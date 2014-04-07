@@ -1,0 +1,38 @@
+{
+  "name": "ismymc.com",
+  "version": "0.1.0",
+  "description": "The application the runs the ismymc.com sites for motorcycle clubs.",
+  "main": "server.js",
+  "scripts": {
+    "test": "nodeunit tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/realistschuckle/mcm"
+  },
+  "author": "Curtis Schlak <curtis@curtissimo.com>",
+  "license": "Proprietary",
+  "bugs": {
+    "url": "https://github.com/realistschuckle/mcm/issues"
+  },
+  "homepage": "https://what.ismymc.com",
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-contrib-handlebars": "^0.7.0",
+    "grunt-contrib-nodeunit": "^0.3.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-jslint": "^1.1.8",
+    "grunt-sass": "^0.12.1",
+    "nodeunit": "^0.8.6",
+    "grunt-contrib-clean": "^0.5.0",
+    "handlebars": "~1.3.0"
+  },
+  "dependencies": {
+    "express": "^3.5.1",
+    "promise": "^4.0.0",
+    "ycb": "^0.1.1",
+    "express-map": "^0.1.0",
+    "inflection": "^1.3.5",
+    "stork-odm": "^0.1.6"
+  }
+}

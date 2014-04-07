@@ -1,0 +1,28 @@
+[
+  {
+    "dimensions": [{
+      "environment": {
+        "development": {
+          "realistschuckle": null
+        }
+      }
+    }]
+  }, {
+    "settings": [ "master" ],
+    "port": 8021,
+    "catalogUrl": "http://what.ismymc.com",
+    "domainSuffix": ".ismymc.com",
+    "db": {
+      "server": "http://192.168.191.78:5984",
+      "master": "what-ismymc-com"
+    }
+  }, {
+    "settings": [ "environment:development" ],
+    "port": 3000,
+    "domainSuffix": ".ismymc.dev",
+    "db": { "server": "http://localhost:5984" }
+  }, {
+    "settings": [ "environment:realistschuckle" ],
+    "db": { "server": "http://couchdb:5984" }
+  }
+]
