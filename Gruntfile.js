@@ -19,11 +19,12 @@ module.exports = function (grunt) {
       },
       dev: {
         options: {
-          outputStyle: 'compressed'
+          sourceComments: 'normal'
         },
         files: {
           'assets/css/site.css': 'scss/site.scss',
-          'assets/css/pure.css': 'scss/pure.css'
+          'assets/css/pure.css': 'scss/pure.css',
+          'assets/themes/leather/theme.css': 'scss/themes/leather/theme.scss'
         }
       }
     },
@@ -66,7 +67,7 @@ module.exports = function (grunt) {
         tasks: [ 'jslint:dev' ]
       },
       sass: {
-        files: 'scss/*.scss',
+        files: 'scss/**/*.scss',
         tasks: [ 'sass:dev' ]
       },
       handlebars: {

@@ -1,0 +1,78 @@
+$menu-color: red;
+$menu-background-color: orange;
+$menu-hover-background-color: purple;
+$menu-disabled-color: yellow;
+$menu-disabled-background-color: green;
+$menu-active-color: blue;
+
+/* BASE *******************************************************/
+
+
+/* LAYOUT *****************************************************/
+
+
+/* MODULE *****************************************************/
+.pure-menu {
+  a {
+    color: $menu-color;
+  }
+
+  li {
+    a {
+      &:hover,
+      &:focus {
+        background-color: $menu-hover-background-color;
+      }
+    }
+
+    &.pure-menu-disabled > a {
+      background-color: $menu-disabled-background-color;
+      color: $menu-disabled-color;
+
+      &:hover,
+      &:focus {
+        background-color: $menu-disabled-background-color;
+        color: $menu-disabled-color;
+      }
+    }
+  }
+
+  .pure-menu-selected {
+    a {
+      color: $menu-active-color;
+    }
+  }
+
+  .pure-menu-can-have-children {
+    &.pure-menu-disabled > a:after {
+      color: $menu-disabled-color;
+    }
+  }
+
+  .pure-menu {
+    .pure-menu-can-have-children {
+      >li:after {
+        color: $menu-color;
+      }
+    }
+  }
+
+  &.pure-menu-open,
+  .pure-menu-open {
+    background-color: $menu-background-color;
+  }
+
+  &.pure-menu-horizontal {
+    li {
+      .pure-menu-children {
+        background-color: $menu-background-color;
+      }
+    }
+  }
+}
+
+.pure-menu-separator {
+  background-color: #dfdfdf;
+}
+
+/* STATE ******************************************************/
