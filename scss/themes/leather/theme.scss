@@ -1,12 +1,17 @@
-$menu-color: red;
-$menu-background-color: orange;
-$menu-hover-background-color: purple;
-$menu-disabled-color: yellow;
-$menu-disabled-background-color: green;
-$menu-active-color: blue;
+$content-background-color: #FFF;
+
+$menu-color: inherit;
+$menu-background-color: inherit;
+$menu-hover-background-color: inherit;
+$menu-disabled-color: inherit;
+$menu-disabled-background-color: inherit;
+$menu-active-color: inherit;
+$menu-active-background-color: inherit;
 
 /* BASE *******************************************************/
-
+body, html {
+  background-color: $content-background-color;
+}
 
 /* LAYOUT *****************************************************/
 
@@ -40,6 +45,7 @@ $menu-active-color: blue;
   .pure-menu-selected {
     a {
       color: $menu-active-color;
+      background-color: $menu-active-background-color;
     }
   }
 
