@@ -14,7 +14,17 @@ body, html {
 }
 
 /* LAYOUT *****************************************************/
+.public-page {
+  padding: 0 4em;
 
+  .content {
+    padding: 1em;
+
+    > h1:first-child {
+      margin-top: 0;
+    }
+  }
+}
 
 /* MODULE *****************************************************/
 .pure-menu {
