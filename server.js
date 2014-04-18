@@ -66,6 +66,9 @@ fs.readFile('config.json', 'utf8', function (e, text) {
   leslie.setModifyScene(function (scene, req) {
     scene.pathTo = expmap.pathTo(app.getRouteMap());
     scene.member = req.member;
+    scene.chapter = req.chapter;
+    scene.chapterdb = req.chapterdb;
+    scene.addViewData({ chapter: req.chapter });
     return scene;
   });
 
