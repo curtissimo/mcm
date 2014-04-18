@@ -6,7 +6,7 @@ module.exports = function (grunt) {
     },
     jslint: {
       dev: {
-        src: [ 'server.js', 'lib/**/*.js' ],
+        src: [ 'server.js', 'lib/**/*.js', 'assets/scripts/site.js' ],
         exclude: [ 'lib/**/views/*.js' ],
         directives: {
           indent: 2
@@ -42,7 +42,8 @@ module.exports = function (grunt) {
           'lib/pages/views/get.js': [ 'hbs/pages/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/footer/views/get.js': [ 'hbs/footer/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/header/views/get.js': [ 'hbs/header/views/get.hbs', 'hbs/partials/*.hbs' ],
-          'lib/menu/views/get.js': [ 'hbs/menu/views/get.hbs', 'hbs/partials/*.hbs' ]
+          'lib/menu/views/get.js': [ 'hbs/menu/views/get.hbs', 'hbs/partials/*.hbs' ],
+          'lib/session/views/get.js': [ 'hbs/session/views/get.hbs', 'hbs/partials/*.hbs' ]
         }
       }
     },
@@ -63,7 +64,7 @@ module.exports = function (grunt) {
         tasks: [ 'nodeunit:dev' ]
       },
       lint: {
-        files: [ 'server.js', 'lib/**/*.js' ],
+        files: [ 'server.js', 'lib/**/*.js', 'assets/scripts/site.js' ],
         tasks: [ 'jslint:dev' ]
       },
       sass: {

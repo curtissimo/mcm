@@ -50,7 +50,8 @@ fs.readFile('config.json', 'utf8', function (e, text) {
   app.use(express.cookieParser());
   app.use(chapter);
 
-  app.get('/chapter', leslie.bother('dashboard'));
+  app.get('/chapter', member(true), leslie.bother('dashboard'));
+  app.map('/chapter', 'dashboard');
 
   single('dashboard');
   single('email');
@@ -59,9 +60,14 @@ fs.readFile('config.json', 'utf8', function (e, text) {
     many(name);
   });
 
-  app.all('/*', leslie.bother('pages'));
+  app.all('/*', member(), leslie.bother('pages'));
 
   leslie.addMinion('pathTo', expmap.pathTo(app.getRouteMap()));
+  leslie.setModifyScene(function (scene, req) {
+    scene.pathTo = expmap.pathTo(app.getRouteMap());
+    scene.member = req.member;
+    return scene;
+  });
 
   app.listen(config.port);
 
