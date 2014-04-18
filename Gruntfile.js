@@ -39,6 +39,7 @@ module.exports = function (grunt) {
           }
         },
         files: {
+          'lib/dashboard/views/get.js': [ 'hbs/dashboard/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/pages/views/get.js': [ 'hbs/pages/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/footer/views/get.js': [ 'hbs/footer/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/header/views/get.js': [ 'hbs/header/views/get.hbs', 'hbs/partials/*.hbs' ],
