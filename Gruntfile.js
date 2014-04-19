@@ -67,7 +67,7 @@ module.exports = function (grunt) {
         tasks: [ 'jslint:dev' ]
       },
       sass: {
-        files: 'scss/**/*.scss',
+        files: [ 'scss/**/*.scss', 'scss/**/*.css' ],
         tasks: [ 'sass:dev' ]
       },
       handlebars: {
