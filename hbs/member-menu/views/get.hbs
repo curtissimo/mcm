@@ -15,6 +15,23 @@
             {{menuName}}</a>
         </li>
       {{/each}}
+      {{#each actions}}
+        <li>
+          {{#if method}}
+            {{#if primary}}
+              <a class="pure-button pure-button-primary" href="{{path}}" title="{{title}}" data-method="{{method}}">{{menuName}}</a>
+            {{else}}
+              <a class="pure-button" href="{{path}}" title="{{title}}" data-method="{{method}}">{{menuName}}</a>
+            {{/if}}
+          {{else}}
+            {{#if primary}}
+              <a class="pure-button pure-button-primary" href="{{path}}" title="{{title}}">{{menuName}}</a>
+            {{else}}
+              <a class="pure-button" href="{{path}}" title="{{title}}">{{menuName}}</a>
+            {{/if}}
+          {{/if}}
+        </li>
+      {{/each}}
     </ul>
   </nav>
 </div>
