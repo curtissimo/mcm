@@ -1,4 +1,9 @@
 <div id="main-nav">
+  {{#if loggedin}}
+  <div class="profile">
+    <a class="pure-button pure-button-primary" href="{{loggedin}}" title="Go to the member-only area">Members Only</a>
+  </div>
+  {{/if}}
   <nav class="pure-menu pure-menu-open pure-menu-horizontal">
     <ul>
       {{#each pages}}

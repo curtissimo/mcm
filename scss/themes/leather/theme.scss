@@ -8,6 +8,13 @@ $menu-disabled-background-color: inherit;
 $menu-active-color: orange;
 $menu-active-background-color: inherit;
 
+@mixin transition ($property, $time) {
+  -webkit-transition: $property $time ease;
+  -moz-transition: $property $time ease;
+  -o-transition: $property $time ease;
+  transition: $property $time ease;
+}
+
 /* BASE *******************************************************/
 body, html {
   background-color: $content-background-color;
@@ -16,6 +23,7 @@ body, html {
 /* LAYOUT *****************************************************/
 .public-page, .member-page {
   padding: 0 4em;
+  @include transition (padding, 0.25s);
 
   .content {
     padding: 1em;
@@ -26,10 +34,25 @@ body, html {
   }
 }
 
+@media (max-width: 640px) {
+  .public-page, .member-page {
+    padding: 0;
+  }
+}
+
+#main-nav {
+  position: relative;
+}
+
 /* MODULE *****************************************************/
 .pure-menu {
+
   a {
     color: $menu-color;
+  }
+
+  ul {
+    margin-right: 111px;
   }
 
   li {
@@ -112,6 +135,11 @@ a.pure-button-primary,
 a.pure-button-selected {
     background-color: $menu-active-color;
     color: #000;
+}
+
+.profile {
+  position: absolute;
+  right: 0;
 }
 
 /* STATE ******************************************************/
