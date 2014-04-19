@@ -88,5 +88,6 @@ module.exports = function (grunt) {
 
   grunt.registerTask('purge', [ 'clean:all' ]);
   grunt.registerTask('dev', [ 'handlebars:compile', 'sass:dev', 'nodeunit:dev', 'jslint:dev', 'watch' ]);
+  grunt.registerTask('build', [ 'handlebars:compile', 'sass:dev' ]);
   grunt.registerTask('default', [ 'purge' ]);
 };
