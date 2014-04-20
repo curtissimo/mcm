@@ -23,6 +23,6 @@
     "db": { "server": "http://localhost:5984" }
   }, {
     "settings": [ "environment:realistschuckle" ],
-    "db": { "server": "http://couchdb:5984" }
+    "db": { "server": "http://couchdb15:5984" }
   }
 ]
