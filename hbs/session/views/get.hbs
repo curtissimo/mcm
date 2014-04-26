@@ -17,6 +17,10 @@
         <label for="password">your password</label>
         <input type="password" name="password" id="password" placeholder="your password">
 
+        {{#if returnPath}}
+          <input type="hidden" name="returnPath" value="{{returnPath}}" hidden>
+        {{/if}}
+
         <label for="rememberMe" class="pure-checkbox">
           <input type="checkbox" name="rememberMe" id="rememberMe" value="trance"> remember me
         </label>
