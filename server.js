@@ -73,19 +73,4 @@ fs.readFile('config.json', 'utf8', function (e, text) {
   });
 
   app.listen(config.port);
-
-  (function () {
-    var page, chapter, member, masterdb, chapterdb;
-    chapter = require('./lib/models/chapter');
-    masterdb = url.resolve(config.db.server, config.db.master);
-    chapter.to(masterdb).sync();
-
-    member = require('./lib/models/member');
-    chapterdb = url.resolve(config.db.server, 'republichog');
-    member.to(chapterdb).sync();
-
-    page = require('./lib/models/page');
-    chapterdb = url.resolve(config.db.server, 'republichog');
-    page.to(chapterdb).sync();
-  }());
 });
