@@ -58,7 +58,10 @@ new rsvp.Promise(function(g) { g(); })
       city: 'Stafford',
       state: 'TX',
       chapterNumber: 1115,
-      sponsorUrl: 'http://republichd.com',
+      sponsor: {
+        name: 'Republic H.D.',
+        url: 'http://republichd.com'
+      },
       theme: 'leather',
       urls: {
         facebook: 'https://www.facebook.com/pages/Republic-Harley-Owners-Group/219625578179322',
@@ -77,6 +80,7 @@ new rsvp.Promise(function(g) { g(); })
   })
   .then(function() {
     var m = member.new({
+      _id: '24a359fba8f7c2099f413cf34909beac',
       email: 'curtis@schlak.com',
       login: 'cschlak',
       hogNumber: 'US12345678',

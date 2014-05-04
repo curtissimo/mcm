@@ -52,6 +52,9 @@ fs.readFile('config.json', 'utf8', function (e, text) {
 
   app.get('/chapter', member(true), leslie.bother('dashboard'));
   app.map('/chapter', 'dashboard');
+  app.get('/chapter/attachments/:id/:name', member(true), leslie.bother('attachments'));
+  app.map('/chapter/attachments/:id/:name', 'private-attachment');
+
 
   single('dashboard');
   single('email');

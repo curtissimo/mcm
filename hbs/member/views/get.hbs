@@ -4,7 +4,16 @@
   {{{menu}}}
   </div>
   <div class="content">
-  {{{content}}}
+    {{#each members}}
+      <div class="member">
+        {{#if photoPath}}
+          <div class="member-photo">
+            <img src="{{photoPath}}" width="200" height="200">
+          </div>
+        {{/if}}
+        <div>{{lastName}}, {{firstName}}</div>
+      </div>
+    {{/each}}
   </div>
   <div class="footer">
   {{{footer}}}
