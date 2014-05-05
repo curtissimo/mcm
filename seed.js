@@ -86,6 +86,19 @@ new rsvp.Promise(function(g) { g(); })
       hogNumber: 'US12345678',
       password: 'lovely',
       firstName: 'Curtis',
+      lastName: 'Schlak',
+      photo: { type: 'image/jpeg', content: new Buffer('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', 'base64') }
+    });
+    return d(m.to(chapterdb).save)();
+  })
+  .then(function() {
+    var m = member.new({
+      _id: '24a359fba8f7c2099f413cf34909bedd',
+      email: 'leslie@schlak.com',
+      login: 'lschlak',
+      hogNumber: 'US87654321',
+      password: 'lovelier',
+      firstName: 'Leslie',
       lastName: 'Schlak'
     });
     return d(m.to(chapterdb).save)();

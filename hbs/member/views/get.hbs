@@ -4,16 +4,22 @@
   {{{menu}}}
   </div>
   <div class="content">
-    {{#each members}}
-      <div class="member">
-        {{#if photoPath}}
-          <div class="member-photo">
-            <img src="{{photoPath}}" width="200" height="200">
-          </div>
-        {{/if}}
-        <div>{{lastName}}, {{firstName}}</div>
-      </div>
-    {{/each}}
+    <div class="pure-g">
+      {{#each members}}
+        <div class="member pure-u-sm-1-2 pure-u-md-1-4">
+          {{#if photoPath}}
+            <div class="member-photo">
+              <img src="{{photoPath}}" width="100" height="100">
+            </div>
+          {{else}}
+            <div class="member-photo">
+              <img src="{{../../unknownMemberPath}}" width="100" height="100">
+            </div>
+          {{/if}}
+          <div>{{lastName}}, {{firstName}}</div>
+        </div>
+      {{/each}}
+    </div>
   </div>
   <div class="footer">
   {{{footer}}}

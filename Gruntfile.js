@@ -24,6 +24,8 @@ module.exports = function (grunt) {
         files: {
           'assets/css/site.css': 'scss/site.scss',
           'assets/css/pure.css': 'scss/pure.css',
+          'assets/css/grids-responsive-old-ie.css': 'scss/grids-responsive-old-ie.css',
+          'assets/css/grids-responsive.css': 'scss/grids-responsive.css',
           'assets/themes/leather/theme.css': 'scss/themes/leather/theme.scss'
         }
       }
