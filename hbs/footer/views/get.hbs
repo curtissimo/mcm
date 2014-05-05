@@ -1,4 +1,10 @@
 <div class="chapter-copyright">
   <span class="declaration">&copy; {{year}} {{name}}</span>
-  <span class="sponsor">sponsored by <a href="{{sponsor.url}}" target="_blank">{{sponsor.name}}</a></span>
+  {{#if sponsor.name}}
+    {{#if sponsor.url}}
+      <span class="sponsor">sponsored by <a href="{{sponsor.url}}" target="_blank">{{sponsor.name}}</a></span>
+    {{else}}
+      <span class="sponsor">sponsored by {{sponsor.name}}</span>
+    {{/if}}
+  {{/if}}
 </div>
