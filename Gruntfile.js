@@ -50,6 +50,7 @@ module.exports = function (grunt) {
           'lib/discussion/views/get.js': [ 'hbs/discussion/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/event/views/get.js': [ 'hbs/event/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/member/views/get.js': [ 'hbs/member/views/get.hbs', 'hbs/partials/*.hbs' ],
+          'lib/member/views/one.js': [ 'hbs/member/views/one.hbs', 'hbs/partials/*.hbs' ],
           'lib/newsletter/views/get.js': [ 'hbs/newsletter/views/get.hbs', 'hbs/partials/*.hbs' ],
           'lib/session/views/get.js': [ 'hbs/session/views/get.hbs', 'hbs/partials/*.hbs' ]
         }

@@ -1,4 +1,5 @@
 /*global jQuery*/
+/*jslint browser:true */
 (function ($) {
   'use strict';
   $(function () {
@@ -11,10 +12,17 @@
         '</form>'
       ].join('\n');
 
+      e.stopPropagation();
       e.preventDefault();
       $(form)
         .appendTo('body')
         .submit();
+    });
+
+    $('[data-url]').click(function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      location.href = $(e.currentTarget).data('url');
     });
   });
 }(jQuery));
