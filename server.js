@@ -76,6 +76,7 @@ fs.readFile('config.json', 'utf8', function (e, text) {
     scene.chapter = req.chapter;
     scene.chapterdb = req.chapterdb;
     scene.addViewData({ chapter: req.chapter });
+    scene.md5 = req.get('If-None-Match');
     return scene;
   });
 
