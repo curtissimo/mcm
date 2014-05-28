@@ -1,5 +1,5 @@
 /*jslint node:true*/
-var member, express, app, ycb, fs, chapter, Promise, context, config, environment, leslie, expmap, inflection, url;
+var member, express, app, ycb, fs, chapter, Promise, context, config, environment, leslie, expmap, inflection, url, moment;
 
 express = require('express');
 expmap = require('express-map');
@@ -9,6 +9,7 @@ environment = { environment: process.argv[2] || 'production' };
 leslie = require('leslie-mvp');
 inflection = require('inflection');
 url = require('url');
+moment = require('moment');
 chapter = require('./lib/middleware/resolve-chapter');
 member = require('./lib/middleware/resolve-member');
 
@@ -66,6 +67,9 @@ fs.readFile('config.json', 'utf8', function (e, text) {
   app.all('/*', member(), leslie.bother('pages'));
 
   leslie.addMinion('pathTo', expmap.pathTo(app.getRouteMap()));
+  leslie.addMinion('formatDate', function (date, format) {
+    return moment(date).format(format);
+  });
   leslie.setModifyScene(function (scene, req) {
     scene.pathTo = expmap.pathTo(app.getRouteMap());
     scene.member = req.member;
