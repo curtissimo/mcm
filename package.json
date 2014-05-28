@@ -31,10 +31,11 @@
   },
   "dependencies": {
     "express": "^3.5.1",
-    "promise": "^4.0.0",
-    "ycb": "^0.1.1",
     "express-map": "^0.1.0",
     "inflection": "^1.3.5",
-    "utile": "^0.2.1"
+    "moment": "^2.6.0",
+    "promise": "^4.0.0",
+    "utile": "^0.2.1",
+    "ycb": "^0.1.1"
   }
 }
