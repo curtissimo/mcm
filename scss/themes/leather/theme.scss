@@ -46,10 +46,17 @@ body, html {
 
 #main-nav {
   position: relative;
+
+  .profile {
+    font-size: 14px;
+  }
+
 }
 
 /* MODULE *****************************************************/
 .pure-menu {
+
+  font-size: 14px;
 
   a {
     color: $menu-color;
@@ -61,6 +68,9 @@ body, html {
 
   li {
     a {
+      padding-left: 14px;
+      padding-right: 14px;
+
       &:hover,
       &:focus {
         background-color: $menu-hover-background-color;
@@ -149,10 +159,47 @@ a.pure-button-selected {
 .member {
   margin: .5em;
   padding: .5em;
+  position: relative;
+  min-height: 100px;
+
 
   &:hover {
     background: #efefef;
   }
+}
+
+.member-photo {
+  position: absolute;
+  top: .5em;
+  left: .5em;
+  width: 100px;
+  height: 100px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.member-lastName, .member-firstName, .member-nickName, .member-localSince, .member-email, .member-phone {
+  margin-left: 115px;
+}
+
+.member-lastName {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+.member-firstName {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.member-nickName {
+  font-size: 1.25em;
+  font-style: italic;
+  font-variant: small-caps;
 }
 
 /* STATE ******************************************************/

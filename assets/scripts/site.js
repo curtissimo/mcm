@@ -20,6 +20,9 @@
     });
 
     $('[data-url]').click(function (e) {
+      if (e.target.tagName.toLowerCase() === 'a') {
+        return;
+      }
       e.preventDefault();
       e.stopPropagation();
       location.href = $(e.currentTarget).data('url');

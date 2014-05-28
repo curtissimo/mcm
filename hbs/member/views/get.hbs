@@ -10,25 +10,34 @@
           <div class="member">
             {{#if photoPath}}
               <div class="member-photo">
-                <img src="{{photoPath}}" width="100" height="100">
+                <img src="{{photoPath}}" class="pure-img">
               </div>
             {{else}}
               <div class="member-photo">
-                <img src="{{../../unknownMemberPath}}" width="100" height="100">
+                <img src="{{../../unknownMemberPath}}" class="pure-img">
+              </div>
+            {{/if}}
+            <div class="member-firstName">
+              {{firstName}}
+            </div>
+            {{#if nickName}}
+              <div class="member-nickName">
+                {{nickName}}
               </div>
             {{/if}}
             <div class="member-lastName">
               {{lastName}}
             </div>
-            <div class="member-firstName">
-              {{firstName}}
-            </div>
-            <div class="member-nationalSince">
-              National member since {{formatDate nationalMembership.startedOn "MMMM YYYY"}}
-            </div>
-            <div class="member-localSince">
-              Local member since {{formatDate localMembership.startedOn "MMMM YYYY"}}
-            </div>
+            {{#if email}}
+              <div class="member-email">
+                <a href="mailto:{{email}}">{{email}}</a>
+              </div>
+            {{/if}}
+            {{#if phone}}
+              <div class="member-phone">
+                {{phone}}
+              </div>
+            {{/if}}
           </div>
         </div>
       {{/each}}
