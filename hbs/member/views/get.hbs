@@ -23,6 +23,12 @@
             <div class="member-firstName">
               {{firstName}}
             </div>
+            <div class="member-nationalSince">
+              National member since {{formatDate nationalMembership.startedOn "MMMM YYYY"}}
+            </div>
+            <div class="member-localSince">
+              Local member since {{formatDate localMembership.startedOn "MMMM YYYY"}}
+            </div>
           </div>
         </div>
       {{/each}}
