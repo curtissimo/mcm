@@ -204,6 +204,28 @@ new rsvp.Promise(function(g) { g(); })
     return d(m.to(chapterdb).save)();
   })
   .then(function() {
+    console.log('inserting member into chapter database.');
+    var m = member.new({
+      _id: '24a359fba8f7c2099f413cf34909be12',
+      email: 'gabby@burgard.com',
+      login: 'gabby',
+      hogNumber: 'US01010101',
+      password: 'stinky',
+      firstName: 'Gabrielle',
+      lastName: 'Burgard',
+      nickName: 'Stinky',
+      nationalMembership: {
+        startedOn: new Date(2009, 11),
+        expiresOn: new Date(2012, 10)
+      },
+      localMembership: {
+        startedOn: new Date(2010, 6),
+        expiresOn: new Date(2014, 12)
+      }
+    });
+    return d(m.to(chapterdb).save)();
+  })
+  .then(function() {
     console.log('inserting page into chapter database.');
     var p = page.new({
       _id: '/',
