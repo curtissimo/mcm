@@ -101,10 +101,11 @@ new rsvp.Promise(function(g) { g(); })
       lastName: 'Schlak',
       nickName: 'The Saint',
       preferences: {
-        'directory:show': true,
-        'directory:show:email': true,
-        'directory:show:address': true,
-        'directory:show:phone': true
+        directory: {
+          email: true,
+          address: true,
+          phone: true
+        }
       },
       phones: {
         mobile: '713-555-1212',
@@ -136,9 +137,7 @@ new rsvp.Promise(function(g) { g(); })
       firstName: 'Leslie',
       lastName: 'Schlak',
       nickName: 'Stinger',
-      preferences: {
-        'directory:show': false
-      },
+      preferences: {},
       phones: {
         home: '000-000-0000'
       },
@@ -164,7 +163,7 @@ new rsvp.Promise(function(g) { g(); })
       firstName: 'Isaac',
       lastName: 'Schlak',
       preferences: {
-        'directory:show': true
+        directory: {}
       },
       phones: {
         mobile: '713-555-1212',
