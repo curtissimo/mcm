@@ -65,7 +65,7 @@ new rsvp.Promise(function(g) { g(); })
     var c = chapter.new({
       _id: 'republichog',
       name: 'Republic H.O.G.',
-      domains: [ 'republichog.dev' ],
+      domains: [ 'republichog.dev', 'republichog.com' ],
       city: 'Stafford',
       state: 'TX',
       chapterNumber: 1115,

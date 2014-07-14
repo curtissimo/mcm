@@ -4,10 +4,23 @@
   {{{menu}}}
   </div>
   <div class="content">
-    {{#with m}}
-      Name: {{firstName}} {{lastName}}<br>
-      HOG: {{hogNumber}}
-    {{/with}}
+    <div class="pure-u-1 pure-u-md-1-4 member-info">
+      {{#if m.photoPath}}
+        <div class="member-photo">
+          <img src="{{m.photoPath}}" class="pure-img">
+        </div>
+      {{else}}
+        <div class="member-photo">
+          <img src="{{unknownMemberPath}}" class="pure-img">
+        </div>
+      {{/if}}
+    </div>
+    <div>
+      {{#with m}}
+        Name: {{firstName}} {{lastName}}<br>
+        HOG: {{hogNumber}}
+      {{/with}}
+    </div>
   </div>
   <div class="footer">
   {{{footer}}}

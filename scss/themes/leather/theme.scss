@@ -168,6 +168,10 @@ a.pure-button-selected {
   }
 }
 
+.member-search input {
+  width: 100%;
+}
+
 .member-photo {
   position: absolute;
   top: .5em;
@@ -178,6 +182,14 @@ a.pure-button-selected {
   img {
     width: 100%;
     height: 100%;
+  }
+}
+
+.member-info {
+  .member-photo {
+    width: auto;
+    height: auto;
+    position: static;
   }
 }
 
