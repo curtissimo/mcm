@@ -18,7 +18,10 @@
     <div>
       {{#with m}}
         Name: {{firstName}} {{lastName}}<br>
-        HOG: {{hogNumber}}
+        Nickname: {{nickName}}<br>
+        {{#if ../user.privileges.canModifyMembers}}
+        HOG: {{hogNumber}}<br>
+        {{/if}}
       {{/with}}
     </div>
   </div>
