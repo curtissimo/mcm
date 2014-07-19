@@ -49,6 +49,8 @@ body, html {
 
   .profile {
     font-size: 14px;
+    position: absolute;
+    right: 0;
   }
 
 }
@@ -149,11 +151,6 @@ a.pure-button-primary,
 a.pure-button-selected {
     background-color: $menu-active-color;
     color: #000;
-}
-
-.profile {
-  position: absolute;
-  right: 0;
 }
 
 .member {
