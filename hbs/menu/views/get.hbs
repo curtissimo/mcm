@@ -5,6 +5,8 @@
   </div>
   {{/if}}
   <nav class="pure-menu pure-menu-open pure-menu-horizontal">
+    <label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu" onclick></label>
+    <input type="checkbox" id="toggle">
     <ul>
       {{#each pages}}
         {{#if isActive}}

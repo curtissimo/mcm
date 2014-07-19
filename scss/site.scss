@@ -25,6 +25,10 @@
     list-style: none;
     float: left;
   }
+
+  .alt-profile {
+    display: none;
+  }
 }
 
 /* Nicolas Gallagher micro clearfix */
@@ -33,13 +37,17 @@
 
 @media only screen and (max-width: 35.5em){
   #main-nav {
+    .profile {
+      display: none;
+    }
+
     ul {
       display: none;
       opacity: 0;
       width: 100%;
       right: 0;
 
-      li {
+      li, li.alt-profile {
         display: block;
         width: 100%;
         margin: 0;
