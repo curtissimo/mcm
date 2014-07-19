@@ -93,6 +93,7 @@ new rsvp.Promise(function(g) { g(); })
     console.log('inserting member into chapter database.');
     var m = member.new({
       _id: '24a359fba8f7c2099f413cf34909beac',
+      token: 'd80eb6666d354e1eacbce9e902bad430',
       email: 'curtis@schlak.com',
       login: 'cschlak',
       hogNumber: 'US12345678',
@@ -130,6 +131,7 @@ new rsvp.Promise(function(g) { g(); })
     console.log('inserting member into chapter database.');
     var m = member.new({
       _id: '24a359fba8f7c2099f413cf34909bedd',
+      token: '91ed1c672aa14d818088f8f3cbcc3ee5',
       email: 'leslie@schlak.com',
       login: 'lschlak',
       hogNumber: 'US87654321',
@@ -156,6 +158,7 @@ new rsvp.Promise(function(g) { g(); })
     console.log('inserting member into chapter database.');
     var m = member.new({
       _id: '24a359fba8f7c2099f413cf34909beee',
+      token: 'f26ef52e7f384d95867e718943f2ed8c',
       email: 'isaac@schlak.com',
       login: 'ischlak',
       hogNumber: 'US88888888',
@@ -183,6 +186,7 @@ new rsvp.Promise(function(g) { g(); })
     console.log('inserting member into chapter database.');
     var m = member.new({
       _id: '24a359fba8f7c2099f413cf34909beff',
+      token: '69205a6a874c4103b23bd09c61b5405b',
       email: 'lola@schlak.com',
       login: 'lola.schlak',
       hogNumber: 'US11111111',
@@ -206,6 +210,7 @@ new rsvp.Promise(function(g) { g(); })
     console.log('inserting member into chapter database.');
     var m = member.new({
       _id: '24a359fba8f7c2099f413cf34909be12',
+      token: '5211154c82324348a2362cb3e4b4ec14',
       email: 'gabby@burgard.com',
       login: 'gabby',
       hogNumber: 'US01010101',
