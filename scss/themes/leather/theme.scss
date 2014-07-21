@@ -1,3 +1,5 @@
+$media-query-small: 35.5em;
+
 $content-background-color: #FFF;
 
 $menu-color: inherit;
@@ -215,6 +217,17 @@ a.pure-button-selected {
   padding-left: 1rem;
   padding-top: 0;
   margin-top: 0;
+}
+
+@media only screen and (max-width: $media-query-small) {
+  .member-info-full-name {
+    padding: 0;
+  }
+}
+
+.private-member-info {
+  background-color: #CCC;
+  padding: .25em;
 }
 
 /* STATE ******************************************************/
