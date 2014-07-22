@@ -38,6 +38,10 @@ $media-query-small: 35.5em;
 .clearfix:after { clear: both; }
 
 @media only screen and (max-width: $media-query-small) {
+  h1 {
+    font-size: 1.5em;
+  }
+  
   #main-nav {
     .profile {
       display: none;
