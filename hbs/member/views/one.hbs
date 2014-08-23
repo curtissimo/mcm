@@ -32,12 +32,10 @@
         {{/if}}
       </div>
     </div>
-    {{#if m.nickName}}
-      <div class="pure-u-1 pure-u-sm-3-4">
-        <h1 class="member-info-full-nickname">"{{m.nickName}}"</h1>
-      </div>
-    {{/if}}
     <div class="pure-u-1 pure-u-sm-3-4">
+      {{#if m.nickName}}
+        <h1 class="member-info-full-nickname">"{{m.nickName}}"</h1>
+      {{/if}}
       <h1 class="member-info-full-name">{{m.firstName}} {{m.lastName}}</h1>
     </div>
   </div>
