@@ -5,44 +5,49 @@
   </div>
   <div class="content">
     <div class="pure-g">
-      {{#each members}}
-        <div class="pure-u-1 pure-u-lg-1-3 pure-u-md-1-2" data-url="{{memberUrl}}">
-          <div class="member">
-            {{#if photoPath}}
-              <div class="member-photo">
-                <img src="{{photoPath}}" class="pure-img">
-              </div>
-            {{else}}
-              <div class="member-photo">
-                <img src="{{../../unknownMemberPath}}" class="pure-img">
-              </div>
-            {{/if}}
-            <div class="member-since">
-              Since {{since}}
-            </div>
-            {{#if nickName}}
-              <div class="member-nickName">
-                "{{nickName}}"
-              </div>
-            {{/if}}
-            <div class="member-firstName">
-              {{firstName}}
-            </div>
-            <div class="member-lastName">
-              {{lastName}}
-            </div>
-            {{#if email}}
-              <div class="member-email">
-                <a href="mailto:{{email}}">{{email}}</a>
-              </div>
-            {{/if}}
-            {{#if phone}}
-              <div class="member-phone">
-                {{phone}}
-              </div>
-            {{/if}}
-          </div>
+      {{#each directoryEntry}}
+        <div class="pure-u-1">
+          <h1 class="member-list-initial">{{initial}}</h1>
         </div>
+        {{#each members}}
+          <div class="pure-u-1 pure-u-lg-1-3 pure-u-md-1-2" data-url="{{memberUrl}}">
+            <div class="member">
+              {{#if photoPath}}
+                <div class="member-photo">
+                  <img src="{{photoPath}}" class="pure-img">
+                </div>
+              {{else}}
+                <div class="member-photo">
+                  <img src="{{../../unknownMemberPath}}" class="pure-img">
+                </div>
+              {{/if}}
+              <div class="member-since">
+                Since {{since}}
+              </div>
+              {{#if nickName}}
+                <div class="member-nickName">
+                  "{{nickName}}"
+                </div>
+              {{/if}}
+              <div class="member-firstName">
+                {{firstName}}
+              </div>
+              <div class="member-lastName">
+                {{lastName}}
+              </div>
+              {{#if email}}
+                <div class="member-email">
+                  <a href="mailto:{{email}}">{{email}}</a>
+                </div>
+              {{/if}}
+              {{#if phone}}
+                <div class="member-phone">
+                  {{phone}}
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        {{/each}}
       {{/each}}
     </div>
   </div>
