@@ -48,19 +48,12 @@ body, html {
 
 #main-nav {
   position: relative;
-
-  .profile {
-    font-size: 14px;
-    position: absolute;
-    right: 0;
-  }
-
 }
 
 /* MODULE *****************************************************/
 .pure-menu {
 
-  font-size: 14px;
+  // font-size: 14px;
 
   a {
     color: $menu-color;
