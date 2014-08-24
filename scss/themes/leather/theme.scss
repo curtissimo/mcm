@@ -1,5 +1,6 @@
 $media-query-small: 35.5em;
 
+$page-background-color: #000;
 $content-background-color: #FFF;
 
 $menu-color: inherit;
@@ -17,15 +18,20 @@ $menu-active-background-color: inherit;
   transition: $property $time ease;
 }
 
+@mixin shadow ($dx, $dy, $blur, $spread, $color) {
+  -webkit-box-shadow: $dx $dy $blur $spread $color;
+          box-shadow: $dx $dy $blur $spread $color;
+}
+
 /* BASE *******************************************************/
 body, html {
-  background-color: $content-background-color;
+  background-color: $page-background-color;
 }
 
 /* LAYOUT *****************************************************/
 .public-page, .member-page {
-  padding: 0 4em;
   @include transition (padding, 0.25s);
+  background-color: $content-background-color;
 
   .menu {
     padding: 0 1em;
@@ -164,9 +170,9 @@ a.pure-button-selected {
   padding: .5em;
   position: relative;
   min-height: 126px;
-
+  background: #efefef;
   &:hover {
-    background: #efefef;
+    @include shadow(0, 1px, 4px, 1px, $menu-active-color);
   }
 }
 
