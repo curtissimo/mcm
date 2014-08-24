@@ -23,6 +23,11 @@ $menu-active-background-color: inherit;
           box-shadow: $dx $dy $blur $spread $color;
 }
 
+@mixin rounded ($radius) {
+  border-radius: $radius;
+  background-clip: padding-box;
+}
+
 /* BASE *******************************************************/
 body, html {
   background-color: $page-background-color;
@@ -171,6 +176,7 @@ a.pure-button-selected {
   position: relative;
   min-height: 126px;
   background: #efefef;
+  @include rounded(8px);
   &:hover {
     @include shadow(0, 1px, 4px, 1px, $menu-active-color);
   }
