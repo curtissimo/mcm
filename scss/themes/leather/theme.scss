@@ -1,4 +1,5 @@
 $media-query-small: 35.5em;
+$media-query-medium: 48em;
 
 $page-background-color: #000;
 $content-background-color: #FFF;
@@ -234,16 +235,29 @@ a.pure-button-selected {
   font-variant: small-caps;
 }
 
-.member-info-full-nickname, .member-info-full-name {
+.member-info-title {
   padding-left: 1rem;
-  padding: .25em;
   margin: 0;
   text-align: center;
 }
 
-@media only screen and (max-width: $media-query-small) {
-  .member-info-full-name {
+@media only screen and (max-width: $media-query-medium) {
+  .member-info-title {
     padding: 0;
+  }
+
+  .member-info-full-nickname {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: $media-query-medium) and (orientation: landscape) {
+  .member-page, .public-page {
+    padding-top: 40px;
+  }
+
+  .member-info-full-nickname {
+    display: inline;
   }
 }
 
