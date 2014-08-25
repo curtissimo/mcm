@@ -23,21 +23,36 @@
       {{/if}}
       {{#if showPrivateInformation}}
         <div class="private-member-info">
-          <div class="private-member-info-hog">HOG: {{m.hogNumber}}</div>
-          <div class="private-member-info-local-membership">
-            Chapter membership:
-            {{formatDate m.localMembership.startedOn "MM/YY"}}
-            -
-            {{formatDate m.localMembership.expiresOn "MM/YY"}}
+          <div class="private-member-datum">
+            <span class="private-member-label">HOG</span>
+            <span class="private-member-value">{{m.hogNumber}}</span>
           </div>
-          <div class="private-member-info-national-membership">
-            National membership:
-            {{formatDate m.nationalMembership.startedOn "MM/YY"}}
-            -
-            {{formatDate m.nationalMembership.expiresOn "MM/YY"}}
-          </div>
+          {{#if m.localMembership.expired}}
+            <div class="private-member-datum is-error">
+              <span class="private-member-label">Local membership expired</span>
+              <span class="private-member-value">{{calendar m.localMembership.expiresOn}}</span>
+            </div>
+          {{else}}
+            <div class="private-member-datum">
+              <span class="private-member-label">Local membership expires</span>
+              <span class="private-member-value">{{calendar m.localMembership.expiresOn}}</span>
+            </div>
+          {{/if}}
+          {{#if m.nationalMembership.expired}}
+            <div class="private-member-datum is-error">
+              <span class="private-member-label">Nat'l membership expired</span>
+              <span class="private-member-value">{{calendar m.nationalMembership.expiresOn 'never'}}</span>
+            </div>
+          {{else}}
+            <div class="private-member-datum">
+              <span class="private-member-label">Nat'l membership expires</span>
+              <span class="private-member-value">{{calendar m.nationalMembership.expiresOn 'never'}}</span>
+            </div>
+          {{/if}}
         </div>
       {{/if}}
+      <div class="public-member-info">
+      </div>
     </div>
     <div class="pure-u-1 pure-u-md-3-4">
     </div>

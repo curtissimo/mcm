@@ -29,6 +29,18 @@ $menu-active-background-color: inherit;
   background-clip: padding-box;
 }
 
+@mixin rounded-top ($radius) {
+  border-top-left-radius: $radius;
+  border-top-right-radius: $radius;
+  background-clip: padding-box;
+}
+
+@mixin rounded-bottom ($radius) {
+  border-bottom-left-radius: $radius;
+  border-bottom-right-radius: $radius;
+  background-clip: padding-box;
+}
+
 /* BASE *******************************************************/
 body, html {
   background-color: $page-background-color;
@@ -175,8 +187,8 @@ a.pure-button-selected {
   margin-bottom: 2em;
   padding: .5em;
   position: relative;
-  min-height: 126px;
-  background: #efefef;
+  min-height: 130px;
+  background: #f2f2f2;
   @include rounded(8px);
   &:hover {
     @include shadow(0, 1px, 4px, 1px, $menu-active-color);
@@ -189,10 +201,15 @@ a.pure-button-selected {
   left: .5em;
   width: 100px;
   height: 100px;
+  border-top: 1px solid #999;
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
+  @include rounded-top(8px);
 
   img {
     width: 100%;
     height: 100%;
+    @include rounded-top(6px);
   }
 }
 
@@ -204,6 +221,9 @@ a.pure-button-selected {
   padding: 4px;
   text-align: center;
   background-color: #D6E5EF;
+  border-bottom: 1px solid #999;
+  border-left: 1px solid #999;
+  border-right: 1px solid #999;
 }
 
 .member-info {
@@ -211,10 +231,21 @@ a.pure-button-selected {
     width: auto;
     height: auto;
     position: static;
+    border: 0;
+
+    img {
+      @include rounded-bottom(8px);
+    }
   }
 }
 
-.member-lastName, .member-firstName, .member-nickName, .member-localSince, .member-email, .member-phone {
+.member-lastName,
+.member-firstName,
+.member-nickName,
+.member-localSince,
+.member-email,
+.member-phone,
+.member-address {
   margin-left: 115px;
 }
 
@@ -235,10 +266,39 @@ a.pure-button-selected {
   font-variant: small-caps;
 }
 
+.member-address {
+  margin-top: .5em;
+}
+
+.member-address-city:after {
+  content: ','
+}
+
 .member-info-title {
   padding-left: 1rem;
   margin: 0;
   text-align: center;
+}
+
+.private-member-info, .public-member-info {
+  padding: .25em;
+}
+
+.private-member-datum {
+  margin-bottom: 1em;
+}
+
+.private-member-value {
+  display: inline-block;
+}
+
+.private-member-label {
+  display: inline-block;
+  font-weight: bold;
+
+  &:after {
+    content: ':';
+  }
 }
 
 @media only screen and (max-width: $media-query-medium) {
@@ -259,11 +319,39 @@ a.pure-button-selected {
   .member-info-full-nickname {
     display: inline;
   }
-}
 
-.private-member-info {
-  background-color: #CCC;
-  padding: .25em;
+  .member-info {
+    .member-photo {
+      border: 0;
+      opacity: .1;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      left: 0;
+
+      @include rounded(0);
+
+      img {
+        @include rounded(0);
+      }
+    }
+  }
+
+  .content {
+    position: relative;
+  }
+
+  .private-member-datum {
+    margin-bottom: .25em;
+    padding: 0;
+  }
 }
 
 /* STATE ******************************************************/
+.is-error {
+  background-color: #FF5555;
+  color: white;
+  padding: .25em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

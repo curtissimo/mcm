@@ -45,6 +45,17 @@
                   {{phone}}
                 </div>
               {{/if}}
+              {{#if address}}
+                <div class="member-address">
+                  <div class="member-address-street">{{address.street}}</div>
+                  <div class="member-address-apartment">{{address.apartment}}</div>
+                  <div>
+                    <span class="member-address-city">{{address.city}}</span>
+                    <span class="member-address-state">{{address.state}}</span>
+                    <span class="member-address-zip">{{address.zip}}</span>
+                  </div>
+                </div>
+              {{/if}}
             </div>
           </div>
         {{/each}}

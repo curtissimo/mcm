@@ -43,6 +43,8 @@ fs.readFile('config.json', 'utf8', function (e, text) {
   config = new ycb.Ycb(JSON.parse(text)).read(environment);
 
   app = express();
+  app.disable('x-powered-by');
+  
   expmap.extend(app);
   app.set('config', config);
 
@@ -68,7 +70,16 @@ fs.readFile('config.json', 'utf8', function (e, text) {
 
   leslie.addMinion('pathTo', expmap.pathTo(app.getRouteMap()));
   leslie.addMinion('formatDate', function (date, format) {
+    if (!date) {
+      return '';
+    }
     return moment(date).format(format);
+  });
+  leslie.addMinion('calendar', function (date, fallback) {
+    if (!date) {
+      return fallback;
+    }
+    return moment(date).fromNow();
   });
   leslie.setModifyScene(function (scene, req) {
     scene.pathTo = expmap.pathTo(app.getRouteMap());
