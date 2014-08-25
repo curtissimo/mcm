@@ -21,23 +21,23 @@
           <img src="{{unknownMemberPath}}" class="pure-img">
         </div>
       {{/if}}
-      <div class="private-member-info">
-        {{#if showPrivateInformation}}
-        <div class="private-member-info-hog">HOG: {{m.hogNumber}}</div>
-        <div class="private-member-info-local-membership">
-          Chapter membership:
-          {{formatDate m.localMembership.startedOn "MM/YY"}}
-          -
-          {{formatDate m.localMembership.expiresOn "MM/YY"}}
+      {{#if showPrivateInformation}}
+        <div class="private-member-info">
+          <div class="private-member-info-hog">HOG: {{m.hogNumber}}</div>
+          <div class="private-member-info-local-membership">
+            Chapter membership:
+            {{formatDate m.localMembership.startedOn "MM/YY"}}
+            -
+            {{formatDate m.localMembership.expiresOn "MM/YY"}}
+          </div>
+          <div class="private-member-info-national-membership">
+            National membership:
+            {{formatDate m.nationalMembership.startedOn "MM/YY"}}
+            -
+            {{formatDate m.nationalMembership.expiresOn "MM/YY"}}
+          </div>
         </div>
-        <div class="private-member-info-national-membership">
-          National membership:
-          {{formatDate m.nationalMembership.startedOn "MM/YY"}}
-          -
-          {{formatDate m.nationalMembership.expiresOn "MM/YY"}}
-        </div>
-        {{/if}}
-      </div>
+      {{/if}}
     </div>
     <div class="pure-u-1 pure-u-md-3-4">
     </div>
