@@ -1,7 +1,7 @@
 $media-query-small: 35.5em;
 $media-query-medium: 48em;
 
-$page-background-color: #000;
+$page-background-color: #FFF;
 $content-background-color: #FFF;
 
 $menu-color: inherit;
@@ -48,54 +48,34 @@ body, html {
 
 /* LAYOUT *****************************************************/
 .public-page, .member-page {
-  @include transition (padding, 0.25s);
   background-color: $content-background-color;
 
-  .menu {
-    padding: 0 1em;
-  }
-
   .content {
-    padding: 1em;
-
     > h1:first-child {
       margin-top: 0;
     }
   }
-
-  .footer {
-    padding: 1em;
-  }
 }
 
-@media (max-width: 640px) {
-  .public-page, .member-page {
-    padding: 0;
-  }
-}
+.menu-link {
+  span {
+    background-color: $menu-active-color;
 
-#main-nav {
-  position: relative;
+    &:after,
+    &:before {
+      background-color: $menu-active-color;
+    }
+  }
 }
 
 /* MODULE *****************************************************/
 .pure-menu {
-
-  // font-size: 14px;
-
   a {
     color: $menu-color;
   }
 
-  ul {
-    margin-right: 111px;
-  }
-
   li {
     a {
-      padding-left: 14px;
-      padding-right: 14px;
-
       &:hover,
       &:focus {
         background-color: $menu-hover-background-color;

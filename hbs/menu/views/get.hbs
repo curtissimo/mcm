@@ -1,7 +1,7 @@
 <div id="main-nav">
-  <nav class="pure-menu pure-menu-open pure-menu-horizontal">
-    <label for="toggle" class="toggle" data-open="Main Menu" data-close="Close Menu" onclick></label>
-    <input type="checkbox" id="toggle">
+  <a href="#main-nav" id="menu-link" class="menu-link"><span></span></a>
+  <nav class="pure-menu pure-menu-open">
+    <a class="pure-menu-heading" href="/">{{chapter.name}}</a>
     <ul>
       {{#each pages}}
         {{#if isActive}}
