@@ -19,7 +19,7 @@ $menu-width: 12em;
   min-width: 320px;
   margin: 0 auto;
   position: relative;
-  padding: 0 2em;
+  padding: 0;
   margin-bottom: 50px;
   line-height: 1.6em;
 
@@ -89,7 +89,9 @@ $menu-width: 12em;
 
 @media (min-width: $media-query-medium) {
   .member-page, .public-page {
+    @include transition(all, 0.2s);
     padding-left: $menu-width + 2em;
+    padding-right: 2em;
     left: 0;
 
     &.active {
