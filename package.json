@@ -21,7 +21,7 @@
     "gulp": "^3.8.7",
     "gulp-concat": "^2.3.4",
     "gulp-handlebars": "^2.2.0",
-    "gulp-jslint": "git://github.com/realistschuckle/gulp-jslint.git#errorsOnly-and-gulp-util",
+    "gulp-jslint": "^0.1.9",
     "gulp-nodeunit-runner": "^0.2.2",
     "gulp-rimraf": "^0.1.0",
     "gulp-sass": "^0.7.3",
