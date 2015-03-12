@@ -9,8 +9,9 @@ var sync = require('browser-sync');
 
 var reloading = false;
 
-function sourceMapsInDevelopment(source, pipe) {
+function sourceMapsInDevelopment(source, pipe, dest) {
   var stream = gulp.src(source);
+  dest = dest || './dist';
   if (!forProduction) {
     stream = stream.pipe(sourcemaps.init())
   }
@@ -18,7 +19,7 @@ function sourceMapsInDevelopment(source, pipe) {
   if (!forProduction) {
     stream = stream.pipe(sourcemaps.write())
   }
-  stream = stream.pipe(gulp.dest("dist"));
+  stream = stream.pipe(gulp.dest(dest));
 }
 var forProduction = process.env.NODE_ENV === 'production';
 
@@ -49,7 +50,7 @@ gulp.task('reserve', function (cb) {
 
 gulp.task('sass', function () {
   var source = [ './src/**/*.scss' ];
-  return sourceMapsInDevelopment(source, sass());
+  return sourceMapsInDevelopment(source, sass(), './dist/public');
 });
 
 gulp.task('serve', function () {
