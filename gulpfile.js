@@ -1,17 +1,29 @@
 var gulp = require('gulp');
+var babel = require('gulp-babel');
 var server = require('gulp-develop-server');
+var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
 var sync = require('browser-sync');
 
 var reloading = false;
 
+var forProduction = process.env.NODE_ENV === 'production';
+
 gulp.task('clean', function (cb) {
   del('./dist', cb);
 });
 
-gulp.task('dist', function () {
-  return gulp.src('./src/**/*.*')
-    .pipe(gulp.dest('./dist/'));
+gulp.task('es6-server', function () {
+  var stream = gulp.src([ './src/app.js', './src/**/controller.js' ]);
+  if (!forProduction) {
+    stream = stream.pipe(sourcemaps.init())
+  }
+  stream = stream.pipe(babel())
+  if (!forProduction) {
+    stream = stream.pipe(sourcemaps.write())
+  }
+  stream = stream.pipe(gulp.dest("dist"));
 });
 
 gulp.task('reserve', function (cb) {
@@ -28,6 +40,18 @@ gulp.task('reserve', function (cb) {
     reloading = false;
     cb();
   });
+});
+
+gulp.task('sass', function () {
+  var stream = gulp.src('./src/**/*.scss')
+  if (!forProduction) {
+    stream = stream.pipe(sourcemaps.init());
+  }
+  stream = stream.pipe(sass());
+  if (!forProduction) {
+    stream = stream.pipe(sourcemaps.write());
+  }
+  return stream.pipe(gulp.dest('./dist/public'))
 });
 
 gulp.task('serve', function () {
@@ -53,5 +77,6 @@ gulp.task('watch', [ 'dist' ], function () {
   gulp.watch('./src/**/*.*', [ 'dist' ]);
 });
 
-gulp.task('dev', [ 'serve', 'watch' ]);
+gulp.task('dev', [ 'sass', 'es6-server', 'serve', 'watch' ]);
 gulp.task('default', [ 'dist' ]);
+gulp.task('dist', [ 'sass', 'es6-server' ]);
