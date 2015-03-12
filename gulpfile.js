@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var autoprefixer = require('gulp-autoprefixer');
 var babel = require('gulp-babel');
+var csso = require('gulp-csso');
 var ractive = require('gulp-ractive');
 var server = require('gulp-develop-server');
 var sass = require('gulp-sass');
@@ -75,7 +76,8 @@ gulp.task('sass', function () {
     precision: 10
   });
   return sourceMapsInDevelopment(source, s, './dist/public', function (stream) {
-    return stream.pipe(autoprefixer(AUTOPREFIXER_BROWSERS));
+    return stream.pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
+      .pipe(csso());
   });
 });
 
