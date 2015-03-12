@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var babel = require('gulp-babel');
+var ractive = require('gulp-ractive');
 var server = require('gulp-develop-server');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
@@ -68,13 +69,20 @@ gulp.task('serve', function () {
   });
 });
 
+gulp.task('views', function () {
+  return gulp.src('./src/**/*.ractive')
+    .pipe(ractive())
+    .pipe(gulp.dest('./dist'));
+});
+
 gulp.task('watch', [ 'dist' ], function () {
   gulp.watch('./dist/**/*.*', [ 'reserve' ]);
 
   gulp.watch('./src/**/*.scss', [ 'sass' ]);
+  gulp.watch('./src/**/*.ractive', [ 'views' ]);
   gulp.watch([ './src/app.js', './src/**/controller.js' ], [ 'es6-server' ]);
 });
 
 gulp.task('dev', [ 'dist', 'serve', 'watch' ]);
 gulp.task('default', [ 'dist' ]);
-gulp.task('dist', [ 'sass', 'es6-server' ]);
+gulp.task('dist', [ 'sass', 'es6-server', 'views' ]);
