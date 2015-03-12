@@ -8,6 +8,17 @@ var sync = require('browser-sync');
 
 var reloading = false;
 
+function sourceMapsInDevelopment(source, pipe) {
+  var stream = gulp.src(source);
+  if (!forProduction) {
+    stream = stream.pipe(sourcemaps.init())
+  }
+  stream = stream.pipe(pipe);
+  if (!forProduction) {
+    stream = stream.pipe(sourcemaps.write())
+  }
+  stream = stream.pipe(gulp.dest("dist"));
+}
 var forProduction = process.env.NODE_ENV === 'production';
 
 gulp.task('clean', function (cb) {
@@ -15,15 +26,8 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('es6-server', function () {
-  var stream = gulp.src([ './src/app.js', './src/**/controller.js' ]);
-  if (!forProduction) {
-    stream = stream.pipe(sourcemaps.init())
-  }
-  stream = stream.pipe(babel())
-  if (!forProduction) {
-    stream = stream.pipe(sourcemaps.write())
-  }
-  stream = stream.pipe(gulp.dest("dist"));
+  var source = [ './src/app.js', './src/**/controller.js' ];
+  return sourceMapsInDevelopment(source, babel());
 });
 
 gulp.task('reserve', function (cb) {
@@ -43,15 +47,8 @@ gulp.task('reserve', function (cb) {
 });
 
 gulp.task('sass', function () {
-  var stream = gulp.src('./src/**/*.scss')
-  if (!forProduction) {
-    stream = stream.pipe(sourcemaps.init());
-  }
-  stream = stream.pipe(sass());
-  if (!forProduction) {
-    stream = stream.pipe(sourcemaps.write());
-  }
-  return stream.pipe(gulp.dest('./dist/public'))
+  var source = [ './src/**/*.scss' ];
+  return sourceMapsInDevelopment(source, sass());
 });
 
 gulp.task('serve', function () {
@@ -74,9 +71,10 @@ gulp.task('serve', function () {
 gulp.task('watch', [ 'dist' ], function () {
   gulp.watch('./dist/**/*.*', [ 'reserve' ]);
 
-  gulp.watch('./src/**/*.*', [ 'dist' ]);
+  gulp.watch('./src/**/*.scss', [ 'sass' ]);
+  gulp.watch([ './src/app.js', './src/**/controller.js' ], [ 'es6-server' ]);
 });
 
-gulp.task('dev', [ 'sass', 'es6-server', 'serve', 'watch' ]);
+gulp.task('dev', [ 'dist', 'serve', 'watch' ]);
 gulp.task('default', [ 'dist' ]);
 gulp.task('dist', [ 'sass', 'es6-server' ]);
