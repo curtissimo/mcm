@@ -1,4 +1,5 @@
 var gulp = require('gulp');
+var autoprefixer = require('gulp-autoprefixer');
 var babel = require('gulp-babel');
 var ractive = require('gulp-ractive');
 var server = require('gulp-develop-server');
@@ -8,14 +9,33 @@ var del = require('del');
 var sync = require('browser-sync');
 
 var reloading = false;
+var AUTOPREFIXER_BROWSERS = [
+  'ie >= 8',
+  'ie_mob >= 7',
+  'ff >= 30',
+  'chrome >= 34',
+  'safari >= 7',
+  'opera >= 23',
+  'ios >= 7',
+  'android >= 4.4',
+  'bb >= 10'
+];
 
-function sourceMapsInDevelopment(source, pipe, dest) {
+function sourceMapsInDevelopment(source, pipe, dest, cb) {
   var stream = gulp.src(source);
+  if (typeof dest === 'function') {
+    cb = dest;
+    dest = null;
+  }
+  if (typeof cb !== 'function') {
+    cb = function (s) { return s; };
+  }
   dest = dest || './dist';
   if (!forProduction) {
     stream = stream.pipe(sourcemaps.init())
   }
   stream = stream.pipe(pipe);
+  stream = cb(stream);
   if (!forProduction) {
     stream = stream.pipe(sourcemaps.write())
   }
@@ -50,7 +70,13 @@ gulp.task('reserve', function (cb) {
 
 gulp.task('sass', function () {
   var source = [ './src/**/*.scss' ];
-  return sourceMapsInDevelopment(source, sass(), './dist/public');
+  var s = sass({
+    outputStyle: 'expanded',
+    precision: 10
+  });
+  return sourceMapsInDevelopment(source, s, './dist/public', function (stream) {
+    return stream.pipe(autoprefixer(AUTOPREFIXER_BROWSERS));
+  });
 });
 
 gulp.task('serve', function () {
