@@ -3,6 +3,8 @@ var server = require('gulp-develop-server');
 var del = require('del');
 var sync = require('browser-sync');
 
+var reloading = false;
+
 gulp.task('clean', function (cb) {
   del('./dist', cb);
 });
@@ -12,12 +14,19 @@ gulp.task('dist', function () {
     .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('reserve', function () {
+gulp.task('reserve', function (cb) {
+  if (reloading) {
+    cb();
+  }
+  reloading = true;
   server.restart(function (err) {
     if (err) {
       return console.error(err);
+    } else {
+      sync.reload();
     }
-    sync.reload();
+    reloading = false;
+    cb();
   });
 });
 
@@ -39,9 +48,9 @@ gulp.task('serve', function () {
 });
 
 gulp.task('watch', [ 'dist' ], function () {
-  gulp.watch('./dist/app.js', [ 'reserve' ]);
+  gulp.watch('./dist/**/*.*', [ 'reserve' ]);
 
-  gulp.watch('./src/app.js', [ 'dist' ]);
+  gulp.watch('./src/**/*.*', [ 'dist' ]);
 });
 
 gulp.task('dev', [ 'serve', 'watch' ]);
