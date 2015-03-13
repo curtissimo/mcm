@@ -79,6 +79,11 @@ gulp.task('label', [ 'build' ], function (cb) {
   });
 });
 
+gulp.task('reload', [ 'sass', 'views', 'fonts' ], function (cb) {
+  sync.reload();
+  cb();
+});
+
 gulp.task('reserve', function (cb) {
   if (reloading) {
     cb();
@@ -139,10 +144,11 @@ gulp.task('views', function () {
 });
 
 gulp.task('watch', [ 'build' ], function () {
-  gulp.watch('./build/**/*.*', [ 'reserve' ]);
+  gulp.watch('./build/**/*.js', [ 'reserve' ]);
 
-  gulp.watch('./src/**/*.scss', [ 'sass' ]);
-  gulp.watch('./src/**/*.ractive', [ 'views' ]);
+  gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
+  gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
+  gulp.watch('./src/**/*.ractive', [ 'views', 'reload' ]);
   gulp.watch([ './src/app.js', './src/**/controller.js' ], [ 'es6-server' ]);
 });
 
