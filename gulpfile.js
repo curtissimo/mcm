@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var autoprefixer = require('gulp-autoprefixer');
 var babel = require('gulp-babel');
 var csso = require('gulp-csso');
+var hash = require('gulp-hash');
 var ractive = require('gulp-ractive');
 var server = require('gulp-develop-server');
 var sass = require('gulp-sass');
@@ -9,6 +10,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
 var sync = require('browser-sync');
 
+var forProduction = process.env.NODE_ENV === 'production';
 var reloading = false;
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 8',
@@ -22,35 +24,36 @@ var AUTOPREFIXER_BROWSERS = [
   'bb >= 10'
 ];
 
-function sourceMapsInDevelopment(source, pipe, dest, cb) {
+function sourceMapsInDevelopment(options) {
+  var source = options.source;
+  var pipe = options.pipe;
+  var dest = options.dest || './dist';
+  var betweenMaps = options.betweenMaps || function (s) { return s; };
+  var afterMaps = options.afterMaps || function (s) { return s; };
   var stream = gulp.src(source);
-  if (typeof dest === 'function') {
-    cb = dest;
-    dest = null;
-  }
-  if (typeof cb !== 'function') {
-    cb = function (s) { return s; };
-  }
-  dest = dest || './dist';
+
   if (!forProduction) {
     stream = stream.pipe(sourcemaps.init())
   }
-  stream = stream.pipe(pipe);
-  stream = cb(stream);
+  stream = betweenMaps(stream);
   if (!forProduction) {
     stream = stream.pipe(sourcemaps.write())
   }
   stream = stream.pipe(gulp.dest(dest));
+  return afterMaps(stream);
 }
-var forProduction = process.env.NODE_ENV === 'production';
 
 gulp.task('clean', function (cb) {
   del('./dist', cb);
 });
 
 gulp.task('es6-server', function () {
-  var source = [ './src/app.js', './src/**/controller.js' ];
-  return sourceMapsInDevelopment(source, babel());
+  return sourceMapsInDevelopment({
+    source: [ './src/app.js', './src/**/controller.js' ],
+    betweenMaps: function (stream) {
+      return stream.pipe(babel());
+    }
+  });
 });
 
 gulp.task('reserve', function (cb) {
@@ -70,14 +73,19 @@ gulp.task('reserve', function (cb) {
 });
 
 gulp.task('sass', function () {
-  var source = [ './src/**/*.scss' ];
-  var s = sass({
-    outputStyle: 'expanded',
-    precision: 10
-  });
-  return sourceMapsInDevelopment(source, s, './dist/public', function (stream) {
-    return stream.pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
-      .pipe(csso());
+  return sourceMapsInDevelopment({
+    source: './src/**/*.scss',
+    betweenMaps: function (stream) {
+      return stream.pipe(sass({ outputStyle: 'expanded', precision: 10 }))
+        .pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
+        .pipe(csso())
+        .pipe(hash());
+    },
+    dest: './dist/public',
+    afterMaps: function (stream) {
+      return stream.pipe(hash.manifest('asset-hashes.json'))
+        .pipe(gulp.dest('./dist'));
+    }
   });
 });
 
