@@ -62,14 +62,14 @@ class PresenterContext {
 
   addStylesheet(name) {
     if (name !== undefined && name !== null) {
-      let assetPath = '/controllers/' + this._name + '/styles/' + name;
+      let assetPath = '/presenters/' + this._name + '/styles/' + name;
       this._stylesheets.push(assetPath)
     }
   }
 
   loadPresenter() {
-    var controllerPath = 'controllers/' + this._name + '/presenter';
-    return System.import(controllerPath);
+    var presenterPath = 'presenters/' + this._name + '/presenter';
+    return System.import(presenterPath);
   }
 }
 
@@ -79,7 +79,7 @@ app.get('/session', (req, res) => {
   context.loadPresenter()
     .then(m => m.get(context))
     .then(() => {
-      var source = path.join(__dirname, 'controllers/session/views', context.view);
+      var source = path.join(__dirname, 'presenters/session/views', context.view);
       source += '.ractive';
       return promisify(fs.readFile.bind(fs, source, options));
     })

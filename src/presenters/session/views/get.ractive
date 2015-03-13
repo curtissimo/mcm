@@ -22,7 +22,7 @@
     </p>
     <i class="fa fa-mercury"></i>
     <p>
-      Fixed controller loading?
+      Fixed presenter loading?
     </p>
     <p>{{ message }}</p>
   </body>
