@@ -156,7 +156,7 @@ gulp.task('views', function () {
 });
 
 gulp.task('watch', [ 'build' ], function () {
-  gulp.watch('./build/**/*.js', [ 'reserve' ]);
+  gulp.watch([ './build/**/*.js', './build/asset-hashes.json' ], [ 'reserve' ]);
 
   gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
