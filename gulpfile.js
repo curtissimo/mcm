@@ -46,7 +46,12 @@ function sourceMapsInDevelopment(options) {
 }
 
 gulp.task('clean', function (cb) {
-  del('./build', cb);
+  del('./build', function (err) {
+    if (err) {
+      return cb(err);
+    }
+    del('./dist', cb);
+  });
 });
 
 gulp.task('es6-server', function () {
