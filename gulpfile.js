@@ -138,10 +138,10 @@ gulp.task('serve', [ 'build' ], function () {
     }
     sync({
       browser: [
-        'FirefoxDeveloperEdition',
         'Google Chrome Canary',
         'Google Chrome',
-        'Safari'
+        'Safari',
+        'FirefoxDeveloperEdition'
       ],
       startPath: '/session',
       proxy: 'http://localhost:3000'
