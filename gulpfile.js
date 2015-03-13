@@ -13,7 +13,7 @@ var fs = require('fs');
 var exec = require('child_process').exec;
 
 var forProduction = process.env.NODE_ENV === 'production';
-var reloading = false;
+var reloading = null;
 var AUTOPREFIXER_BROWSERS = [
   'ie >= 8',
   'ie_mob >= 7',
@@ -98,18 +98,19 @@ gulp.task('reload', [ 'sass', 'views', 'fonts' ], function (cb) {
 
 gulp.task('reserve', function (cb) {
   if (reloading) {
-    cb();
+    clearTimeout(reloading);
   }
-  reloading = true;
-  server.restart(function (err) {
-    if (err) {
-      return console.error(err);
-    } else {
-      sync.reload();
-    }
-    reloading = false;
-    cb();
-  });
+  reloading = setTimeout(function () {
+    server.restart(function (err) {
+      if (err) {
+        return console.error(err);
+      } else {
+        sync.reload();
+      }
+      reloading = null;
+      cb();
+    });
+  }, 500);
 });
 
 gulp.task('sass', function () {
@@ -138,9 +139,9 @@ gulp.task('serve', [ 'build' ], function () {
     }
     sync({
       browser: [
-        'Google Chrome Canary',
-        'Google Chrome',
-        'Safari',
+        // 'Google Chrome Canary',
+        // 'Google Chrome',
+        // 'Safari',
         'FirefoxDeveloperEdition'
       ],
       startPath: '/session',
