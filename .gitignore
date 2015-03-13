@@ -22,4 +22,5 @@ assets/css/
 assets/themes/leather/*.css
 lib/**/views/*.js
 
+build/
 dist/
