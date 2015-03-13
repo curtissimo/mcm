@@ -1,3 +1,9 @@
-import fs from 'fs';
+let controller = {
+  get(ac) {
+    ac.data = { message: 'hello, curtis' };
+    return ac;
+  }
+};
 
-console.log('session controller loaded');
+export default controller;
+export var __useDefault = true; // Stupid hack for system.js
