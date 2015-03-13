@@ -68,7 +68,7 @@ class PresenterContext {
   }
 
   loadPresenter() {
-    var controllerPath = 'controllers/' + this._name + '/controller';
+    var controllerPath = 'controllers/' + this._name + '/presenter';
     return System.import(controllerPath);
   }
 }
