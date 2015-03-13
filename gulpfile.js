@@ -63,7 +63,7 @@ gulp.task('es6-server', function () {
   });
 });
 
-gulp.task('label', function (cb) {
+gulp.task('label', [ 'build' ], function (cb) {
   exec('cp -R ./build ./dist', function (e) {
     var now = new Date();
     var content = JSON.stringify({
@@ -107,7 +107,7 @@ gulp.task('sass', function () {
   });
 });
 
-gulp.task('serve', function () {
+gulp.task('serve', [ 'build' ], function () {
   server.listen({ path: './build/app.js' }, function (err) {
     if (err) {
       return console.error(err);
@@ -119,6 +119,7 @@ gulp.task('serve', function () {
         'Google Chrome',
         'Safari'
       ],
+      startPath: '/session',
       proxy: 'http://localhost:3000'
     });
   });
@@ -130,7 +131,7 @@ gulp.task('views', function () {
     .pipe(gulp.dest('./build'));
 });
 
-gulp.task('watch', [ 'dist' ], function () {
+gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./build/**/*.*', [ 'reserve' ]);
 
   gulp.watch('./src/**/*.scss', [ 'sass' ]);
@@ -140,5 +141,5 @@ gulp.task('watch', [ 'dist' ], function () {
 
 gulp.task('build', [ 'sass', 'es6-server', 'views' ]);
 gulp.task('default', [ 'build' ]);
-gulp.task('dev', [ 'build', 'serve', 'watch' ]);
-gulp.task('dist', [ 'build', 'label' ]);
+gulp.task('dev', [ 'serve', 'watch' ]);
+gulp.task('dist', [ 'label' ]);
