@@ -63,6 +63,11 @@ gulp.task('es6-server', function () {
   });
 });
 
+gulp.task('fonts', function () {
+  return gulp.src('./src/fonts/*')
+    .pipe(gulp.dest('./build/public/fonts'));
+});
+
 gulp.task('label', [ 'build' ], function (cb) {
   exec('cp -R ./build ./dist', function (e) {
     var now = new Date();
@@ -139,7 +144,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch([ './src/app.js', './src/**/controller.js' ], [ 'es6-server' ]);
 });
 
-gulp.task('build', [ 'sass', 'es6-server', 'views' ]);
+gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'views' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
