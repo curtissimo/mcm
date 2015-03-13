@@ -31,7 +31,7 @@ function sourceMapsInDevelopment(options) {
   var pipe = options.pipe;
   var dest = options.dest || './build';
   var betweenMaps = options.betweenMaps || function (s) { return s; };
-  var afterMaps = options.afterMaps || function (s) { return s; };
+  var afterDist = options.afterDist || function (s) { return s; };
   var stream = gulp.src(source);
 
   if (!forProduction) {
@@ -42,7 +42,7 @@ function sourceMapsInDevelopment(options) {
     stream = stream.pipe(sourcemaps.write())
   }
   stream = stream.pipe(gulp.dest(dest));
-  return afterMaps(stream);
+  return afterDist(stream);
 }
 
 gulp.task('clean', function (cb) {
@@ -99,13 +99,15 @@ gulp.task('sass', function () {
   return sourceMapsInDevelopment({
     source: './src/**/*.scss',
     betweenMaps: function (stream) {
-      return stream.pipe(sass({ outputStyle: 'expanded', precision: 10 }))
-        .pipe(autoprefixer(AUTOPREFIXER_BROWSERS))
-        .pipe(csso())
-        .pipe(hash());
+      stream = stream.pipe(sass({ precision: 10 }))
+        .pipe(autoprefixer(AUTOPREFIXER_BROWSERS));
+      if (forProduction) {
+        stream = stream.pipe(csso())
+      }
+      return stream.pipe(hash());
     },
     dest: './build/public',
-    afterMaps: function (stream) {
+    afterDist: function (stream) {
       return stream.pipe(hash.manifest('asset-hashes.json'))
         .pipe(gulp.dest('./build'));
     }
