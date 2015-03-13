@@ -54,11 +54,23 @@ gulp.task('clean', function (cb) {
   });
 });
 
-gulp.task('es6-server', function () {
+gulp.task('es6-app', function () {
   return sourceMapsInDevelopment({
-    source: [ './src/app.js', './src/**/controller.js' ],
+    source: './src/*.js',
     betweenMaps: function (stream) {
       return stream.pipe(babel());
+    }
+  });
+});
+
+gulp.task('es6-controllers', function () {
+  return sourceMapsInDevelopment({
+    source: './src/**/controller.js',
+    betweenMaps: function (stream) {
+      return stream.pipe(babel({
+        modules: 'system',
+        moduleIds: true
+      }));
     }
   });
 });
@@ -149,10 +161,12 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
   gulp.watch('./src/**/*.ractive', [ 'views', 'reload' ]);
-  gulp.watch([ './src/app.js', './src/**/controller.js' ], [ 'es6-server' ]);
+  gulp.watch('./src/*.js', [ 'es6-app' ]);
+  gulp.watch('./src/**/controller.js', [ 'es6-controllers' ]);
 });
 
 gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'views' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
+gulp.task('es6-server', [ 'es6-app', 'es6-controllers' ]);
