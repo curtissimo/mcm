@@ -1,1 +1,1 @@
-console.log('newsletters controller loaded');
+console.log('newsletters presenter loaded');

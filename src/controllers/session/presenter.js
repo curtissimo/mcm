@@ -1,4 +1,4 @@
-let controller = {
+let presenter = {
   get(ac) {
     ac.data = { message: 'hello, curtis' };
     ac.addStylesheet('area.css');
@@ -6,5 +6,5 @@ let controller = {
   }
 };
 
-export default controller;
+export default presenter;
 export var __useDefault = true; // Stupid hack for system.js
