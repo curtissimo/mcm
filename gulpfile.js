@@ -139,9 +139,9 @@ gulp.task('serve', [ 'build' ], function () {
     }
     sync({
       browser: [
-        // 'Google Chrome Canary',
-        // 'Google Chrome',
-        // 'Safari',
+        'Google Chrome Canary',
+        'Google Chrome',
+        'Safari',
         'FirefoxDeveloperEdition'
       ],
       startPath: '/session',
