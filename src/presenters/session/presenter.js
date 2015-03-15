@@ -4,7 +4,7 @@ let presenter = {
       title: 'Log in',
     };
     ac.addStylesheet('area');
-    ac.render({ data: data, presenters: { menu: 'newsletters' } });
+    ac.render({ data: data, presenters: { menu: 'menu' } });
   }
 };
 
