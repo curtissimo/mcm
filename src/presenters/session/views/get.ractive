@@ -8,13 +8,13 @@
   <form class="pure-form pure-form-stacked" method="post" action="/session">
     <fieldset>
       <label for="email">Email</label>
-      <input id="email" name="email" type="email" class="pure-input-1">
+      <input id="email" name="email" type="email" class="pure-input-1" required>
 
       <label for="password">Password</label>
-      <input id="password" name="password" type="password" class="pure-input-1">
+      <input id="password" name="password" type="password" class="pure-input-1" required>
 
       <label for="remember" class="pure-checkbox">
-        <input id="remember" name="remember" value="1" type="checkbox"> Remember me
+        <input id="remember" name="remember" value="1" type="checkbox" checked> Remember me
       </label>
       
       <button type="submit" class="pure-button pure-button-primary">Submit my credentials</button>

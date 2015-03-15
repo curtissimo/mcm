@@ -197,6 +197,26 @@ export class LeslieMvp {
     });
   }
 
+  put({ presenterName: p, uri: r }) {
+    if (!r) {
+      r = `/${p}`;
+    }
+    let self = this;
+    this._expressApp.put(r, function (req, res, next) {
+      let presenter = new Presenter(p, 'put', self._assets.request(p), true);
+      presenter.render()
+        .then(output => res.send(output))
+        .catch(directive => {
+          if (typeof directive.handle === 'function') {
+            directive.handle(res, next);
+          } else {
+            let output = `${directive.message}\n${directive.stack}`;
+            console.error(output);
+          }
+        })
+    });
+  }
+
   set contextModifier(value) {
     if (typeof value === 'function') {
       this._contextModifier = o => value(o) || o;

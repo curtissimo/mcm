@@ -97,6 +97,13 @@ class Assets {
   }
 }
 
+app.use(function (req, res, next) {
+  if (req.url.startsWith('/session') && req.method === 'POST') {
+    req.method = 'PUT';
+  }
+  next();
+});
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {
@@ -106,6 +113,7 @@ assets.initialize()
     leslieMvp.addStylesheet('app');
     leslieMvp.addStylesheet('themes/leather/theme');
     leslieMvp.get({ presenterName: 'session' });
+    leslieMvp.put({ presenterName: 'session' });
 
     app.listen(3000);
   })
