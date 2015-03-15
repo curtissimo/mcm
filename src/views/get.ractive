@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, inital-scale=1">
     {{#stylesheets}}
     <link rel="stylesheet" href="{{.}}">
     {{/stylesheets}}
@@ -9,6 +10,10 @@
   <body>
     {{{ menu }}}
     {{{ content }}}
-    <h1>And, that's the rest of the story.</h1>
+    <div class="is-xs-screen">tiny</div>
+    <div class="is-sm-screen">small</div>
+    <div class="is-md-screen">medium</div>
+    <div class="is-lg-screen">large</div>
+    <div class="is-xl-screen">extra large</div>
   </body>
 </html>

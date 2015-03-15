@@ -1,0 +1,53 @@
+@import 'partials/_media-queries';
+
+.is-xs-screen {
+  display: block;
+
+  @include small-screen {
+    display: none;
+  }
+}
+
+.is-sm-screen {
+  display: none;
+
+  @include small-screen {
+    display: block;
+  }
+
+  @include medium-screen {
+    display: none;
+  }
+}
+
+.is-md-screen {
+  display: none;
+
+  @include medium-screen {
+    display: block;
+  }
+
+  @include large-screen {
+    display: none;
+  }
+}
+
+.is-lg-screen {
+  display: none;
+
+  @include large-screen {
+    display: block;
+  }
+
+  @include extra-large-screen {
+    display: none;
+  }
+}
+
+.is-xl-screen {
+  display: none;
+
+  @include extra-large-screen {
+    display: block;
+  }
+}
