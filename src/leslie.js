@@ -174,7 +174,7 @@ export class LeslieMvp {
         .then(output => res.send(output))
         .catch(directive => {
           let output = `${directive.message}\n${directive.stack}`;
-          console.log(output);
+          console.error(output);
           directive.handle(res, next);
         })
     });
