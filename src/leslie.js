@@ -181,29 +181,20 @@ export class LeslieMvp {
   }
 
   get({ presenterName: p, uri: r }) {
-    if (!r) {
-      r = `/${p}`;
-    }
-    let self = this;
-    this._expressApp.get(r, function (req, res, next) {
-      let presenter = new Presenter(p, 'get', self._assets.request(p), true);
-      presenter.render()
-        .then(output => res.send(output))
-        .catch(directive => {
-          let output = `${directive.message}\n${directive.stack}`;
-          console.error(output);
-          directive.handle(res, next);
-        })
-    });
+    this._method({ methodName: 'get', presenterName: p, uri: r });
   }
 
   put({ presenterName: p, uri: r }) {
+    this._method({ methodName: 'put', presenterName: p, uri: r });
+  }
+
+  _method({ methodName: m, presenterName: p, uri: r }) {
     if (!r) {
       r = `/${p}`;
     }
     let self = this;
-    this._expressApp.put(r, function (req, res, next) {
-      let presenter = new Presenter(p, 'put', self._assets.request(p), true);
+    this._expressApp[m](r, function (req, res, next) {
+      let presenter = new Presenter(p, m, self._assets.request(p), true);
       presenter.render()
         .then(output => res.send(output))
         .catch(directive => {
