@@ -3,25 +3,25 @@ $medium-screen-query: "screen and (min-width: 48em)";
 $large-screen-query: "screen and (min-width: 64em)";
 $extra-large-screen-query: "screen and (min-width: 80em)";
 
-@mixin small-screen {
+@mixin min-sm-screen {
   @media #{$small-screen-query} {
     @content;
   }
 }
 
-@mixin medium-screen {
+@mixin min-md-screen {
   @media #{$medium-screen-query} {
     @content;
   }
 }
 
-@mixin large-screen {
+@mixin min-lg-screen {
   @media #{$large-screen-query} {
     @content;
   }
 }
 
-@mixin extra-large-screen {
+@mixin min-xl-screen {
   @media #{$extra-large-screen-query} {
     @content;
   }

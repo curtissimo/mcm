@@ -1,17 +1,22 @@
-<p>
-  Hello, world.
-</p>
-<p>
-  No, really, hello.
-</p>
-<p>
-  Does this reload?
-</p>
-<p>
-  Does this restart the server?
-</p>
-<i class="fa fa-mercury"></i>
-<p>
-  Fixed presenter loading?
-</p>
-<p>{{ message }}</p>
+<h1 class="banner">Log in!</h1>
+<section>
+  <p>
+    Type in your email and password, below, to log into the Members' only portion
+    of the Web site. You can access events, discussion groups, your blog, 
+    newsletters, and more!
+  </p>
+  <form class="pure-form pure-form-stacked" method="post" action="/session">
+    <fieldset>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" class="pure-input-1">
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" class="pure-input-1">
+
+      <label for="remember" class="pure-checkbox">
+        <input id="remember" name="remember" value="1" type="checkbox"> Remember me
+      </label>
+      
+      <button type="submit" class="pure-button pure-button-primary">Submit my credentials</button>
+  </form>
+</section>

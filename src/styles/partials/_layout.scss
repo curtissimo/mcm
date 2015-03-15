@@ -1,0 +1,36 @@
+@import 'partials/_media-queries';
+
+#main-menu {
+  position: absolute;
+  width: 19em;
+  height: 100%;
+  left: -19em;
+  box-sizing: border-box;
+
+  @include min-lg-screen {
+    left: 0;
+  }
+}
+
+#main-content {
+  padding-top: 3em;
+
+  @include min-lg-screen {
+    padding-top: 0;
+    margin-left: 19em;
+  }
+}
+
+#main-toolbar {
+  overflow: hidden;
+  height: 3em;
+  position: fixed;
+}
+
+#debug {
+  background-color: gray;
+
+  @include min-lg-screen {
+    margin-left: 19em;
+  }
+}

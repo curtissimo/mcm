@@ -1,0 +1,28 @@
+@import '../../partials/_colors.scss';
+
+.banner {
+  margin: 0;
+  padding: 1em .5em .5em .5em;
+  color: $primary-color;
+  text-transform: uppercase;
+}
+
+.main-menu {
+  background-color: $primary-color-dark;
+  color: $primary-color-dark-text;
+
+  .pure-menu-link {
+    color: $primary-color-dark-text;
+    text-decoration: none;
+  }
+
+  .pure-menu-selected  {
+    background-color: $primary-color-light;
+    color: $primary-color-light-text;
+
+    .pure-menu-link,
+    .pure-menu-link:visited {
+      color: $primary-color-light-text;
+    }
+  }
+}

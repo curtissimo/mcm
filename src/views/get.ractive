@@ -2,18 +2,29 @@
 <html>
   <head>
     <title>{{title}}</title>
-    <meta name="viewport" content="width=device-width, inital-scale=1">
+    <meta name="viewport" content="width=device-width, inital-scale=1, maximum-scale=1">
     {{#stylesheets}}
     <link rel="stylesheet" href="{{.}}">
     {{/stylesheets}}
   </head>
   <body>
+    <div id="main-menu" class="main-menu">
     {{{ menu }}}
-    {{{ content }}}
-    <div class="is-xs-screen">tiny</div>
-    <div class="is-sm-screen">small</div>
-    <div class="is-md-screen">medium</div>
-    <div class="is-lg-screen">large</div>
-    <div class="is-xl-screen">extra large</div>
+    </div>
+    <div id="main-toolbar" class="max-lg-screen toolbar">
+      <div class="toolbar-item">
+        <a href="#" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+      </div>
+    </div>
+    <div id="main-content">
+      {{{ content }}}
+    </div>
+    <div id="debug">
+      <div class="is-xs-screen">tiny</div>
+      <div class="is-sm-screen">small</div>
+      <div class="is-md-screen">medium</div>
+      <div class="is-lg-screen">large</div>
+      <div class="is-xl-screen">extra large</div>
+    </div>
   </body>
 </html>

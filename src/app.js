@@ -104,6 +104,7 @@ assets.initialize()
 
     leslieMvp.addStylesheet('font-awesome');
     leslieMvp.addStylesheet('app');
+    leslieMvp.addStylesheet('themes/leather/theme');
     leslieMvp.get({ presenterName: 'session' });
 
     app.listen(3000);
