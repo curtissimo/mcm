@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import Ractive from 'ractive';
 import System from 'systemjs';
+import { LeslieMvp } from './leslie';
 
 let app = express();
 let pwd = __dirname;
@@ -29,14 +30,66 @@ function promisify(fn) {
   })
 }
 
+class ScopedAssets {
+  constructor(assets, scope) {
+    this._assets = assets;
+    this._scope = scope;
+    this._stylesheets = [];
+  }
+
+  add(name) {
+    let path = this.getPath(name);
+    let a = this._assets.translate(path);
+    this._stylesheets.push(a)
+  }
+
+  getPath(name) {
+    if (!this._scope) {
+      return `styles/${name}.css`;
+    }
+    return `presenters/${this._scope}/styles/${name}.css`;
+  }
+
+  request(path) {
+    let newScope = new ScopedAssets(this._assets, path);
+    newScope._stylesheets = this._stylesheets;
+    return newScope;
+  }
+
+  get stylesheets() {
+    return Array.from(this._stylesheets);
+  }
+}
+
 class Assets {
-  constructor() {
+  initialize() {
     let options = { encoding: 'utf8' };
     let source = path.join(pwd, 'asset-hashes.json');
-    var self = this;
-    promisify(fs.readFile.bind(fs, source, options)).then(content => {
-      self._translations = JSON.parse(content);
-    });
+    this._stylesheets = [];
+    let self = this;
+    return promisify(fs.readFile.bind(fs, source, options))
+      .then(content => {
+        self._translations = JSON.parse(content);
+      })
+  }
+
+  add(name) {
+    let path = this.getPath(name);
+    let a = this.translate(path);
+    this._stylesheets.push(a)
+  }
+
+  getPath(name) {
+    if (!this._scope) {
+      return `styles/${name}.css`;
+    }
+    return `presenters/${this._scope}/styles/${name}.css`;
+  }
+
+  request(path) {
+    let newScope = new ScopedAssets(this, path);
+    newScope._stylesheets = Array.from(this._stylesheets);
+    return newScope;
   }
 
   translate(name) {
@@ -45,59 +98,14 @@ class Assets {
 }
 
 let assets = new Assets();
+assets.initialize()
+  .then(() => {
+    let leslieMvp = new LeslieMvp(app, assets);
 
-class PresenterContext {
-  constructor(httpAction, presenterName) {
-    this._view = (httpAction || '').toLowerCase();
-    this._name = presenterName;
-    this._stylesheets = [];
-  }
+    leslieMvp.addStylesheet('font-awesome');
+    leslieMvp.addStylesheet('app');
+    leslieMvp.get({ presenterName: 'session' });
 
-  get view() { return this._view || 'get'; }
-  set view(value) { this._view = value; }
-
-  get name() { return this_name; }
-
-  get stylesheets() { return Array.from(this._stylesheets); }
-
-  addStylesheet(name) {
-    if (name !== undefined && name !== null) {
-      let assetPath = '/presenters/' + this._name + '/styles/' + name;
-      this._stylesheets.push(assetPath)
-    }
-  }
-
-  loadPresenter() {
-    var presenterPath = 'presenters/' + this._name + '/presenter';
-    return System.import(presenterPath);
-  }
-}
-
-app.get('/session', (req, res) => {
-  let options = { encoding: 'utf8' };
-  let context = new PresenterContext(req.method, 'session');
-  context.loadPresenter()
-    .then(m => m.get(context))
-    .then(() => {
-      var source = path.join(__dirname, 'presenters/session/views', context.view);
-      source += '.ractive';
-      return promisify(fs.readFile.bind(fs, source, options));
-    })
-    .then(content => {
-      let data = context.data;
-      let ss = data.stylesheets = [
-        assets.translate('/styles/font-awesome.css'),
-        assets.translate('/styles/app.css')
-      ];
-      for (var asset of context.stylesheets) {
-        ss.push(assets.translate(asset));
-      }
-      let r = new Ractive({
-        template: JSON.parse(content),
-        data: data
-      });
-      res.send(r.toHTML());
-    });
-});
-
-var server = app.listen(3000);
+    app.listen(3000);
+  })
+  .catch(e => console.log(`${e.message}\n${e.stack}`));

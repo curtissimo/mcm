@@ -7,7 +7,7 @@
     {{/stylesheets}}
   </head>
   <body>
-    {{{ header }}}
+    {{{ menu }}}
     <p>
       Hello, world.
     </p>

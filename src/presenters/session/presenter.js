@@ -1,8 +1,8 @@
 let presenter = {
   get(ac) {
-    ac.data = { message: 'hello, curtis' };
-    ac.addStylesheet('area.css');
-    return ac;
+    let data = { message: 'hello, curtis', menu: '<pre>placeholder</pre>' };
+    ac.addStylesheet('area');
+    ac.render({ data: data, presenters: { menu: 'newsletters' } });
   }
 };
 
