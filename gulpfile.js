@@ -8,9 +8,10 @@ var server = require('gulp-develop-server');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var del = require('del');
-var sync = require('browser-sync');
-var fs = require('fs');
 var exec = require('child_process').exec;
+var fs = require('fs');
+var minimist = require('minimist');
+var sync = require('browser-sync');
 
 var forProduction = process.env.NODE_ENV === 'production';
 var reloading = null;
@@ -88,6 +89,23 @@ gulp.task('label', [ 'build' ], function (cb) {
       author: process.env.USER
     });
     fs.writeFile('./dist/stamp.json', content, cb);
+  });
+});
+
+gulp.task('new:presenter', function (cb) {
+  var argv = minimist(process.argv.slice(2));
+  exec('mkdir -p src/presenters/' + argv.name + '/{views,styles}', function (e) {
+    if (e) {
+      return cb(e)
+    }
+    exec('echo "let presenter = {\n  get(ac) {\n    ac.render({});\n  }\n};\n\nexport default presenter;\nexport var __useDefault = true; // Stupid hack for system.js" > src/presenters/' + argv.name + '/presenter.js', function (e) {
+      if (e) {
+        return cb(e);
+      }
+      exec('touch src/presenters/' + argv.name + '/views/get.ractive', function (e) {
+        cb(e);
+      });
+    });
   });
 });
 
