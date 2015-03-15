@@ -132,10 +132,14 @@ gulp.task('reserve', function (cb) {
 });
 
 gulp.task('sass', function () {
+  var options = { precision: 10 };
+  if (!forProduction) {
+    options.sourceComments = true;
+  }
   return sourceMapsInDevelopment({
     source: './src/**/*.scss',
     betweenMaps: function (stream) {
-      stream = stream.pipe(sass({ precision: 10 }))
+      stream = stream.pipe(sass(options))
         .pipe(autoprefixer(AUTOPREFIXER_BROWSERS));
       if (forProduction) {
         stream = stream.pipe(csso())
