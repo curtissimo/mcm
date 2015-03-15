@@ -63,9 +63,12 @@ export class NotModifiedDirective extends Directive {
 
 /** VIEWS *********************************************************************/
 class View {
-  constructor(presenterName, viewName, data) {
+  constructor(data, viewName, presenterName) {
     let options = { encoding: 'utf8' };
     let source = `${__dirname}/presenters/${presenterName}/views/${viewName}`;
+    if (!presenterName) {
+      source = `${__dirname}/views/${viewName || 'get'}`;
+    }
     source += '.ractive';
 
     this._loader = promisify(fs.readFile.bind(fs, source, options));
@@ -75,10 +78,11 @@ class View {
   render() {
     return this._loader
       .then(content => {
-        return new Ractive({
+        let html = new Ractive({
           template: JSON.parse(content),
           data: this._data
         }).toHTML();
+        return { data: this._data, html: html };
       });
   }
 }
@@ -125,11 +129,12 @@ class PresenterInvoker {
 }
 
 export class Presenter {
-  constructor(name, method, assets) {
+  constructor(name, method, assets, isRootRequest) {
     this._name = name;
     this._loader = System.import(`presenters/${name}/presenter`);
     this._method = method;
     this._assets = assets;
+    this._isRootRequest = !!isRootRequest;
   }
 
   render() {
@@ -147,7 +152,19 @@ export class Presenter {
         d.stylesheets = this._assets.stylesheets;
         return Promise.hash(d);
       })
-      .then(data => new View(this._name, this._method, data).render());
+      .then(data => new View(data, this._method, this._name).render())
+      .then(content => {
+        if (!this._isRootRequest) {
+          return content.html;
+        }
+        return new Promise((good, bad) => {
+          let data = content.data;
+          data.content = content.html;
+          new View(data).render()
+            .then(c => good(c.html))
+            .catch(() => good(content.html));
+        });
+      });
   }
 }
 
@@ -169,7 +186,7 @@ export class LeslieMvp {
     }
     let self = this;
     this._expressApp.get(r, function (req, res, next) {
-      let presenter = new Presenter(p, 'get', self._assets.request(p));
+      let presenter = new Presenter(p, 'get', self._assets.request(p), true);
       presenter.render()
         .then(output => res.send(output))
         .catch(directive => {

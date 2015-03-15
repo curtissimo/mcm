@@ -1,29 +1,17 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Login</title>
-    {{#stylesheets}}
-    <link rel="stylesheet" href="{{.}}">
-    {{/stylesheets}}
-  </head>
-  <body>
-    {{{ menu }}}
-    <p>
-      Hello, world.
-    </p>
-    <p>
-      No, really, hello.
-    </p>
-    <p>
-      Does this reload?
-    </p>
-    <p>
-      Does this restart the server?
-    </p>
-    <i class="fa fa-mercury"></i>
-    <p>
-      Fixed presenter loading?
-    </p>
-    <p>{{ message }}</p>
-  </body>
-</html>
+<p>
+  Hello, world.
+</p>
+<p>
+  No, really, hello.
+</p>
+<p>
+  Does this reload?
+</p>
+<p>
+  Does this restart the server?
+</p>
+<i class="fa fa-mercury"></i>
+<p>
+  Fixed presenter loading?
+</p>
+<p>{{ message }}</p>

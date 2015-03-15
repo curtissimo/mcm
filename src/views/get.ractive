@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    {{#stylesheets}}
+    <link rel="stylesheet" href="{{.}}">
+    {{/stylesheets}}
+  </head>
+  <body>
+    {{{ menu }}}
+    {{{ content }}}
+    <h1>And, that's the rest of the story.</h1>
+  </body>
+</html>
