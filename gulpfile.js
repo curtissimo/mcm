@@ -68,10 +68,7 @@ gulp.task('es6-presenters', function () {
   return sourceMapsInDevelopment({
     source: './src/**/presenter.js',
     betweenMaps: function (stream) {
-      return stream.pipe(babel({
-        modules: 'system',
-        moduleIds: true
-      }));
+      return stream.pipe(babel());
     }
   });
 });

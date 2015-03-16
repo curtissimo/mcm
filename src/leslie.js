@@ -131,7 +131,7 @@ class PresenterInvoker {
 export class Presenter {
   constructor(name, method, assets, isRootRequest) {
     this._name = name;
-    this._loader = System.import(`presenters/${name}/presenter`);
+    this._loader = Promise.resolve(require(__dirname + `/presenters/${name}/presenter`));
     this._method = method;
     this._assets = assets;
     this._isRootRequest = !!isRootRequest;

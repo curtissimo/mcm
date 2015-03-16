@@ -3,7 +3,6 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import Ractive from 'ractive';
-import System from 'systemjs';
 import { LeslieMvp } from './leslie';
 
 let app = express();
@@ -11,8 +10,6 @@ let pwd = __dirname;
 let inProduction = process.env.NODE_ENV === 'production';
 
 if (!inProduction) {
-  System.baseURL = './build';
-
   console.log('Serving public files from express at ' + __dirname);
   app.use(express.static(path.join(__dirname, 'public'), {
     maxAge: '365d'
