@@ -57,16 +57,7 @@ gulp.task('clean', function (cb) {
 
 gulp.task('es6-app', function () {
   return sourceMapsInDevelopment({
-    source: './src/*.js',
-    betweenMaps: function (stream) {
-      return stream.pipe(babel());
-    }
-  });
-});
-
-gulp.task('es6-presenters', function () {
-  return sourceMapsInDevelopment({
-    source: './src/**/presenter.js',
+    source: './src/**/*.js',
     betweenMaps: function (stream) {
       return stream.pipe(babel());
     }
@@ -158,9 +149,9 @@ gulp.task('serve', [ 'build' ], function () {
     }
     sync({
       browser: [
-        'Google Chrome Canary',
-        'Google Chrome',
-        'Safari',
+        // 'Google Chrome Canary',
+        // 'Google Chrome',
+        // 'Safari',
         'FirefoxDeveloperEdition'
       ],
       startPath: '/session',
@@ -182,11 +173,10 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
   gulp.watch('./src/**/*.ractive', [ 'views', 'reload' ]);
   gulp.watch('./src/*.js', [ 'es6-app' ]);
-  gulp.watch('./src/**/presenter.js', [ 'es6-presenters' ]);
 });
 
 gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'views' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
-gulp.task('es6-server', [ 'es6-app', 'es6-presenters' ]);
+gulp.task('es6-server', [ 'es6-app' ]);
