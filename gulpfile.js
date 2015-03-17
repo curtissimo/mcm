@@ -28,7 +28,10 @@ var AUTOPREFIXER_BROWSERS = [
   'bb >= 10'
 ];
 
-function promisify(fn) {
+function promisify(scope, method) {
+  var args = Array.prototype.slice.apply(arguments);
+  args.splice(1, 1);
+  var fn = scope[method].bind.apply(scope[method], args);
   return new Promise(function (good, bad) {
     fn(function (err, value) {
       if (err) {
@@ -80,16 +83,16 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
   var account = require('./build/models/account');
   var settings = require('./build/models/settings');
 
-  promisify(dbms.db.destroy.bind(dbms.db, db.config.db))
-    .then(function () { return promisify(dbms.db.create.bind(dbms.db, db.config.db)); })
-    .then(function () { return promisify(dbms.db.destroy.bind(dbms.db, chapterName)); })
-    .then(function () { return promisify(dbms.db.create.bind(dbms.db, chapterName)); })
+  promisify(dbms.db, 'destroy', db.config.db)
+    .then(function () { return promisify(dbms.db, 'create', db.config.db); })
+    .then(function () { return promisify(dbms.db, 'destroy', chapterName); })
+    .then(function () { return promisify(dbms.db, 'create', chapterName); })
     .then(function () {
       var ato = account.to(masterurl);
       var sto = settings.to(chapterurl);
       return Promise.all([
-        promisify(ato.sync.bind(ato)),
-        promisify(sto.sync.bind(sto))
+        promisify(ato, 'sync'),
+        promisify(sto, 'sync')
       ]);
     })
     .then(function () {
@@ -97,16 +100,14 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
       a.name = 'Republic H.O.G.';
       a.subdomain = 'rhog';
       a.domain = 'localhost';
-      var to = a.to(masterurl);
-      return promisify(to.save.bind(to));
+      return promisify(a.to(masterurl), 'save');
     })
     .then(function () {
       var a = settings.new({ name: 'Republic H.O.G.' });
-      var to = a.to(chapterurl);
-      return promisify(to.save.bind(to));
+      return promisify(a.to(chapterurl), 'save');
     })
     .then(function () {
-      return promisify(dbms.db.compact.bind(nano.db, 'mcm-master', 'account'));
+      return promisify(dbms.db, 'compact', 'mcm-master', 'account');
     })
     .then(function () { cb(); })
     .catch(function (e) {
