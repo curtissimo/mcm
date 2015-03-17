@@ -49,8 +49,11 @@ app.use(function (req, res, next) {
   }
 
   account.from(req.vars.masterdb).byUrl(server, function (e, a) {
+    if (e && e.code === 'ECONNREFUSED') {
+      return res.redirect('http://what.ismymc.com/under-maintenance');
+    }
     if (e || a.length === 0) {
-      res.redirect('http://what.ismymc.com');
+      return res.redirect('http://what.ismymc.com');
     }
     a = a[0];
     req.vars.account = a;
