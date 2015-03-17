@@ -1,6 +1,6 @@
 let presenter = {
   get(ac) {
-    let data = { content: 'MY NEW MENU JUST FOR YOU!' };
+    let data = { name: ac.settings.name };
     let presenters = {};
     ac.render({ data: data, presenters: presenters });
   }

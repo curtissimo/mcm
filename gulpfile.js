@@ -72,23 +72,37 @@ gulp.task('clean', function (cb) {
 });
 
 gulp.task('db', [ 'es6-server' ], function (cb) {
-  var url = 'http://couchdb15:5984/mcm-master';
-  var db = nano(url);
+  var chapterName = 'rhog';
+  var masterurl = 'http://couchdb15:5984/mcm-master';
+  var chapterurl = 'http://couchdb15:5984/' + chapterName;
+  var db = nano(masterurl);
   var dbms = nano(db.config.url);
   var account = require('./build/models/account');
+  var settings = require('./build/models/settings');
 
   promisify(dbms.db.destroy.bind(dbms.db, db.config.db))
     .then(function () { return promisify(dbms.db.create.bind(dbms.db, db.config.db)); })
+    .then(function () { return promisify(dbms.db.destroy.bind(dbms.db, chapterName)); })
+    .then(function () { return promisify(dbms.db.create.bind(dbms.db, chapterName)); })
     .then(function () {
-      var to = account.to(url);
-      return promisify(to.sync.bind(to));
+      var ato = account.to(masterurl);
+      var sto = settings.to(chapterurl);
+      return Promise.all([
+        promisify(ato.sync.bind(ato)),
+        promisify(sto.sync.bind(sto))
+      ]);
     })
     .then(function () {
       var a = account.new();
       a.name = 'Republic H.O.G.';
       a.subdomain = 'rhog';
       a.domain = 'localhost';
-      var to = a.to(url);
+      var to = a.to(masterurl);
+      return promisify(to.save.bind(to));
+    })
+    .then(function () {
+      var a = settings.new({ name: 'Republic H.O.G.' });
+      var to = a.to(chapterurl);
       return promisify(to.save.bind(to));
     })
     .then(function () {

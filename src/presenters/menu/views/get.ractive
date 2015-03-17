@@ -1,4 +1,4 @@
-<div class="menu-header">Republic H.O.G.</div>
+<div class="menu-header">{{ name }}</div>
 <div class="pure-menu">
   <ul class="pure-menu-list">
     <li class="pure-menu-item">
