@@ -11,6 +11,7 @@ var del = require('del');
 var exec = require('child_process').exec;
 var fs = require('fs');
 var minimist = require('minimist');
+var nano = require('nano');
 var sync = require('browser-sync');
 
 var forProduction = process.env.NODE_ENV === 'production';
@@ -26,6 +27,21 @@ var AUTOPREFIXER_BROWSERS = [
   'android >= 4.4',
   'bb >= 10'
 ];
+
+function promisify(fn) {
+  return new Promise(function (good, bad) {
+    fn(function (err, value) {
+      if (err) {
+        return bad(err);
+      }
+      try {
+        good(value);
+      } catch (e) {
+        bad(e);
+      }
+    });
+  })
+}
 
 function sourceMapsInDevelopment(options) {
   var source = options.source;
@@ -53,6 +69,33 @@ gulp.task('clean', function (cb) {
     }
     del('./dist', cb);
   });
+});
+
+gulp.task('db', [ 'es6-server' ], function (cb) {
+  var url = 'http://couchdb15:5984/mcm-master';
+  var db = nano(url);
+  var dbms = nano(db.config.url);
+  var account = require('./build/models/account');
+
+  promisify(dbms.db.destroy.bind(dbms.db, db.config.db))
+    .then(function () { return promisify(dbms.db.create.bind(dbms.db, db.config.db)); })
+    .then(function () {
+      var to = account.to(url);
+      return promisify(to.sync.bind(to));
+    })
+    .then(function () {
+      var a = account.new();
+      a.name = 'Republic H.O.G.';
+      a.subdomain = 'rhog';
+      a.domain = 'republichog.org';
+      var to = a.to(url);
+      return promisify(to.save.bind(to));
+    })
+    .then(function () { cb(); })
+    .catch(function (e) {
+      console.error('ERROR!', e);
+      cb(e);
+    });
 });
 
 gulp.task('es6-app', function () {
