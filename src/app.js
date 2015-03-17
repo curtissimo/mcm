@@ -1,12 +1,13 @@
 import 'babel-core/polyfill';
 import express from 'express';
-import fs from 'fs';
 import path from 'path';
 import Ractive from 'ractive';
 import { LeslieMvp } from './leslie';
+import account from './models/account';
+import { Assets } from './assets';
+import { inspect as ins } from 'util';
 
 let app = express();
-let pwd = __dirname;
 let inProduction = process.env.NODE_ENV === 'production';
 
 if (!inProduction) {
@@ -16,84 +17,6 @@ if (!inProduction) {
   }));
 }
 
-function promisify(fn) {
-  return new Promise((good, bad) => {
-    fn((err, value) => {
-      if (err) {
-        return bad(err);
-      }
-      good(value);
-    });
-  })
-}
-
-class ScopedAssets {
-  constructor(assets, scope) {
-    this._assets = assets;
-    this._scope = scope;
-    this._stylesheets = [];
-  }
-
-  add(name) {
-    let path = this.getPath(name);
-    let a = this._assets.translate(path);
-    this._stylesheets.push(a)
-  }
-
-  getPath(name) {
-    if (!this._scope) {
-      return `styles/${name}.css`;
-    }
-    return `presenters/${this._scope}/styles/${name}.css`;
-  }
-
-  request(path) {
-    let newScope = new ScopedAssets(this._assets, path);
-    newScope._stylesheets = this._stylesheets;
-    return newScope;
-  }
-
-  get stylesheets() {
-    return Array.from(this._stylesheets);
-  }
-}
-
-class Assets {
-  initialize() {
-    let options = { encoding: 'utf8' };
-    let source = path.join(pwd, 'asset-hashes.json');
-    this._stylesheets = [];
-    let self = this;
-    return promisify(fs.readFile.bind(fs, source, options))
-      .then(content => {
-        self._translations = JSON.parse(content);
-      })
-  }
-
-  add(name) {
-    let path = this.getPath(name);
-    let a = this.translate(path);
-    this._stylesheets.push(a)
-  }
-
-  getPath(name) {
-    if (!this._scope) {
-      return `styles/${name}.css`;
-    }
-    return `presenters/${this._scope}/styles/${name}.css`;
-  }
-
-  request(path) {
-    let newScope = new ScopedAssets(this, path);
-    newScope._stylesheets = Array.from(this._stylesheets);
-    return newScope;
-  }
-
-  translate(name) {
-    return this._translations[name] || this._translations[name.substring(1)];
-  }
-}
-
 app.use(function (req, res, next) {
   if (req.url.startsWith('/session') && req.method === 'POST') {
     req.method = 'PUT';
@@ -101,10 +24,26 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(function (req, res, next) {
+  if (req.vars === undefined) {
+    req.vars = {};
+  }
+  let server = req.get('x-forwarded-server') || req.hostname;
+  req.vars.masterdb = 'http://couchdb15:5984/mcm-master';
+  account.from(req.vars.masterdb).byUrl(server, function (e, a) {
+    a = a[0];
+    req.vars.chapterdb = 'http://couchdb15:5984/' + a.subdomain;
+    next();
+  });
+});
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {
     let leslieMvp = new LeslieMvp(app, assets);
+    leslieMvp.contextModifier = (req, res, context) => {
+      context.chapterdb = req.vars.chapterdb;
+    };
 
     leslieMvp.addStylesheet('font-awesome');
     leslieMvp.addStylesheet('app');

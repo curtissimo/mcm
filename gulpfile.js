@@ -87,9 +87,12 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
       var a = account.new();
       a.name = 'Republic H.O.G.';
       a.subdomain = 'rhog';
-      a.domain = 'republichog.org';
+      a.domain = 'localhost';
       var to = a.to(url);
       return promisify(to.save.bind(to));
+    })
+    .then(function () {
+      return promisify(dbms.db.compact.bind(nano.db, 'mcm-master', 'account'));
     })
     .then(function () { cb(); })
     .catch(function (e) {
@@ -215,7 +218,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
   gulp.watch('./src/**/*.ractive', [ 'views', 'reload' ]);
-  gulp.watch('./src/*.js', [ 'es6-app' ]);
+  gulp.watch('./src/**/*.js', [ 'es6-app' ]);
 });
 
 gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'views' ]);

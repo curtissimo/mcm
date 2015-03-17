@@ -113,40 +113,43 @@ class PresentationContext {
 }
 
 class PresenterInvoker {
-  constructor(presenter, methodName, assets) {
+  constructor(presenter, methodName, assets, modifier) {
     this._presenter = presenter;
     this._methodName = methodName;
     this._assets = assets;
+    this._modifier = modifier;
   }
 
   invoke() {
     let self = this;
     return new Promise((good, bad) => {
       let context = new PresentationContext(good, bad, self._assets);
+      context = self._modifier(context);
       self._presenter[self._methodName](context);
     });
   }
 }
 
 export class Presenter {
-  constructor(name, method, assets, isRootRequest) {
+  constructor(name, method, assets, modifier, isRootRequest) {
     this._name = name;
     this._loader = Promise.resolve(require(__dirname + `/presenters/${name}/presenter`));
     this._method = method;
     this._assets = assets;
+    this._modifier = modifier;
     this._isRootRequest = !!isRootRequest;
   }
 
   render() {
     let self = this;
     return this._loader
-      .then(m => new PresenterInvoker(m, self._method, self._assets).invoke())
+      .then(m => new PresenterInvoker(m, self._method, self._assets, self._modifier).invoke())
       .then(({view: v, data: d = {}, presenters: p = {}}) => {
         this._method = v || this._method;
         for (let key of Object.keys(p)) {
           let value = p[key];
           if (typeof value === 'string') {
-            d[key] = new Presenter(value, 'get', this._assets.request(value)).render();
+            d[key] = new Presenter(value, 'get', this._assets.request(value), self._modifier).render();
           }
         }
         d.stylesheets = this._assets.stylesheets;
@@ -171,7 +174,7 @@ export class Presenter {
 export class LeslieMvp {
   constructor(expressApp, assets) {
     this._expressApp = expressApp;
-    this._contextModifier = o => o;
+    this._contextModifier = (_, __, o) => o;
     this._assets = assets;
     this._stylesheets = [];
   }
@@ -194,7 +197,8 @@ export class LeslieMvp {
     }
     let self = this;
     this._expressApp[m](r, function (req, res, next) {
-      let presenter = new Presenter(p, m, self._assets.request(p), true);
+      let modifier = self._contextModifier.bind(null, req, res);
+      let presenter = new Presenter(p, m, self._assets.request(p), modifier, true);
       presenter.render()
         .then(output => res.send(output))
         .catch(directive => {
@@ -210,7 +214,7 @@ export class LeslieMvp {
 
   set contextModifier(value) {
     if (typeof value === 'function') {
-      this._contextModifier = o => value(o) || o;
+      this._contextModifier = (req, res, o) => value(req, res, o) || o;
     }
   }
 }
