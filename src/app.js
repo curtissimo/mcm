@@ -5,8 +5,11 @@ import Ractive from 'ractive';
 import { LeslieMvp } from './leslie';
 import account from './models/account';
 import settings from './models/settings';
+import member from './models/member';
 import { Assets } from './assets';
 import { inspect as ins } from 'util';
+import { urlencoded, json } from 'body-parser';
+import cookieParser from 'cookie-parser';
 
 let app = express();
 let inProduction = process.env.NODE_ENV === 'production';
@@ -18,6 +21,10 @@ if (!inProduction) {
     maxAge: '365d'
   }));
 }
+
+app.use(cookieParser());
+app.use(urlencoded({ extended: true }));
+app.use(json());
 
 app.use(function (req, res, next) {
   if (req.url.startsWith('/session') && req.method === 'POST') {
@@ -34,9 +41,10 @@ app.use(function (req, res, next) {
   req.vars.masterdb = 'http://couchdb15:5984/mcm-master';
 
   if (chapterdbs.has(server)) {
-    let { db, settings } = chapterdbs.get(server);
+    let { db, settings, account: a } = chapterdbs.get(server);
     req.vars.chapterdb = db;
     req.vars.settings = settings;
+    req.vars.account = a;
     return next();
   }
 
@@ -45,6 +53,7 @@ app.use(function (req, res, next) {
       res.redirect('http://what.ismymc.com');
     }
     a = a[0];
+    req.vars.account = a;
     req.vars.chapterdb = 'http://couchdb15:5984/' + a.subdomain;
     settings.from(req.vars.chapterdb).all(function (e, s) {
       if (e) {
@@ -54,11 +63,26 @@ app.use(function (req, res, next) {
       req.vars.settings = s;
       chapterdbs.set(server, {
          db: req.vars.chapterdb,
-         settings: req.vars.settings
+         settings: req.vars.settings,
+         account: req.vars.account
       });
       next();
     });
   });
+});
+
+app.use(function (req, res, next) {
+  var id = req.cookies[req.vars.account.subdomain];
+  if (id) {
+    member.from(req.vars.chapterdb).get(id, function (e, m) {
+      if (m) {
+        req.vars.member = m;
+      }
+      next();
+    });
+  } else {
+    next();
+  }
 });
 
 let assets = new Assets();
@@ -68,6 +92,12 @@ assets.initialize()
     leslieMvp.contextModifier = (req, res, context) => {
       context.chapterdb = req.vars.chapterdb;
       context.settings = req.vars.settings;
+      context.account = req.vars.account;
+      context.member = req.vars.member;
+      context.body = req.body;
+      context.query = req.query;
+      context.cookie = (name, value) => res.cookie(name, value, { httpOnly: true, expires: new Date(Date.now() + 900000) });
+      context.clearCookie = (name) => res.clearCookie(name);
     };
 
     leslieMvp.addStylesheet('font-awesome');

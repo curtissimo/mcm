@@ -1,4 +1,12 @@
-@import 'partials/_media-queries';
+@import 'media-queries';
+@import 'colors';
+
+.is-error {
+  background-color: $accent-color;
+  padding: 1em;
+  border-radius: .5em;
+  color: $accent-color-text;
+}
 
 .is-xs-screen {
   display: block;

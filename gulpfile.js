@@ -82,32 +82,43 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
   var dbms = nano(db.config.url);
   var account = require('./build/models/account');
   var settings = require('./build/models/settings');
+  var member = require('./build/models/member');
+  var lookup = {
+    account: account,
+    settings: settings,
+    member: member
+  };
 
   promisify(dbms.db, 'destroy', db.config.db)
     .then(function () { return promisify(dbms.db, 'create', db.config.db); })
     .then(function () { return promisify(dbms.db, 'destroy', chapterName); })
     .then(function () { return promisify(dbms.db, 'create', chapterName); })
     .then(function () {
-      var ato = account.to(masterurl);
-      var sto = settings.to(chapterurl);
       return Promise.all([
-        promisify(ato, 'sync'),
-        promisify(sto, 'sync')
+        promisify(account.to(masterurl), 'sync'),
+        promisify(settings.to(chapterurl), 'sync'),
+        promisify(member.to(chapterurl), 'sync')
       ]);
     })
     .then(function () {
-      var a = account.new();
-      a.name = 'Republic H.O.G.';
-      a.subdomain = 'rhog';
-      a.domain = 'localhost';
-      return promisify(a.to(masterurl), 'save');
+      return promisify(fs, 'readFile', './seed.json', 'utf8');
     })
-    .then(function () {
-      var a = settings.new({ name: 'Republic H.O.G.' });
-      return promisify(a.to(chapterurl), 'save');
-    })
-    .then(function () {
-      return promisify(dbms.db, 'compact', 'mcm-master', 'account');
+    .then(function (seeds) {
+      seeds = JSON.parse(seeds);
+      var promises = [];
+
+      for (var i = 0; i < seeds.length; i += 1) {
+        var seed = seeds[i];
+        var builder = lookup[seed.type];
+        var instance = builder.new(seed);
+        var url = chapterurl;
+        if (seed.type === 'account') {
+          url = masterurl;
+        }
+        var promise = promisify(instance.to(url), 'save');
+        promises.push(promise);
+      }
+      return Promise.all(promises);
     })
     .then(function () { cb(); })
     .catch(function (e) {

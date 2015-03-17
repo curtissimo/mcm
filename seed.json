@@ -1,0 +1,68 @@
+[
+{
+  "type": "account",
+  "name": "Republic H.O.G.",
+  "subdomain": "rhog",
+  "domain": "localhost"
+},
+{
+  "type": "settings",
+  "name": "Republic H.O.G."
+},
+{
+  "type": "member",
+  "firstName": "Curtis",
+  "lastName": "Schlak",
+  "email": "curtis@schlak.com",
+  "password": "curtis",
+  "hogNumber": "US123456"
+},
+{
+  "type": "member",
+  "firstName": "Leslie",
+  "lastName": "Schlak",
+  "email": "leslie@schlak.com",
+  "password": "leslie",
+  "hogNumber": "US123457"
+},
+{
+  "type": "member",
+  "firstName": "Isaac",
+  "lastName": "Schlak",
+  "email": "isaac@schlak.com",
+  "password": "isaac",
+  "hogNumber": "US123458"
+},
+{
+  "type": "member",
+  "firstName": "Gabrielle",
+  "lastName": "Burgard",
+  "email": "gabby@burgard.com",
+  "password": "gabby",
+  "hogNumber": "US123459"
+},
+{
+  "type": "member",
+  "firstName": "Bryan",
+  "lastName": "Ray",
+  "email": "bryan@ray.com",
+  "password": "bryan",
+  "hogNumber": "US123460"
+},
+{
+  "type": "member",
+  "firstName": "Kylie",
+  "lastName": "Ray",
+  "email": "kylie@ray.com",
+  "password": "kylie",
+  "hogNumber": "US123461"
+},
+{
+  "type": "member",
+  "firstName": "Philip",
+  "lastName": "mateescu",
+  "email": "philip@mateescu.com",
+  "password": "philip",
+  "hogNumber": "US123462"
+}
+]

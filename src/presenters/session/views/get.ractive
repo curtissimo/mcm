@@ -5,6 +5,13 @@
     of the Web site. You can access events, discussion groups, your blog, 
     newsletters, and more!
   </p>
+  {{#bad}}
+  <p class="is-error">
+    You did not provide a user name and/or password that matched one created by
+    the Membership officer. Please try again or send an email to you membership
+    officer.
+  </p>
+  {{/bad}}
   <form class="pure-form pure-form-stacked" method="post" action="/session">
     <fieldset>
       <label for="email">Email</label>
