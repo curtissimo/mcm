@@ -1,6 +1,7 @@
 var gulp = require('gulp');
 var autoprefixer = require('gulp-autoprefixer');
 var babel = require('gulp-babel');
+var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var hash = require('gulp-hash');
 var ractive = require('gulp-ractive');
@@ -127,9 +128,30 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
     });
 });
 
-gulp.task('es6-app', function () {
+gulp.task('es6-client', function () {
   return sourceMapsInDevelopment({
-    source: './src/**/*.js',
+    source: [ './src/presenters/*/scripts/*.js', './src/scripts/*.js', '!./src/scripts/shiv.js' ],
+    dest: './build/public/scripts',
+    betweenMaps: function (stream) {
+      return stream.pipe(babel({ modules: 'ignore' }))
+        .pipe(concat('app.js'));
+    }
+  });
+});
+
+gulp.task('es3-shiv', function () {
+  return sourceMapsInDevelopment({
+    source: './src/scripts/shiv.js',
+    dest: './build/public/scripts',
+    betweenMaps: function (stream) {
+      return stream;
+    }
+  });
+});
+
+gulp.task('es6-server', function () {
+  return sourceMapsInDevelopment({
+    source: [ './src/**/*.js', '!./src/presenters/*/scripts/*.js', '!./src/scripts/*.js' ],
     betweenMaps: function (stream) {
       return stream.pipe(babel());
     }
@@ -221,9 +243,9 @@ gulp.task('serve', [ 'build' ], function () {
     }
     sync({
       browser: [
-        // 'Google Chrome Canary',
-        // 'Google Chrome',
-        // 'Safari',
+        'Google Chrome Canary',
+        'Google Chrome',
+        'Safari',
         'FirefoxDeveloperEdition'
       ],
       startPath: '/session',
@@ -244,11 +266,11 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
   gulp.watch('./src/**/*.ractive', [ 'views', 'reload' ]);
-  gulp.watch('./src/**/*.js', [ 'es6-app' ]);
+  gulp.watch([ './src/**/*.js', '!./src/presenters/*/scripts/*.js', '!./src/scripts/*.js' ], [ 'es6-server' ]);
+  gulp.watch([ './src/presenters/*/scripts/*.js', './src/scripts/*.js' ], [ 'es6-client', 'reload' ]);
 });
 
-gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'views' ]);
+gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'es6-client', 'es3-shiv', 'views' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
-gulp.task('es6-server', [ 'es6-app' ]);

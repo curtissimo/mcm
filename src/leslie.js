@@ -131,12 +131,13 @@ class PresenterInvoker {
 }
 
 export class Presenter {
-  constructor(name, method, assets, modifier, isRootRequest) {
+  constructor(name, method, assets, modifier, data, isRootRequest) {
     this._name = name;
     this._loader = Promise.resolve(require(__dirname + `/presenters/${name}/presenter`));
     this._method = method;
     this._assets = assets;
     this._modifier = modifier;
+    this._data = data;
     this._isRootRequest = !!isRootRequest;
   }
 
@@ -162,6 +163,7 @@ export class Presenter {
         }
         return new Promise((good, bad) => {
           let data = content.data;
+          Object.assign(data, self._data);
           data.content = content.html;
           new View(data).render()
             .then(c => good(c.html))
@@ -177,6 +179,7 @@ export class LeslieMvp {
     this._contextModifier = (_, __, o) => o;
     this._assets = assets;
     this._stylesheets = [];
+    this._data = new Map();
   }
 
   addStylesheet(stylesheet) {
@@ -198,7 +201,7 @@ export class LeslieMvp {
     let self = this;
     this._expressApp[m](r, function (req, res, next) {
       let modifier = self._contextModifier.bind(null, req, res);
-      let presenter = new Presenter(p, m, self._assets.request(p), modifier, true);
+      let presenter = new Presenter(p, m, self._assets.request(p), modifier, self._data, true);
       presenter.render()
         .then(output => res.send(output))
         .catch(directive => {
@@ -217,4 +220,6 @@ export class LeslieMvp {
       this._contextModifier = (req, res, o) => value(req, res, o) || o;
     }
   }
+
+  get data() { return this._data; }
 }

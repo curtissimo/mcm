@@ -6,6 +6,9 @@
     {{#stylesheets}}
     <link rel="stylesheet" href="{{.}}">
     {{/stylesheets}}
+    {{{ ifltie9 }}}
+    <script src="/scripts/shiv.js"></script>
+    {{{ endif }}}
   </head>
   <body>
     <div id="main-menu" class="main-menu">
@@ -26,5 +29,7 @@
       <div class="is-lg-screen">large</div>
       <div class="is-xl-screen">extra large</div>
     </div>
+    <div id="overlay"></div>
+    <script src="/scripts/app.js"></script>
   </body>
 </html>

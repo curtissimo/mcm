@@ -102,6 +102,8 @@ assets.initialize()
       context.cookie = (name, value) => res.cookie(name, value, { httpOnly: true, expires: new Date(Date.now() + 900000) });
       context.clearCookie = (name) => res.clearCookie(name);
     };
+    leslieMvp.data.set('ifltie9', '<!--[if lt IE 9]>');
+    leslieMvp.data.set('endif', '<![endif]-->');
 
     leslieMvp.addStylesheet('font-awesome');
     leslieMvp.addStylesheet('app');

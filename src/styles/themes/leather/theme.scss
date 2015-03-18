@@ -14,11 +14,16 @@
   .pure-menu-link {
     color: $primary-color-dark-text;
     text-decoration: none;
+
+    &:hover {
+      background-color: $primary-color-light;
+      color: $primary-color-light-text;
+    }
   }
 
   .pure-menu-selected  {
-    background-color: $primary-color-light;
-    color: $primary-color-light-text;
+    background-color: $accent-color;
+    color: $accent-color-text;
 
     .pure-menu-link,
     .pure-menu-link:visited {

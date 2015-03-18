@@ -1,13 +1,33 @@
 @import 'partials/_media-queries';
 
+#overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: #888;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+}
+
 #main-menu {
+  @include min-lg-screen {
+    left: 0;
+  }
+
+  transition: left .3s;
+
   position: absolute;
   width: 19em;
   height: 100%;
   left: -19em;
   box-sizing: border-box;
+  z-index: 1000;
+  overflow-y: auto;
 
-  @include min-lg-screen {
+  &.is-shown {
     left: 0;
   }
 }
