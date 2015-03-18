@@ -8,6 +8,17 @@ let member = stork.deliver('member', function () {
   this.string('hogNumber', { required: true });
   this.timestamps();
 
+  this.object('membership', function () {
+    this.object('national', function () {
+      this.datetime('startDate');
+      this.datetime('endDate', { required: true });
+    });
+    this.object('local', function () {
+      this.datetime('startDate');
+      this.datetime('endDate', { required: true });
+    });
+  });
+
   this.view('byLogin', function (member, emitKey) {
     emitKey(member.email);
     emitKey(member.hogNumber);

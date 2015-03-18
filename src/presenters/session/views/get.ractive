@@ -12,6 +12,12 @@
     officer.
   </p>
   {{/bad}}
+  {{#expiredMembership}}
+  <p class="is-error">
+    Your membership has expired. Please contact your membership officer to
+    renew your membership with the chapter.
+  </p>
+  {{/bad}}
   <form class="pure-form pure-form-stacked" method="post" action="/session">
     <fieldset>
       <label for="email">Email</label>

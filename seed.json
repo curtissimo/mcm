@@ -15,7 +15,11 @@
   "lastName": "Schlak",
   "email": "curtis@schlak.com",
   "password": "curtis",
-  "hogNumber": "US123456"
+  "hogNumber": "US123456",
+  "membership": { 
+    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
+    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+  }
 },
 {
   "type": "member",
@@ -23,7 +27,11 @@
   "lastName": "Schlak",
   "email": "leslie@schlak.com",
   "password": "leslie",
-  "hogNumber": "US123457"
+  "hogNumber": "US123457",
+  "membership": { 
+    "national": { "endDate": "2013-12-31T06:00:00.000Z" },
+    "local": { "endDate": "2013-12-31T06:00:00.000Z" }
+  }
 },
 {
   "type": "member",
@@ -31,7 +39,11 @@
   "lastName": "Schlak",
   "email": "isaac@schlak.com",
   "password": "isaac",
-  "hogNumber": "US123458"
+  "hogNumber": "US123458",
+  "membership": { 
+    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
+    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+  }
 },
 {
   "type": "member",
@@ -39,7 +51,11 @@
   "lastName": "Burgard",
   "email": "gabby@burgard.com",
   "password": "gabby",
-  "hogNumber": "US123459"
+  "hogNumber": "US123459",
+  "membership": { 
+    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
+    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+  }
 },
 {
   "type": "member",
@@ -47,7 +63,11 @@
   "lastName": "Ray",
   "email": "bryan@ray.com",
   "password": "bryan",
-  "hogNumber": "US123460"
+  "hogNumber": "US123460",
+  "membership": { 
+    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
+    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+  }
 },
 {
   "type": "member",
@@ -55,7 +75,11 @@
   "lastName": "Ray",
   "email": "kylie@ray.com",
   "password": "kylie",
-  "hogNumber": "US123461"
+  "hogNumber": "US123461",
+  "membership": { 
+    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
+    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+  }
 },
 {
   "type": "member",
@@ -63,6 +87,10 @@
   "lastName": "mateescu",
   "email": "philip@mateescu.com",
   "password": "philip",
-  "hogNumber": "US123462"
+  "hogNumber": "US123462",
+  "membership": { 
+    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
+    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+  }
 }
 ]

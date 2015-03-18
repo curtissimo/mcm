@@ -7,7 +7,8 @@ let presenter = {
     }
     let data = {
       title: 'Log in',
-      bad: ac.query.bad !== undefined
+      bad: ac.query.bad !== undefined,
+      expiredMembership: ac.query.expiredMembership !== undefined
     };
     ac.addStylesheet('area');
     ac.render({ data: data, presenters: { menu: 'menu' } });
@@ -19,7 +20,15 @@ let presenter = {
         return ac.redirect('/session?bad');
       }
       m = m[0];
-      ac.cookie(ac.account.subdomain, m._id);
+      let now = new Date();
+      if (now > m.membership.national.endDate || now > m.membership.local.endDate) {
+        return ac.redirect('/session?expiredMembership');
+      }
+      let options = { httpOnly: true };
+      if (ac.body.remember) {
+        options.expires = new Date(Date.now() + 900000);
+      }
+      ac.cookie(ac.account.subdomain, m._id, options);
       ac.redirect('/chapter');
     });
   }

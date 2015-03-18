@@ -99,7 +99,7 @@ assets.initialize()
       context.member = req.vars.member;
       context.body = req.body;
       context.query = req.query;
-      context.cookie = (name, value) => res.cookie(name, value, { httpOnly: true, expires: new Date(Date.now() + 900000) });
+      context.cookie = (name, value, options) => res.cookie(name, value, options);
       context.clearCookie = (name) => res.clearCookie(name);
     };
     leslieMvp.data.set('ifltie9', '<!--[if lt IE 9]>');
