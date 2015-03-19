@@ -11,6 +11,10 @@
   background-color: $primary-color-dark;
   color: $primary-color-dark-text;
 
+  .pure-menu-heading {
+    color: #999;
+  }
+
   .pure-menu-link {
     color: $primary-color-dark-text;
     text-decoration: none;

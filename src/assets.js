@@ -23,15 +23,15 @@ class ScopedAssets {
 
   add(name) {
     let path = this.getPath(name);
-    let a = this._assets.translate(path);
+    let a = '/' + this._assets.translate(path);
     this._stylesheets.push(a)
   }
 
   getPath(name) {
     if (!this._scope) {
-      return `styles/${name}.css`;
+      return `/styles/${name}.css`;
     }
-    return `presenters/${this._scope}/styles/${name}.css`;
+    return `/presenters/${this._scope}/styles/${name}.css`;
   }
 
   request(path) {
@@ -59,15 +59,15 @@ export class Assets {
 
   add(name) {
     let path = this.getPath(name);
-    let a = this.translate(path);
+    let a = '/' + this.translate(path);
     this._stylesheets.push(a)
   }
 
   getPath(name) {
     if (!this._scope) {
-      return `styles/${name}.css`;
+      return `/styles/${name}.css`;
     }
-    return `presenters/${this._scope}/styles/${name}.css`;
+    return `/presenters/${this._scope}/styles/${name}.css`;
   }
 
   request(path) {

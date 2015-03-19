@@ -1,11 +1,36 @@
 <div class="menu-header">{{ name }}</div>
 <div class="pure-menu">
   <ul class="pure-menu-list">
+    {{#member}}
+    <li class="pure-menu-heading">Members-Only</li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/dashbaord">Dashboard</a>
+    </li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/events">Events</a>
+    </li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/members">Members</a>
+    </li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/newsletters">Newletters</a>
+    </li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/discussions">Discussions</a>
+    </li>
+    <li class="pure-menu-heading">Public site</li>
+    {{/member}}
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/">Home</a>
     </li>
-    <li class="pure-menu-item pure-menu-selected">
-      <a class="pure-menu-link" href="/">Log in</a>
+    {{#member}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link delete-link" data-method="delete" href="/session">Log out</a>
     </li>
+    {{else}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/session">Log in</a>
+    </li>
+    {{/member}}
   </ul>
 </div>

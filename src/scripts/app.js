@@ -44,3 +44,22 @@ document
       .getElementById('overlay')
       .style.display = 'block';
   });
+
+document
+  .addEventListener('click', e => {
+    e = e || window.event;
+    let target = e.target || e.srcElement;
+    if (target.tagName === 'A' && target.className.indexOf('delete-link') > -1) {
+      e.preventDefault();
+      let form = document.createElement('form');
+      form.method = 'post';
+      form.action = target.href;
+      let input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'X-HTTP-Method-Override';
+      input.value = 'delete';
+      form.appendChild(input);
+      document.body.appendChild(form);
+      form.submit();
+    }
+  });

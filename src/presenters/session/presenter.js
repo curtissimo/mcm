@@ -1,6 +1,11 @@
 let member = require('../../models/member');
 
 let presenter = {
+  delete(ac) {
+    ac.clearCookie(ac.account.subdomain);
+    ac.redirect('/');
+  },
+
   get(ac) {
     if (ac.member) {
       return ac.redirect('/chapter');

@@ -29,6 +29,8 @@
       <label for="remember" class="pure-checkbox">
         <input id="remember" name="remember" value="1" type="checkbox" checked> Remember me
       </label>
+
+      <input type="hidden" name="X-HTTP-Method-Override" value="put">
       
       <button type="submit" class="pure-button pure-button-primary">Submit my credentials</button>
   </form>

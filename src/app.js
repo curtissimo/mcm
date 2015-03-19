@@ -10,6 +10,7 @@ import { Assets } from './assets';
 import { inspect as ins } from 'util';
 import { urlencoded, json } from 'body-parser';
 import cookieParser from 'cookie-parser';
+import methodOverride from 'method-override';
 
 let app = express();
 let inProduction = process.env.NODE_ENV === 'production';
@@ -26,12 +27,13 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 app.use(json());
 
-app.use(function (req, res, next) {
-  if (req.url.startsWith('/session') && req.method === 'POST') {
-    req.method = 'PUT';
+app.use(methodOverride((req, res) => {
+  if (req.body && req.body['X-HTTP-Method-Override']) {
+    var method = req.body['X-HTTP-Method-Override'];
+    delete req.body['X-HTTP-Method-Override'];
+    return method;
   }
-  next();
-});
+}));
 
 app.use(function (req, res, next) {
   if (req.vars === undefined) {
@@ -88,11 +90,22 @@ app.use(function (req, res, next) {
   }
 });
 
+app.use('/chapter', function (req, res, next) {
+  if (!req.vars.member) {
+    return res.redirect('/session');
+  }
+  next();
+});
+
+app.get('/chapter', function (req, res, next) {
+  res.redirect('/chapter/dashboard');
+});
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {
-    let leslieMvp = new LeslieMvp(app, assets);
-    leslieMvp.contextModifier = (req, res, context) => {
+    let leslie = new LeslieMvp(app, assets);
+    leslie.contextModifier = (req, res, context) => {
       context.chapterdb = req.vars.chapterdb;
       context.settings = req.vars.settings;
       context.account = req.vars.account;
@@ -102,14 +115,17 @@ assets.initialize()
       context.cookie = (name, value, options) => res.cookie(name, value, options);
       context.clearCookie = (name) => res.clearCookie(name);
     };
-    leslieMvp.data.set('ifltie9', '<!--[if lt IE 9]>');
-    leslieMvp.data.set('endif', '<![endif]-->');
+    leslie.data.set('ifltie9', '<!--[if lt IE 9]>');
+    leslie.data.set('endif', '<![endif]-->');
 
-    leslieMvp.addStylesheet('font-awesome');
-    leslieMvp.addStylesheet('app');
-    leslieMvp.addStylesheet('themes/leather/theme');
-    leslieMvp.get({ presenterName: 'session' });
-    leslieMvp.put({ presenterName: 'session' });
+    leslie.addStylesheet('font-awesome');
+    leslie.addStylesheet('app');
+    leslie.addStylesheet('themes/leather/theme');
+    leslie.get({ presenterName: 'session' });
+    leslie.put({ presenterName: 'session' });
+    leslie.delete({ presenterName: 'session' });
+
+    leslie.get({ presenterName: 'dashboard', uri: '/chapter/dashboard' });
 
     app.listen(3000);
   })

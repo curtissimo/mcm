@@ -194,6 +194,10 @@ export class LeslieMvp {
     this._method({ methodName: 'put', presenterName: p, uri: r });
   }
 
+  delete({ presenterName: p, uri: r }) {
+    this._method({ methodName: 'delete', presenterName: p, uri: r });
+  }
+
   _method({ methodName: m, presenterName: p, uri: r }) {
     if (!r) {
       r = `/${p}`;
