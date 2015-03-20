@@ -15,6 +15,7 @@ function promisify(fn) {
 
 Promise.hash = o => {
   let keys = Object.keys(o);
+  let symbols = Object.getOwnPropertySymbols(o);
   let values = [];
   for (let key of keys) {
     values.push(o[key]);
@@ -22,11 +23,14 @@ Promise.hash = o => {
   return new Promise((good, bad) => {
     Promise.all(values)
       .then(result => {
-        var o = {};
+        var resolved = {};
         for (let i = 0; i < keys.length; i += 1) {
-          o[keys[i]] = result[i];
+          resolved[keys[i]] = result[i];
         }
-        good(o);
+        for (let symbol of symbols) {
+          resolved[symbol] = o[symbol];
+        }
+        good(resolved);
       })
       .catch(error => bad(error));
   });
@@ -67,7 +71,7 @@ class View {
     let options = { encoding: 'utf8' };
     let source = `${__dirname}/presenters/${presenterName}/views/${viewName}`;
     if (!presenterName) {
-      source = `${__dirname}/views/${viewName || 'get'}`;
+      source = `${__dirname}/views/${viewName}`;
     }
     source += '.ractive';
 
@@ -99,8 +103,8 @@ class PresentationContext {
     this._assets.add(name);
   }
 
-  render({ view: v, data: d = {}, presenters: p = {}}) {
-    this._good({ view: v, data: d, presenters: p });
+  render({ view: v, data: d = {}, presenters: p = {}, layout: l}) {
+    this._good({ view: v, data: d, presenters: p, layout: l || this.layout });
   }
 
   redirect(href) {
@@ -139,13 +143,14 @@ export class Presenter {
     this._modifier = modifier;
     this._data = data;
     this._isRootRequest = !!isRootRequest;
+    this._layoutSymbol = Symbol('layout');
   }
 
   render() {
     let self = this;
     return this._loader
       .then(m => new PresenterInvoker(m, self._method, self._assets, self._modifier).invoke())
-      .then(({view: v, data: d = {}, presenters: p = {}}) => {
+      .then(({view: v, data: d = {}, presenters: p = {}, layout: l = 'application'}) => {
         this._method = v || this._method;
         for (let key of Object.keys(p)) {
           let value = p[key];
@@ -154,6 +159,7 @@ export class Presenter {
           }
         }
         d.stylesheets = this._assets.stylesheets;
+        d[self._layoutSymbol] = l;
         return Promise.hash(d);
       })
       .then(data => new View(data, this._method, this._name).render())
@@ -163,9 +169,10 @@ export class Presenter {
         }
         return new Promise((good, bad) => {
           let data = content.data;
+          let layout = data[self._layoutSymbol];
           Object.assign(data, self._data);
           data.content = content.html;
-          new View(data).render()
+          new View(data, layout).render()
             .then(c => good(c.html))
             .catch(() => good(content.html));
         });
