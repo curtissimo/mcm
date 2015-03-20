@@ -10,6 +10,8 @@
 .main-menu {
   background-color: $primary-color-dark;
   color: $primary-color-dark-text;
+  border-right: 1px solid $divider-color;
+  box-sizing: border-box;
 
   .pure-menu-heading {
     color: #999;

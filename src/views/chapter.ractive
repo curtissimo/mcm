@@ -15,15 +15,21 @@
     {{{ menu }}}
     </div>
     <div id="main-toolbar" class="max-lg-screen toolbar">
-      <div class="toolbar-item">
-        <a href="#" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+      <div class="toolbar-section toolbar-left">
+        <a href="#" class="toolbar-item" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+      </div>
+      <div class="toolbar-section toolbar-center-side">
+      </div>
+      <div class="toolbar-section toolbar-right">
+        <a class="toolbar-item" href="#"><i class="fa fa-ellipsis-v"></i></a>
       </div>
     </div>
     <div id="main-content">
+      <div id="action-toolbar" class="min-lg-screen toolbar">
+      </div>
       {{{ content }}}
     </div>
     <div id="debug">
-      <p>PRIVATE SHIT!</p>
       <div class="is-xs-screen">tiny</div>
       <div class="is-sm-screen">small</div>
       <div class="is-md-screen">medium</div>

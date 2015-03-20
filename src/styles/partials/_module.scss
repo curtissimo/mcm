@@ -4,7 +4,6 @@
     box-shadow: -1px 3px 3px #666666;
     background-color: $primary-color-dark;
     color: $primary-color-dark-text;
-    padding-left: 1em;
     width: 100%;
 
     a {
@@ -13,9 +12,30 @@
     }
 }
 
+.toolbar-section {
+    display: inline-block;
+    width: 33%;
+    box-sizing: border-box;
+}
+
+.toolbar-left {
+    padding-left: 1em;
+}
+
+.toolbar-center {
+    text-align: center;
+}
+
+.toolbar-right {
+    padding-right: 1em;
+    text-align: right;
+}
+
 .toolbar-item {
     font-size: 2.1em;
     display: inline-block;
+    min-width: 48px;
+    text-align: center;
 }
 
 .menu-header {
