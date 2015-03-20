@@ -116,7 +116,8 @@ assets.initialize()
       context.clearCookie = (name) => res.clearCookie(name);
     };
     leslie.data.set('ifltie9', '<!--[if lt IE 9]>');
-    leslie.data.set('endif', '<![endif]-->');
+      leslie.data.set('endif', '<![endif]-->');
+    leslie.data.set('member', req => req.vars.member);
 
     leslie.addStylesheet('font-awesome');
     leslie.addStylesheet('app');

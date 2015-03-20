@@ -28,6 +28,9 @@
       <div class="is-md-screen">medium</div>
       <div class="is-lg-screen">large</div>
       <div class="is-xl-screen">extra large</div>
+      {{#member}}
+      <div>{{ member.email }}</div>
+      {{/member}}
     </div>
     <div id="overlay"></div>
     <script src="/scripts/app.js"></script>

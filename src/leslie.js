@@ -202,10 +202,19 @@ export class LeslieMvp {
     if (!r) {
       r = `/${p}`;
     }
+
     let self = this;
     this._expressApp[m](r, function (req, res, next) {
       let modifier = self._contextModifier.bind(null, req, res);
-      let presenter = new Presenter(p, m, self._assets.request(p), modifier, self._data, true);
+      let data = {};
+      for (let [ key, value ] of self._data.entries()) {
+        data[key] = value;
+        if (typeof value === 'function') {
+          data[key] = value(req);
+        }
+      }
+      let presenter = new Presenter(p, m, self._assets.request(p), modifier, data, true);
+
       presenter.render()
         .then(output => res.send(output))
         .catch(directive => {
