@@ -144,8 +144,8 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 .pure-button-selected,
 a.pure-button-primary,
 a.pure-button-selected {
-    background-color: $primary-color-dark;
-    color: #fff;
+    background-color: $accent-color;
+    color: $accent-color-text;
 }
 
 /*csslint box-model:false*/
