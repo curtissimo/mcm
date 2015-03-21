@@ -17,7 +17,10 @@ document
   .getElementById('main-menu')
   .addEventListener('click', e => {
     e = e || window.event;
-    e.preventDefault();
+    let target = e.target || e.srcElement;
+    if (target.tagName !== 'A') {
+      e.preventDefault();
+    }
   });
 
 document
