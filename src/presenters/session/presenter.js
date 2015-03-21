@@ -31,7 +31,7 @@ let presenter = {
       }
       let options = { httpOnly: true };
       if (ac.body.remember) {
-        options.expires = new Date(Date.now() + 900000);
+        options.expires = new Date(Date.now() + 900000000000);
       }
       ac.cookie(ac.account.subdomain, m._id, options);
       ac.redirect('/chapter');
