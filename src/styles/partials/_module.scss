@@ -1,47 +1,52 @@
 @import 'colors';
+@import 'media-queries';
 
 .toolbar {
-    box-shadow: -1px 3px 3px #666666;
-    background-color: $primary-color-dark;
-    color: $primary-color-dark-text;
-    width: 100%;
+  box-shadow: -1px 3px 3px #666666;
+  background-color: $primary-color-dark;
+  color: $primary-color-dark-text;
+  width: 100%;
 
-    a {
-        color: $primary-color-dark-text;
-        text-decoration: none;
-    }
+  a {
+    color: $primary-color-dark-text;
+    text-decoration: none;
+  }
 }
 
 .toolbar-section {
-    display: inline-block;
-    width: 33%;
-    box-sizing: border-box;
+  display: inline-block;
+  width: 33%;
+  box-sizing: border-box;
 }
 
 .toolbar-left {
-    padding-left: 1em;
+  padding-left: 1em;
 }
 
 .toolbar-center {
-    text-align: center;
+  text-align: center;
 }
 
 .toolbar-right {
-    padding-right: 1em;
-    text-align: right;
+  padding-right: 1em;
+  text-align: right;
 }
 
 .toolbar-item {
-    font-size: 2.1em;
-    display: inline-block;
-    min-width: 48px;
-    text-align: center;
+  font-size: 2.1em;
+  display: inline-block;
+  min-width: 48px;
+  text-align: center;
 }
 
 .menu-header {
-    padding: 0.5em 1em;
-    text-transform: uppercase;
-    border-bottom: 1px solid $divider-color;
+padding: 0.5em 1em;
+text-transform: uppercase;
+border-bottom: 1px solid $divider-color;
+}
+
+.input-year {
+  width: 5em;
 }
 
 /*!
@@ -773,4 +778,30 @@ striping:
 }
 .pure-table-horizontal tbody > tr:last-child > td {
     border-bottom-width: 0;
+}
+
+/*********** CUSTOMIZED VALUES! **************/
+.pure-form input[type="text"],
+.pure-form input[type="password"],
+.pure-form input[type="email"],
+.pure-form input[type="url"],
+.pure-form input[type="date"],
+.pure-form input[type="month"],
+.pure-form input[type="time"],
+.pure-form input[type="datetime"],
+.pure-form input[type="datetime-local"],
+.pure-form input[type="week"],
+.pure-form input[type="number"],
+.pure-form input[type="search"],
+.pure-form input[type="tel"],
+.pure-form input[type="color"],
+.pure-form select, .pure-form textarea {
+  padding: 0.3em 0.6em;
+}
+
+.pure-form-aligned .pure-control-group label {
+  @include min-md-screen {
+    color: 'orange';
+    width: 'auto';
+  }
 }

@@ -194,24 +194,34 @@ export class LeslieMvp {
   }
 
   get({ presenterName: p, uri: r }) {
-    this._method({ methodName: 'get', presenterName: p, uri: r });
+    this._method({ verb: 'get', presenterName: p, uri: r });
   }
 
   put({ presenterName: p, uri: r }) {
-    this._method({ methodName: 'put', presenterName: p, uri: r });
+    this._method({ verb: 'put', presenterName: p, uri: r });
   }
 
   delete({ presenterName: p, uri: r }) {
-    this._method({ methodName: 'delete', presenterName: p, uri: r });
+    this._method({ verb: 'delete', presenterName: p, uri: r });
   }
 
-  _method({ methodName: m, presenterName: p, uri: r }) {
+  routeTo({ presenterName: presenterName, area: area, routes: routes = [] }) {
+    let baseRoute = area ? `/${area}/${presenterName}` : `/${presenterName}`;
+    for (let { verb: verb, action: action, method: method} of routes) {
+      method = method || verb;
+      let route = action ? `${baseRoute}/${action}` : baseRoute;
+      this._method({ verb: verb, method: method, presenterName:presenterName, uri: route });
+    }
+  }
+
+  _method({ verb: verb, method: m, presenterName: p, uri: r }) {
     if (!r) {
       r = `/${p}`;
     }
+    m = m || verb;
 
     let self = this;
-    this._expressApp[m](r, function (req, res, next) {
+    this._expressApp[verb](r, function (req, res, next) {
       let modifier = self._contextModifier.bind(null, req, res);
       let data = {};
       for (let [ key, value ] of self._data.entries()) {

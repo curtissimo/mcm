@@ -126,13 +126,21 @@ assets.initialize()
     leslie.addStylesheet('font-awesome');
     leslie.addStylesheet('app');
     leslie.addStylesheet('themes/leather/theme');
-    
+
     leslie.get({ presenterName: 'session' });
     leslie.put({ presenterName: 'session' });
     leslie.delete({ presenterName: 'session' });
 
     leslie.get({ presenterName: 'dashboard', uri: '/chapter/dashboard' });
-    leslie.get({ presenterName: 'newsletters', uri: '/chapter/newsletters' });
+
+    leslie.routeTo({
+      presenterName: 'newsletters',
+      area: 'chapter',
+      routes: [
+        { verb: 'get' },
+        { verb: 'get', action: 'create-form', method: 'create' }
+      ]
+    });
 
     app.listen(3000);
   })

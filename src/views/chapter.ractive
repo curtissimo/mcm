@@ -36,6 +36,8 @@
             <a class="toolbar-item pure-button" href="{{ . }}">{{ @key }}</a>
             {{/actions}}
           </div>
+        {{else}}
+          <p class="toolbar-section">{{{ '&nbsp;' }}}</p>
         {{/if}}
       </div>
       {{{ content }}}
