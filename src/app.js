@@ -33,6 +33,10 @@ app.use(methodOverride((req, res) => {
     delete req.body['X-HTTP-Method-Override'];
     return method;
   }
+  if (req.query['X-HTTP-Method-Override']) {
+    var method = req.query['X-HTTP-Method-Override'];
+    return method;
+  }
 }));
 
 app.use(function (req, res, next) {
@@ -127,6 +131,7 @@ assets.initialize()
     leslie.delete({ presenterName: 'session' });
 
     leslie.get({ presenterName: 'dashboard', uri: '/chapter/dashboard' });
+    leslie.get({ presenterName: 'newsletters', uri: '/chapter/newsletters' });
 
     app.listen(3000);
   })
