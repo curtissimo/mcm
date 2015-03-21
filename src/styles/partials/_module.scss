@@ -144,8 +144,8 @@ https://github.com/yahoo/pure/blob/master/LICENSE.md
 .pure-button-selected,
 a.pure-button-primary,
 a.pure-button-selected {
-    background-color: $accent-color;
-    color: $accent-color-text;
+    background-color: rgb(0, 120, 231);
+    color: #fff;
 }
 
 /*csslint box-model:false*/
@@ -799,22 +799,47 @@ striping:
   padding: 0.3em 0.6em;
 }
 
-.pure-form-aligned .pure-control-group label {
-  width: 8em;
-
-  @include min-md-screen {
-    width: 10em;
-  }
-}
-
 .normal-cursor {
   cursor: default !important;
 }
 
-.pure-form-aligned .pure-controls {
-  margin: 1.5em 0 0 9.3em;
+.pure-form-aligned {
+  .pure-control-group {
+    label {
+      width: 8em;
 
-  @include min-md-screen {
-    margin: 1.5em 0 0 11.3em;
+      @include min-md-screen {
+        width: 10em;
+      }
+    }
+
+    .form-error {
+      margin-left: 9.3em;
+      padding: .5em;
+
+      @include min-md-screen {
+        margin-left: 11.3em;
+      }
+
+      p {
+        margin: .5em;
+      }
+
+      p:first-child {
+        margin-top: 0;
+      }
+
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .pure-controls {
+    margin: 1.5em 0 0 9.3em;
+
+    @include min-md-screen {
+      margin: 1.5em 0 0 11.3em;
+    }
   }
 }

@@ -39,5 +39,10 @@
 }
 
 .toolbar .pure-button {
-    background-color: transparent;
+  background-color: transparent;
+}
+
+.form-error {
+  background-color: $error-color;
+  color: $error-color-text;
 }

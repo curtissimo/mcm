@@ -11,6 +11,7 @@ import { inspect as ins } from 'util';
 import { urlencoded, json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
+import multer from 'multer';
 
 let app = express();
 let inProduction = process.env.NODE_ENV === 'production';
@@ -105,6 +106,13 @@ app.get('/chapter', function (req, res, next) {
   res.redirect('/chapter/dashboard');
 });
 
+app.use('/chapter/newsletters', multer({
+  limits: {
+    files: 1,
+    putSingleFilesInArray: true
+  }
+}));
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {
@@ -115,6 +123,7 @@ assets.initialize()
       context.account = req.vars.account;
       context.member = req.vars.member;
       context.body = req.body;
+      context.files = req.files;
       context.query = req.query;
       context.cookie = (name, value, options) => res.cookie(name, value, options);
       context.clearCookie = (name) => res.clearCookie(name);
@@ -138,7 +147,8 @@ assets.initialize()
       area: 'chapter',
       routes: [
         { verb: 'get' },
-        { verb: 'get', action: 'create-form', method: 'create' }
+        { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'post' }
       ]
     });
 

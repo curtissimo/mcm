@@ -1,14 +1,26 @@
+import newsletter from '../../models/newsletter';
+
+let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+
 let presenter = {
   get(ac) {
     let data = {
+      months: months,
       actions: {
         'Upload': '/chapter/newsletters/create-form'
       }
     };
-    ac.render({
-      data: data,
-      presenters: { menu: 'menu' },
-      layout: 'chapter'
+    newsletter.from(ac.chapterdb).all(function (e, newsletters) {
+      if (e) {
+        return ac.error(e);
+      }
+      newsletters.reverse();
+      data.newsletters = newsletters;
+      ac.render({
+        data: data,
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
     });
   },
 
@@ -16,12 +28,60 @@ let presenter = {
     ac.render({
       data: {
         year: new Date().getFullYear(),
-        months: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+        months: months,
         month: (new Date().getMonth() + 1) % 12
       },
       presenters: { menu: 'menu' },
       layout: 'chapter'
     });
+  },
+
+  post(ac) {
+    if (!Array.isArray(ac.files.file)) {
+      ac.files.file = [ ac.files.file ];
+    }
+
+    let month = ac.body.month - 0;
+    let year = ac.body.year - 0;
+    let file = ac.files.file[0];
+
+    let n = newsletter.new({
+      month: month,
+      year: year,
+      path: file.path,
+      authorId: ac.member._id
+    });
+
+    let validation = n.validate();
+
+    if (validation.valid) {
+      n.to(ac.chapterdb).save((e, savedNewsletter) => {
+        if (e) {
+          return ac.error(e);
+        }
+        ac.redirect('/chapter/newsletters');
+      });
+    } else {
+      let errors = {};
+      for (let error of validation.errors) {
+        errors[error.property] = error.message;
+
+        if (error.property === 'month') {
+          errors['month'] = 'cannot be left blank';
+        }
+      }
+      ac.render({
+        data: {
+          year: year,
+          month: month,
+          months: months,
+          errors: errors
+        },
+        view: 'create',
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
+    }
   }
 };
 
