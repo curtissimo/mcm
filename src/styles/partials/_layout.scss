@@ -1,4 +1,5 @@
 @import 'partials/_media-queries';
+$menu-width: 15em;
 
 #overlay {
   position: fixed;
@@ -20,9 +21,9 @@
   transition: left .3s;
 
   position: absolute;
-  width: 19em;
+  width: $menu-width;
   height: 100%;
-  left: -19em;
+  left: -$menu-width;
   box-sizing: border-box;
   z-index: 1000;
   overflow-y: auto;
@@ -33,11 +34,15 @@
 }
 
 #main-content {
-  padding-top: 3em;
-
   @include min-lg-screen {
     padding-top: 0;
-    margin-left: 19em;
+    margin-left: $menu-width;
+  }
+
+  padding-top: 3em;
+
+  :first-child {
+    margin-top: 0;
   }
 }
 
@@ -51,6 +56,6 @@
   background-color: gray;
 
   @include min-lg-screen {
-    margin-left: 19em;
+    margin-left: $menu-width;
   }
 }
