@@ -203,7 +203,8 @@ gulp.task('reserve', function (cb) {
   reloading = setTimeout(function () {
     server.restart(function (err) {
       if (err) {
-        return console.error(err);
+        console.error(err);
+        cb(err);
       } else {
         sync.reload();
       }
@@ -248,6 +249,7 @@ gulp.task('serve', [ 'build' ], function () {
         'Safari',
         'FirefoxDeveloperEdition'
       ],
+      notify: false,
       startPath: '/session',
       proxy: 'http://localhost:3000'
     });
@@ -266,7 +268,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
   gulp.watch('./src/**/*.ractive', [ 'views', 'reload' ]);
-  gulp.watch([ './src/**/*.js', '!./src/presenters/*/scripts/*.js', '!./src/scripts/*.js' ], [ 'es6-server' ]);
+  gulp.watch([ './src/**/*.js', '!./src/presenters/*/scripts/*.js', '!./src/scripts/*.js' ], [ 'es6-server', 'reserve' ]);
   gulp.watch([ './src/presenters/*/scripts/*.js', './src/scripts/*.js' ], [ 'es6-client', 'reload' ]);
 });
 
