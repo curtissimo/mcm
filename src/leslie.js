@@ -114,6 +114,10 @@ class PresentationContext {
   notModified() {
     this._bad(new NotModifiedDirective());
   }
+
+  error(e) {
+    this._bad(e);
+  }
 }
 
 class PresenterInvoker {

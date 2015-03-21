@@ -84,10 +84,12 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
   var account = require('./build/models/account');
   var settings = require('./build/models/settings');
   var member = require('./build/models/member');
+  var newsletter = require('./build/models/newsletter');
   var lookup = {
     account: account,
     settings: settings,
-    member: member
+    member: member,
+    newsletter: newsletter
   };
 
   promisify(dbms.db, 'destroy', db.config.db)
@@ -98,7 +100,8 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
       return Promise.all([
         promisify(account.to(masterurl), 'sync'),
         promisify(settings.to(chapterurl), 'sync'),
-        promisify(member.to(chapterurl), 'sync')
+        promisify(member.to(chapterurl), 'sync'),
+        promisify(newsletter.to(chapterurl), 'sync')
       ]);
     })
     .then(function () {
