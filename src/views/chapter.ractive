@@ -21,11 +21,22 @@
       <div class="toolbar-section toolbar-center-side">
       </div>
       <div class="toolbar-section toolbar-right">
+        {{#if actions}}
         <a class="toolbar-item" href="#"><i class="fa fa-ellipsis-v"></i></a>
+        {{/if}}
       </div>
     </div>
     <div id="main-content">
       <div id="action-toolbar" class="min-lg-screen toolbar">
+        {{#if actions}}
+          <div class="toolbar-section toolbar-left"></div>
+          <div class="toolbar-section toolbar-center-side"></div>
+          <div class="toolbar-section toolbar-right">
+            {{#actions:url}}
+            <a class="toolbar-item pure-button" href="{{ . }}">{{ @key }}</a>
+            {{/actions}}
+          </div>
+        {{/if}}
       </div>
       {{{ content }}}
     </div>
