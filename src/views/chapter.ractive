@@ -37,7 +37,9 @@
             {{/actions}}
           </div>
         {{else}}
-          <p class="toolbar-section">{{{ '&nbsp;' }}}</p>
+          <div class="toolbar-section">
+            <div class="pure-button pure-button-disabled normal-cursor">{{{ '&nbsp;' }}}</div>
+          </div>
         {{/if}}
       </div>
       {{{ content }}}

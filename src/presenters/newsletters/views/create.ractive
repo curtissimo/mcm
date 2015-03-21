@@ -19,6 +19,13 @@
         </select>
         <input class="input-year" type="number" value="{{ year }}" name="year" id="year" required>
       </div>
+      <div class="pure-control-group">
+        <label for="file">File</label>
+        <input type="file" id="file" name="file" required>
+      </div>
+      <div class="pure-controls">
+        <button type="submit" class="pure-button pure-button-primary">Upload</button>
+      </div>
     </fieldset>
   </form>
 </section>

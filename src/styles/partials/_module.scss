@@ -800,8 +800,21 @@ striping:
 }
 
 .pure-form-aligned .pure-control-group label {
+  width: 8em;
+
   @include min-md-screen {
-    color: 'orange';
-    width: 'auto';
+    width: 10em;
+  }
+}
+
+.normal-cursor {
+  cursor: default !important;
+}
+
+.pure-form-aligned .pure-controls {
+  margin: 1.5em 0 0 9.3em;
+
+  @include min-md-screen {
+    margin: 1.5em 0 0 11.3em;
   }
 }
