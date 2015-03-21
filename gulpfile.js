@@ -77,8 +77,8 @@ gulp.task('clean', function (cb) {
 
 gulp.task('db', [ 'es6-server' ], function (cb) {
   var chapterName = 'rhog';
-  var masterurl = 'http://couchdb15:5984/mcm-master';
-  var chapterurl = 'http://couchdb15:5984/' + chapterName;
+  var masterurl = 'http://couchdb:5984/mcm-master';
+  var chapterurl = 'http://couchdb:5984/' + chapterName;
   var db = nano(masterurl);
   var dbms = nano(db.config.url);
   var account = require('./build/models/account');

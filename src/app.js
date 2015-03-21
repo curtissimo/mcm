@@ -44,7 +44,7 @@ app.use(function (req, res, next) {
     req.vars = {};
   }
   let server = req.get('x-forwarded-server') || req.hostname;
-  req.vars.masterdb = 'http://couchdb15:5984/mcm-master';
+  req.vars.masterdb = 'http://couchdb:5984/mcm-master';
 
   if (chapterdbs.has(server)) {
     let { db, settings, account: a } = chapterdbs.get(server);
@@ -63,7 +63,7 @@ app.use(function (req, res, next) {
     }
     a = a[0];
     req.vars.account = a;
-    req.vars.chapterdb = 'http://couchdb15:5984/' + a.subdomain;
+    req.vars.chapterdb = 'http://couchdb:5984/' + a.subdomain;
     settings.from(req.vars.chapterdb).all(function (e, s) {
       if (e) {
         next(e);
