@@ -8,6 +8,7 @@ let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/fil
 let presenter = {
   get(ac) {
     let data = {
+      title: 'Chapter Newsletters',
       months: months,
       actions: {},
       canManageNewsletters: ac.member.permissions.canManageNewsletters
@@ -48,6 +49,7 @@ let presenter = {
     }
     ac.render({
       data: {
+        title: 'Upload a Newsletter',
         year: new Date().getFullYear(),
         months: months,
         month: (new Date().getMonth() + 1) % 12
@@ -119,6 +121,7 @@ let presenter = {
         }
         ac.render({
           data: {
+            title: 'Error Uploading Newsletter',
             year: year,
             month: month,
             months: months,
