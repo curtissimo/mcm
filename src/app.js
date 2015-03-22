@@ -81,7 +81,7 @@ app.use(function (req, res, next) {
   });
 });
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   var id = req.cookies[req.vars.account.subdomain];
   if (id) {
     member.from(req.vars.chapterdb).get(id, function (e, m) {
@@ -95,7 +95,7 @@ app.use(function (req, res, next) {
   }
 });
 
-app.use('/chapter', function (req, res, next) {
+app.use('/chapter', (req, res, next) => {
   if (!req.vars.member) {
     return res.redirect('/session');
   }
@@ -125,6 +125,7 @@ assets.initialize()
       context.body = req.body;
       context.files = req.files;
       context.query = req.query;
+      context.params = req.params;
       context.cookie = (name, value, options) => res.cookie(name, value, options);
       context.clearCookie = (name) => res.clearCookie(name);
     };
@@ -148,9 +149,27 @@ assets.initialize()
       routes: [
         { verb: 'get' },
         { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' }
       ]
     });
+
+    if (!inProduction) {
+      console.log('Serving uploaded files from express at ' + __dirname);
+      app.use((req, res, next) => {
+        if (res.get('X-Accel-Redirect')) {
+          let path = res.get('X-Accel-Redirect').replace('/mcm-files', '');
+          res.set('X-Accel-Redirect', '');
+          return res.sendFile(path, {
+            headers: {
+              'Content-Type': res.get('Content-Type'),
+              'Content-Disposition': res.get('Content-Disposition')
+            }
+          });
+        }
+        next();
+      });
+    }
 
     app.listen(3000);
   })

@@ -1,6 +1,9 @@
+import fs from 'fs';
 import newsletter from '../../models/newsletter';
 
+let inProduction = process.env.NODE_ENV === 'production';
 let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
 
 let presenter = {
   get(ac) {
@@ -10,7 +13,7 @@ let presenter = {
         'Upload': '/chapter/newsletters/create-form'
       }
     };
-    newsletter.from(ac.chapterdb).all(function (e, newsletters) {
+    newsletter.from(ac.chapterdb).all((e, newsletters) => {
       if (e) {
         return ac.error(e);
       }
@@ -21,6 +24,17 @@ let presenter = {
         presenters: { menu: 'menu' },
         layout: 'chapter'
       });
+    });
+  },
+
+  item(ac) {
+    let id = ac.params.id;
+
+    newsletter.from(ac.chapterdb).get(id, (e, n) => {
+      if (e) {
+        return ac.error(e);
+      }
+      ac.file(n.path, n.fileName);
     });
   },
 
@@ -49,6 +63,7 @@ let presenter = {
       month: month,
       year: year,
       path: file.path,
+      fileName: file.originalname,
       authorId: ac.member._id
     });
 
@@ -59,7 +74,16 @@ let presenter = {
         if (e) {
           return ac.error(e);
         }
-        ac.redirect('/chapter/newsletters');
+        let newPath = dest + '/' + file.name;
+        fs.rename(file.path, newPath, e => {
+          n.path = newPath;
+          n.to(ac.chapterdb).save(err => {
+            if (err) {
+              return ac.error(err);
+            }
+            ac.redirect('/chapter/newsletters');
+          });
+        });
       });
     } else {
       let errors = {};
