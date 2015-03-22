@@ -15,6 +15,11 @@ var minimist = require('minimist');
 var nano = require('nano');
 var sync = require('browser-sync');
 
+var argv = minimist(process.argv.slice(2));
+if (argv._[0] === 'dist') {
+  process.env.NODE_ENV = 'production';
+}
+
 var forProduction = process.env.NODE_ENV === 'production';
 var reloading = null;
 var AUTOPREFIXER_BROWSERS = [
@@ -161,6 +166,20 @@ gulp.task('es6-server', function () {
   });
 });
 
+gulp.task('files-dir', function (cb) {
+  fs.mkdir('./build', function (e) {
+    if (e && e.code !== 'EEXIST') {
+      return cb(e);
+    }
+    fs.mkdir('./build/files', function (e) {
+      if (e && e.code !== 'EEXIST') {
+        return cb(e);
+      }
+      cb();
+    });
+  });
+});
+
 gulp.task('fonts', function () {
   return gulp.src('./src/fonts/*')
     .pipe(gulp.dest('./build/public/fonts'));
@@ -275,7 +294,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch([ './src/presenters/*/scripts/*.js', './src/scripts/*.js' ], [ 'es6-client', 'reload' ]);
 });
 
-gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'es6-client', 'es3-shiv', 'views' ]);
+gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'es6-client', 'es3-shiv', 'views', 'files-dir' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
