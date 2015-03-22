@@ -19,6 +19,10 @@ let member = stork.deliver('member', function () {
     });
   });
 
+  this.object('permissions', function () {
+    this.bool('canManageNewsletters');
+  });
+
   this.view('byLogin', function (member, emitKey) {
     emitKey(member.email);
     emitKey(member.hogNumber);

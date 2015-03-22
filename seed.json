@@ -19,6 +19,9 @@
   "membership": { 
     "national": { "endDate": "2016-12-31T06:00:00.000Z" },
     "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+  },
+  "permissions": {
+    "canManageNewsletters": true
   }
 },
 {
@@ -31,7 +34,8 @@
   "membership": { 
     "national": { "endDate": "2013-12-31T06:00:00.000Z" },
     "local": { "endDate": "2013-12-31T06:00:00.000Z" }
-  }
+  },
+  "permissions": {}
 },
 {
   "type": "member",
@@ -43,7 +47,8 @@
   "membership": { 
     "national": { "endDate": "2016-12-31T06:00:00.000Z" },
     "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  }
+  },
+  "permissions": {}
 },
 {
   "type": "member",
@@ -55,7 +60,8 @@
   "membership": { 
     "national": { "endDate": "2016-12-31T06:00:00.000Z" },
     "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  }
+  },
+  "permissions": {}
 },
 {
   "type": "member",
@@ -67,7 +73,8 @@
   "membership": { 
     "national": { "endDate": "2016-12-31T06:00:00.000Z" },
     "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  }
+  },
+  "permissions": {}
 },
 {
   "type": "member",
@@ -79,7 +86,8 @@
   "membership": { 
     "national": { "endDate": "2016-12-31T06:00:00.000Z" },
     "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  }
+  },
+  "permissions": {}
 },
 {
   "type": "member",
@@ -91,6 +99,7 @@
   "membership": { 
     "national": { "endDate": "2016-12-31T06:00:00.000Z" },
     "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  }
+  },
+  "permissions": {}
 }
 ]
