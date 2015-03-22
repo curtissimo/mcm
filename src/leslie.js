@@ -41,9 +41,8 @@ Promise.hash = o => {
 /** DIRECTIVES ****************************************************************/
 export class Directive {
   handle(res, next) {
-    console.log('Directive#handle says:', this.code, this.content);
     if (this.code < 400) {
-      return res.status(this.code).end(this.content.toString());
+      return res.status(this.code).end(this.content);
     }
     next(this);
   }
