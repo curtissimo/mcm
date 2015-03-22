@@ -9,9 +9,9 @@ plan.target('staging', {
 
 plan.local(function (local) {
   local.log('Run build');
-  local.exec('gulp dist');
+  local.exec('NODE_ENV=production gulp dist');
   local.exec('cp ./package.json ./dist');
-  local.exec('mkdir -p ./dist/{public,tmp}');
+  local.exec('mkdir -p ./dist/{public,tmp,files}');
 
   local.log('Copy files to remote hosts');
   var filesToCopy = local.exec('find ./dist -type f', { silent: true });
