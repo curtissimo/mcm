@@ -65,6 +65,21 @@ export class NotModifiedDirective extends Directive {
   }
 }
 
+export class FileDirective extends Directive {
+  constructor(path, name = 'attachment') {
+    this._path = path;
+    this._name = name;
+  }
+
+  handle(res, next) {
+    let ext = this._name.substring(this._name.lastIndexOf('.'));
+    res.set('X-Accel-Redirect', '/mcm-files' + this._path);
+    res.attachment(this._name);
+    res.type(ext);
+    next();
+  }
+}
+
 /** VIEWS *********************************************************************/
 class View {
   constructor(data, viewName, presenterName) {
@@ -113,6 +128,10 @@ class PresentationContext {
 
   notModified() {
     this._bad(new NotModifiedDirective());
+  }
+
+  file(path, name) {
+    this._bad(new FileDirective(path, name));
   }
 
   error(e) {
