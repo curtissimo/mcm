@@ -34,6 +34,10 @@
         </div>
         {{/if}}
       </div>
+      <div class="pure-control-group">
+        <label for="description">Description</label>
+        <textarea class="long-plain-text" name="description" id="description"></textarea>
+      </div>
       <div class="pure-controls">
         <button type="submit" class="pure-button pure-button-primary">Upload</button>
         <a href="/chapter/newsletters" class="pure-button">Cancel</a>

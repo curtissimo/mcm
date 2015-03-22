@@ -8,6 +8,8 @@
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <a class="delete-link" href="/chapter/newsletters/{{ this._id }}"><i class="fa fa-trash-o"></i></a>
       {{/if}}
+      <br>
+      {{ this.description }}
     </li>
     {{/newsletters}}
   </ul>

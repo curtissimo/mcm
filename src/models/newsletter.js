@@ -6,6 +6,7 @@ let newsletter = stork.deliver('newsletter', function () {
   this.string('fileName', { required: true });
   this.string('path', { required: true });
   this.string('authorId', { required: true });
+  this.string('description');
   this.timestamps();
 
   this.sort('year', 'month');

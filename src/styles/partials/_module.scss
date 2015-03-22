@@ -813,6 +813,18 @@ striping:
       }
     }
 
+    .long-plain-text {
+      width: 60%;
+
+      @include min-md-screen {
+        width: 75%;
+      }
+
+      @media only screen and (max-width : 480px) {
+        width: 100%;
+      }
+    }
+
     .form-error {
       margin-left: 9.3em;
       padding: .5em;

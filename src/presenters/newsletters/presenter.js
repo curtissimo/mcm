@@ -85,6 +85,7 @@ let presenter = {
     }
 
     let month = ac.body.month - 0;
+    let description = ac.body.description;
     let year = ac.body.year - 0;
     let file = ac.files.file[0];
 
@@ -94,6 +95,7 @@ let presenter = {
         month: month,
         year: year,
         path: newPath,
+        description: description,
         fileName: file.originalname,
         authorId: ac.member._id
       });
