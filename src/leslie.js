@@ -1,5 +1,6 @@
 import fs from 'fs';
 import util from 'util';
+import path from 'path';
 import Ractive from 'ractive';
 
 function promisify(fn) {
@@ -73,7 +74,7 @@ export class FileDirective extends Directive {
 
   handle(res, next) {
     let ext = this._name.substring(this._name.lastIndexOf('.'));
-    res.set('X-Accel-Redirect', '/mcm-files' + this._path);
+    res.set('X-Accel-Redirect', '/mcm-files/' + path.basename(this._path));
     res.attachment(this._name);
     res.type(ext);
     next();

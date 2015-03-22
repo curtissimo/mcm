@@ -155,10 +155,11 @@ assets.initialize()
     });
 
     if (!inProduction) {
-      console.log('Serving uploaded files from express at ' + __dirname);
+      let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
+      console.log('Serving uploaded files from express at ' + dest);
       app.use((req, res, next) => {
         if (res.get('X-Accel-Redirect')) {
-          let path = res.get('X-Accel-Redirect').replace('/mcm-files', '');
+          let path = res.get('X-Accel-Redirect').replace('/mcm-files', dest);
           res.set('X-Accel-Redirect', '');
           return res.sendFile(path, {
             headers: {
@@ -166,6 +167,13 @@ assets.initialize()
               'Content-Disposition': res.get('Content-Disposition')
             }
           });
+        }
+        next();
+      });
+    } else {
+      app.use((req, res, next) => {
+        if (res.get('X-Accel-Redirect')) {
+          return res.end();
         }
         next();
       });
