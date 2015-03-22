@@ -48,18 +48,20 @@ document
       .style.display = 'block';
   });
 
-document
-  .getElementById('main-toolbar-show-actions')
-  .addEventListener('click', e => {
-    e.preventDefault();
-    let actionMenu = document.getElementById('secondary-actions');
-    if (actionMenu.className.indexOf('is-shown') > -1) {
-      actionMenu.className = actionMenu.className.replace(/\s+is-shown/g, '');
-    } else {
-      actionMenu.className += ' is-shown';
-    }
-    console.log(actionMenu.className, actionMenu);
-  });
+let showActionsButton = document.getElementById('main-toolbar-show-actions');
+if (showActionsButton) {
+  showActionsButton
+    .addEventListener('click', e => {
+      e.preventDefault();
+      let actionMenu = document.getElementById('secondary-actions');
+      if (actionMenu.className.indexOf('is-shown') > -1) {
+        actionMenu.className = actionMenu.className.replace(/\s+is-shown/g, '');
+      } else {
+        actionMenu.className += ' is-shown';
+      }
+      console.log(actionMenu.className, actionMenu);
+    });
+}
 
 document.body
   .addEventListener('click', e => {
