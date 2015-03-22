@@ -2,7 +2,7 @@ import 'babel-core/polyfill';
 import express from 'express';
 import path from 'path';
 import Ractive from 'ractive';
-import { LeslieMvp } from './leslie';
+import { Directive, LeslieMvp } from './leslie';
 import account from './models/account';
 import settings from './models/settings';
 import member from './models/member';
@@ -152,6 +152,13 @@ assets.initialize()
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' }
       ]
+    });
+
+    app.use((err, req, res, next) => {
+      if (err instanceof Directive) {
+        return res.status(err.code).end(err.content);
+      }
+      next(err);
     });
 
     if (!inProduction) {

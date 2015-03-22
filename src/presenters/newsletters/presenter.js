@@ -9,10 +9,12 @@ let presenter = {
   get(ac) {
     let data = {
       months: months,
-      actions: {
-        'Upload': '/chapter/newsletters/create-form'
-      }
+      actions: {},
+      canManageNewsletters: ac.member.permissions.canManageNewsletters
     };
+    if (data.canManageNewsletters) {
+      data.actions['Upload'] = '/chapter/newsletters/create-form';
+    }
     newsletter.from(ac.chapterdb).all((e, newsletters) => {
       if (e) {
         return ac.error(e);
@@ -39,6 +41,9 @@ let presenter = {
   },
 
   create(ac) {
+    if (!ac.member.permissions.canManageNewsletters) {
+      return ac.unauthorized();
+    }
     ac.render({
       data: {
         year: new Date().getFullYear(),
@@ -51,6 +56,10 @@ let presenter = {
   },
 
   post(ac) {
+    if (!ac.member.permissions.canManageNewsletters) {
+      return ac.unauthorized();
+    }
+
     if (!Array.isArray(ac.files.file)) {
       ac.files.file = [ ac.files.file ];
     }

@@ -41,9 +41,9 @@ Promise.hash = o => {
 /** DIRECTIVES ****************************************************************/
 export class Directive {
   handle(res, next) {
+    console.log('Directive#handle says:', this.code, this.content);
     if (this.code < 400) {
-      res.status(this.code);
-      return res.send(this.content);
+      return res.status(this.code).end(this.content.toString());
     }
     next(this);
   }
@@ -63,6 +63,13 @@ export class NotModifiedDirective extends Directive {
   constructor() {
     this.code = 304;
     this.content = '';
+  }
+}
+
+export class UnauthorizedDirective extends Directive {
+  constructor() {
+    this.code = 401;
+    this.content = 'You cannot access this resource.';
   }
 }
 
@@ -129,6 +136,10 @@ class PresentationContext {
 
   notModified() {
     this._bad(new NotModifiedDirective());
+  }
+
+  unauthorized() {
+    this._bad(new UnauthorizedDirective());
   }
 
   file(path, name) {
@@ -264,6 +275,7 @@ export class LeslieMvp {
           } else {
             let output = `${directive.message}\n${directive.stack}`;
             console.error(output);
+            res.send(output);
           }
         })
     });
