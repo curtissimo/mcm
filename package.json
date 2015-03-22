@@ -31,7 +31,7 @@
     "method-override": "^2.3.2",
     "multer": "^0.1.8",
     "ractive": "^0.6.1",
-    "stork-odm": "^0.1.11",
+    "stork-odm": "^0.1.12",
     "systemjs": "^0.15.0"
   }
 }
