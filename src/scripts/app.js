@@ -61,9 +61,8 @@ document
     console.log(actionMenu.className, actionMenu);
   });
 
-document
+document.body
   .addEventListener('click', e => {
-    e = e || window.event;
     let target = e.target || e.srcElement;
     while (target && target.tagName !== 'A') {
       target = target.parentNode;
