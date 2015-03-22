@@ -15,21 +15,36 @@
     {{{ menu }}}
     </div>
     <div id="main-toolbar" class="max-lg-screen toolbar">
-      <div class="toolbar-section toolbar-left">
-        <a href="#" class="toolbar-item" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+      <div class="toolbar-section">
+        <div class="toolbar-left">
+          <a href="#" class="toolbar-item" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+        </div>
       </div>
       <div class="toolbar-section toolbar-center-side">
       </div>
-      <div class="toolbar-section toolbar-right">
-        {{#if actions}}
-        <a class="toolbar-item" href="#"><i class="fa fa-ellipsis-v"></i></a>
-        {{/if}}
+      <div class="toolbar-section">
+        <div class="toolbar-right">
+          {{#if actions}}
+          <a class="toolbar-item" href="#" id="main-toolbar-show-actions"><i class="fa fa-ellipsis-v"></i></a>
+          {{/if}}
+        </div>
       </div>
     </div>
+    {{#if actions}}
+    <div class="max-lg-screen">
+      <div id="secondary-actions" class="secondary-actions">
+        <ul class="secondary-actions-list">
+          {{#actions:url}}
+          <li><a class="secondary-action" href="{{ . }}">{{ @key }}</a></li>
+          {{/actions}}
+        </ul>
+      </div>
+    </div>
+    {{/if}}
     <div id="main-content">
       <div id="action-toolbar" class="min-lg-screen toolbar">
         {{#if actions}}
-          <div class="toolbar-section toolbar-left"></div>
+          <div class="toolbar-section"></div>
           <div class="toolbar-section toolbar-center-side"></div>
           <div class="toolbar-section toolbar-right">
             {{#actions:url}}

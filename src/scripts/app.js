@@ -7,16 +7,18 @@ Event.prototype.preventDefault = function () {
   }
 };
 
-if (typeof Element !== 'undefined' && Element.prototype.attachEvent) {
+if (typeof Element !== 'undefined' && Element.prototype.attachEvent && !Element.prototype.addEventListener) {
   Element.prototype.addEventListener = function (event, callback) {
-    this.attachEvent('on' + event, callback);
+    let self = this;
+    this.attachEvent('on' + event, () => {
+      callback.call(self, window.event);
+    });
   };
 }
 
 document
   .getElementById('main-menu')
   .addEventListener('click', e => {
-    e = e || window.event;
     let target = e.target || e.srcElement;
     if (target.tagName !== 'A') {
       e.preventDefault();
@@ -26,7 +28,6 @@ document
 document
   .getElementById('overlay')
   .addEventListener('click', e => {
-    e = e || window.event;
     e.preventDefault();
     let mainMenu = document.getElementById('main-menu');
     mainMenu.className = mainMenu.className.replace(/is-shown/g, '');
@@ -38,7 +39,6 @@ document
 document
   .getElementById('main-toolbar-show-menu')
   .addEventListener('click', e => {
-    e = e || window.event;
     e.preventDefault();
     document
       .getElementById('main-menu')
@@ -46,6 +46,19 @@ document
     document
       .getElementById('overlay')
       .style.display = 'block';
+  });
+
+document
+  .getElementById('main-toolbar-show-actions')
+  .addEventListener('click', e => {
+    e.preventDefault();
+    let actionMenu = document.getElementById('secondary-actions');
+    if (actionMenu.className.indexOf('is-shown') > -1) {
+      actionMenu.className = actionMenu.className.replace(/\s+is-shown/g, '');
+    } else {
+      actionMenu.className += ' is-shown';
+    }
+    console.log(actionMenu.className, actionMenu);
   });
 
 document

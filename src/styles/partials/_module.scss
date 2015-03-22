@@ -11,12 +11,28 @@
     color: $primary-color-dark-text;
     text-decoration: none;
   }
+
+  letter-spacing: -0.31em; /* Webkit: collapse white-space between units */
+  *letter-spacing: normal; /* reset IE < 8 */
+  *word-spacing: -0.43em; /* IE < 8: collapse white-space between units */
+  text-rendering: optimizespeed; /* Webkit: fixes text-rendering: optimizeLegibility */
+
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
 }
 
 .toolbar-section {
-  display: inline-block;
-  width: 33%;
   box-sizing: border-box;
+  display: inline-block;
+  *display: inline; /* IE < 8: fake inline-block */
+  zoom: 1;
+  letter-spacing: normal;
+  word-spacing: normal;
+  vertical-align: top;
+  text-rendering: auto;
+  width: 33.3333%;
+  *width: 33.3023%;
 }
 
 .toolbar-left {
@@ -37,6 +53,32 @@
   display: inline-block;
   min-width: 48px;
   text-align: center;
+}
+
+.secondary-actions {
+  display: none;
+  position: fixed;
+  right: 0;
+  padding: .5em;
+  top: 46px;
+  background-color: white;
+  border: 2px solid $primary-color-dark;
+  box-shadow: -1px 3px 3px #888888;
+  z-index: 1000;
+
+  &.is-shown {
+    display: block;
+  }
+}
+
+.secondary-actions-list {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+.secondary-action {
+  padding: .25em .5em;
 }
 
 .menu-header {
@@ -813,6 +855,12 @@ striping:
       }
     }
 
+    input[type="file"] {
+      @media only screen and (max-width : 480px) {
+        width: 100%;
+      }
+    }
+
     .long-plain-text {
       width: 60%;
 
@@ -852,6 +900,14 @@ striping:
 
     @include min-md-screen {
       margin: 1.5em 0 0 11.3em;
+    }
+
+    @media only screen and (max-width : 480px) {
+      margin: 1.5em 0 0 0;
+    }
+
+    .pure-button {
+      margin: 0;
     }
   }
 }
