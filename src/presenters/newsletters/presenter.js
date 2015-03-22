@@ -33,7 +33,9 @@ let presenter = {
     let id = ac.params.id;
 
     newsletter.from(ac.chapterdb).get(id, (e, n) => {
-      if (e) {
+      if (e && e.status_code === 404) {
+        return ac.notFound();
+      } else if (e) {
         return ac.error(e);
       }
       ac.file(n.path, n.fileName);
@@ -52,6 +54,24 @@ let presenter = {
       },
       presenters: { menu: 'menu' },
       layout: 'chapter'
+    });
+  },
+
+  delete(ac) {
+    let id = ac.params.id;
+
+    newsletter.from(ac.chapterdb).get(id, (e, n) => {
+      if (e) {
+        return ac.error(e);
+      }
+      n.to(ac.chapterdb).destroy(err => {
+        if (err) {
+          return ac.error(e);
+        }
+        fs.unlink(n.path, error => {
+          ac.redirect('/chapter/newsletters');
+        });
+      });
     });
   },
 

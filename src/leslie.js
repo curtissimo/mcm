@@ -58,6 +58,13 @@ export class RedirectDirective extends Directive {
   }
 }
 
+export class NotFoundDirective extends Directive {
+  constructor() {
+    this.code = 404;
+    this.content = 'Cannot find that resource.';
+  }
+}
+
 export class NotModifiedDirective extends Directive {
   constructor() {
     this.code = 304;
@@ -131,6 +138,10 @@ class PresentationContext {
 
   redirect(href) {
     this._bad(new RedirectDirective(href));
+  }
+
+  notFound() {
+    this._bad(new NotFoundDirective());
   }
 
   notModified() {

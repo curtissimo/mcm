@@ -150,7 +150,8 @@ assets.initialize()
         { verb: 'get' },
         { verb: 'get', action: 'create-form', method: 'create' },
         { verb: 'get', action: ':id', method: 'item' },
-        { verb: 'post' }
+        { verb: 'post' },
+        { verb: 'delete', action: ':id' }
       ]
     });
 

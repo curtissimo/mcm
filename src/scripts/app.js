@@ -52,7 +52,10 @@ document
   .addEventListener('click', e => {
     e = e || window.event;
     let target = e.target || e.srcElement;
-    if (target.tagName === 'A' && target.className.indexOf('delete-link') > -1) {
+    while (target && target.tagName !== 'A') {
+      target = target.parentNode;
+    }
+    if (target && target.className.indexOf('delete-link') > -1) {
       e.preventDefault();
       let form = document.createElement('form');
       form.method = 'post';
