@@ -26,6 +26,7 @@ plan.remote(function (remote) {
   remote.log('Move folder to web root');
   remote.sudo('mkdir -p ' + to, { user: 'curtis' });
   remote.sudo('cp -R ' + from + '/. ' + to, { user: 'curtis' });
+  remote.sudo('mkdir -p ' + to + '/files', { user: 'curtis' });
   remote.sudo('rm -rf ' + fromDir, { user: 'curtis' });
 
   remote.log('Install dependencies');
