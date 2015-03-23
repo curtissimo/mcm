@@ -4,6 +4,7 @@ var babel = require('gulp-babel');
 var concat = require('gulp-concat');
 var csso = require('gulp-csso');
 var hash = require('gulp-hash');
+var jsmin = require('gulp-jsmin');
 var ractive = require('gulp-ractive');
 var server = require('gulp-develop-server');
 var sass = require('gulp-sass');
@@ -136,23 +137,23 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
     });
 });
 
-gulp.task('es6-client', function () {
+gulp.task('es3', function () {
   return sourceMapsInDevelopment({
-    source: [ './src/presenters/*/scripts/*.js', './src/scripts/*.js', '!./src/scripts/shiv.js' ],
+    source: [ './src/scripts/shiv.js', './src/scripts/squire-raw.js' ],
     dest: './build/public/scripts',
     betweenMaps: function (stream) {
-      return stream.pipe(babel({ modules: 'ignore' }))
-        .pipe(concat('app.js'));
+      return stream.pipe(jsmin());
     }
   });
 });
 
-gulp.task('es3-shiv', function () {
+gulp.task('es6-client', function () {
   return sourceMapsInDevelopment({
-    source: './src/scripts/shiv.js',
+    source: [ './src/presenters/*/scripts/*.js', './src/scripts/*.js', '!./src/scripts/shiv.js', '!./src/scripts/squire-raw.js' ],
     dest: './build/public/scripts',
     betweenMaps: function (stream) {
-      return stream;
+      return stream.pipe(babel({ modules: 'ignore' }))
+        .pipe(concat('app.js'));
     }
   });
 });
@@ -278,6 +279,11 @@ gulp.task('serve', [ 'build' ], function () {
   });
 });
 
+gulp.task('html', function () {
+  return gulp.src('./src/views/*.html')
+    .pipe(gulp.dest('./build/public'));
+});
+
 gulp.task('views', function () {
   return gulp.src('./src/**/*.ractive')
     .pipe(ractive())
@@ -294,7 +300,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch([ './src/presenters/*/scripts/*.js', './src/scripts/*.js' ], [ 'es6-client', 'reload' ]);
 });
 
-gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'es6-client', 'es3-shiv', 'views', 'files-dir' ]);
+gulp.task('build', [ 'sass', 'fonts', 'es6-server', 'es6-client', 'es3', 'views', 'files-dir' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
