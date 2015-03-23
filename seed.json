@@ -21,7 +21,8 @@
     "local": { "endDate": "2016-12-31T06:00:00.000Z" }
   },
   "permissions": {
-    "canManageNewsletters": true
+    "canManageNewsletters": true,
+    "canManageMembers": true
   }
 },
 {

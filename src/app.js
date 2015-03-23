@@ -155,6 +155,16 @@ assets.initialize()
       ]
     });
 
+    leslie.routeTo({
+      presenterName: 'members',
+      area: 'chapter',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'get', action: 'create-form', method: 'create' }
+      ]
+    });
+
     app.use((err, req, res, next) => {
       if (err instanceof Directive) {
         return res.status(err.code).end(err.content);

@@ -214,6 +214,11 @@ gulp.task('new:presenter', function (cb) {
   });
 });
 
+gulp.task('new:view', function (cb) {
+  var argv = minimist(process.argv.slice(2));
+  exec('touch ./src/presenters/' + argv.presenter + '/views/' + argv.name + '.ractive', cb);
+});
+
 gulp.task('reload', [ 'sass', 'views', 'fonts' ], function (cb) {
   sync.reload();
   cb();
