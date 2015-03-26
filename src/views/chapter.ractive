@@ -42,7 +42,7 @@
     </div>
     {{/if}}
     <div id="main-content">
-      <div id="action-toolbar" class="min-lg-screen toolbar">
+      <div id="action-toolbar" class="min-lg-screen toolbar action-toolbar">
         {{#if actions}}
           <div class="toolbar-section"></div>
           <div class="toolbar-section toolbar-center-side"></div>
