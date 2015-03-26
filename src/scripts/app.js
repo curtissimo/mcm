@@ -16,6 +16,18 @@ if (typeof Element !== 'undefined' && Element.prototype.attachEvent && !Element.
   };
 }
 
+if (document.querySelectorAll) {
+  try {
+    let dateInputs = document.querySelectorAll('input[type="date"]');
+    for (let i = 0; i < dateInputs.length; i += 1) {
+      let input = dateInputs[i];
+      if (input.value !== input.getAttribute('value')) {
+        input.value = input.getAttribute('data-value');
+      }
+    }
+  } catch (e) { console.error(e); }
+}
+
 document
   .getElementById('main-menu')
   .addEventListener('click', e => {
