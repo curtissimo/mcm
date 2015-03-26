@@ -144,8 +144,8 @@ assets.initialize()
     leslie.get({ presenterName: 'dashboard', uri: '/chapter/dashboard' });
 
     leslie.routeTo({
-      presenterName: 'newsletters',
       area: 'chapter',
+      presenterName: 'newsletters',
       routes: [
         { verb: 'get' },
         { verb: 'get', action: 'create-form', method: 'create' },
@@ -156,12 +156,13 @@ assets.initialize()
     });
 
     leslie.routeTo({
-      presenterName: 'members',
       area: 'chapter',
+      presenterName: 'members',
       routes: [
         { verb: 'get', method: 'list' },
+        { verb: 'get', action: 'create-form', method: 'create' },
         { verb: 'get', action: ':id', method: 'item' },
-        { verb: 'get', action: 'create-form', method: 'create' }
+        { verb: 'post' }
       ]
     });
 
