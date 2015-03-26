@@ -136,6 +136,7 @@ assets.initialize()
     leslie.addStylesheet('font-awesome');
     leslie.addStylesheet('app');
     leslie.addStylesheet('themes/leather/theme');
+    leslie.addScript('app');
 
     leslie.get({ presenterName: 'session' });
     leslie.put({ presenterName: 'session' });

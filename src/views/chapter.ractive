@@ -4,7 +4,7 @@
     <title>{{title}}</title>
     <meta name="viewport" content="width=device-width, inital-scale=1, maximum-scale=1">
     {{#stylesheets}}
-    <link rel="stylesheet" href="{{.}}">
+    <link rel="stylesheet" href="{{ . }}">
     {{/stylesheets}}
     {{{ ifltie9 }}}
     <script src="/scripts/shiv.js"></script>
@@ -70,6 +70,8 @@
       {{/member}}
     </div>
     <div id="overlay"></div>
-    <script src="/scripts/app.js"></script>
+    {{#scripts}}
+    <script src="{{ . }}"></script>
+    {{/scripts}}
   </body>
 </html>

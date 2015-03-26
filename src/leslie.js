@@ -129,7 +129,11 @@ class PresentationContext {
   }
 
   addStylesheet(name) {
-    this._assets.add(name);
+    this._assets.addStylesheet(name);
+  }
+
+  addScript(name) {
+    this._assets.addScript(name);
   }
 
   render({ view: v, data: d = {}, presenters: p = {}, layout: l}) {
@@ -203,7 +207,6 @@ export class Presenter {
             d[key] = new Presenter(value, 'get', this._assets.request(value), self._modifier).render();
           }
         }
-        d.stylesheets = this._assets.stylesheets;
         d[self._layoutSymbol] = l;
         return Promise.hash(d);
       })
@@ -212,6 +215,8 @@ export class Presenter {
         if (!this._isRootRequest) {
           return content.html;
         }
+        content.data.stylesheets = this._assets.stylesheets;
+        content.data.scripts = this._assets.scripts;
         return new Promise((good, bad) => {
           let data = content.data;
           let layout = data[self._layoutSymbol];
@@ -230,12 +235,16 @@ export class LeslieMvp {
     this._expressApp = expressApp;
     this._contextModifier = (_, __, o) => o;
     this._assets = assets;
-    this._stylesheets = [];
+    this._scripts = [];
     this._data = new Map();
   }
 
   addStylesheet(stylesheet) {
-    this._assets.add(stylesheet);
+    this._assets.addStylesheet(stylesheet);
+  }
+
+  addScript(script) {
+    this._assets.addScript(script);
   }
 
   get({ presenterName: p, uri: r }) {

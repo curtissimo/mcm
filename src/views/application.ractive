@@ -33,6 +33,8 @@
       {{/member}}
     </div>
     <div id="overlay"></div>
-    <script src="/scripts/app.js"></script>
+    {{#scripts}}
+    <script src="{{ . }}"></script>
+    {{/scripts}}
   </body>
 </html>

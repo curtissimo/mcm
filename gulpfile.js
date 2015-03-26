@@ -149,11 +149,17 @@ gulp.task('es3', function () {
 
 gulp.task('es6-client', function () {
   return sourceMapsInDevelopment({
-    source: [ './src/presenters/*/scripts/*.js', './src/scripts/*.js', '!./src/scripts/shiv.js', '!./src/scripts/squire-raw.js' ],
-    dest: './build/public/scripts',
+    source: [ './src/**/scripts/*.js', '!./src/scripts/shiv.js', '!./src/scripts/squire-raw.js' ],
+    dest: './build/public',
     betweenMaps: function (stream) {
       return stream.pipe(babel({ modules: 'ignore' }))
-        .pipe(concat('app.js'));
+        .pipe(concat('scripts/app.js'))
+        .pipe(hash());
+    },
+    afterDist: function (stream) {
+      return stream
+        .pipe(hash.manifest('es-asset-hashes.json'))
+        .pipe(gulp.dest('./build'));
     }
   });
 });
@@ -259,7 +265,7 @@ gulp.task('sass', function () {
     },
     dest: './build/public',
     afterDist: function (stream) {
-      return stream.pipe(hash.manifest('asset-hashes.json'))
+      return stream.pipe(hash.manifest('css-asset-hashes.json'))
         .pipe(gulp.dest('./build'));
     }
   });
@@ -272,9 +278,9 @@ gulp.task('serve', [ 'build' ], function () {
     }
     sync({
       browser: [
-        'Google Chrome Canary',
-        'Google Chrome',
-        'Safari',
+        // 'Google Chrome Canary',
+        // 'Google Chrome',
+        // 'Safari',
         'FirefoxDeveloperEdition'
       ],
       notify: false,
@@ -296,7 +302,7 @@ gulp.task('views', function () {
 });
 
 gulp.task('watch', [ 'build' ], function () {
-  gulp.watch([ './build/**/*.js', './build/asset-hashes.json' ], [ 'reserve' ]);
+  gulp.watch([ './build/**/*.js', './build/*-asset-hashes.json' ], [ 'reserve' ]);
 
   gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
