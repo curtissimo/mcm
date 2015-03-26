@@ -14,22 +14,27 @@ a {
 }
 
 .main-menu {
-  background-color: $primary-color-dark;
-  color: $primary-color-dark-text;
+  background-color: #dedede;
+  color: $primary-color-light-text;
   border-right: 1px solid $divider-color;
   box-sizing: border-box;
 
+  .menu-header {
+    background-color: $primary-color-dark;
+    color: $primary-color-dark-text;
+  }
+
   .pure-menu-heading {
-    color: #999;
+    color: $primary-color-light-text;
   }
 
   .pure-menu-link {
-    color: $primary-color-dark-text;
+    color: $primary-color;
     text-decoration: none;
 
     &:hover {
-      background-color: $primary-color-light;
-      color: $primary-color-light-text;
+      background-color: $primary-color;
+      color: $primary-color-text;
     }
   }
 
