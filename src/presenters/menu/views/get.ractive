@@ -4,7 +4,7 @@
     {{#member}}
     <li class="pure-menu-heading">Members-Only</li>
     <li class="pure-menu-item">
-      <a class="pure-menu-link" href="/chapter/dashboard">Dashboard</a>
+      <a class="pure-menu-link" href="/chapter/dashboard">My Page</a>
     </li>
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/events">Events</a>
