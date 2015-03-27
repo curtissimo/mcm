@@ -1,0 +1,1 @@
+<h1 class="banner">{{ member.lastName }}, {{ member.firstName }}</h1>

@@ -11,6 +11,10 @@ $menu-width: 15em;
   background-color: #888;
   background-color: rgba(0, 0, 0, 0.5);
   display: none;
+
+  @include min-lg-screen {
+    display: none !important;
+  }
 }
 
 #main-menu {
@@ -20,12 +24,12 @@ $menu-width: 15em;
 
   transition: left .3s;
 
-  position: absolute;
+  position: fixed;
   width: $menu-width;
   height: 100%;
   left: -$menu-width;
   box-sizing: border-box;
-  z-index: 1000;
+  z-index: 1003;
   overflow-y: auto;
 
   &.is-shown {
@@ -35,7 +39,6 @@ $menu-width: 15em;
 
 #main-content {
   @include min-lg-screen {
-    padding-top: 0;
     margin-left: $menu-width;
   }
 
@@ -46,10 +49,18 @@ $menu-width: 15em;
   }
 }
 
+#action-toolbar {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+}
+
 #main-toolbar {
   overflow: hidden;
   height: 3em;
   position: fixed;
+  z-index: 1000;
 }
 
 #debug {

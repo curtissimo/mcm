@@ -2,6 +2,17 @@
 @import 'media-queries';
 @import 'pure';
 
+@mixin grid-column() {
+  box-sizing: border-box;
+  display: inline-block;
+  *display: inline; /* IE < 8: fake inline-block */
+  zoom: 1;
+  letter-spacing: normal;
+  word-spacing: normal;
+  vertical-align: top;
+  text-rendering: auto;
+}
+
 .normal-cursor {
   cursor: default !important;
 }
@@ -82,6 +93,7 @@
 }
 
 .form-layout {
+  @include grid-column();
   letter-spacing: -0.31em; /* Webkit: collapse white-space between units */
   *letter-spacing: normal; /* reset IE < 8 */
   *word-spacing: -0.43em; /* IE < 8: collapse white-space between units */
@@ -93,14 +105,7 @@
 }
 
 .form-panel {
-  box-sizing: border-box;
-  display: inline-block;
-  *display: inline; /* IE < 8: fake inline-block */
-  zoom: 1;
-  letter-spacing: normal;
-  word-spacing: normal;
-  vertical-align: top;
-  text-rendering: auto;
+  @include grid-column();
 
   @include min-md-screen {
     width: 50%;
@@ -113,14 +118,7 @@
 }
 
 .form-controls {
-  box-sizing: border-box;
-  display: inline-block;
-  *display: inline; /* IE < 8: fake inline-block */
-  zoom: 1;
-  letter-spacing: normal;
-  word-spacing: normal;
-  vertical-align: top;
-  text-rendering: auto;
+  @include grid-column();
 }
 
 .toolbar {
@@ -145,14 +143,7 @@
 }
 
 .toolbar-section {
-  box-sizing: border-box;
-  display: inline-block;
-  *display: inline; /* IE < 8: fake inline-block */
-  zoom: 1;
-  letter-spacing: normal;
-  word-spacing: normal;
-  vertical-align: top;
-  text-rendering: auto;
+  @include grid-column();
   width: 33.3333%;
   *width: 33.3023%;
 }
@@ -178,6 +169,8 @@
 }
 
 .action-toolbar {
+  z-index: 1020;
+
   .toolbar-item {
     font-size: 1em;
   }
@@ -192,7 +185,7 @@
   background-color: white;
   border: 2px solid $primary-color-dark;
   box-shadow: -1px 3px 3px #888888;
-  z-index: 1000;
+  z-index: 1001;
 
   &.is-shown {
     display: block;
@@ -217,4 +210,62 @@
 
 .input-year {
   width: 5em;
+}
+
+.members-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.members-list-item {
+  letter-spacing: -0.31em; /* Webkit: collapse white-space between units */
+  *letter-spacing: normal; /* reset IE < 8 */
+  *word-spacing: -0.43em; /* IE < 8: collapse white-space between units */
+  text-rendering: optimizespeed; /* Webkit: fixes text-rendering: optimizeLegibility */
+
+  display: flex;
+  flex-flow: row wrap;
+  align-content: flex-start;
+  margin-bottom: 4em;
+}
+
+.members-list-letter-label {
+  @include grid-column();
+  display: block;
+  width: 100%;
+
+  @include min-sm-screen {
+    display: inline-block;
+    width: 10%;
+  }
+}
+
+.members-list-tile-holder {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  @include grid-column();
+  display: block;
+  text-align: center;
+  width: 100%;
+
+  @include min-sm-screen {
+    display: inline-block;
+    width: 90%;
+    text-align: left;
+  }
+}
+
+.member-list-tile-column {
+  vertical-align: top;
+  width: 16em;
+  display: inline-block;
+  text-align: left;
+}
+
+.member-list-tile {
+  margin: .5em;
+  text-align: center;
+  position: relative;
 }

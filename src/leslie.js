@@ -80,15 +80,20 @@ export class UnauthorizedDirective extends Directive {
 }
 
 export class FileDirective extends Directive {
-  constructor(path, name = 'attachment') {
+  constructor(path, name = 'attachment', download) {
     this._path = path;
     this._name = name;
+    this._download = download;
   }
 
   handle(res, next) {
     let ext = this._name.substring(this._name.lastIndexOf('.'));
     res.set('X-Accel-Redirect', '/mcm-files/' + path.basename(this._path));
-    res.attachment(this._name);
+    if (this._download) {
+      res.attachment(this._name);
+    } else {
+      res.set('Content-Disposition', 'inline');
+    }
     res.type(ext);
     next();
   }
@@ -156,8 +161,12 @@ class PresentationContext {
     this._bad(new UnauthorizedDirective());
   }
 
-  file(path, name) {
+  binary(path, name) {
     this._bad(new FileDirective(path, name));
+  }
+
+  file(path, name) {
+    this._bad(new FileDirective(path, name, true));
   }
 
   error(e) {

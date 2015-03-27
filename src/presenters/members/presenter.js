@@ -45,22 +45,58 @@ let presenter = {
   list(ac) {
     let data = {
       actions: {},
+      letters: upper,
       title: 'View members'
     };
+    let aMonthAgo = moment();
+    aMonthAgo.subtract(1, 'month');
     if (ac.member.permissions.canManageMembers) {
       data.actions['Add a new member'] = '/chapter/members/create-form';
     }
-    ac.render({
-      data: data,
-      presenters: { menu: 'menu' },
-      layout: 'chapter'
+    let organizedMembers = [];
+    member.from(ac.chapterdb).all(function(e, members) {
+      if (e) {
+        return ac.error(e);
+      }
+      let memberIndex = 0;
+      for (let i = 0; i < lower.length; i += 1) {
+        let letter = lower[i];
+        let currentSection = [];
+        organizedMembers.push(currentSection);
+        while (memberIndex < members.length && members[memberIndex].lastName[0].toLowerCase() == letter) {
+          let m = members[memberIndex];
+          memberIndex += 1;
+          if (!ac.member.permissions.canManageMembers && m.private) {
+            continue;
+          }
+          currentSection.push(m);
+          if (m.membership && m.membership.local && m.membership.local.startDate) {
+            let startDate = moment(m.membership.local.startDate);
+            if (startDate > aMonthAgo) {
+              m.isNewMember = true;
+            }
+          }
+        }
+      }
+      data.members = organizedMembers;
+      ac.render({
+        data: data,
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
     });
   },
 
   item(ac) {
-    ac.render({
-      presenters: { menu: 'menu' },
-      layout: 'chapter'
+    member.from(ac.chapterdb).get(ac.params.id, function (e, member) {
+      if (e) {
+        return ac.error(e);
+      }
+      ac.render({
+        data: { member: member },
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
     });
   },
 
@@ -87,6 +123,16 @@ let presenter = {
       },
       presenters: { menu: 'menu' },
       layout: 'chapter'
+    });
+  },
+
+  photo(ac) {
+    member.from(ac.chapterdb).get(ac.params.id, function (e, member) {
+      if (e) {
+        return ac.error(e);
+      }
+      let photo = member.photoPath || 'images/unknown-user.jpg';
+      ac.binary(photo, photo);
     });
   },
 
@@ -120,7 +166,12 @@ let presenter = {
     let m = member.new(params);
     let validation = m.validate();
     if (validation.valid && localJoined && localExpiration) {
-      
+      m.to(ac.chapterdb).save(e => {
+        if (e) {
+          return ac.error(e);
+        }
+        ac.redirect('/chapter/members');
+      });
     } else {
       let errors = {};
       (validation.errors || []).forEach(error => {

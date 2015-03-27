@@ -5,8 +5,10 @@ let member = stork.deliver('member', function () {
   this.string('lastName', { required: true, minLength: 2 });
   this.string('email', { required: true, format: 'email' });
   this.string('password', { required: true, minLength: 6 });
-  this.string('hogNumber', { required: true });
+  this.string('hogNumber', { required: true, minLength: 6 });
   this.timestamps();
+
+  this.array('achievements');
 
   this.object('membership', function () {
     this.object('national', function () {
@@ -23,6 +25,8 @@ let member = stork.deliver('member', function () {
     this.bool('canManageNewsletters');
     this.bool('canManageMembers');
   });
+
+  this.sort('lastName', 'firstName');
 
   this.view('byLogin', function (member, emitKey) {
     emitKey(member.email);

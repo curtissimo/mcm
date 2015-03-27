@@ -162,6 +162,7 @@ assets.initialize()
       routes: [
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' }
       ]
