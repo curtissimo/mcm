@@ -15,7 +15,7 @@
               {{#if private}}
               <div class="is-hidden"><span>Hidden</span></div>
               {{/if}}
-              <img class="pure-img" src="/chapter/members/{{ _id }}/photo">
+              <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
               <div class="member-list-tile-information">
                 {{#if nickName}}
                 <div class="member-list-tile-nickName">{{ nickName }}</div>
