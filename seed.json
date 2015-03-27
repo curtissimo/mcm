@@ -34,9 +34,9 @@
   "password": "leslie",
   "hogNumber": "US123457",
   "achievements": [
-    "Secretary 2012 - 2014",
-    "LOH Director - 2011",
-    "Most miles - Dec 2014"
+    { "description": "Secretary", "from": 2012, "to": 2014 },
+    { "description": "LOH Director", "from": 2011, "to": 2011 },
+    { "description": "Most miles", "on": [ 2014, 11 ] }
   ],
   "permissions": {
     "canManageNewsletters": true,
@@ -70,8 +70,8 @@
   "email": "gabby@burgard.com",
   "password": "gabby",
   "achievements": [
-    "Most miles - Dec 2015",
-    "Most miles - Oct 2014"
+    { "description": "Most miles", "on": [ 2015, 11 ] },
+    { "description": "Most miles", "on": [ 2014, 9 ] }
   ],
   "hogNumber": "US123459",
   "membership": { 

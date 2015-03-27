@@ -1,6 +1,7 @@
 import moment from 'moment';
 import member from '../../models/member';
 
+const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const lower = 'abcdefghijklmnopqrstuvwxyz'
 const digit = '0123456789'
@@ -70,6 +71,17 @@ let presenter = {
             continue;
           }
           currentSection.push(m);
+          for (let achievement of (m.achievements || [])) {
+            if (achievement.on) {
+              achievement.toString = () => {
+                return `${achievement.description} - ${months[achievement.on[1]]} ${achievement.on[0]}`;
+              };
+            } else {
+              achievement.toString = () => {
+                return `${achievement.description} ${achievement.from} - ${achievement.to}`;
+              };
+            }
+          }
           if (m.membership && m.membership.local && m.membership.local.startDate) {
             let startDate = moment(m.membership.local.startDate);
             if (startDate > aMonthAgo) {
