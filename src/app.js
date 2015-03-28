@@ -199,13 +199,6 @@ assets.initialize()
     });
 
     leslie.routeTo({
-      presenterName: 'public-documents',
-      routes: [
-        { verb: 'get' }
-      ]
-    });
-
-    leslie.routeTo({
       area: 'chapter',
       presenterName: 'members',
       routes: [
@@ -214,6 +207,22 @@ assets.initialize()
         { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
+      presenterName: 'security',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
+      presenterName: 'public-documents',
+      routes: [
+        { verb: 'get' }
       ]
     });
 

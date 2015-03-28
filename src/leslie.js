@@ -167,7 +167,7 @@ class PresentationContext {
     this._bad(new UnauthorizedDirective());
   }
 
-  binary(path, name) {
+  binary(path, name, section) {
     this._bad(new FileDirective(path, name, section));
   }
 

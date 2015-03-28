@@ -48,7 +48,7 @@
     {{/if}}
     <div id="main-content">
       <div id="action-toolbar" class="min-lg-screen toolbar action-toolbar">
-        {{#if actions || nav}}
+        {{#if !!(actions || nav)}}
           <div class="toolbar-section toolbar-left">
             {{#nav:url}}
             <a class="toolbar-item pure-button" href="{{ . }}">{{{ @key }}}</a>

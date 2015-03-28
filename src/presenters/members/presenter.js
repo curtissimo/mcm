@@ -45,14 +45,15 @@ function password (length) {
 let presenter = {
   list(ac) {
     let data = {
-      actions: {},
       letters: upper,
       title: 'View members'
     };
     let aMonthAgo = moment();
     aMonthAgo.subtract(1, 'month');
     if (ac.member.permissions.canManageMembers) {
-      data.actions['Add a new member'] = '/chapter/members/create-form';
+      data.actions = {
+        ['Add a new member']: '/chapter/members/create-form'
+      };
     }
     let organizedMembers = [];
     member.from(ac.chapterdb).all(function(e, members) {
@@ -122,11 +123,15 @@ let presenter = {
       }
       let editKey = `Edit ${member.firstName}`;
       let editValue = `/chapter/members/${member._id}/edit-form`;
+      let actions = null;
+      if (ac.member.permissions.canManageMembers) {
+        actions = { [editKey]: editValue };
+      }
       ac.render({
         data: {
           nav: { '<i class="fa fa-chevron-left"></i> Back to members': '/chapter/members' },
           shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/members' },
-          actions: { [editKey]: editValue },
+          actions: actions,
           member: member,
           viewer: ac.member,
           title: member.nickName || `${member.firstName} ${member.lastName}`
@@ -168,8 +173,10 @@ let presenter = {
       if (e) {
         return ac.error(e);
       }
-      let photo = member.photoPath || 'images/unknown-user.jpg';
-      ac.binary(photo, photo);
+      if (member.photoPath) {
+        return ac.binary(member.photoPath, member.photoPath, ac.account.subdomain);
+      }
+      ac.binary('images/unknown-user.jpg', 'images/unknown-user.jpg', '');
     });
   },
 
