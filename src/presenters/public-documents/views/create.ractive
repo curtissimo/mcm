@@ -1,0 +1,38 @@
+<h1 class="banner">Upload a Public Document</h1>
+<section>
+  I know you have something for the world to see! This is the place that you
+  can make that happen. Fill out the information below and everyone that
+  visits the documents area on the public Web site can access them!
+</section>
+<section>
+  <form class="pure-form pure-form-aligned" method="post" action="/chapter/public-documents" enctype="multipart/form-data">
+    <fieldset>
+      <div class="pure-control-group">
+        <label for="title">Title</label>
+        <input type="text" required value="{{ docTitle }}" id="title" name="docTitle" class="long-plain-text" autofocus>
+        {{#if errors.docTitle}}
+        <div class="form-error">
+          <p>You must enter a title for the document</p>
+        </div>
+        {{/if}}
+      </div>
+      <div class="pure-control-group">
+        <label for="file">File</label>
+        <input type="file" id="file" name="file" required>
+        {{#if errors.file}}
+        <div class="form-error">
+          <p>You must select a file to upload</p>
+        </div>
+        {{/if}}
+      </div>
+      <div class="pure-control-group">
+        <label for="description">Description</label>
+        <textarea class="long-plain-text" value="{{ description }}" name="description" id="description"></textarea>
+      </div>
+      <div class="pure-controls">
+        <a href="/chapter/public-documents" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Upload</button>
+      </div>
+    </fieldset>
+  </form>
+</section>

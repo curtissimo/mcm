@@ -120,6 +120,13 @@ app.use('/chapter/private-documents', multer({
   }
 }));
 
+app.use('/chapter/public-documents', multer({
+  limits: {
+    files: 1,
+    putSingleFilesInArray: true
+  }
+}));
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {
@@ -167,6 +174,19 @@ assets.initialize()
     leslie.routeTo({
       area: 'chapter',
       presenterName: 'private-documents',
+      routes: [
+        { verb: 'get' },
+        { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: 'delete-form', method: 'deleteForm' },
+        { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'post' },
+        { verb: 'delete' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
+      presenterName: 'public-documents',
       routes: [
         { verb: 'get' },
         { verb: 'get', action: 'create-form', method: 'create' },

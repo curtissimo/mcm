@@ -1,0 +1,15 @@
+<h1 class="banner">Public Documents</h1>
+<section>
+  Sharing all of this with the whole wide world web...
+</section>
+<section>
+  <ul class="document-list">
+    {{#documents}}
+    <li>
+      <a href="/chapter/public-documents/{{ _id }}">{{ this.title }}</a>
+      <br>
+      {{ description }}
+    </li>
+    {{/documents}}
+  </ul>
+</section>
