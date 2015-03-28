@@ -198,6 +198,13 @@ assets.initialize()
     });
 
     leslie.routeTo({
+      presenterName: 'public-documents',
+      routes: [
+        { verb: 'get' }
+      ]
+    });
+
+    leslie.routeTo({
       area: 'chapter',
       presenterName: 'members',
       routes: [

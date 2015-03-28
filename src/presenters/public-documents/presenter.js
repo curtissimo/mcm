@@ -6,10 +6,11 @@ let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/fil
 
 let presenter = {
   get(ac) {
+    let canManage = ac.member && ac.member.permissions.canManagePublicDocuments;
     let data = {
       title: 'Public Documents',
       actions: {},
-      canManage: ac.member.permissions.canManagePublicDocuments
+      canManage: canManage
     };
     if (data.canManage) {
       data.actions['Upload'] = '/chapter/public-documents/create-form';

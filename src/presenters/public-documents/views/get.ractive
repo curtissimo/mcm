@@ -1,6 +1,10 @@
 <h1 class="banner">Public Documents</h1>
 <section>
-  Sharing all of this with the whole wide world web...
+  {{#if documents.length}}
+  Click a link below to download the indicated document.
+  {{else}}
+  This chapter hasn't shared any documents, yet.
+  {{/if}}
 </section>
 <section>
   <ul class="document-list">

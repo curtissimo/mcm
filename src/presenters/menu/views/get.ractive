@@ -44,6 +44,9 @@
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/">Home</a>
     </li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/public-documents">Forms and such</a>
+    </li>
     {{#member}}
     <li class="pure-menu-item">
       <a class="pure-menu-link delete-link" data-method="delete" href="/session">Log out</a>
