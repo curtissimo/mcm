@@ -136,6 +136,7 @@ assets.initialize()
       context.settings = req.vars.settings;
       context.account = req.vars.account;
       context.member = req.vars.member;
+      context.account = req.vars.account;
       context.body = req.body;
       context.files = req.files;
       context.query = req.query;

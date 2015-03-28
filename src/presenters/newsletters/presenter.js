@@ -43,7 +43,7 @@ let presenter = {
       } else if (e) {
         return ac.error(e);
       }
-      ac.file(n.path, n.fileName);
+      ac.file(n.path, n.fileName, ac.account.subdomain);
     });
   },
 
@@ -121,47 +121,50 @@ let presenter = {
     let year = ac.body.year - 0;
     let file = ac.files.file[0];
 
-    let newPath = dest + '/' + file.name;
-    fs.rename(file.path, newPath, e => {
-      let n = newsletter.new({
-        month: month,
-        year: year,
-        path: newPath,
-        description: description,
-        fileName: file.originalname,
-        authorId: ac.member._id
-      });
-      let validation = n.validate();
-      
-      if (validation.valid) {
-        n.to(ac.chapterdb).save((e, savedNewsletter) => {
-          if (e) {
-            return ac.error(e);
-          }
-          ac.redirect('/chapter/newsletters');
+    let newDir = dest + '/' + ac.account.subdomain;
+    let newPath = dest + '/' + ac.account.subdomain + '/' + file.name;
+    fs.mkdir(newDir, () => {
+      fs.rename(file.path, newPath, () => {
+        let n = newsletter.new({
+          month: month,
+          year: year,
+          path: newPath,
+          description: description,
+          fileName: file.originalname,
+          authorId: ac.member._id
         });
-      } else {
-        let errors = {};
-        for (let error of validation.errors) {
-          errors[error.property] = error.message;
+        let validation = n.validate();
+        
+        if (validation.valid) {
+          n.to(ac.chapterdb).save((e, savedNewsletter) => {
+            if (e) {
+              return ac.error(e);
+            }
+            ac.redirect('/chapter/newsletters');
+          });
+        } else {
+          let errors = {};
+          for (let error of validation.errors) {
+            errors[error.property] = error.message;
 
-          if (error.property === 'month') {
-            errors['month'] = 'cannot be left blank';
+            if (error.property === 'month') {
+              errors['month'] = 'cannot be left blank';
+            }
           }
+          ac.render({
+            data: {
+              title: 'Error Uploading Newsletter',
+              year: year,
+              month: month,
+              months: months,
+              errors: errors
+            },
+            view: 'create',
+            presenters: { menu: 'menu' },
+            layout: 'chapter'
+          });
         }
-        ac.render({
-          data: {
-            title: 'Error Uploading Newsletter',
-            year: year,
-            month: month,
-            months: months,
-            errors: errors
-          },
-          view: 'create',
-          presenters: { menu: 'menu' },
-          layout: 'chapter'
-        });
-      }
+      });
     });
   }
 };

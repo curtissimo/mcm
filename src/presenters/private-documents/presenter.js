@@ -40,7 +40,7 @@ let presenter = {
       } else if (e) {
         return ac.error(e);
       }
-      ac.file(n.path, n.fileName);
+      ac.file(n.path, n.fileName, ac.account.subdomain);
     });
   },
 
@@ -113,49 +113,52 @@ let presenter = {
     let year = ac.body.year - 0;
     let file = ac.files.file[0] || { path: '' };
 
-    let newPath = dest + '/' + file.name;
-    fs.rename(file.path, newPath, e => {
-      let n = document.new({
-        private: true,
-        path: newPath,
-        description: description,
-        fileName: file.originalname,
-        authorId: ac.member._id,
-        title: ac.body.docTitle
-      });
-      let validation = n.validate();
-      
-      if (validation.valid) {
-        n.to(ac.chapterdb).save((e, savedDocument) => {
-          if (e) {
-            return ac.error(e);
+    let newDir = dest + '/' + ac.account.subdomain;
+    let newPath = dest + '/' + ac.account.subdomain + '/' + file.name;
+    fs.mkdir(newDir, () => {
+      fs.rename(file.path, newPath, () => {
+        let n = document.new({
+          private: true,
+          path: newPath,
+          description: description,
+          fileName: file.originalname,
+          authorId: ac.member._id,
+          title: ac.body.docTitle
+        });
+        let validation = n.validate();
+        
+        if (validation.valid) {
+          n.to(ac.chapterdb).save((e, savedDocument) => {
+            if (e) {
+              return ac.error(e);
+            }
+            ac.redirect('/chapter/private-documents');
+          });
+        } else {
+          let errors = {};
+          for (let error of validation.errors) {
+            errors[error.property] = error.message;
           }
-          ac.redirect('/chapter/private-documents');
-        });
-      } else {
-        let errors = {};
-        for (let error of validation.errors) {
-          errors[error.property] = error.message;
+          if (errors.title) {
+            errors.docTitle = errors.title;
+          }
+          if (file.path.length === 0) {
+            errors.file = true;
+          }
+          let data = {
+            title: 'Error Uploading Private Document',
+            errors: errors
+          };
+          Object.assign(data, ac.body);
+          console.log('data:', data);
+          ac.render({
+            data: data,
+            view: 'create',
+            presenters: { menu: 'menu' },
+            layout: 'chapter'
+          });
         }
-        if (errors.title) {
-          errors.docTitle = errors.title;
-        }
-        if (file.path.length === 0) {
-          errors.file = true;
-        }
-        let data = {
-          title: 'Error Uploading Private Document',
-          errors: errors
-        };
-        Object.assign(data, ac.body);
-        console.log('data:', data);
-        ac.render({
-          data: data,
-          view: 'create',
-          presenters: { menu: 'menu' },
-          layout: 'chapter'
-        });
-      }
+      });
     });
   }
 };
