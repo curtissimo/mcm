@@ -64,11 +64,11 @@
     }
 
     .form-error {
-      margin-left: 9.25em;
+      margin-left: 9em;
       padding: .5em;
 
       @include min-lg-screen {
-        margin-left: 9.75em;
+        margin-left: 9.25em;
       }
 
       @media only screen and (max-width : 480px) {
@@ -205,6 +205,18 @@
   margin: 0;
   list-style: none;
   padding: 0;
+
+  li {
+    margin: 2em 1em;
+  }
+
+  li:first-child {
+    margin-top: 1em;
+  }
+
+  li:last-child {
+    margin-bottom: 1em;
+  }
 }
 
 .secondary-action {

@@ -113,6 +113,13 @@ app.use('/chapter/newsletters', multer({
   }
 }));
 
+app.use('/chapter/private-documents', multer({
+  limits: {
+    files: 1,
+    putSingleFilesInArray: true
+  }
+}));
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {
@@ -158,6 +165,19 @@ assets.initialize()
 
     leslie.routeTo({
       area: 'chapter',
+      presenterName: 'private-documents',
+      routes: [
+        { verb: 'get' },
+        { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: 'delete-form', method: 'deleteForm' },
+        { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'post' },
+        { verb: 'delete' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
       presenterName: 'members',
       routes: [
         { verb: 'get', method: 'list' },
@@ -166,6 +186,10 @@ assets.initialize()
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' }
       ]
+    });
+
+    app.get('/', (req, res) => {
+      res.redirect('/session');
     });
 
     app.use((err, req, res, next) => {
