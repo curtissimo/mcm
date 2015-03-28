@@ -40,6 +40,8 @@
       </header>
       <p>{{ this.content }}</p>
     </article>
+    {{else}}
+    <h2>{{ firstName }} hasn't posted any entries, yet.</h2>
     {{/blogs}}
   </div>
 {{/member}}

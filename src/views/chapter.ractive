@@ -18,6 +18,11 @@
       <div class="toolbar-section">
         <div class="toolbar-left">
           <a href="#" class="toolbar-item" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+          {{#if shortnav}}
+            {{#shortnav:url}}
+            <a class="toolbar-item" href="{{ . }}">{{{ @key }}}</a>
+            {{/shortnav}}
+          {{/if}}
         </div>
       </div>
       <div class="toolbar-section toolbar-center-side">
@@ -43,8 +48,12 @@
     {{/if}}
     <div id="main-content">
       <div id="action-toolbar" class="min-lg-screen toolbar action-toolbar">
-        {{#if actions}}
-          <div class="toolbar-section"></div>
+        {{#if actions || nav}}
+          <div class="toolbar-section toolbar-left">
+            {{#nav:url}}
+            <a class="toolbar-item pure-button" href="{{ . }}">{{{ @key }}}</a>
+            {{/nav}}
+          </div>
           <div class="toolbar-section toolbar-center-side"></div>
           <div class="toolbar-section toolbar-right">
             {{#actions:url}}

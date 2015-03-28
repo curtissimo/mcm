@@ -120,8 +120,13 @@ let presenter = {
           blog.createdOn = moment(blog.createdOn).format('dddd MMM DD, YYYY');
         }
       }
+      let editKey = `Edit ${member.firstName}`;
+      let editValue = `/chapter/members/${member._id}/edit-form`;
       ac.render({
         data: {
+          nav: { '<i class="fa fa-chevron-left"></i> Back to members': '/chapter/members' },
+          shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/members' },
+          actions: { [editKey]: editValue },
           member: member,
           viewer: ac.member,
           title: member.nickName || `${member.firstName} ${member.lastName}`

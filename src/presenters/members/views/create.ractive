@@ -64,18 +64,11 @@
     </div>
     <div class="form-panel">
       <fieldset>
-        <legend>National Membership Dates</legend>
-        <div class="pure-control-group">
-          <label for="nationalJoined">Joined on</label>
-          <input type="date" value="{{ nationalJoined }}" name="nationalJoined" id="nationalJoined">
-        </div>
-        <div class="pure-control-group">
-          <label for="nationalExpiration">Expires on</label>
-          <input type="date" value="{{ nationalExpiration }}" name="nationalExpiration" id="nationalExpiration">
-        </div>
-      </fieldset>
-      <fieldset>
         <legend>Local Membership Dates</legend>
+        <p>
+          We've put in some reasonable dates for you, here. From today until
+          the end of the year is the default dates for local membership.
+        </p>
         <div class="pure-control-group">
           <label for="localJoined">Joined on</label>
           <input type="date" data-value="{{ localJoinedNative }}" value="{{ localJoined }}" name="localJoined" id="localJoined" required>
@@ -93,6 +86,21 @@
             <p>The expires on date {{ errors.localExpiration }}</p>
           </div>
           {{/if}}
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>National Membership Dates</legend>
+        <p>
+          You may not know these, which is ok. Just leave them blank, if you
+          have to.
+        </p>
+        <div class="pure-control-group">
+          <label for="nationalJoined">Joined on</label>
+          <input type="date" value="{{ nationalJoined }}" name="nationalJoined" id="nationalJoined">
+        </div>
+        <div class="pure-control-group">
+          <label for="nationalExpiration">Expires on</label>
+          <input type="date" value="{{ nationalExpiration }}" name="nationalExpiration" id="nationalExpiration">
         </div>
       </fieldset>
     </div>
