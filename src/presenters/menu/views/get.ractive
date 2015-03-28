@@ -18,7 +18,28 @@
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/discussions">Discussions</a>
     </li>
-    <li class="pure-menu-heading">Public site</li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/private-documents">Chapter documents</a>
+    </li>
+    {{#if member.permissions.canManagePermissions}}
+    <li class="pure-menu-heading menu-section">Administration</li>
+      {{#if member.permissions.canManagePermissions}}
+      <li class="pure-menu-item">
+        <a class="pure-menu-link" href="/chapter/security">Change security</a>
+      </li>
+      {{/if}}
+      {{#if member.permissions.canManageSettings}}
+      <li class="pure-menu-item">
+        <a class="pure-menu-link" href="/chapter/settings">Change settings</a>
+      </li>
+      {{/if}}
+      {{#if member.permissions.canManagePublicDocuments}}
+      <li class="pure-menu-item">
+        <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
+      </li>
+      {{/if}}
+    {{/if}}
+    <li class="pure-menu-heading menu-section">Public site</li>
     {{/member}}
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/">Home</a>

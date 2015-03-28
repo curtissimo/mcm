@@ -15,7 +15,11 @@
       },
     "password" : "curtis",
     "permissions" : { "canManageMembers" : true,
-        "canManageNewsletters" : true
+        "canManageNewsletters" : true,
+        "canManageSettings": true,
+        "canManageEvents": true,
+        "canManagePermissions": true,
+        "canManagePublicDocuments": true
       },
     "title" : "Webmaster",
     "type" : "member"
@@ -48,7 +52,11 @@
     "nickName" : "Stinger",
     "password" : "leslie",
     "permissions" : { "canManageMembers" : true,
-        "canManageNewsletters" : true
+        "canManageNewsletters" : true,
+        "canManageSettings": true,
+        "canManageEvents": true,
+        "canManagePermissions": true,
+        "canManagePublicDocuments": true
       },
     "title" : "Sergeant at Arms",
     "type" : "member"
