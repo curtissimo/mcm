@@ -1,125 +1,134 @@
-[
-{
-  "type": "account",
-  "name": "Republic H.O.G.",
-  "subdomain": "rhog",
-  "domain": "localhost"
-},
-{
-  "type": "settings",
-  "name": "Republic H.O.G."
-},
-{
-  "type": "member",
-  "firstName": "Curtis",
-  "lastName": "Schlak",
-  "email": "curtis@schlak.com",
-  "password": "curtis",
-  "hogNumber": "US123456",
-  "title": "Webmaster",
-  "membership": { 
-    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
-    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
+[ { "domain" : "localhost",
+    "name" : "Republic H.O.G.",
+    "subdomain" : "rhog",
+    "type" : "account"
   },
-  "permissions": {
-    "canManageNewsletters": true,
-    "canManageMembers": true
+  { "name" : "Republic H.O.G.",
+    "type" : "settings"
+  },
+  { "email" : "curtis@schlak.com",
+    "firstName" : "Curtis",
+    "hogNumber" : "US123456",
+    "lastName" : "Schlak",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "curtis",
+    "permissions" : { "canManageMembers" : true,
+        "canManageNewsletters" : true
+      },
+    "title" : "Webmaster",
+    "type" : "member"
+  },
+  { "achievements" : [ { "description" : "Secretary",
+          "from" : 2012,
+          "to" : 2014
+        },
+        { "description" : "LOH Director",
+          "from" : 2011,
+          "to" : 2011
+        },
+        { "description" : "Most miles",
+          "on" : [ 2014,
+              11
+            ]
+        }
+      ],
+    "blogs": [
+      { "title": "First post!", "content": "Hello, world!", "createdOn": "2014-01-02T14:05:02.000Z" },
+      { "title": "Second post!", "content": "Hello, world! Again!", "createdOn": "2014-03-02T14:05:02.000Z" }
+    ],
+    "email" : "leslie@schlak.com",
+    "firstName" : "Leslie",
+    "hogNumber" : "US123457",
+    "lastName" : "Schlak",
+    "membership" : { "local" : { "endDate" : "2013-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2013-12-31T06:00:00.000Z" }
+      },
+    "nickName" : "Stinger",
+    "password" : "leslie",
+    "permissions" : { "canManageMembers" : true,
+        "canManageNewsletters" : true
+      },
+    "title" : "Sergeant at Arms",
+    "type" : "member"
+  },
+  { "email" : "isaac@schlak.com",
+    "firstName" : "Isaac",
+    "hogNumber" : "US123458",
+    "lastName" : "Schlak",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "isaac",
+    "permissions" : {  },
+    "private" : true,
+    "type" : "member"
+  },
+  { "achievements" : [ { "description" : "Most miles",
+          "on" : [ 2015,
+              11
+            ]
+        },
+        { "description" : "Most miles",
+          "on" : [ 2014,
+              9
+            ]
+        }
+      ],
+    "email" : "gabby@burgard.com",
+    "firstName" : "Gabrielle",
+    "hogNumber" : "US123459",
+    "lastName" : "Burgard",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "gabby",
+    "permissions" : {  },
+    "privacy" : { "showEmail" : true },
+    "type" : "member"
+  },
+  { "address" : { "city" : "Stafford",
+        "state" : "TX",
+        "street1" : "123 Main St.",
+        "zip" : "77071"
+      },
+    "email" : "bryan@ray.com",
+    "firstName" : "Bryan",
+    "hogNumber" : "US123460",
+    "lastName" : "Ray",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "bryan",
+    "permissions" : {  },
+    "privacy" : { "showAddress" : true },
+    "type" : "member"
+  },
+  { "email" : "kylie@ray.com",
+    "firstName" : "Kylie",
+    "hogNumber" : "US123461",
+    "lastName" : "Ray",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "mobile" : "832-555-1212",
+    "password" : "kylie",
+    "permissions" : {  },
+    "privacy" : { "showPhone" : true },
+    "type" : "member"
+  },
+  { "email" : "philip@mateescu.com",
+    "firstName" : "Philip",
+    "hogNumber" : "US123462",
+    "lastName" : "Mateescu",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z",
+            "startDate" : "2015-03-01T06:00:00.000Z"
+          },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "philip",
+    "permissions" : {  },
+    "type" : "member"
   }
-},
-{
-  "type": "member",
-  "firstName": "Leslie",
-  "lastName": "Schlak",
-  "email": "leslie@schlak.com",
-  "password": "leslie",
-  "hogNumber": "US123457",
-  "achievements": [
-    { "description": "Secretary", "from": 2012, "to": 2014 },
-    { "description": "LOH Director", "from": 2011, "to": 2011 },
-    { "description": "Most miles", "on": [ 2014, 11 ] }
-  ],
-  "permissions": {
-    "canManageNewsletters": true,
-    "canManageMembers": true
-  },
-  "membership": { 
-    "national": { "endDate": "2013-12-31T06:00:00.000Z" },
-    "local": { "endDate": "2013-12-31T06:00:00.000Z" }
-  },
-  "nickName": "Stinger",
-  "title": "Sergeant at Arms"
-},
-{
-  "type": "member",
-  "firstName": "Isaac",
-  "lastName": "Schlak",
-  "email": "isaac@schlak.com",
-  "password": "isaac",
-  "hogNumber": "US123458",
-  "membership": { 
-    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
-    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  },
-  "permissions": {},
-  "private": true
-},
-{
-  "type": "member",
-  "firstName": "Gabrielle",
-  "lastName": "Burgard",
-  "email": "gabby@burgard.com",
-  "password": "gabby",
-  "achievements": [
-    { "description": "Most miles", "on": [ 2015, 11 ] },
-    { "description": "Most miles", "on": [ 2014, 9 ] }
-  ],
-  "hogNumber": "US123459",
-  "membership": { 
-    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
-    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  },
-  "permissions": {}
-},
-{
-  "type": "member",
-  "firstName": "Bryan",
-  "lastName": "Ray",
-  "email": "bryan@ray.com",
-  "password": "bryan",
-  "hogNumber": "US123460",
-  "membership": { 
-    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
-    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  },
-  "permissions": {}
-},
-{
-  "type": "member",
-  "firstName": "Kylie",
-  "lastName": "Ray",
-  "email": "kylie@ray.com",
-  "password": "kylie",
-  "hogNumber": "US123461",
-  "membership": { 
-    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
-    "local": { "endDate": "2016-12-31T06:00:00.000Z" }
-  },
-  "permissions": {}
-},
-{
-  "type": "member",
-  "firstName": "Philip",
-  "lastName": "Mateescu",
-  "email": "philip@mateescu.com",
-  "password": "philip",
-  "hogNumber": "US123462",
-  "membership": { 
-    "national": { "endDate": "2016-12-31T06:00:00.000Z" },
-    "local": {
-      "startDate": "2015-03-01T06:00:00.000Z",
-      "endDate": "2016-12-31T06:00:00.000Z"
-    }
-  },
-  "permissions": {}
-}
 ]

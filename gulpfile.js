@@ -91,6 +91,7 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
   var settings = require('./build/models/settings');
   var member = require('./build/models/member');
   var newsletter = require('./build/models/newsletter');
+  var blog = require('./build/models/blog');
   var lookup = {
     account: account,
     settings: settings,
@@ -106,6 +107,7 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
       return Promise.all([
         promisify(account.to(masterurl), 'sync'),
         promisify(settings.to(chapterurl), 'sync'),
+        promisify(blog.to(chapterurl), 'sync'),
         promisify(member.to(chapterurl), 'sync'),
         promisify(newsletter.to(chapterurl), 'sync')
       ]);
@@ -124,6 +126,12 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
         var url = chapterurl;
         if (seed.type === 'account') {
           url = masterurl;
+        } else if (seed.type === 'member') {
+          if (seed.blogs) {
+            for (var j = 0; j < seed.blogs.length; j += 1) {
+              seed.blogs[j] = blog.new(seed.blogs[j]);
+            }
+          }
         }
         var promise = promisify(instance.to(url), 'save');
         promises.push(promise);

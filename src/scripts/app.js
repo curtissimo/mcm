@@ -71,7 +71,6 @@ if (showActionsButton) {
       } else {
         actionMenu.className += ' is-shown';
       }
-      console.log(actionMenu.className, actionMenu);
     });
 }
 

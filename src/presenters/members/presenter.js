@@ -100,12 +100,32 @@ let presenter = {
   },
 
   item(ac) {
-    member.from(ac.chapterdb).get(ac.params.id, function (e, member) {
+    member.from(ac.chapterdb).withBlogs(ac.params.id, function (e, member) {
       if (e) {
         return ac.error(e);
       }
+      for (let achievement of (member.achievements || [])) {
+        if (achievement.on) {
+          achievement.toString = () => {
+            return `${achievement.description} - ${months[achievement.on[1]]} ${achievement.on[0]}`;
+          };
+        } else {
+          achievement.toString = () => {
+            return `${achievement.description} ${achievement.from} - ${achievement.to}`;
+          };
+        }
+      }
+      for (let blog of (member.blogs || [])) {
+        if (blog && blog.createdOn) {
+          blog.createdOn = moment(blog.createdOn).format('dddd MMM DD, YYYY');
+        }
+      }
       ac.render({
-        data: { member: member },
+        data: {
+          member: member,
+          viewer: ac.member,
+          title: member.nickName || `${member.firstName} ${member.lastName}`
+        },
         presenters: { menu: 'menu' },
         layout: 'chapter'
       });

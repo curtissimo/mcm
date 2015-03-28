@@ -258,3 +258,49 @@
   text-align: center;
   position: relative;
 }
+
+.member-item {
+  @include grid;
+}
+
+.member-item-information {
+  @include grid-column;
+  width: 100%;
+  position: relative;
+
+  @include min-sm-screen {
+    width: 33%;
+  }
+}
+
+.member-item-achievement-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.member-item-achievement {
+  font-size: .875em;
+  display: inline-block;
+  padding: .125em .5em;
+  margin: .25em;
+  border-radius: .25em;
+}
+
+.member-item-personal-information {
+  text-align: center;
+  margin: 1em 0;
+}
+
+.member-item-blog-entries {
+  @include grid-column;
+  width: 100%;
+
+  @include min-sm-screen {
+    width: 65%;
+  }
+}
+
+.member-item-blog-entries {
+}

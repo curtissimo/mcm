@@ -134,3 +134,33 @@ a {
     text-align: center;
   }
 }
+
+.member-item-achievement {
+  background-color: $accent-color;
+  color: $accent-color-text;
+}
+
+.member-item-blog-entries {
+  color: $primary-text-color;
+}
+
+.member-item-blog-entry {
+  margin-bottom: 4em;
+  margin-left: 1em;
+  margin-right: 1em;
+
+  @include min-sm-screen {
+    margin-right: 0;
+  }
+
+  h1 {
+    margin-top: 0;
+  }
+ 
+  h2 {
+    border-top: 1px dotted $secondary-text-color;
+    color: $secondary-text-color;
+    font-size: 1em;
+    margin: 0;
+  }
+}

@@ -1,1 +1,45 @@
-<h1 class="banner">{{ member.lastName }}, {{ member.firstName }}</h1>
+{{#member}}
+<h1 class="banner">{{ lastName }}, {{ firstName }}</h1>
+<div class="member-item">
+  <div class="member-item-information">
+    {{#if private}}
+    <div class="is-hidden"><span>Hidden</span></div>
+    {{/if}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
+    <div class="member-item-personal-information">
+      {{#if phone && (privacy.showPhone || viewer.permissions.canManageMembers)}}
+      <div>{{ mobile || phone }}</div>
+      {{/if}}
+      {{#if privacy.showEmail || viewer.permissions.canManageMembers}}
+      <div><a href="mailto:{{ email }}">{{ email }}</a></div>
+      {{/if}}
+      {{#if privacy.showAddress || viewer.permissions.canManageMembers}}
+        {{#address}}
+        <div>
+          {{#if street1}}{{ street1 }}<br>{{/if}}
+          {{#if street2}}{{ street2 }}<br>{{/if}}
+          {{ city }}, {{ state }} {{ zip }}
+        </div>
+        {{/address}}
+      {{/if}}
+    </div>
+    {{#if achievements}}
+    <ul class="member-item-achievement-list">
+      {{#achievements}}
+      <li class="member-item-achievement">{{ this.toString() }}</li>
+      {{/achievements}}
+    </ul>
+    {{/if}}
+  </div>
+  <div class="member-item-blog-entries">
+    {{#blogs}}
+    <article class="member-item-blog-entry">
+      <header>
+        <h2>{{ this.createdOn }}</h2>
+        <h1>{{ this.title }}</h1>
+      </header>
+      <p>{{ this.content }}</p>
+    </article>
+    {{/blogs}}
+  </div>
+{{/member}}
