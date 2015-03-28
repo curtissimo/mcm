@@ -157,9 +157,10 @@ assets.initialize()
       routes: [
         { verb: 'get' },
         { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: 'delete-form', method: 'deleteForm' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' },
-        { verb: 'delete', action: ':id' }
+        { verb: 'delete' }
       ]
     });
 

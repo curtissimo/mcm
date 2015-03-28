@@ -15,6 +15,7 @@ let presenter = {
     };
     if (data.canManageNewsletters) {
       data.actions['Upload'] = '/chapter/newsletters/create-form';
+      data.actions['Delete'] = '/chapter/newsletters/delete-form';
     }
     newsletter.from(ac.chapterdb).all((e, newsletters) => {
       if (e) {
@@ -22,6 +23,9 @@ let presenter = {
       }
       newsletters.reverse();
       data.newsletters = newsletters;
+      if (newsletters.length === 0) {
+        delete data.actions['Delete'];
+      }
       ac.render({
         data: data,
         presenters: { menu: 'menu' },
@@ -60,7 +64,11 @@ let presenter = {
   },
 
   delete(ac) {
-    let id = ac.params.id;
+    let id = ac.body.id;
+
+    if (id === undefined) {
+      return ac.redirect('/chapter/newsletters');
+    }
 
     newsletter.from(ac.chapterdb).get(id, (e, n) => {
       if (e) {
@@ -73,6 +81,28 @@ let presenter = {
         fs.unlink(n.path, error => {
           ac.redirect('/chapter/newsletters');
         });
+      });
+    });
+  },
+
+  deleteForm(ac) {
+    if (!ac.member.permissions.canManageNewsletters) {
+      return ac.unauthorized();
+    }
+    newsletter.from(ac.chapterdb).all((e, newsletters) => {
+      if (e) {
+        return ac.error(e);
+      }
+      newsletters.reverse();
+      ac.render({
+        data: {
+          newsletters: newsletters,
+          months: months,
+          title: 'Delete a Newsletter'
+        },
+        presenters: { menu: 'menu' },
+        layout: 'chapter',
+        view: 'delete-form'
       });
     });
   },
