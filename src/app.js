@@ -1,7 +1,6 @@
 import 'babel-core/polyfill';
 import express from 'express';
 import path from 'path';
-import Ractive from 'ractive';
 import { Directive, LeslieMvp } from './leslie';
 import account from './models/account';
 import settings from './models/settings';
@@ -207,6 +206,21 @@ assets.initialize()
         { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
+      presenterName: 'discussions',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id/delete-form', method: 'deleteForm' },
+        { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'post', action: ':id/comments', method: 'createComment' },
+        { verb: 'post' },
+        { verb: 'delete', action: ':id/comments/:commentId', method: 'deleteComment' },
+        { verb: 'delete', action: ':id' }
       ]
     });
 

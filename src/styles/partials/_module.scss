@@ -39,6 +39,28 @@
   height: 10em;
 }
 
+.pure-form-stacked {
+  .pure-control-group {
+    margin-bottom: 1em;
+  }
+
+  .form-error {
+    padding: .5em;
+
+    p {
+      margin: .5em;
+    }
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 .pure-form-aligned {
   p {
     margin-top: 0;
@@ -336,4 +358,104 @@
 }
 
 .member-item-blog-entries {
+}
+
+.discussion-group {
+  margin-bottom: 3em;
+}
+
+.discussions-category {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.discussions-entry {
+  @include grid;
+  margin: 0;
+  padding: 0;
+}
+
+.discussions-entry-summary, .discussions-entry-summary-header {
+  @include grid-column;
+  width: 100%;
+  padding: 0.5em;
+
+  @include min-sm-screen {
+    width: 50%;
+  }
+}
+
+.discussions-entry-title {
+
+}
+
+.discussions-entry-created {
+}
+
+.discussions-entry-comment-count,
+.discussions-entry-comment-count-header {
+  display: none;
+  padding: 0.5em;
+
+  @include min-md-screen {
+    @include grid-column;
+    width: 20%;
+  }
+}
+
+.discussions-entry-last-comment,
+.discussions-entry-last-comment-header {
+  display: none;
+  padding: 0.5em;
+
+  @include min-sm-screen {
+    @include grid-column;
+    width: 50%;
+  }
+
+  @include min-md-screen {
+    width: 30%;
+  }
+}
+
+.discussions-entry-last-comment-author {
+
+}
+
+.discussions-entry-last-comment-created {
+
+}
+
+.discussion-content {
+}
+
+.discussion-content:after,
+.comment-content:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.discussion-content-author-photo {
+  float: left;
+  width: 200px;
+}
+
+.discussion-content-text {
+  margin-left: 200px;
+}
+
+.comment-content-text,
+.comment-content-author {
+  margin-left: 175px;
+}
+
+.comment-content-author {
+  margin-bottom: .5em;
+}
+
+.comment-content-author-photo {
+  float: left;
+  width: 150px;
 }

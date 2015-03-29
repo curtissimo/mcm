@@ -2,6 +2,7 @@ import member from '../../models/member';
 
 let permissions = {
   'Chapter docs': 'canManagePrivateDocuments',
+  'Discussions': 'canManageDiscussions',
   'Events': 'canManageEvents',
   'Members': 'canManageMembers',
   'Newsletters': 'canManageNewsletters',

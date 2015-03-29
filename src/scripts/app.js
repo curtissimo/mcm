@@ -94,3 +94,23 @@ document.body
       form.submit();
     }
   });
+
+let submitters = document.querySelectorAll('button[type="submit"]');
+for (let i = 0; i < submitters.length; i += 1) {
+  let submitter = submitters[i];
+  submitter.addEventListener('click', e => {
+    let target = e.target || e.srcElement;
+
+    setTimeout(function () {
+      target.disabled = true;
+    }, 10);
+  });
+}
+
+function showComments() {
+  document.getElementById('comment-form')
+    .style.display = 'block';
+  let content = document.getElementById('content');
+  setTimeout(function () { content.focus(); }, 10);
+  location.href += '#comment-form';
+}

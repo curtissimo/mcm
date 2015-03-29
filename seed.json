@@ -22,7 +22,8 @@
         "canManageEvents": true,
         "canManagePermissions": true,
         "canManagePublicDocuments": true,
-        "canManagePrivateDocuments": true
+        "canManagePrivateDocuments": true,
+        "canManageDiscussions": true
       },
     "title" : "Webmaster",
     "type" : "member"
@@ -61,12 +62,14 @@
         "canManageEvents": true,
         "canManagePermissions": true,
         "canManagePublicDocuments": true,
-        "canManagePrivateDocuments": true
+        "canManagePrivateDocuments": true,
+        "canManageDiscussions": true
       },
     "title" : "Sergeant at Arms",
     "type" : "member"
   },
-  { "email" : "isaac@schlak.com",
+  { "_id": "54632230487239",
+    "email" : "isaac@schlak.com",
     "firstName" : "Isaac",
     "hogNumber" : "US123458",
     "lastName" : "Schlak",
@@ -143,5 +146,101 @@
     "password" : "philip",
     "permissions" : {  },
     "type" : "member"
+  },
+  {
+    "_id": "34789237472934723487",
+    "type": "discussion",
+    "title": "Hearken unto me!",
+    "content": "I have a loud voice.",
+    "authorId": "20934029834092834",
+    "category": "Off-Topic"
+  },
+  {
+    "type": "comment",
+    "title": "Shut UP!",
+    "content": "Really? Do you have to be so loud?",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "34789237472934723487",
+    "$discussion_comments_order": 0
+  },
+  {
+    "type": "comment",
+    "title": "Okay, honey...",
+    "content": "I'll take my crazy outside.",
+    "authorId": "20934029834092834",
+    "$discussion_comments_id": "34789237472934723487",
+    "$discussion_comments_order": 1
+  },
+  {
+    "type": "comment",
+    "title": "Hearken unto me!",
+    "content": "Why do you have to be so weird?",
+    "authorId": "54632230487239",
+    "$discussion_comments_id": "34789237472934723487",
+    "$discussion_comments_order": 2
+  },
+  {
+    "_id": "38476837485734765",
+    "type": "discussion",
+    "title": "I want a good hamburger!",
+    "content": "Anyone know where to get one?",
+    "authorId": "20934029834092834",
+    "category": "Off-Topic"
+  },
+  {
+    "type": "comment",
+    "title": "Hubcap Grill!",
+    "content": "Great burgers! Great buns! Great fries!",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "38476837485734765",
+    "$discussion_comments_order": 0
+  },
+  {
+    "type": "comment",
+    "title": "Let's go!",
+    "content": "Maybe on Sunday?",
+    "authorId": "20934029834092834",
+    "$discussion_comments_id": "38476837485734765",
+    "$discussion_comments_order": 1
+  },
+  {
+    "type": "comment",
+    "title": "Can't",
+    "content": "Nope. They're closed on Sunday.",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "38476837485734765",
+    "$discussion_comments_order": 2
+  },
+  {
+    "_id": "1029371102397",
+    "type": "discussion",
+    "title": "Ride idea",
+    "content": "Wouldn't it be great to ride to Pasadena?",
+    "authorId": "20934029834092834",
+    "category": "Ride Idea"
+  },
+  {
+    "type": "comment",
+    "title": "Ride idea",
+    "content": "No.",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "1029371102397",
+    "$discussion_comments_order": 0
+  },
+  {
+    "type": "comment",
+    "title": "Ride idea",
+    "content": "Oh. Ok.",
+    "authorId": "20934029834092834",
+    "$discussion_comments_id": "1029371102397",
+    "$discussion_comments_order": 1
+  },
+  {
+    "type": "comment",
+    "title": "Ride idea",
+    "content": "Hey, so what do you want for dinner?",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "1029371102397",
+    "$discussion_comments_order": 2
   }
 ]
