@@ -9,6 +9,7 @@ let member = stork.deliver('member', function () {
   this.string('hogNumber', { required: true, minLength: 6 });
   this.string('mobile');
   this.string('phone');
+  this.bool('private');
   this.timestamps();
 
   this.array('achievements');
