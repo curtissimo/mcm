@@ -237,7 +237,7 @@ let presenter = {
         view: 'create',
         presenters: { menu: 'menu' },
         layout: 'chapter'
-      })
+      });
     }
   }
 };
