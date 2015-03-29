@@ -179,16 +179,12 @@
 
 .toolbar-section {
   @include grid-column();
-  width: 33.3333%;
-  *width: 33.3023%;
+  width: 50%;
+  *width: 49.8889999%;
 }
 
 .toolbar-left {
   padding-left: 1em;
-}
-
-.toolbar-center {
-  text-align: center;
 }
 
 .toolbar-right {
