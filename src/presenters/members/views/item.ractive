@@ -7,7 +7,7 @@
     {{/if}}
     <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
     <div class="member-item-personal-information">
-      {{#if phone && (privacy.showPhone || viewer.permissions.canManageMembers)}}
+      {{#if (phone || mobile) && (privacy.showPhone || viewer.permissions.canManageMembers)}}
       <div>{{ mobile || phone }}</div>
       {{/if}}
       {{#if privacy.showEmail || viewer.permissions.canManageMembers}}
