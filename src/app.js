@@ -220,6 +220,15 @@ assets.initialize()
     });
 
     leslie.routeTo({
+      area: 'chapter',
+      presenterName: 'settings',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
       presenterName: 'public-documents',
       routes: [
         { verb: 'get' }

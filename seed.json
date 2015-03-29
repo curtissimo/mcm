@@ -4,9 +4,11 @@
     "type" : "account"
   },
   { "name" : "Republic H.O.G.",
+    "rideLegalese": "Routes and destinations are subject to change with little or no notice and more info may be added so check the calendar often for changes. Scroll to the very bottom of the page and there will be an update date so you will know if any changes have been made since the last time you looked and as always be sure to have your light blue membership card for 2015 (you will have to sign a waiver if you don't) and have a full tank of gas. In the event of a cancelation, a notice will be posted on the calendar and an email will go out 1 1/2 hrs before KSU.",
     "type" : "settings"
   },
-  { "email" : "curtis@schlak.com",
+  { "_id": "20934029834092834",
+    "email" : "curtis@schlak.com",
     "firstName" : "Curtis",
     "hogNumber" : "US123456",
     "lastName" : "Schlak",
@@ -25,7 +27,8 @@
     "title" : "Webmaster",
     "type" : "member"
   },
-  { "achievements" : [ { "description" : "Secretary",
+  { "_id": "98293492378497234",
+    "achievements" : [ { "description" : "Secretary",
           "from" : 2012,
           "to" : 2014
         },
