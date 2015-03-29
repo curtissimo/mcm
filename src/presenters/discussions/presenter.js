@@ -212,6 +212,7 @@ let presenter = {
     let c = commentEntity.new(ac.body);
     c.authorId = ac.member._id;
     c['$discussion_comments_id'] = ac.params.id;
+    c['$discussion_comments_order'] = ac.body['$discussion_comments_order'] - 0;
 
     let validation = c.validate();
     if (validation.valid) {
