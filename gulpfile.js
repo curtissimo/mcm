@@ -21,6 +21,8 @@ if (argv._[0] === 'dist') {
   process.env.NODE_ENV = 'production';
 }
 
+process.env.MCM_DB = 'http://couchdb:5984'
+
 var forProduction = process.env.NODE_ENV === 'production';
 var reloading = null;
 var AUTOPREFIXER_BROWSERS = [
@@ -83,8 +85,8 @@ gulp.task('clean', function (cb) {
 
 gulp.task('db', [ 'es6-server' ], function (cb) {
   var chapterName = 'rhog';
-  var masterurl = 'http://couchdb:5984/mcm-master';
-  var chapterurl = 'http://couchdb:5984/' + chapterName;
+  var masterurl = process.env.MCM_DB + '/mcm-master';
+  var chapterurl = process.env.MCM_DB + '/' + chapterName;
   var db = nano(masterurl);
   var dbms = nano(db.config.url);
   var account = require('./build/models/account');
@@ -294,7 +296,11 @@ gulp.task('sass', function () {
 });
 
 gulp.task('serve', [ 'build' ], function () {
-  server.listen({ path: './build/app.js' }, function (err) {
+  var opts = {
+    env: { MCM_DB: process.env.MCM_DB },
+    path: './build/app.js'
+  }
+  server.listen(opts, function (err) {
     if (err) {
       return console.error(err);
     }
