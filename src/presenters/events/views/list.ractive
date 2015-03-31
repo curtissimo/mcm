@@ -1,0 +1,59 @@
+<h1 class="banner">Events</h1>
+<section class="events-list">
+  <div class="calendar-column min-md-screen">
+    {{#months}}
+    <table class="calendar">
+      <thead class="calendar-month-name">
+        <tr>
+          <th colspan="7">{{ name }}</th>
+        </tr>
+      </thead>
+      <thead class="calendar-day-name">
+        <tr>
+          <th>S</th>
+          <th>M</th>
+          <th>T</th>
+          <th>W</th>
+          <th>T</th>
+          <th>F</th>
+          <th>S</th>
+        </tr>
+      </thead>
+      <tbody class="calendar-weeks">
+        {{#weeks}}
+        <tr>
+          {{#this}}
+            {{#if !this}}
+            <td class="not-a-day"></td>
+            {{else}}
+            <td class="day">{{ . }}</td>
+            {{/if}}
+          {{/this}}
+        </tr>
+        {{/weeks}}
+      </tbody>
+    </table>
+    {{/months}}
+  </div>
+  <div class="calendar-column">
+    <ul class="discussions-category">
+      {{#events}}
+      <li class="event-entry stripe-{{(@index + 1) % 2}}">
+        <div class="event-entry-summary">
+          <div class="event-entry-title">
+            {{ date || startDate }}
+          </div>
+          <div class="event-entry-title">
+            <a href="/chapter/events/{{ _id }}">{{ title }}</a>
+          </div>
+          {{#if roadCaptain }}
+          <div class="event-entry-rc">
+            {{ roadCaptain }}
+          </div>
+          {{/if}}
+        </div>
+      </li>
+      {{/events}}
+    </ul>
+  </div>
+</section>

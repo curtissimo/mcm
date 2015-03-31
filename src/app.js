@@ -11,11 +11,14 @@ import { urlencoded, json } from 'body-parser';
 import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
 import multer from 'multer';
+import Ractive from 'ractive';
 
 let app = express();
 let inProduction = process.env.NODE_ENV === 'production';
 let chapterdbs = new Map();
 let dburl = process.env.MCM_DB;
+
+Ractive.DEBUG = !inProduction;
 
 if (!inProduction) {
   console.log('Serving public files from express at ' + __dirname);
@@ -151,6 +154,7 @@ assets.initialize()
     leslie.addStylesheet('font-awesome');
     leslie.addStylesheet('app');
     leslie.addStylesheet('themes/leather/theme');
+    leslie.addScript('ractive-legacy');
     leslie.addScript('app');
 
     leslie.get({ presenterName: 'session' });
@@ -221,6 +225,20 @@ assets.initialize()
         { verb: 'post', action: ':id/comments', method: 'createComment' },
         { verb: 'post' },
         { verb: 'delete', action: ':id/comments/:commentId', method: 'deleteComment' },
+        { verb: 'delete', action: ':id' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
+      presenterName: 'events',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'get', action: 'create/:type', method: 'create' },
+        { verb: 'get', action: ':id/edit-form', method: 'edit' },
+        { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'post' },
+        { verb: 'put' },
         { verb: 'delete', action: ':id' }
       ]
     });

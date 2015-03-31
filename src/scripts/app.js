@@ -114,3 +114,57 @@ function showComments() {
   setTimeout(function () { content.focus(); }, 10);
   location.href += '#comment-form';
 }
+
+let schedule = document.getElementById('schedule');
+let numberOfDays = document.getElementById('numberOfDays');
+if (schedule) {
+  schedule.addEventListener('change', () => {
+    var groups = document.getElementsByClassName('when-specifier');
+    for (let i = 0; i < groups.length; i += 1) {
+      let group = groups[i];
+      if ('occurs-' + schedule.value === group.id) {
+        group.className += ' is-shown';
+      } else {
+        group.className = group.className.replace(/\s+is-shown/g, '');
+      }
+    }
+
+    let days = [];
+    if (schedule.value === 'once' && numberOfDays) {
+      days = [ true ];
+    } else if (schedule.value === 'range' && numberOfDays) {
+      let number = numberOfDays.value - 0;
+      for (let i = 0; i < number; i += 1) {
+        days.push(true);
+      }
+    }
+    if (numberOfDays) {
+      ractive.set('days', days);
+    }
+  });
+}
+
+if (numberOfDays) {
+  numberOfDays.addEventListener('change', () => {
+    let days = [];
+    let number = numberOfDays.value - 0;
+    for (let i = 0; i < number; i += 1) {
+      days.push(true);
+    }
+    ractive.set('days', days);
+  });
+}
+
+let ractive = null;
+if (document.getElementById('day-details')) {
+  let data = {
+    days: [ true ]
+  };
+
+  ractive = new Ractive({
+    el: '#day-details',
+    template: '#day-detail-template',
+    data: data
+  });
+}
+

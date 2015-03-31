@@ -1,0 +1,156 @@
+<h1 class="banner">Create a Ride</h1>
+<section>
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/members" enctype="mutipart/form-data">
+    <div class="form-panel">
+      <fieldset>
+        <legend>General Information</legend>
+        <div class="pure-control-group">
+          <label for="name">Name</label>
+          <input type="text" value="{{ name }}" name="name" id="name" required>
+          {{#if errors.name}}
+          <div class="form-error">
+            <p>The name {{ errors.name }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="sponsor">Sponsor</label>
+          <select name="sponsor" id="sponsor">
+            <option value="chapter">Chapter</option>
+            <option value="dealer">Dealer</option>
+            <option value="outside">Third-Party</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="hogNumber">Attendance</label>
+          <select name="sponsor" id="sponsor">
+            <option value="closed">Members + 1 guest</option>
+            <option value="member">Only Chapter members</option>
+            <option value="open">Anyone</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="reminderDays">Reminders on</label>
+          <input type="text" value="5, 3, 1" name="reminderDays" id="reminderDays" required>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>When</legend>
+        <div class="pure-control-group">
+          <label for="schedule">Occurs</label>
+          <select name="schedule" id="schedule">
+            <option value="once">On one day</option>
+            <option value="range">On multiple days</option>
+          </select>
+        </div>
+        <div id="occurs-once" class="pure-control-group when-specifier {{#if schedule === 'once'}}is-shown{{/if}}">
+          <label for="date">On</label>
+          <input type="date" placeholder="MM/DD/YYYY" id="date" name="date">
+        </div>
+        <div id="occurs-range" class="when-specifier {{#if schedule === 'range'}}is-shown{{/if}}">
+          <div class="pure-control-group">
+            <label for="startDate">From</label>
+            <input type="date" placeholder="MM/DD/YYYY" id="startDate" name="startDate">
+          </div>
+          <div class="pure-control-group">
+            <label for="endDate">For</label>
+            <select id="numberOfDays" name="numberOfDays">
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
+              <option>13</option>
+              <option>14</option>
+            </select>
+            days
+            <input type="hidden" id="endDate" name="endDate">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div id="day-details" class="pure-input-1">
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/events" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Create this ride</button>
+      </div>
+    </div>
+  </form>
+</section>
+<script type="text/ractive" id="day-detail-template">
+{{ "{{#days:i}}" }}
+<div class="pure-input-1 section">
+  {{ "{{#if days.length > 1}}" }}
+  <section class="section-header">
+    Day {{ "{{i + 1}}" }}
+  </section>
+  {{ "{{/if}}" }}
+  <div class="form-panel">
+    <fieldset>
+      <legend>Description</legend>
+      <div class="pure-control-group">
+        <textarea class="pure-input-1 long-text" name="day[][description]" id="description{{ '{{ i }}' }}" required></textarea>
+      </div>
+    </fieldset>
+    <fieldset>
+      <legend>Files</legend>
+      <div class="pure-control-group">
+        <label for="routeGpx{{ '{{ i }}' }}">Garmin</label>
+        <input type="file" name="day[][routeGpx]" id="routeGpx{{ '{{ i }}' }}">
+      </div>
+      <div class="pure-control-group">
+        <label for="routePdf{{ '{{ i }}' }}">PDF</label>
+        <input type="file" name="day[][routePdf]" id="routePdf{{ '{{ i }}' }}">
+      </div>
+      <div class="pure-control-group">
+        <label for="routeEst{{ '{{ i }}' }}">Streets &amp; Trips</label>
+        <input type="file" name="day[][routeEst]" id="routeEst{{ '{{ i }}' }}">
+      </div>
+    </fieldset>
+  </div>
+  <div class="form-panel">
+    <fieldset>
+      <legend>Where and Times</legend>
+      <div class="pure-control-group">
+        <label for="start{{ '{{ i }}' }}">Starts from</label>
+        <input type="text" placeholder="where you going?" name="day[][start]" id="start{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="meetAt{{ '{{ i }}' }}">at</label>
+        <input type="text" placeholder="a time like 9am" name="day[][meetAt]" id="meetAt{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="ksuAt{{ '{{ i }}' }}">with KSU at</label>
+        <input type="text" placeholder="a time like 9:30am" name="day[][ksuAt]" id="ksuAt{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="endsAt{{ '{{ i }}' }}">Ending around</label>
+        <input type="text" placeholder="a time like noon" name="day[][endsAt]" id="endsAt{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="destination{{ '{{ i }}' }}">at location</label>
+        <input type="text" placeholder="where you going?" name="day[][destination]" id="destination{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="destinationUrl{{ '{{ i }}' }}">Web site</label>
+        <input type="text" placeholder="does it have a URL?" name="day[][destinationUrl]" id="destinationUrl{{ '{{ i }}' }}">
+      </div>
+      <div class="pure-control-group">
+        <label for="roadCaptain{{ '{{ i }}' }}">Led by</label>
+        <input type="text" placeholder="someone's name" name="day[][roadCaptain]" id="roadCaptain{{ '{{ i }}' }}" required>
+      </div>
+    </fieldset>
+  </div>
+</div>
+{{ "{{/days}}" }}
+</script>

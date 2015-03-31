@@ -1,0 +1,168 @@
+<h1 class="banner">Create a Meeting, Meal, or Movie</h1>
+<section>
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/members">
+    <div class="form-panel">
+      <fieldset>
+        <legend>General Information</legend>
+        <div class="pure-control-group">
+          <label for="activity">Activity</label>
+          <select name="activity" id="activity">
+            <option value="meeting">Meeting</option>
+            <option value="meal">Meal</option>
+            <option value="movie">Movie</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="name">Name</label>
+          <input type="text" value="{{ name }}" name="name" id="name" required>
+          {{#if errors.name}}
+          <div class="form-error">
+            <p>The name {{ errors.name }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="sponsor">Sponsor</label>
+          <select name="sponsor" id="sponsor">
+            <option value="chapter">Chapter</option>
+            <option value="dealer">Dealer</option>
+            <option value="outside">Third-Party</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="hogNumber">Attendance</label>
+          <select name="sponsor" id="sponsor">
+            <option value="closed">Members + 1 guest</option>
+            <option value="member">Only Chapter members</option>
+            <option value="open">Anyone</option>
+          </select>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Description</legend>
+        <div class="pure-control-group">
+          <textarea class="pure-input-1 long-text" name="description" id="description" required></textarea>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>When</legend>
+        <div class="pure-control-group">
+          <label for="schedule">Occurs</label>
+          <select name="schedule" id="schedule">
+            <option value="once">On one day</option>
+            <option value="range">On multiple days</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+        <div id="occurs-once" class="pure-control-group when-specifier {{#if schedule === 'once'}}is-shown{{/if}}">
+          <label for="date">On</label>
+          <input type="date" placeholder="MM/DD/YYYY" id="date" name="date">
+        </div>
+        <div id="occurs-range" class="when-specifier {{#if schedule === 'range'}}is-shown{{/if}}">
+          <div class="pure-control-group">
+            <label for="startDate">From</label>
+            <input type="date" placeholder="MM/DD/YYYY" id="startDate" name="startDate">
+          </div>
+          <div class="pure-control-group">
+            <label for="endDate">To</label>
+            <input type="date" placeholder="MM/DD/YYYY" id="endDate" name="endDate">
+          </div>
+        </div>
+        <div id="occurs-weekly" class="when-specifier {{#if schedule === 'weekly'}}is-shown{{/if}}">
+          <div class="pure-control-group">
+            <label for="weeklyWeekday">Every</label>
+            <select name="weeklyWeekday" id="weeklyWeekday">
+              <option value="sunday">Sunday</option>
+              <option value="monday">Monday</option>
+              <option value="tuesday">Tuesday</option>
+              <option value="wednesday">Wednesday</option>
+              <option value="thursday">Thursday</option>
+              <option value="friday">Friday</option>
+              <option value="saturday">Saturday</option>
+            </select>
+          </div>
+          <div class="pure-control-group">
+            <label for="weeklyEnd">Until</label>
+            <input type="date" placeholder="MM/DD/YYYY" id="weeklyEnd" name="weeklyEnd">
+          </div>
+        </div>
+        <div id="occurs-monthly" class="when-specifier {{#if schedule === 'monthly'}}is-shown{{/if}}">
+          <div class="pure-control-group">
+            <label for="periodicity">Every</label>
+            <select name="periodicity" id="periodicity">
+              <option value="0">1st</option>
+              <option value="1">2nd</option>
+              <option value="2">3rd</option>
+              <option value="3">4th</option>
+              <option value="-1">last</option>
+              <option value="-2">second to last</option>
+            </select>
+          </div>
+          <div class="pure-control-group">
+            <label for="monthlyWeekday"></label>
+            <select name="monthlyWeekday" id="monthlyWeekday">
+              <option value="sunday">Sunday</option>
+              <option value="monday">Monday</option>
+              <option value="tuesday">Tuesday</option>
+              <option value="wednesday">Wednesday</option>
+              <option value="thursday">Thursday</option>
+              <option value="friday">Friday</option>
+              <option value="saturday">Saturday</option>
+            </select>
+          </div>
+          <div class="pure-control-group">
+            <label for="monthlyEnd">Until</label>
+            <input type="date" placeholder="MM/DD/YYYY" id="monthlyEnd" name="monthlyEnd">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Where and Times</legend>
+        <div class="pure-control-group">
+          <label for="destination">Location</label>
+          <input type="text" placeholder="where you going?" value="{{ destination }}" name="destination" id="destination" required>
+          {{#if errors.destination}}
+          <div class="form-error">
+            <p>The destination {{ errors.destination }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="destinationUrl">Web site</label>
+          <input type="text" placeholder="does it have a URL?" value="{{ destinationUrl }}" name="destinationUrl" id="destinationUrl">
+        </div>
+        <div class="pure-control-group">
+          <label for="meetAt">Starts at</label>
+          <input type="text" placeholder="a time like 9am" value="{{ meetAt }}" name="meetAt" id="meetAt" required>
+          {{#if errors.meetAt}}
+          <div class="form-error">
+            <p>The start at time {{ errors.meetAt }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="endsAt">Ends around</label>
+          <input type="text" placeholder="a time like noon" value="{{ endsAt }}" name="endsAt" id="endsAt" required>
+          {{#if errors.endsAt}}
+          <div class="form-error">
+            <p>The end time {{ errors.endsAt }}</p>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/events" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Create the event</button>
+      </div>
+    </div>
+  </form>
+</section>

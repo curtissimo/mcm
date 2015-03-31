@@ -61,6 +61,7 @@ export class Assets {
     let options = { encoding: 'utf8' };
     let cssSource = path.join(pwd, 'css-asset-hashes.json');
     let esSource = path.join(pwd, 'es-asset-hashes.json');
+    let es3Source = path.join(pwd, 'es3-asset-hashes.json');
     this._stylesheets = [];
     let self = this;
     this._scripts = [];
@@ -68,6 +69,10 @@ export class Assets {
       .then(content => {
         self._translations = JSON.parse(content);
         return promisify(fs.readFile.bind(fs, esSource, options));
+      })
+      .then(content => {
+        Object.assign(self._translations, JSON.parse(content));
+        return promisify(fs.readFile.bind(fs, es3Source, options));
       })
       .then(content => {
         Object.assign(self._translations, JSON.parse(content));
@@ -83,14 +88,14 @@ export class Assets {
   addScript(name) {
     let path = this.getPath(name, 'scripts', 'js');
     let a = '/' + this.translate(path);
+    if (a === '/undefined') {
+      a = '/scripts/' + this.translate(`${name}.js`);
+    }
     this._scripts.push(a)
   }
 
   getPath(name, path, ext) {
-    if (!this._scope) {
-      return `/${path}/${name}.${ext}`;
-    }
-    return `/presenters/${this._scope}/${path}/${name}.${ext}`;
+    return `/${path}/${name}.${ext}`;
   }
 
   request(path) {

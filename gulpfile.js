@@ -158,17 +158,23 @@ gulp.task('db', [ 'es6-server' ], function (cb) {
 
 gulp.task('es3', function () {
   return sourceMapsInDevelopment({
-    source: [ './src/scripts/shiv.js', './src/scripts/squire-raw.js' ],
+    source: [ './src/scripts/shiv.js', './src/scripts/squire-raw.js', './src/scripts/ractive-legacy.js' ],
     dest: './build/public/scripts',
     betweenMaps: function (stream) {
-      return stream.pipe(jsmin());
+      return stream.pipe(jsmin())
+        .pipe(hash());
+    },
+    afterDist: function (stream) {
+      return stream
+        .pipe(hash.manifest('es3-asset-hashes.json'))
+        .pipe(gulp.dest('./build'));
     }
   });
 });
 
 gulp.task('es6-client', function () {
   return sourceMapsInDevelopment({
-    source: [ './src/**/scripts/*.js', '!./src/scripts/shiv.js', '!./src/scripts/squire-raw.js' ],
+    source: [ './src/**/scripts/*.js', '!./src/scripts/shiv.js', '!./src/scripts/squire-raw.js', '!./src/scripts/ractive.js', '!./src/scripts/ractive-legacy.js' ],
     dest: './build/public',
     betweenMaps: function (stream) {
       return stream.pipe(babel({ modules: 'ignore' }))

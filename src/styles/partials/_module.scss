@@ -39,6 +39,24 @@
   height: 10em;
 }
 
+.when-specifier {
+  display: none;
+
+  &.is-shown {
+    display: block;
+  }
+}
+
+.section {
+  margin-top: 1em;
+}
+
+.section-header {
+  background-color: #EEE;
+  @include grid-column;
+  width: 100%;
+}
+
 .pure-form-stacked {
   .pure-control-group {
     margin-bottom: 1em;
@@ -454,4 +472,39 @@
 .comment-content-author-photo {
   float: left;
   width: 150px;
+}
+
+.events-list {
+  @include grid;
+}
+
+.calendar-column {
+  @include grid-column;
+  width: 100%;
+
+  @include min-md-screen {
+    width: 50%;
+  }
+}
+
+.calendar {
+  width: 50%;
+  margin: auto;
+  margin-bottom: 4em;
+}
+
+.calendar-weeks {
+  text-align: center;
+}
+
+.event-entry {
+  @include grid;
+  margin: 0;
+  padding: 0;
+}
+
+.event-entry-summary {
+  @include grid-column;
+  width: 100%;
+  padding: 0.5em;
 }
