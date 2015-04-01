@@ -13,15 +13,15 @@ var del = require('del');
 var exec = require('child_process').exec;
 var fs = require('fs');
 var minimist = require('minimist');
-var nano = require('nano');
 var sync = require('browser-sync');
+var gulpdb = require('./gulp-db-tasks');
 
 var argv = minimist(process.argv.slice(2));
 if (argv._[0] === 'dist') {
   process.env.NODE_ENV = 'production';
 }
 
-process.env.MCM_DB = 'http://couchdb:5984'
+process.env.MCM_DB = 'http://couchdb:5984';
 
 var forProduction = process.env.NODE_ENV === 'production';
 var reloading = null;
@@ -36,24 +36,6 @@ var AUTOPREFIXER_BROWSERS = [
   'android >= 4.4',
   'bb >= 10'
 ];
-
-function promisify(scope, method) {
-  var args = Array.prototype.slice.apply(arguments);
-  args.splice(1, 1);
-  var fn = scope[method].bind.apply(scope[method], args);
-  return new Promise(function (good, bad) {
-    fn(function (err, value) {
-      if (err) {
-        return bad(err);
-      }
-      try {
-        good(value);
-      } catch (e) {
-        bad(e);
-      }
-    });
-  })
-}
 
 function sourceMapsInDevelopment(options) {
   var source = options.source;
@@ -74,6 +56,8 @@ function sourceMapsInDevelopment(options) {
   return afterDist(stream);
 }
 
+gulpdb.initialize(gulp, process.env.MCM_DB);
+
 gulp.task('clean', function (cb) {
   del('./build', function (err) {
     if (err) {
@@ -81,79 +65,6 @@ gulp.task('clean', function (cb) {
     }
     del('./dist', cb);
   });
-});
-
-gulp.task('db', [ 'es6-server' ], function (cb) {
-  var chapterName = 'rhog';
-  var masterurl = process.env.MCM_DB + '/mcm-master';
-  var chapterurl = process.env.MCM_DB + '/' + chapterName;
-  var db = nano(masterurl);
-  var dbms = nano(db.config.url);
-  var account = require('./build/models/account');
-  var settings = require('./build/models/settings');
-  var member = require('./build/models/member');
-  var newsletter = require('./build/models/newsletter');
-  var blog = require('./build/models/blog');
-  var document = require('./build/models/document');
-  var discussion = require('./build/models/discussion');
-  var comment = require('./build/models/comment');
-  var lookup = {
-    account: account,
-    settings: settings,
-    member: member,
-    newsletter: newsletter,
-    document: document,
-    discussion: discussion,
-    comment: comment
-  };
-
-  promisify(dbms.db, 'destroy', db.config.db)
-    .then(function () { return promisify(dbms.db, 'create', db.config.db); })
-    .then(function () { return promisify(dbms.db, 'destroy', chapterName); })
-    .then(function () { return promisify(dbms.db, 'create', chapterName); })
-    .then(function () {
-      return Promise.all([
-        promisify(account.to(masterurl), 'sync'),
-        promisify(settings.to(chapterurl), 'sync'),
-        promisify(blog.to(chapterurl), 'sync'),
-        promisify(member.to(chapterurl), 'sync'),
-        promisify(newsletter.to(chapterurl), 'sync'),
-        promisify(document.to(chapterurl), 'sync'),
-        promisify(discussion.to(chapterurl), 'sync'),
-        promisify(comment.to(chapterurl), 'sync')
-      ]);
-    })
-    .then(function () {
-      return promisify(fs, 'readFile', './seed.json', 'utf8');
-    })
-    .then(function (seeds) {
-      seeds = JSON.parse(seeds);
-      var promises = [];
-
-      for (var i = 0; i < seeds.length; i += 1) {
-        var seed = seeds[i];
-        var builder = lookup[seed.type];
-        var instance = builder.new(seed);
-        var url = chapterurl;
-        if (seed.type === 'account') {
-          url = masterurl;
-        } else if (seed.type === 'member') {
-          if (seed.blogs) {
-            for (var j = 0; j < seed.blogs.length; j += 1) {
-              seed.blogs[j] = blog.new(seed.blogs[j]);
-            }
-          }
-        }
-        var promise = promisify(instance.to(url), 'save');
-        promises.push(promise);
-      }
-      return Promise.all(promises);
-    })
-    .then(function () { cb(); })
-    .catch(function (e) {
-      console.error('ERROR!', e);
-      cb(e);
-    });
 });
 
 gulp.task('es3', function () {

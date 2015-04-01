@@ -1,6 +1,6 @@
 <h1 class="banner">Events</h1>
 <section class="events-list">
-  <div class="calendar-column calendar-column-40 min-md-screen">
+  <div class="calendar-column-left min-md-screen">
     {{#months}}
     <table class="calendar">
       <thead class="calendar-month-name">
@@ -45,7 +45,7 @@
     </table>
     {{/months}}
   </div>
-  <div class="calendar-column calendar-column-60">
+  <div class="calendar-column-right">
     <ul class="discussions-category">
       {{#events}}
       <li class="event-entry stripe-{{(@index + 1) % 2}}">

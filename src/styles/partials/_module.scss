@@ -475,23 +475,18 @@
 }
 
 .events-list {
-  @include grid;
 }
 
-.calendar-column {
-  @include grid-column;
-  width: 100%;
-}
-
-.calendar-column-40 {
+.calendar-column-left {
   @include min-md-screen {
-    width: 40%;
+    width: 230px;
+    float: left;
   }
 }
 
-.calendar-column-60 {
+.calendar-column-right {
   @include min-md-screen {
-    width: 60%;
+    margin-left: 250px;
   }
 }
 

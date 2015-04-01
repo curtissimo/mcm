@@ -105,7 +105,7 @@ let presenter = {
       },
       presenters: { menu: 'menu' },
       layout: 'chapter',
-      view: 'item'
+      view: 'list'
     });
   },
 

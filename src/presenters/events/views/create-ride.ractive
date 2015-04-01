@@ -1,6 +1,7 @@
 <h1 class="banner">Create a Ride</h1>
 <section>
   <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/members" enctype="mutipart/form-data">
+    <input type="hidden" name="activity" value="ride">
     <div class="form-panel">
       <fieldset>
         <legend>General Information</legend>
