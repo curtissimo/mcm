@@ -22,7 +22,8 @@ function makeCalendar(startOfMonth) {
 
   let month = {
     name: months[startOfMonth.getMonth()],
-    weeks: [[]]
+    weeks: [[]],
+    days: []
   };
 
   for (let i = 0; i < startOfMonth.getDay(); i += 1) {
@@ -30,7 +31,14 @@ function makeCalendar(startOfMonth) {
   }
 
   for (let i = startOfMonth; i.valueOf() < nextMonth.valueOf(); i.setDate(i.getDate() + 1)) {
-    month.weeks[month.weeks.length - 1].push(i.getDate());
+    let day = {
+      number: i.getDate(),
+      month: i.getMonth(),
+      year: i.getFullYear(),
+      formatted: moment(i).format('MM/DD/YYYY')
+    };
+    month.weeks[month.weeks.length - 1].push(day);
+    month.days.push(day);
     if (month.weeks[month.weeks.length - 1].length === 7) {
       month.weeks.push([]);
     }
@@ -57,18 +65,30 @@ let presenter = {
     nextMonth.setDate(1);
     nextMonth.setMonth(nextMonth.getMonth() + 1);
 
+    let months = [ makeCalendar(thisMonth), makeCalendar(nextMonth) ];
+
     for (let e of events) {
+      let d = null;
       if (e.date) {
-        e.date = moment(e.date).format('MM/DD/YYYY');
+        d = e.date = moment(e.date).format('MM/DD/YYYY');
       }
       if (e.startDate) {
-        e.startDate = moment(e.startDate).format('MM/DD/YYYY');
+        d = e.startDate = moment(e.startDate).format('MM/DD/YYYY');
+      }
+      for (let i = 0; i < months.length; i += 1) {
+        let month = months[i];
+        for (let j = 0; j < month.days.length; j += 1) {
+          let day = month.days[j];
+          if (day.formatted === d) {
+            day.event = true;
+          }
+        }
       }
     }
 
     ac.render({
       data: {
-        months: [ makeCalendar(thisMonth), makeCalendar(nextMonth) ],
+        months: months,
         events: events,
         actions: actions,
         title: 'Chapter Events'
@@ -78,10 +98,21 @@ let presenter = {
     });
   },
 
+  items(ac) {
+    ac.render({
+      data: {
+        title: '«event name»'
+      },
+      presenters: { menu: 'menu' },
+      layout: 'chapter',
+      view: 'item'
+    });
+  },
+
   item(ac) {
     ac.render({
       data: {
-        title: '«event name'
+        title: '«event name»'
       },
       presenters: { menu: 'menu' },
       layout: 'chapter'

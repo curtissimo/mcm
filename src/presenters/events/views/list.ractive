@@ -1,6 +1,6 @@
 <h1 class="banner">Events</h1>
 <section class="events-list">
-  <div class="calendar-column min-md-screen">
+  <div class="calendar-column calendar-column-40 min-md-screen">
     {{#months}}
     <table class="calendar">
       <thead class="calendar-month-name">
@@ -24,9 +24,19 @@
         <tr>
           {{#this}}
             {{#if !this}}
-            <td class="not-a-day"></td>
+            <td>
+              <span class="day not-a-day"></span>
+            </td>
+            {{elseif event}}
+            <td>
+              <a class="day day-has-event" href="/chapter/events/{{year}}/{{month}}/{{number}}">
+                {{ number }}
+              </a>
+            </td>
             {{else}}
-            <td class="day">{{ . }}</td>
+            <td>
+              <span class="day">{{ number }}</span>
+            </td>
             {{/if}}
           {{/this}}
         </tr>
@@ -35,7 +45,7 @@
     </table>
     {{/months}}
   </div>
-  <div class="calendar-column">
+  <div class="calendar-column calendar-column-60">
     <ul class="discussions-category">
       {{#events}}
       <li class="event-entry stripe-{{(@index + 1) % 2}}">
@@ -48,7 +58,7 @@
           </div>
           {{#if roadCaptain }}
           <div class="event-entry-rc">
-            {{ roadCaptain }}
+            Led by {{ roadCaptain }}
           </div>
           {{/if}}
         </div>

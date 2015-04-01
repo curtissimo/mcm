@@ -236,6 +236,7 @@ assets.initialize()
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create/:type', method: 'create' },
         { verb: 'get', action: ':id/edit-form', method: 'edit' },
+        { verb: 'get', action: ':year/:month/:day', method: 'items' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' },
         { verb: 'put' },

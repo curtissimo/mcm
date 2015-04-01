@@ -308,3 +308,20 @@ fieldset {
   margin-top: 2em;
   font-size: .9em;
 }
+
+.calendar {
+  border-collapse: collapse;;
+}
+
+.day {
+  width: 30px;
+  height: 30px;
+  display: block;
+  line-height: 30px;
+}
+
+.day-has-event {
+  color: $accent-color-text;
+  background-color: $accent-color;
+}
+

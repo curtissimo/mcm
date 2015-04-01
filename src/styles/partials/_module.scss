@@ -481,14 +481,21 @@
 .calendar-column {
   @include grid-column;
   width: 100%;
+}
 
+.calendar-column-40 {
   @include min-md-screen {
-    width: 50%;
+    width: 40%;
+  }
+}
+
+.calendar-column-60 {
+  @include min-md-screen {
+    width: 60%;
   }
 }
 
 .calendar {
-  width: 50%;
   margin: auto;
   margin-bottom: 4em;
 }
