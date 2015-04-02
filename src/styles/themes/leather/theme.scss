@@ -274,8 +274,7 @@ fieldset {
 .discussions-entry-author,
 .discussions-entry-created,
 .discussions-entry-last-comment-created,
-.discussions-entry-sticky,
-.event-entry-rc {
+.discussions-entry-sticky {
   font-size: 0.8em;
   color: $secondary-text-color;
 }
@@ -336,3 +335,53 @@ fieldset {
   background-color: $accent-color;
 }
 
+.event-entry-date {
+  float: left;
+  width: 40px;
+  padding-right: 10px;
+  text-align: center;
+}
+
+.event-entry-files {
+  float: right;
+  width: 90px;
+  padding-left: 10px;
+}
+
+.event-entry-date-month {
+  font-size: .9em;
+  font-weight: bold;
+  color: $secondary-text-color;
+}
+
+.event-entry-date-day {
+  font-size: 1.25em;
+}
+
+.event-entry-rc {
+  font-size: 0.8em;
+  color: $secondary-text-color;
+}
+
+.event-entry-text {
+  margin-left: 50px;
+  margin-top: .75em;
+  padding-top: .75em;
+  border-top: 2px solid white;
+}
+
+.event-entry-title {
+  margin-right: 100px;
+}
+
+.event-entry-text:nth-child(2) {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.event-entry-files-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}

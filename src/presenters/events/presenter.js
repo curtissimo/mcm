@@ -1,7 +1,8 @@
 import moment from 'moment';
 import event from '../../models/event';
+import ride from '../../models/ride';
 
-let months = [
+let monthNames = [
   'January',
   'February',
   'March',
@@ -22,7 +23,7 @@ function makeCalendar(startOfMonth) {
   nextMonth.setDate(1);
 
   let month = {
-    name: months[startOfMonth.getMonth()],
+    name: monthNames[startOfMonth.getMonth()],
     weeks: [[]],
     days: []
   };
@@ -76,39 +77,63 @@ let presenter = {
     let months = [ makeCalendar(thisMonth), makeCalendar(nextMonth) ];
 
     event.from(ac.chapterdb).byDate(from, to, (error, events) => {
-      if (error) {
-        return ac.error(error);
-      }
-      let eventsByDay = {};
-      for (let e of events) {
-        let _date = e.date;
-        let d = e.date = moment(new Date(e.year, e.month, e.date)).format('MM/DD/YYYY');
-        if (e.year >= today.getFullYear() && ((e.month > today.getMonth() || (e.month <= today.getMonth() && _date >= today.getDate())))) {
-          if (!eventsByDay[d]) {
-            eventsByDay[d] = [];
+      ride.from(ac.chapterdb).byDate(from, to, (error, rides) => {
+        events = events.concat(rides);
+        events.sort((a, b) => {
+          if (a.year < b.year) {
+            return -1;
           }
-          eventsByDay[d].push(e);
+          if (a.year > b.year) {
+            return 1;
+          }
+          if (a.month < b.month) {
+            return -1;
+          }
+          if (a.month > b.month) {
+            return 1;
+          }
+          if (a.date < b.date) {
+            return -1;
+          }
+          if (a.date > b.date) {
+            return 1;
+          }
+          return 0;
+        });
+        if (error) {
+          return ac.error(error);
         }
-        for (let i = 0; i < months.length; i += 1) {
-          let month = months[i];
-          for (let j = 0; j < month.days.length; j += 1) {
-            let day = month.days[j];
-            if (day.formatted === d) {
-              day.event = true;
+        let eventsByDay = {};
+        for (let e of events) {
+          let d = moment([ e.year, e.month, e.date ]).format('MM/DD/YYYY');
+          if (e.year >= today.getFullYear() && ((e.month > today.getMonth() || (e.month <= today.getMonth() && e.date >= today.getDate())))) {
+            if (!eventsByDay[d]) {
+              eventsByDay[d] = [];
+            }
+            eventsByDay[d].push(e);
+          }
+          for (let i = 0; i < months.length; i += 1) {
+            let month = months[i];
+            for (let j = 0; j < month.days.length; j += 1) {
+              let day = month.days[j];
+              if (day.formatted === d) {
+                day.event = true;
+              }
             }
           }
         }
-      }
 
-      ac.render({
-        data: {
-          months: months,
-          events: eventsByDay,
-          actions: actions,
-          title: 'Chapter Events'
-        },
-        presenters: { menu: 'menu' },
-        layout: 'chapter'
+        ac.render({
+          data: {
+            monthNames: monthNames,
+            months: months,
+            events: eventsByDay,
+            actions: actions,
+            title: 'Chapter Events'
+          },
+          presenters: { menu: 'menu' },
+          layout: 'chapter'
+        });
       });
     });
   },
@@ -131,6 +156,45 @@ let presenter = {
       },
       presenters: { menu: 'menu' },
       layout: 'chapter'
+    });
+  },
+
+  est(ac) {
+    ride.from(ac.chapterdb).get(ac.params.id, (e, r) => {
+      if (e) {
+        return ac.error(e);
+      }
+      if (!r || !r.routeFiles || !r.routeFiles.est) {
+        return ac.notFound();
+      }
+      let est = r.routeFiles.est;
+      ac.file(est.path, est.fileName, ac.account.subdomain);
+    });
+  },
+
+  pdf(ac) {
+    ride.from(ac.chapterdb).get(ac.params.id, (e, r) => {
+      if (e) {
+        return ac.error(e);
+      }
+      if (!r || !r.routeFiles || !r.routeFiles.pdf) {
+        return ac.notFound();
+      }
+      let pdf = r.routeFiles.pdf;
+      ac.file(pdf.path, pdf.fileName, ac.account.subdomain);
+    });
+  },
+
+  garmin(ac) {
+    ride.from(ac.chapterdb).get(ac.params.id, (e, r) => {
+      if (e) {
+        return ac.error(e);
+      }
+      if (!r || !r.routeFiles || !r.routeFiles.garmin) {
+        return ac.notFound();
+      }
+      let garmin = r.routeFiles.garmin;
+      ac.file(garmin.path, garmin.fileName, ac.account.subdomain);
     });
   },
 

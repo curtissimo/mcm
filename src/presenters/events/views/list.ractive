@@ -50,18 +50,39 @@
       {{#events:key}}
       <li class="event-entry stripe-{{(@index + 1) % 2}}">
         <div class="event-entry-summary">
-          <div class="event-entry-title">
-            {{ key }}
+          <div class="event-entry-date">
+            <div class="event-entry-date-month">
+              {{ monthNames[this[0].month] }}
+            </div>
+            <div class="event-entry-date-day">
+              {{ this[0].date }}
+            </div>
           </div>
-          {{#each this}}
-          <div class="event-entry-title">
-            <a href="/chapter/events/{{ _id }}">{{ title }}</a>
+          {{#each this:i}}
+          <div class="event-entry-text">
+            {{#if routeFiles.garmin || routeFiles.est || routeFiles.pdf}}
+            <div class="event-entry-files">
+              <ul class="event-entry-files-list">
+                {{#if routeFiles.garmin}}
+                <li><a href="/chapter/events/{{ _id }}/garmin">Garmin</a></li>
+                {{/if}}
+                {{#if routeFiles.pdf}}
+                <li><a href="/chapter/events/{{ _id }}/pdf">PDF</a></li>
+                {{/if}}
+                {{#if routeFiles.est}}
+                <li><a href="/chapter/events/{{ _id }}/est">Streets</a></li>
+                {{/if}}
+            </div>
+            {{/if}}
+            <div class="event-entry-title">
+              <a href="/chapter/events/{{ _id }}">{{ title }}</a>
+            </div>
+            {{#if roadCaptain }}
+            <div class="event-entry-rc">
+              Led by {{ roadCaptain }}
+            </div>
+            {{/if}}
           </div>
-          {{#if roadCaptain }}
-          <div class="event-entry-rc">
-            Led by {{ roadCaptain }}
-          </div>
-          {{/if}}
           {{/each}}
         </div>
       </li>
