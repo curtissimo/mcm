@@ -28,6 +28,9 @@
                 {{#if this.title}}
                 <div class="member-list-tile-title">{{ this.title }}</div>
                 {{/if}}
+                {{#if isRoadCaptain}}
+                <div class="member-list-tile-road-captain">Road Captain</div>
+                {{/if}}
                 {{#if achievements}}
                 <div class="member-list-tile-achievement">{{ this.achievements[0] }}</div>
                 {{/if}}
