@@ -88,7 +88,7 @@
               </div>
               {{/if}}
               {{#if ksuAt }}
-              <div class="event-entry-rc">
+              <div class="event-entry-ksu">
                 Kick-stands up at {{ ksuAt }}
               </div>
               {{/if}}
