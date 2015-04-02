@@ -229,6 +229,11 @@ a {
   border-right: 1px solid $primary-color-light;
 }
 
+.security-table-mid-header {
+  border-top: 1px solid $primary-color-light;
+  color: $secondary-text-color;
+}
+
 .stripe-1 {
   background-color: #EEE;
   color: $primary-color-light-text;
