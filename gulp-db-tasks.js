@@ -288,6 +288,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
     }
   };
 
+  var unprocessed = [];
   setUp()
     .then(function () {
       var account = lookup.account.new({
@@ -312,7 +313,6 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
     .then(function (result) {
       var docs = result.rows;
       var promises = [];
-      var notmapped = {};
 
       for (var i = 0; i < docs.length; i += 1) {
         var doc = docs[i].doc;
@@ -320,9 +320,9 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
         var converter = converters[type];
 
         if (!converter) {
-          notmapped[type] = null;
           continue;
         }
+
         var name = converter.name;
         if (typeof name === 'function') {
           name = name(doc);
@@ -341,12 +341,21 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           var save = function (builder, doc) {
             return function (d) {
               if (!d) {
+                unprocessed.push(doc._id);
                 return;
               }
-              var inst = builder.new(d);
-              inst.createdOn = doc[converter.createdDate];
-              return promisify(inst.to(chapterurl), 'save');
+              var promises = [];
+              if (!Array.isArray(d)) {
+                d = [d];
+              }
+              for (var i = 0; i < d.length; i += 1) {
+                var dd = d[i];
+                var inst = builder.new(dd);
+                inst.createdOn = doc[converter.createdDate];
+                promises.push(promisify(inst.to(chapterurl), 'save'));
+              }
             };
+            return Promise.all(promises);
           };
           var p = promisify(converter, 'map', doc)
             .then(save(builder, doc))
@@ -356,9 +365,10 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
         }
       }
 
-      console.log('not mapping', Object.keys(notmapped));
-
       return Promise.all(promises);
+    })
+    .then(function () {
+      console.log('Did not process', unprocessed);
     })
     .catch(function (e) {
       console.error('ERROR!', e, e.stack);
