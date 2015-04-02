@@ -477,6 +477,13 @@
 .events-list {
 }
 
+.day {
+  width: 30px;
+  height: 30px;
+  display: block;
+  line-height: 30px;
+}
+
 .calendar-column-left {
   @include min-md-screen {
     width: 230px;
@@ -499,6 +506,18 @@
   text-align: center;
 }
 
+.event-entry-date {
+  float: left;
+  width: 40px;
+  padding-right: 10px;
+}
+
+.event-entry-files {
+  float: right;
+  width: 90px;
+  padding-left: 10px;
+}
+
 .event-entry {
   @include grid;
   margin: 0;
@@ -511,8 +530,36 @@
   padding: 0.5em;
 }
 
-.event-entry-text:after {
+.event-entry-text-holder:after {
   content: "";
   display: table;
   clear: both;
+}
+
+.event-entry-text {
+  margin-left: 50px;
+  margin-top: .75em;
+  padding-top: .75em;
+}
+
+.event-entry-title {
+  margin-right: 0;
+  @include min-sm-screen {
+    margin-right: 100px;
+  }
+}
+
+.event-entry-text:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.event-entry-files-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-entry-files-item {
 }

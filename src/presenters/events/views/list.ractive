@@ -29,9 +29,9 @@
             </td>
             {{elseif event}}
             <td>
-              <a class="day day-has-event" href="/chapter/events/{{year}}/{{month}}/{{number}}">
+              <span class="day day-has-event">
                 {{ number }}
-              </a>
+              </span>
             </td>
             {{else}}
             <td>
@@ -58,32 +58,37 @@
               {{ this[0].date }}
             </div>
           </div>
-          {{#each this:i}}
-          <div class="event-entry-text">
-            {{#if routeFiles.garmin || routeFiles.est || routeFiles.pdf}}
-            <div class="event-entry-files">
-              <ul class="event-entry-files-list">
-                {{#if routeFiles.garmin}}
-                <li><a href="/chapter/events/{{ _id }}/garmin">Garmin</a></li>
-                {{/if}}
-                {{#if routeFiles.pdf}}
-                <li><a href="/chapter/events/{{ _id }}/pdf">PDF</a></li>
-                {{/if}}
-                {{#if routeFiles.est}}
-                <li><a href="/chapter/events/{{ _id }}/est">Streets</a></li>
-                {{/if}}
+          <div class="event-entry-text-holder">
+            {{#each this:i}}
+            <div class="event-entry-text">
+              {{#if routeFiles.garmin}}
+              <div class="event-entry-files min-sm-screen">
+                <ul class="event-entry-files-list">
+                  <li class="event-entry-files-item"><a href="/chapter/events/{{ _id }}/garmin">Garmin</a></li>
+                </ul>
+              </div>
+              {{/if}}
+              <div class="event-entry-title">
+                <a href="/chapter/events/{{ _id }}">{{ title }}</a>
+              </div>
+              {{#if roadCaptain }}
+              <div class="event-entry-rc">
+                Led by {{ roadCaptain }}
+              </div>
+              {{/if}}
+              {{#if ksuAt }}
+              <div class="event-entry-rc">
+                Kick-stands up at {{ ksuAt }}
+              </div>
+              {{/if}}
+              {{#if location }}
+              <div class="event-entry-location">
+                Held at {{ location }}
+              </div>
+              {{/if}}
             </div>
-            {{/if}}
-            <div class="event-entry-title">
-              <a href="/chapter/events/{{ _id }}">{{ title }}</a>
-            </div>
-            {{#if roadCaptain }}
-            <div class="event-entry-rc">
-              Led by {{ roadCaptain }}
-            </div>
-            {{/if}}
+            {{/each}}
           </div>
-          {{/each}}
         </div>
       </li>
       {{/events}}
