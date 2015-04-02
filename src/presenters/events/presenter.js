@@ -60,42 +60,56 @@ let presenter = {
       actions['Create an event'] = '/chapter/events/create/other';
     }
 
+    let today = new Date();
     let thisMonth = new Date();
     thisMonth.setDate(1);
     let nextMonth = new Date();
     nextMonth.setDate(1);
     nextMonth.setMonth(nextMonth.getMonth() + 1);
+    let followingMonth = new Date();
+    followingMonth.setDate(1);
+    followingMonth.setMonth(followingMonth.getMonth() + 2);
+
+    let from = [ thisMonth.getFullYear(), thisMonth.getMonth(), thisMonth.getDate() ];
+    let to = [ followingMonth.getFullYear(), followingMonth.getMonth(), followingMonth.getDate() ];
 
     let months = [ makeCalendar(thisMonth), makeCalendar(nextMonth) ];
 
-    for (let e of events) {
-      let d = null;
-      if (e.date) {
-        d = e.date = moment(e.date).format('MM/DD/YYYY');
+    event.from(ac.chapterdb).byDate(from, to, (error, events) => {
+      if (error) {
+        return ac.error(error);
       }
-      if (e.startDate) {
-        d = e.startDate = moment(e.startDate).format('MM/DD/YYYY');
-      }
-      for (let i = 0; i < months.length; i += 1) {
-        let month = months[i];
-        for (let j = 0; j < month.days.length; j += 1) {
-          let day = month.days[j];
-          if (day.formatted === d) {
-            day.event = true;
+      let eventsByDay = {};
+      for (let e of events) {
+        let _date = e.date;
+        let d = e.date = moment(new Date(e.year, e.month, e.date)).format('MM/DD/YYYY');
+        if (e.year >= today.getFullYear() && ((e.month > today.getMonth() || (e.month <= today.getMonth() && _date >= today.getDate())))) {
+          if (!eventsByDay[d]) {
+            eventsByDay[d] = [];
+          }
+          eventsByDay[d].push(e);
+        }
+        for (let i = 0; i < months.length; i += 1) {
+          let month = months[i];
+          for (let j = 0; j < month.days.length; j += 1) {
+            let day = month.days[j];
+            if (day.formatted === d) {
+              day.event = true;
+            }
           }
         }
       }
-    }
 
-    ac.render({
-      data: {
-        months: months,
-        events: events,
-        actions: actions,
-        title: 'Chapter Events'
-      },
-      presenters: { menu: 'menu' },
-      layout: 'chapter'
+      ac.render({
+        data: {
+          months: months,
+          events: eventsByDay,
+          actions: actions,
+          title: 'Chapter Events'
+        },
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
     });
   },
 

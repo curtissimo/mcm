@@ -47,12 +47,13 @@
   </div>
   <div class="calendar-column-right">
     <ul class="discussions-category">
-      {{#events}}
+      {{#events:key}}
       <li class="event-entry stripe-{{(@index + 1) % 2}}">
         <div class="event-entry-summary">
           <div class="event-entry-title">
-            {{ date || startDate }}
+            {{ key }}
           </div>
+          {{#each this}}
           <div class="event-entry-title">
             <a href="/chapter/events/{{ _id }}">{{ title }}</a>
           </div>
@@ -61,6 +62,7 @@
             Led by {{ roadCaptain }}
           </div>
           {{/if}}
+          {{/each}}
         </div>
       </li>
       {{/events}}
