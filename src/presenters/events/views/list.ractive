@@ -68,6 +68,17 @@
                 </ul>
               </div>
               {{/if}}
+              <div class="event-entry-icon">
+                {{#if activity === 'movie'}}
+                <i class="fa fa-film"></i>
+                {{elseif activity === 'meeting'}}
+                <i class="fa fa-user"></i>
+                {{elseif activity === 'meal'}}
+                <i class="fa fa-cutlery"></i>
+                {{else}}
+                <i class="fa fa-motorcycle"></i>
+                {{/if}}
+              </div>
               <div class="event-entry-title">
                 <a href="/chapter/events/{{ _id }}">{{ title }}</a>
               </div>

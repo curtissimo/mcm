@@ -509,7 +509,6 @@
 .event-entry-date {
   float: left;
   width: 40px;
-  padding-right: 10px;
 }
 
 .event-entry-files {
@@ -542,8 +541,15 @@
   padding-top: .75em;
 }
 
+.event-entry-icon {
+  float: left;
+  width: 50px;
+}
+
 .event-entry-title {
   margin-right: 0;
+  margin-left: 50px;
+
   @include min-sm-screen {
     margin-right: 100px;
   }
@@ -562,4 +568,10 @@
 }
 
 .event-entry-files-item {
+}
+
+.event-entry-rc,
+.event-entry-location,
+.event-entry-ksu {
+  margin-left: 50px;
 }
