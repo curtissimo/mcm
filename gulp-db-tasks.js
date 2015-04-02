@@ -17,7 +17,8 @@ function initModels() {
     discussion: null,
     comment: null,
     event: null,
-    page: null
+    page: null,
+    ride: null
   };
 
   var keys = Object.keys(lookup);
@@ -73,7 +74,8 @@ function setUp() {
         promisify(lookup.discussion.to(chapterurl), 'sync'),
         promisify(lookup.comment.to(chapterurl), 'sync'),
         promisify(lookup.event.to(chapterurl), 'sync'),
-        promisify(lookup.page.to(chapterurl), 'sync')
+        promisify(lookup.page.to(chapterurl), 'sync'),
+        promisify(lookup.ride.to(chapterurl), 'sync')
       ]);
     });
 }
@@ -249,6 +251,40 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
       },
       name: 'newsletter',
       createdDate: 'not-there'
+    },
+    event: {
+      map: function (event, cb) {
+        if (event.activity !== 'ride') {
+          var d = new Date(event.date || event.startDate);
+          if (isNaN(d.valueOf())) {
+            return cb();
+          }
+          return cb(null, {
+            _id: event._id,
+            title: event.title,
+            activity: event.activity,
+            sponsor: event.sponsor,
+            attendance: event.attendance,
+            year: d.getFullYear(),
+            month: d.getMonth(),
+            date: d.getDate(),
+            meetAt: event.meetAt,
+            description: event.description,
+            location: event.destination,
+            locationUrl: event.destinationUrl,
+            endsAt: event.endsAt,
+            authorId: event.creator.id
+          });
+        }
+        cb();
+      },
+      name: function (event) {
+        if (event.activity === 'ride') {
+          return 'ride';
+        }
+        return 'event';
+      },
+      createdDate: 'enteredDate'
     }
   };
 
@@ -287,7 +323,15 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           notmapped[type] = null;
           continue;
         }
-        var builder = lookup[converter.name];
+        var name = converter.name;
+        if (typeof name === 'function') {
+          name = name(doc);
+        }
+        var builder = lookup[name];
+        if (!builder) {
+          console.error('ERROR! can not find lookup for', converter.name);
+          throw new Error('ERROR! can not find lookup for ' + converter.name)
+        }
 
         if (converter.map.length === 1) {
           var inst = builder.new(converter.map(doc));
@@ -296,6 +340,9 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
         } else {
           var save = function (builder, doc) {
             return function (d) {
+              if (!d) {
+                return;
+              }
               var inst = builder.new(d);
               inst.createdOn = doc[converter.createdDate];
               return promisify(inst.to(chapterurl), 'save');
@@ -314,7 +361,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
       return Promise.all(promises);
     })
     .catch(function (e) {
-      console.error('ERROR!', e);
+      console.error('ERROR!', e, e.stack);
     });
 });
 
