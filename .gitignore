@@ -25,4 +25,4 @@ lib/**/views/*.js
 
 build/
 dist/
-src/files/**/*.pdf
+src/files/**/*.*
