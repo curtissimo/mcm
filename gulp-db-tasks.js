@@ -1,6 +1,32 @@
 var fs = require('fs');
 var nano = require('nano');
+var crypto = require('crypto');
 var lookup = {};
+
+Promise.hash = function (o) {
+  var keys = Object.keys(o);
+  var symbols = Object.getOwnPropertySymbols(o);
+  var values = [];
+  for (var i = 0; i < keys.length; i += 1) {
+    values.push(o[keys[i]]);
+  }
+  return new Promise(function (good, bad) {
+    Promise.all(values)
+      .then(function (result) {
+        var resolved = {};
+        for (var i = 0; i < keys.length; i += 1) {
+          resolved[keys[i]] = result[i];
+        }
+        for (var i = 0; i < symbols.length; i += 1) {
+          resolved[symbols[i]] = o[symbols[i]];
+        }
+        good(resolved);
+      })
+      .catch(function (error) {
+        bad(error);
+      });
+  });
+}
 
 function initModels() {
   if (Object.keys(lookup).length > 0) {
@@ -57,6 +83,26 @@ function promisify(scope, method) {
     });
   })
 }
+
+function getAttachment(id, oldName, cb) {
+  bakdb.attachment.get(id, oldName, function (err, body) {
+    if (err) {
+      return cb(err);
+    }
+    var suffix = oldName.substring(oldName.lastIndexOf('.') - 1);
+    var md5 = crypto.createHash('md5');
+    md5.update(body);
+    var newName = md5.digest('hex') + suffix;
+    fs.writeFile('./src/files/rhog/' + newName, body, function (err2) {
+      if (err2) {
+        return cb(err2);
+      }
+      cb(null, newName);
+    });
+  });
+}
+
+var att = { getAttachment: getAttachment };
 
 function setUp() {
   return promisify(dbms.db, 'destroy', db.config.db)
@@ -228,25 +274,20 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           month = 10;
         }
         var attachmentName = newsletter.year + '-' + month + '.pdf';
-        bakdb.attachment.get(newsletter._id, attachmentName, function (err, body) {
+        getAttachment(newsletter._id, attachmentName, function (err, newName) {
           if (err) {
             return cb(err);
           }
-          fs.writeFile('./src/files/rhog/' + attachmentName, body, function (err2) {
-            if (err2) {
-              return cb(err2);
-            }
-            var n = {
-              _id: newsletter._id,
-              month: newsletter.month - 1,
-              year: newsletter.year,
-              description: 'Newsletter for ' + newsletter.month + '/' + newsletter.year,
-              path: attachmentName,
-              fileName: attachmentName,
-              authorId: '9fd28734079edc0f2bd6ff25b309f966'
-            };
-            cb(null, n);
-          });
+          var n = {
+            _id: newsletter._id,
+            month: newsletter.month - 1,
+            year: newsletter.year,
+            description: 'Newsletter for ' + newsletter.month + '/' + newsletter.year,
+            path: newName,
+            fileName: attachmentName,
+            authorId: '9fd28734079edc0f2bd6ff25b309f966'
+          };
+          cb(null, n);
         });
       },
       name: 'newsletter',
@@ -255,7 +296,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
     event: {
       map: function (event, cb) {
         if (event.activity !== 'ride') {
-          var d = new Date(event.date || event.startDate);
+          var d = new Date(event.date);
           if (isNaN(d.valueOf())) {
             return cb();
           }
@@ -276,7 +317,62 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
             authorId: event.creator.id
           });
         }
-        cb();
+
+        var attachmentPromises = {};
+        var attachmentProperties = [ 'routeGpx', 'routePdf', 'routeEst' ];
+        for (var i = 0; i < attachmentProperties.length; i += 1) {
+          var prop = attachmentProperties[i];
+          if (event[prop]) {
+            attachmentPromises[prop] = promisify(att, 'getAttachment', event._id, event[prop].replace(/\s/g, '_'));
+          }
+        }
+        Promise.hash(attachmentPromises)
+          .then(function (values) {
+          var d = new Date(event.date);
+            if (isNaN(d.valueOf())) {
+              return cb();
+            }
+            var r = {
+              _id: event._id,
+              title: event.title,
+              sponsor: event.sponsor,
+              attendance: event.attendance,
+              year: d.getFullYear(),
+              month: d.getMonth(),
+              date: d.getDate(),
+              meetAt: event.meetAt,
+              ksuAt: event.ksuAt,
+              startFrom: event.start,
+              description: event.description,
+              destination: event.destination,
+              destinationUrl: event.destinationUrl,
+              endsAt: event.endsAt,
+              authorId: event.creator.id,
+              cancelledReason: event.cancelled,
+              roadCaptain: event.roadCaptain,
+              routeFiles: {}
+            };
+            if (event['routeGpx']) {
+              r.routeFiles.garmin = {
+                fileName: event['routeGpx'],
+                path: values['routeGpx']
+              };
+            }
+            if (event['routePdf']) {
+              r.routeFiles.pdf = {
+                fileName: event['routePdf'],
+                path: values['routePdf']
+              };
+            }
+            if (event['routeEst']) {
+              r.routeFiles.est = {
+                fileName: event['routeEst'],
+                path: values['routeEst']
+              };
+            }
+            cb(null, r);
+          })
+          .catch(cb);
       },
       name: function (event) {
         if (event.activity === 'ride') {
