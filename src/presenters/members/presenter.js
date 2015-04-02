@@ -176,7 +176,7 @@ let presenter = {
       if (member.photoPath) {
         return ac.binary(member.photoPath, member.photoPath, ac.account.subdomain);
       }
-      ac.binary('images/unknown-user.jpg', 'images/unknown-user.jpg', '');
+      ac.redirect('/images/unknown-user.jpg');
     });
   },
 

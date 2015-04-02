@@ -5,7 +5,11 @@
     {{#if private}}
     <div class="is-hidden"><span>Hidden</span></div>
     {{/if}}
+    {{#if photoPath}}
     <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
+    {{else}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/images/unknown-user.jpg">
+    {{/if}}
     <div class="member-item-personal-information">
       {{#if (phone || mobile) && (privacy.showPhone || viewer.permissions.canManageMembers)}}
       <div>{{ mobile || phone }}</div>

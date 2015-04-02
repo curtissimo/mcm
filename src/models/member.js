@@ -36,8 +36,7 @@ let member = stork.deliver('member', function () {
   });
 
   this.object('emergencyContact', function () {
-    this.string('firstName');                                 // firstName
-    this.string('lastName');                                  // lastName
+    this.string('name');                                      // firstName
     this.string('mobile');                                    // cellPhoneNbr
     this.string('phone');                                     // phoneNbr
   });
@@ -88,8 +87,12 @@ let member = stork.deliver('member', function () {
   this.sort('lastName', 'firstName');
 
   this.view('byLogin', function (member, emitKey) {
-    emitKey(member.email);
-    emitKey(member.hogNumber);
+    if (member.email) {
+      emitKey(member.email);
+    }
+    if (member.hogNumber) {
+      emitKey(member.hogNumber);
+    }
   });
 });
 

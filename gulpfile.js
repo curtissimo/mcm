@@ -123,6 +123,11 @@ gulp.task('files-dir', function (cb) {
   });
 });
 
+gulp.task('files', [ 'files-dir' ], function (cb) {
+  return gulp.src('./src/files/**/*.*')
+    .pipe(gulp.dest('./build/files'));
+});
+
 gulp.task('fonts', function () {
   return gulp.src('./src/fonts/*')
     .pipe(gulp.dest('./build/public/fonts'));
@@ -257,7 +262,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch([ './src/presenters/*/scripts/*.js', './src/scripts/*.js' ], [ 'es6-client', 'reload' ]);
 });
 
-gulp.task('build', [ 'sass', 'fonts', 'images', 'es6-server', 'es6-client', 'es3', 'views', 'files-dir' ]);
+gulp.task('build', [ 'sass', 'fonts', 'images', 'es6-server', 'es6-client', 'es3', 'views', 'files-dir', 'files' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);

@@ -208,6 +208,7 @@ assets.initialize()
       routes: [
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id/nophoto', method: 'nophoto' },
         { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' }
@@ -267,6 +268,14 @@ assets.initialize()
       routes: [
         { verb: 'get' }
       ]
+    });
+
+    app.get('/images/:name', (req, res, next) => {
+      let name = req.params.name;
+      res.type(name.substring(name.lastIndexOf('.')));
+      res.set('X-Accel-Redirect', '/mcm-files/' + name);
+      res.set('Content-Disposition', 'inline');
+      next();
     });
 
     app.get('/', (req, res) => {
