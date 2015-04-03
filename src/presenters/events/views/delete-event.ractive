@@ -85,6 +85,6 @@
     </dl>
   </div>
 </section>
-<section class="fine-print">{{ legalese }}</section>
 {{/days}}
 {{/event}}
+<section class="fine-print">{{ legalese }}</section>

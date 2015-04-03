@@ -250,7 +250,7 @@ assets.initialize()
         { verb: 'get', action: ':year/:month/:day', method: 'items' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' },
-        { verb: 'put' },
+        { verb: 'put', action: ':id', method: 'update' },
         { verb: 'delete', action: ':id' }
       ]
     });

@@ -650,3 +650,8 @@
     display: block;
   }
 }
+
+.event-item-day-header {
+  @include grid-column;
+  width: 100%;
+}
