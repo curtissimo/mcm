@@ -244,11 +244,13 @@ assets.initialize()
         { verb: 'get', action: 'create/:type', method: 'create' },
         { verb: 'get', action: ':id/edit-form', method: 'edit' },
         { verb: 'get', action: ':id/delete-form', method: 'deleteForm' },
+        { verb: 'get', action: ':id/cancel-form', method: 'cancelForm' },
         { verb: 'get', action: ':id/garmin', method: 'garmin' },
         { verb: 'get', action: ':id/pdf', method: 'pdf' },
         { verb: 'get', action: ':id/est', method: 'est' },
         { verb: 'get', action: ':year/:month/:day', method: 'items' },
         { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'patch', action: ':id', method: 'patch' },
         { verb: 'post' },
         { verb: 'put', action: ':id', method: 'update' },
         { verb: 'delete', action: ':id' }

@@ -281,6 +281,7 @@ let presenter = {
             }
             day._id = e._id;
             day.activity = e.activity;
+            day.cancelledReason = e.cancelledReason;
             let d = moment([ day.year, day.month, day.date ]).format('MM/DD/YYYY');
             if (day.year >= today.getFullYear() && ((day.month > today.getMonth() || (day.month <= today.getMonth() && day.date >= today.getDate())))) {
               if (!eventsByDay[d]) {
@@ -315,18 +316,11 @@ let presenter = {
     });
   },
 
-  items(ac) {
-    ac.render({
-      data: {
-        title: '«event name»'
-      },
-      presenters: { menu: 'menu' },
-      layout: 'chapter',
-      view: 'list'
-    });
-  },
-
   deleteForm(ac) {
+    if (!ac.member.permissions.canManageEvents) {
+      ac.redirect('/chapter/events');
+    }
+
     couchPromise(event.from(ac.chapterdb), 'get', ac.params.id)
       .then(value => {
         if (!value) {
@@ -335,19 +329,11 @@ let presenter = {
         if (value.activity === undefined) {
           value.activity = 'ride';
         }
-        let actions = {};
-        if (ac.member.permissions.canManageEvents) {
-          actions['Delete ' + value.activity] = `/chapter/events/${value._id}/delete-form`;
-          actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
-        }
         for (let day of value.days) {
           day.formattedDate = moment(new Date(day.year, day.month, day.date)).format('MM/DD/YYYY');
         }
         ac.render({
           data: {
-            actions: actions,
-            nav: { '<i class="fa fa-chevron-left"></i> Back to events': '/chapter/events' },
-            shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/events' },
             title: value.title,
             event: value,
             months: monthNames,
@@ -356,6 +342,37 @@ let presenter = {
           presenters: { menu: 'menu' },
           layout: 'chapter',
           view: 'delete-event'
+        });
+      })
+      .catch(e => ac.error(e));
+  },
+
+  cancelForm(ac) {
+    if (!ac.member.permissions.canManageEvents) {
+      ac.redirect('/chapter/events');
+    }
+
+    couchPromise(event.from(ac.chapterdb), 'get', ac.params.id)
+      .then(value => {
+        if (!value) {
+          return ac.notFound();
+        }
+        if (value.activity === undefined) {
+          value.activity = 'ride';
+        }
+        for (let day of value.days) {
+          day.formattedDate = moment(new Date(day.year, day.month, day.date)).format('MM/DD/YYYY');
+        }
+        ac.render({
+          data: {
+            title: value.title,
+            event: value,
+            months: monthNames,
+            legalese: ac.settings.rideLegalese
+          },
+          presenters: { menu: 'menu' },
+          layout: 'chapter',
+          view: 'cancel-form'
         });
       })
       .catch(e => ac.error(e));
@@ -373,7 +390,9 @@ let presenter = {
         let actions = {};
         if (ac.member.permissions.canManageEvents) {
           actions['Delete ' + value.activity] = `/chapter/events/${value._id}/delete-form`;
-          actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
+          if (!value.cancelledReason) {
+            actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
+          }
           actions['Edit ' + value.activity] = `/chapter/events/${value._id}/edit-form`;
         }
         for (let day of value.days) {
@@ -462,6 +481,25 @@ let presenter = {
       },
       presenters: { menu: 'menu' },
       layout: 'chapter'
+    });
+  },
+
+  patch(ac) {
+    if (!ac.member.permissions.canManageEvents) {
+      ac.redirect('/chapter/events');
+    }
+
+    event.from(ac.chapterdb).get(ac.params.id, (e, r) => {
+      if (e) {
+        return ac.error(e);
+      }
+      r.cancelledReason = ac.body.cancelledReason;
+      r.to(ac.chapterdb).save(e => {
+        if (e) {
+          return ac.error(e);
+        }
+        ac.redirect('/chapter/events/' + ac.params.id);
+      })
     });
   },
 

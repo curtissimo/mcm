@@ -80,6 +80,9 @@
                 {{/if}}
               </div>
               <div class="event-entry-title">
+                {{#if cancelledReason}}
+                <span class="is-cancelled">Cancelled</span>
+                {{/if}}
                 <a href="/chapter/events/{{ _id }}">{{ title }}</a>
               </div>
               {{#if roadCaptain }}
