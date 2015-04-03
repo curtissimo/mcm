@@ -4,6 +4,17 @@ let ride = stork.deliver('ride', function () {
   this.string('title', { required: true });         // title
   this.string('sponsor', { required: true });       // sponsor
   this.string('attendance', { required: true });    // attendance
+  this.string('authorId');                          // creator.id
+  this.array('days', { required: true, minItems: 1 }); // Put everything below in this
+  this.timestamps();
+
+  this.view("byDate", (event, emitKey) => {
+    for (var i = 0; i < event.days.length; i += 1) {
+      emitKey([ event.days[i].year, event.days[i].month, event.days[i].date ]);
+    }
+  });
+
+/*
   this.number('year', { required: true });          // from «date» or based on computation
   this.number('month', { required: true });         // from «date» or based on computation
   this.number('date', { required: true });          // from «date» or based on computation
@@ -15,7 +26,6 @@ let ride = stork.deliver('ride', function () {
   this.string('destination');                       // destination
   this.string('destinationUrl');                    // destinationUrl
   this.string('endsAt');                            // endsAt
-  this.string('authorId');                          // creator.id
   this.string('cancelledReason');                   // cancelled
   this.object('routeFiles', function () {
     this.object('garmin', function () {
@@ -31,11 +41,7 @@ let ride = stork.deliver('ride', function () {
       this.string('path');
     });
   });
-  this.timestamps();
-
-  this.view("byDate", (event, emitKey) => {
-    emitKey([ event.year, event.month, event.date ]);
-  });
+*/
 });
 
 export default ride;

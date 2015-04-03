@@ -1,6 +1,6 @@
 <h1 class="banner">Create a Meeting, Meal, or Movie</h1>
 <section>
-  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/members">
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/events">
     <div class="form-panel">
       <fieldset>
         <legend>General Information</legend>
@@ -13,11 +13,11 @@
           </select>
         </div>
         <div class="pure-control-group">
-          <label for="name">Name</label>
-          <input type="text" value="{{ name }}" name="name" id="name" required>
-          {{#if errors.name}}
+          <label for="title">Name</label>
+          <input type="text" value="{{ event.title }}" name="title" id="title" required>
+          {{#if errors.title}}
           <div class="form-error">
-            <p>The name {{ errors.name }}</p>
+            <p>The title {{ errors.title }}</p>
           </div>
           {{/if}}
         </div>
@@ -30,8 +30,8 @@
           </select>
         </div>
         <div class="pure-control-group">
-          <label for="hogNumber">Attendance</label>
-          <select name="sponsor" id="sponsor">
+          <label for="attendance">Attendance</label>
+          <select name="attendance" id="attendance">
             <option value="closed">Member + 1 guest</option>
             <option value="member">Only members</option>
             <option value="open">Anyone</option>
@@ -43,7 +43,7 @@
       <fieldset>
         <legend>Description</legend>
         <div class="pure-control-group">
-          <textarea class="pure-input-1 long-text" name="description" id="description" required></textarea>
+          <textarea class="pure-input-1 long-text" name="days[][description]" id="description" required></textarea>
         </div>
       </fieldset>
     </div>
@@ -60,7 +60,7 @@
         </div>
         <div id="occurs-once" class="pure-control-group when-specifier {{#if schedule === 'once'}}is-shown{{/if}}">
           <label for="date">On</label>
-          <input type="date" placeholder="MM/DD/YYYY" id="date" name="date">
+          <input type="date" placeholder="MM/DD/YYYY" id="date" name="days[][date]">
         </div>
         <div id="occurs-weekly" class="when-specifier {{#if schedule === 'weekly'}}is-shown{{/if}}">
           <div class="pure-control-group">
@@ -115,8 +115,8 @@
       <fieldset>
         <legend>Where and Times</legend>
         <div class="pure-control-group">
-          <label for="destination">Location</label>
-          <input type="text" placeholder="where's it at?" value="{{ location }}" name="location" id="location" required>
+          <label for="location">Location</label>
+          <input type="text" placeholder="where's it at?" value="{{ location }}" name="days[][location]" id="location" required>
           {{#if errors.location}}
           <div class="form-error">
             <p>The location {{ errors.location }}</p>
@@ -125,11 +125,11 @@
         </div>
         <div class="pure-control-group">
           <label for="locationUrl">Web site</label>
-          <input type="text" placeholder="does it have a URL?" value="{{ locationUrl }}" name="locationUrl" id="locationUrl">
+          <input type="text" placeholder="does it have a URL?" value="{{ locationUrl }}" name="days[][locationUrl]" id="locationUrl">
         </div>
         <div class="pure-control-group">
           <label for="meetAt">Starts at</label>
-          <input type="text" placeholder="a time like 9am" value="{{ meetAt }}" name="meetAt" id="meetAt" required>
+          <input type="text" placeholder="a time like 9am" value="{{ meetAt }}" name="days[][meetAt]" id="meetAt" required>
           {{#if errors.meetAt}}
           <div class="form-error">
             <p>The start at time {{ errors.meetAt }}</p>
@@ -138,7 +138,7 @@
         </div>
         <div class="pure-control-group">
           <label for="endsAt">Ends around</label>
-          <input type="text" placeholder="a time like noon" value="{{ endsAt }}" name="endsAt" id="endsAt" required>
+          <input type="text" placeholder="a time like noon" value="{{ endsAt }}" name="days[][endsAt]" id="endsAt" required>
           {{#if errors.endsAt}}
           <div class="form-error">
             <p>The end time {{ errors.endsAt }}</p>

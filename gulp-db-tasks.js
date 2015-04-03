@@ -306,15 +306,17 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
             activity: event.activity,
             sponsor: event.sponsor,
             attendance: event.attendance,
-            year: d.getFullYear(),
-            month: d.getMonth(),
-            date: d.getDate(),
-            meetAt: event.meetAt,
-            description: event.description,
-            location: event.destination,
-            locationUrl: event.destinationUrl,
-            endsAt: event.endsAt,
-            authorId: event.creator.id
+            authorId: event.creator.id,
+            days: [{
+              year: d.getFullYear(),
+              month: d.getMonth(),
+              date: d.getDate(),
+              meetAt: event.meetAt,
+              description: event.description,
+              location: event.destination,
+              locationUrl: event.destinationUrl,
+              endsAt: event.endsAt
+            }]
           });
         }
 
@@ -328,7 +330,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
         }
         Promise.hash(attachmentPromises)
           .then(function (values) {
-          var d = new Date(event.date);
+            var d = new Date(event.date);
             if (isNaN(d.valueOf())) {
               return cb();
             }
@@ -337,35 +339,37 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
               title: event.title,
               sponsor: event.sponsor,
               attendance: event.attendance,
-              year: d.getFullYear(),
-              month: d.getMonth(),
-              date: d.getDate(),
-              meetAt: event.meetAt,
-              ksuAt: event.ksuAt,
-              startFrom: event.start,
-              description: event.description,
-              destination: event.destination,
-              destinationUrl: event.destinationUrl,
-              endsAt: event.endsAt,
               authorId: event.creator.id,
-              cancelledReason: event.cancelled,
-              roadCaptain: event.roadCaptain,
-              routeFiles: {}
+              days: [{
+                year: d.getFullYear(),
+                month: d.getMonth(),
+                date: d.getDate(),
+                meetAt: event.meetAt,
+                ksuAt: event.ksuAt,
+                startFrom: event.start,
+                description: event.description,
+                destination: event.destination,
+                destinationUrl: event.destinationUrl,
+                endsAt: event.endsAt,
+                cancelledReason: event.cancelled,
+                roadCaptain: event.roadCaptain,
+                routeFiles: {}
+              }]
             };
             if (event['routeGpx']) {
-              r.routeFiles.garmin = {
+              r.days[0].routeFiles.garmin = {
                 fileName: event['routeGpx'],
                 path: values['routeGpx']
               };
             }
             if (event['routePdf']) {
-              r.routeFiles.pdf = {
+              r.days[0].routeFiles.pdf = {
                 fileName: event['routePdf'],
                 path: values['routePdf']
               };
             }
             if (event['routeEst']) {
-              r.routeFiles.est = {
+              r.days[0].routeFiles.est = {
                 fileName: event['routeEst'],
                 path: values['routeEst']
               };
