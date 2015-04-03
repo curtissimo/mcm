@@ -84,6 +84,22 @@
     margin-top: 0;
   }
 
+  .ride-files-group {
+    .pure-control-group {
+      label {
+        width: 5em;
+
+        @include min-lg-screen {
+          width: 6em;
+        }
+      }
+
+      input[type="file"] {
+        width: 15em;
+      }
+    }
+  }
+
   .pure-control-group {
     label {
       width: 7.6em;

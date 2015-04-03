@@ -30,10 +30,10 @@
           </select>
         </div>
         <div class="pure-control-group">
-          <label for="attendance">Attendance</label>
-          <select name="attendance" id="attendance">
-            <option value="closed">Members + 1 guest</option>
-            <option value="member">Only Chapter members</option>
+          <label for="hogNumber">Attendance</label>
+          <select name="sponsor" id="sponsor">
+            <option value="closed">Member + 1 guest</option>
+            <option value="member">Only members</option>
             <option value="open">Anyone</option>
           </select>
         </div>
@@ -116,7 +116,7 @@
         <legend>Where and Times</legend>
         <div class="pure-control-group">
           <label for="destination">Location</label>
-          <input type="text" placeholder="where you going?" value="{{ location }}" name="location" id="location" required>
+          <input type="text" placeholder="where's it at?" value="{{ location }}" name="location" id="location" required>
           {{#if errors.location}}
           <div class="form-error">
             <p>The location {{ errors.location }}</p>

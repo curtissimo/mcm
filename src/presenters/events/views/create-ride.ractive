@@ -30,10 +30,6 @@
             <option value="open">Anyone</option>
           </select>
         </div>
-        <div class="pure-control-group">
-          <label for="reminderDays">Reminders on</label>
-          <input type="text" value="5, 3, 1" name="reminderDays" id="reminderDays" required>
-        </div>
       </fieldset>
     </div>
     <div class="form-panel">
@@ -103,7 +99,7 @@
         <textarea class="pure-input-1 long-text" name="day[][description]" id="description{{ '{{ i }}' }}" required></textarea>
       </div>
     </fieldset>
-    <fieldset>
+    <fieldset class="ride-files-group">
       <legend>Files</legend>
       <div class="pure-control-group">
         <label for="routeGpx{{ '{{ i }}' }}">Garmin</label>
