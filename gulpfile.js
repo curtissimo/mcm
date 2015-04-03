@@ -101,12 +101,9 @@ gulp.task('es6-client', function () {
 });
 
 gulp.task('es6-server', function () {
-  return sourceMapsInDevelopment({
-    source: [ './src/**/*.js', '!./src/presenters/*/scripts/*.js', '!./src/scripts/*.js' ],
-    betweenMaps: function (stream) {
-      return stream.pipe(babel());
-    }
-  });
+  return gulp.src([ './src/**/*.js', '!./src/presenters/*/scripts/*.js', '!./src/scripts/*.js' ])
+    .pipe(babel())
+    .pipe(gulp.dest('./build'));
 });
 
 gulp.task('files-dir', function (cb) {
