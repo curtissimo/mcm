@@ -25,8 +25,8 @@
         <div class="pure-control-group">
           <label for="hogNumber">Attendance</label>
           <select name="sponsor" id="sponsor">
-            <option value="closed">Members + 1 guest</option>
-            <option value="member">Only Chapter members</option>
+            <option value="closed">Member + 1 guest</option>
+            <option value="member">Only members</option>
             <option value="open">Anyone</option>
           </select>
         </div>
