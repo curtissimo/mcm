@@ -130,6 +130,12 @@ app.use('/chapter/public-documents', multer({
   }
 }));
 
+app.use('/chapter/events', multer({
+  limits: {
+    putSingleFilesInArray: true
+  }
+}));
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {

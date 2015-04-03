@@ -1,6 +1,10 @@
 import moment from 'moment';
 import event from '../../models/event';
 import ride from '../../models/ride';
+import fs from 'fs';
+
+let inProduction = process.env.NODE_ENV === 'production';
+let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
 
 let monthNames = [
   'January',
@@ -245,10 +249,18 @@ let presenter = {
         if (error) {
           return ac.error(error);
         }
+        let eventVisited = {};
         let eventsByDay = {};
         for (let e of events) {
-          for (let day of e.days) {
+          if (eventVisited[e._id]) {
+            continue;
+          }
+          eventVisited[e._id] = true;
+          for (let [ index, day ] of e.days.entries()) {
             day.title = e.title || 'no title';
+            if (e.days.length > 1) {
+              day.title += ` (Day ${index + 1})`;
+            }
             day._id = e._id;
             day.activity = e.activity;
             let d = moment([ day.year, day.month, day.date ]).format('MM/DD/YYYY');
@@ -261,9 +273,9 @@ let presenter = {
             for (let i = 0; i < months.length; i += 1) {
               let month = months[i];
               for (let j = 0; j < month.days.length; j += 1) {
-                let day = month.days[j];
-                if (day.formatted === d) {
-                  day.event = true;
+                let zday = month.days[j];
+                if (zday.formatted === d) {
+                  zday.event = true;
                 }
               }
             }
@@ -384,12 +396,62 @@ let presenter = {
       let promises = [];
       let protos = eventFactory[ac.body.schedule](ac.body);
       for (let proto of protos) {
+        proto.authorId = ac.member._id;
         let e = event.new(proto);
         let promise = promisify(e.to(ac.chapterdb), 'save');
         promises.push(promise);
       }
       Promise.all(promises)
         .then(() => ac.redirect('/chapter/events'))
+        .catch(e => ac.error(e));
+    } else {
+      let promises = [];
+      for (let fileKey of Object.keys(ac.files)) {
+        let file = ac.files[fileKey];
+        let newPath = `${dest}/${ac.account.subdomain}/${file.name}`;
+        file.newPath = newPath;
+        let promise = promisify(fs, 'rename', file.path, newPath);
+        promises.push(promise);
+      }
+      Promise.all(promises)
+        .then(() => {
+          let proto = ac.body;
+          proto.authorId = ac.member._id;
+          let fileNames = [ 'garmin', 'pdf', 'est' ];
+          let startDate = moment(proto.date).toDate();
+          if (proto.schedule === 'range') {
+            startDate = moment(proto.startDate).toDate();
+          }
+          for (let [i, value] of proto.days.entries()) {
+            value.year = startDate.getFullYear();
+            value.month = startDate.getMonth();
+            value.date = startDate.getDate();
+            for (let fileName of fileNames) {
+              let key = `days[${i}][${fileName}]`;
+              if (ac.files[key]) {
+                if (!value.routeFiles) {
+                  value.routeFiles = {};
+                }
+                value.routeFiles[fileName] = {
+                  fileName: ac.files[key].originalname,
+                  path: ac.files[key].newPath
+                };
+              }
+            }
+            startDate.setDate(startDate.getDate() + 1);
+          }
+          delete proto.startDate;
+          delete proto.date;
+          delete proto.numberOfDays;
+          delete proto.schedule;
+
+          ride.new(proto).to(ac.chapterdb).save(e => {
+            if (e) {
+              return ac.error(e);
+            }
+            ac.redirect('/chapter/events');
+          })
+        })
         .catch(e => ac.error(e));
     }
   },
