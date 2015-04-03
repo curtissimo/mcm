@@ -205,7 +205,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           private: member.privateName,
           birthDate: member.birthDate,
           isRoadCaptain: member.isRoadCaptain,
-          isLogMember: member.lohMember,
+          isLohMember: member.lohMember,
           title: member.title,
           officerEmail: member.officerEmail,
           motorcycle: {
