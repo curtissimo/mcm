@@ -101,6 +101,13 @@ for (let i = 0; i < submitters.length; i += 1) {
   submitter.addEventListener('click', e => {
     let target = e.target || e.srcElement;
 
+    if (target.form) {
+      var form = document.getElementById(target.form);
+      if (form.querySelector(':invalid')) {
+        return;
+      }
+    }
+
     setTimeout(function () {
       target.disabled = true;
     }, 10);
