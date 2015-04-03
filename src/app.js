@@ -248,7 +248,6 @@ assets.initialize()
         { verb: 'get', action: ':id/garmin', method: 'garmin' },
         { verb: 'get', action: ':id/pdf', method: 'pdf' },
         { verb: 'get', action: ':id/est', method: 'est' },
-        { verb: 'get', action: ':year/:month/:day', method: 'items' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'patch', action: ':id', method: 'patch' },
         { verb: 'post' },
