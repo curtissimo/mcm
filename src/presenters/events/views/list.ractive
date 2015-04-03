@@ -87,9 +87,17 @@
                 Led by {{ roadCaptain }}
               </div>
               {{/if}}
-              {{#if ksuAt }}
+              {{#if ksuAt || meetAt}}
               <div class="event-entry-ksu">
+                {{#if meetAt}}
+                Meet at {{ meetAt }}
+                {{/if}}
+                {{#if ksuAt && meetAt}}
+                |
+                {{/if}}
+                {{#if ksuAt}}
                 Kick-stands up at {{ ksuAt }}
+                {{/if}}
               </div>
               {{/if}}
               {{#if location }}

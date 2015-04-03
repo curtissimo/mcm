@@ -592,3 +592,61 @@
 .event-entry-ksu {
   margin-left: 50px;
 }
+
+.event-item {
+  @include grid;
+}
+
+.event-item-details {
+  @include grid-column;
+
+  @include min-md-screen {
+    width: 50%;
+    *width: 49%;
+  }
+
+  dl {
+    @include grid;
+    list-style-type: none;
+  }
+
+ dt {
+    @include grid-column;
+    margin: 0;
+    padding: 0;
+    width: 33%;
+  }
+
+  dd {
+    @include grid-column;
+    margin: 0;
+    padding: 0;
+    width: 67%;
+    *width: 66%;
+  }
+}
+
+.event-item-description {
+  @include grid-column;
+
+  @include min-md-screen {
+    width: 50%;
+    *width: 49%;
+  }
+
+  dl {
+    list-style-type: none;
+  }
+
+  dt {
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+
+  dd {
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+}

@@ -243,6 +243,7 @@ assets.initialize()
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create/:type', method: 'create' },
         { verb: 'get', action: ':id/edit-form', method: 'edit' },
+        { verb: 'get', action: ':id/delete-form', method: 'deleteForm' },
         { verb: 'get', action: ':id/garmin', method: 'garmin' },
         { verb: 'get', action: ':id/pdf', method: 'pdf' },
         { verb: 'get', action: ':id/est', method: 'est' },

@@ -3,11 +3,21 @@
   A {{ activity }} sponsored by the {{ sponsor }}
 </div>
 <h1 class="banner under-subbanner">{{ title }}</h1>
-{{#if cancelledReason}}
 <section>
-  <p class="is-error">{{ cancelledReason }}</p>
+  <div class="is-error">
+    This action will delete this {{ activity }} and all associated files. You
+    cannot undo this deletion. Are you sure you want to continue?
+    <form class="pure-form pure-form-stacked" method="post" action="/chapter/events/{{ _id }}">
+      <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+      <div class="form-controls">
+        <div class="pure-controls">
+          <a href="/chapter/events/{{ _id }}" class="pure-button">Cancel</a>
+          <button type="submit" class="pure-button pure-button-primary">Delete this {{ activity }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </section>
-{{/if}}
 {{#days}}
 <section class="event-item">
   <div class="event-item-description">
@@ -40,10 +50,6 @@
       <dd>{{ formattedDate }}</dd>
       <dt>Starts at</dt>
       <dd>{{ meetAt }}</dd>
-      {{#if ksuAt}}
-      <dt>KSU at</dt>
-      <dd>{{ ksuAt }}</dd>
-      {{/if}}
       <dt>Ends at</dt>
       <dd>{{ endsAt }}</dd>
       <dt>Open to</dt>

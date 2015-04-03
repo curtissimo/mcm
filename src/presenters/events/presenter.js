@@ -86,6 +86,24 @@ function promisify(scope, method) {
   })
 }
 
+function couchPromise(scope, method) {
+  let args = Array.prototype.slice.apply(arguments);
+  args.splice(1, 1);
+  let fn = scope[method].bind.apply(scope[method], args);
+  return new Promise(function (good, bad) {
+    fn(function (err, value) {
+      if (err && err.status_code !== 404) {
+        return bad(err);
+      }
+      try {
+        good(value);
+      } catch (e) {
+        bad(e);
+      }
+    });
+  })
+}
+
 let eventFactory = {
   once: function (definition) {
     let date = moment(definition.days[0].date).toDate();
@@ -308,14 +326,74 @@ let presenter = {
     });
   },
 
+  deleteForm(ac) {
+    couchPromise(event.from(ac.chapterdb), 'get', ac.params.id)
+      .then(value => {
+        if (!value) {
+          return ac.notFound();
+        }
+        if (value.activity === undefined) {
+          value.activity = 'ride';
+        }
+        let actions = {};
+        if (ac.member.permissions.canManageEvents) {
+          actions['Delete ' + value.activity] = `/chapter/events/${value._id}/delete-form`;
+          actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
+        }
+        for (let day of value.days) {
+          day.formattedDate = moment(new Date(day.year, day.month, day.date)).format('MM/DD/YYYY');
+        }
+        ac.render({
+          data: {
+            actions: actions,
+            nav: { '<i class="fa fa-chevron-left"></i> Back to events': '/chapter/events' },
+            shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/events' },
+            title: value.title,
+            event: value,
+            months: monthNames,
+            legalese: ac.settings.rideLegalese
+          },
+          presenters: { menu: 'menu' },
+          layout: 'chapter',
+          view: 'delete-event'
+        });
+      })
+      .catch(e => ac.error(e));
+  },
+
   item(ac) {
-    ac.render({
-      data: {
-        title: '«event name»'
-      },
-      presenters: { menu: 'menu' },
-      layout: 'chapter'
-    });
+    couchPromise(event.from(ac.chapterdb), 'get', ac.params.id)
+      .then(value => {
+        if (!value) {
+          return ac.notFound();
+        }
+        if (value.activity === undefined) {
+          value.activity = 'ride';
+        }
+        let actions = {};
+        if (ac.member.permissions.canManageEvents) {
+          actions['Delete ' + value.activity] = `/chapter/events/${value._id}/delete-form`;
+          actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
+          actions['Edit ' + value.activity] = `/chapter/events/${value._id}/edit-form`;
+        }
+        for (let day of value.days) {
+          day.formattedDate = moment(new Date(day.year, day.month, day.date)).format('MM/DD/YYYY');
+        }
+        ac.render({
+          data: {
+            actions: actions,
+            nav: { '<i class="fa fa-chevron-left"></i> Back to events': '/chapter/events' },
+            shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/events' },
+            title: value.title,
+            event: value,
+            months: monthNames,
+            legalese: ac.settings.rideLegalese
+          },
+          presenters: { menu: 'menu' },
+          layout: 'chapter'
+        });
+      })
+      .catch(e => ac.error(e));
   },
 
   est(ac) {
@@ -469,7 +547,12 @@ let presenter = {
       ac.redirect('/chapter/events');
     }
 
-    ac.error('not implemented');
+    event.from(ac.chapterdb).get(ac.params.id, (e, d) => {
+      if (e) {
+        return ac.redirect('/chapter/events');
+      }
+      d.to(ac.chapterdb).destroy(() => ac.redirect('/chapter/events'));
+    })
   }
 };
 
