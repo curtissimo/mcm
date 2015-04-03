@@ -45,15 +45,6 @@ let presenter = {
             discussionMap.set(d.category, []);
           }
           discussionMap.get(d.category).push(d);
-          d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
-          d.author = membersMap.get(d.authorId);
-          if (d.comments.length > 0) {
-            for (let comment of d.comments) {
-              comment.author = membersMap.get(comment.authorId);
-              comment.createdOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
-            }
-            d.lastComment = d.comments[d.comments.length - 1];
-          }
         }
         for (let categorized of discussionMap.values()) {
           categorized.sort((a, b) => {
@@ -70,6 +61,17 @@ let presenter = {
           });
         }
         let categories = Array.from(discussionMap.keys()).sort();
+        for (let d of discussions) {
+          d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
+          d.author = membersMap.get(d.authorId);
+          if (d.comments.length > 0) {
+            for (let comment of d.comments) {
+              comment.author = membersMap.get(comment.authorId);
+              comment.createdOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
+            }
+            d.lastComment = d.comments[d.comments.length - 1];
+          }
+        }
         ac.render({
           data: {
             title: 'Discussions',
