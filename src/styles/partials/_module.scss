@@ -177,6 +177,7 @@
 
 .form-panel {
   @include grid-column;
+  width: 100%;
 
   @include min-md-screen {
     width: 50%;
