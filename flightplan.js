@@ -16,7 +16,7 @@ plan.local(function (local) {
   local.log('Copy files to remote hosts');
   var filesToCopy = local.exec('find ./dist -type f', { silent: true });
   local.transfer(filesToCopy, '/tmp/' + tmpDir);
-  local.exec('gulp clean');
+  local.exec('rm -rf ./dist');
 });
 
 plan.remote(function (remote) {
@@ -32,8 +32,10 @@ plan.remote(function (remote) {
   remote.log('Install dependencies');
   remote.sudo('npm --production --prefix ' + to + ' install ' + to, { user: 'curtis' });
 
-  remote.log('Reload application');
+  remote.log('Link the file to the serve directory');
   remote.sudo('ln -snf ' + to + ' /var/www/mcm/mcm.live', { user: 'curtis' });
+
+  remote.log('Reload application');
   remote.exec('mkdir -p /var/www/mcm/mcm.live/tmp');
   remote.exec('touch /var/www/mcm/mcm.live/tmp/restart.txt');
 });
