@@ -62,6 +62,7 @@ let presenter = {
         }
         let categories = Array.from(discussionMap.keys()).sort();
         for (let d of discussions) {
+          d.title = d.title || '«no title»';
           d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
           d.author = membersMap.get(d.authorId);
           if (d.comments.length > 0) {
