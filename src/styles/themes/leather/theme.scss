@@ -366,7 +366,13 @@ fieldset {
 }
 
 .event-entry-text {
-  border-top: 2px solid white;
+  border-top: 2px solid #EEE;
+}
+
+.stripe-1 {
+  .event-entry-text {
+    border-top-color: white;
+  }
 }
 
 .event-entry-files-list {
