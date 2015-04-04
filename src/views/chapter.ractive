@@ -65,16 +65,6 @@
       </div>
       {{{ content }}}
     </div>
-    <div id="debug">
-      <div class="is-xs-screen">tiny</div>
-      <div class="is-sm-screen">small</div>
-      <div class="is-md-screen">medium</div>
-      <div class="is-lg-screen">large</div>
-      <div class="is-xl-screen">extra large</div>
-      {{#member}}
-      <div>{{ member.email }}</div>
-      {{/member}}
-    </div>
     <div id="overlay"></div>
     {{#scripts}}
     <script src="{{ . }}"></script>

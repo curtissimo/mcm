@@ -2,7 +2,7 @@ var plan = require('flightplan');
 var tmpDir = 'mcm-' + new Date().getTime();
 
 plan.target('staging', {
-  host: 'web-server',
+  host: '192.168.1.81',
   username: 'curtis',
   agent: process.env.SSH_AUTH_SOCK
 });

@@ -196,7 +196,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           middleInitial: member.middleInitial,
           lastName: member.lastName,
           nickName: member.nickName,
-          email: member.email.toLowerCase(),
+          email: 'deadguy@mailinator.com', // member.email.toLowerCase(),
           password: member.password,
           hogNumber: member.hogNumber.toUpperCase(),
           mobile: member.cellPhoneNbr,
@@ -392,7 +392,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
   setUp()
     .then(function () {
       var account = lookup.account.new({
-        "domain" : "localhost",
+        "domain" : "republichog.org",
         "name" : "Republic H.O.G.",
         "subdomain" : "rhog",
         "type" : "account"

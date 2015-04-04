@@ -202,7 +202,7 @@ gulp.task('sass', function () {
       stream = stream.pipe(sass(options))
         .pipe(autoprefixer(AUTOPREFIXER_BROWSERS));
       if (forProduction) {
-        stream = stream.pipe(csso())
+        // stream = stream.pipe(csso())
       }
       return stream.pipe(hash());
     },
