@@ -1,4 +1,5 @@
 import moment from 'moment';
+import fs from 'fs';
 import member from '../../models/member';
 
 const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
@@ -6,6 +7,9 @@ const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const lower = 'abcdefghijklmnopqrstuvwxyz'
 const digit = '0123456789'
 const all = upper + lower + digit
+
+let inProduction = process.env.NODE_ENV === 'production';
+let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
 
 function rand (max) {
   return Math.floor(Math.random() * max);
@@ -40,6 +44,24 @@ function password (length) {
   result = result.concat(generate(length - 3, all));
 
   return shuffle(result).join('');;
+}
+
+function promisify(scope, method) {
+  let args = Array.prototype.slice.apply(arguments);
+  args.splice(1, 1);
+  let fn = scope[method].bind.apply(scope[method], args);
+  return new Promise(function (good, bad) {
+    fn(function (err, value) {
+      if (err) {
+        return bad(err);
+      }
+      try {
+        good(value);
+      } catch (e) {
+        bad(e);
+      }
+    });
+  })
 }
 
 let presenter = {
@@ -178,6 +200,28 @@ let presenter = {
       }
       ac.redirect('/images/unknown-user.jpg');
     });
+  },
+
+  patchPhoto(ac) {
+    let file = ac.files.photo;
+    let newPath = `${dest}/${ac.account.subdomain}/${file.name}`;
+    file.newPath = newPath;
+    promisify(fs, 'rename', file.path, newPath)
+      .then(() => {
+        member.from(ac.chapterdb).get(ac.params.id, (e, m) => {
+          if (e) {
+            return ac.error(e);
+          }
+          m.photoPath = newPath;
+          m.to(ac.chapterdb).save(saveError => {
+            if (saveError) {
+              return ac.error(saveError);
+            }
+            ac.redirect(ac.referer);
+          })
+        });
+      })
+      .catch(e => ac.error(e));
   },
 
   post(ac) {

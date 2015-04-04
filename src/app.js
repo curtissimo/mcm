@@ -31,18 +31,6 @@ app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 app.use(json());
 
-app.use(methodOverride((req, res) => {
-  if (req.body && req.body['X-HTTP-Method-Override']) {
-    var method = req.body['X-HTTP-Method-Override'];
-    delete req.body['X-HTTP-Method-Override'];
-    return method;
-  }
-  if (req.query['X-HTTP-Method-Override']) {
-    var method = req.query['X-HTTP-Method-Override'];
-    return method;
-  }
-}));
-
 app.use(function (req, res, next) {
   if (req.vars === undefined) {
     req.vars = {};
@@ -136,6 +124,24 @@ app.use('/chapter/events', multer({
   }
 }));
 
+app.use('/chapter/members', multer({
+  limits: {
+    putSingleFilesInArray: true
+  }
+}));
+
+app.use(methodOverride((req, res) => {
+  if (req.body && req.body['X-HTTP-Method-Override']) {
+    var method = req.body['X-HTTP-Method-Override'];
+    delete req.body['X-HTTP-Method-Override'];
+    return method;
+  }
+  if (req.query['X-HTTP-Method-Override']) {
+    var method = req.query['X-HTTP-Method-Override'];
+    return method;
+  }
+}));
+
 let assets = new Assets();
 assets.initialize()
   .then(() => {
@@ -150,6 +156,7 @@ assets.initialize()
       context.files = req.files;
       context.query = req.query;
       context.params = req.params;
+      context.referer = req.get('Referer');
       context.cookie = (name, value, options) => res.cookie(name, value, options);
       context.clearCookie = (name) => res.clearCookie(name);
     };
@@ -217,6 +224,7 @@ assets.initialize()
         { verb: 'get', action: ':id/nophoto', method: 'nophoto' },
         { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'patch', action: ':id/photo', method: 'patchPhoto' },
         { verb: 'post' }
       ]
     });

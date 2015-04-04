@@ -175,3 +175,16 @@ if (document.getElementById('day-details')) {
   });
 }
 
+let photoChanger = document.getElementById('photo-changer');
+if (photoChanger) {
+  photoChanger.addEventListener('click', () => {
+    photoChanger.style.display = 'none';
+    let saver = document.createElement('A');
+    saver.className = 'pure-button pure-button-primary';
+    saver.innerHTML = 'Save new photo';
+    saver.addEventListener('click', () => {
+      document.getElementById('photo-changer-form').submit();
+    });
+    photoChanger.parentNode.appendChild(saver);
+  });
+}

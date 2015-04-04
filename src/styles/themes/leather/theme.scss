@@ -1,10 +1,11 @@
 @import '../../partials/_media-queries';
 @import '../../partials/_colors.scss';
 
-a {
+a, .link-like {
   color: $primary-color;
   text-decoration: none;
   font-weight: bold;
+  cursor: pointer;
 }
 
 #comment-form {
