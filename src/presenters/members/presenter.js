@@ -212,6 +212,8 @@ let presenter = {
           if (e) {
             return ac.error(e);
           }
+          promisify(fs, 'unlink', m.photoPath)
+            .catch(e => console.error(e));
           m.photoPath = newPath;
           m.to(ac.chapterdb).save(saveError => {
             if (saveError) {
