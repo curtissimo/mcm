@@ -196,7 +196,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           middleInitial: member.middleInitial,
           lastName: member.lastName,
           nickName: member.nickName,
-          email: 'deadguy@mailinator.com', // member.email.toLowerCase(),
+          email: member.email.toLowerCase(),
           password: member.password,
           hogNumber: member.hogNumber.toUpperCase(),
           mobile: member.cellPhoneNbr,
