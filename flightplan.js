@@ -7,6 +7,12 @@ plan.target('staging', {
   agent: process.env.SSH_AUTH_SOCK
 });
 
+plan.target('uat', {
+  host: 'curweb2.curtissimo.com',
+  username: 'curtis',
+  agent: process.env.SSH_AUTH_SOCK
+});
+
 plan.local(function (local) {
   local.log('Run build');
   local.exec('NODE_ENV=production gulp dist');
