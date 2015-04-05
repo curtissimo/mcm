@@ -19,6 +19,9 @@ plan.local(function (local) {
   local.exec('cp ./package.json ./dist');
   local.exec('mkdir -p ./dist/{public,tmp,files}');
 
+  local.log('Removing files from distribution');
+  local.exec('rm -rf ./dist/files');
+
   local.log('Copy files to remote hosts');
   var filesToCopy = local.exec('find ./dist -type f', { silent: true });
   local.transfer(filesToCopy, '/tmp/' + tmpDir);
@@ -38,9 +41,21 @@ plan.remote(function (remote) {
   remote.log('Install dependencies');
   remote.sudo('npm --production --prefix ' + to + ' install ' + to, { user: 'curtis' });
 
+  remote.log('Move files into new directory');
+  remote.sudo('mv /var/www/mcm/mcm.live/files ' + to, { user: 'curtis', failsafe: true });
+
   remote.log('Link the file to the serve directory');
   remote.sudo('ln -snf ' + to + ' /var/www/mcm/mcm.live', { user: 'curtis' });
+});
 
+plan.local(function (local) {
+  local.log('Syncing files');
+  var cwd = process.cwd() + '/src';
+  var filesToCopy = local.exec('find files -type f', { silent: true, exec: { cwd: cwd } });
+  local.transfer(filesToCopy, '/var/www/mcm/mcm.live', { exec: { cwd: cwd } });
+});
+
+plan.remote(function (remote) {
   remote.log('Reload application');
   remote.exec('mkdir -p /var/www/mcm/mcm.live/tmp');
   remote.exec('touch /var/www/mcm/mcm.live/tmp/restart.txt');

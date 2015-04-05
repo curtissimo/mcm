@@ -231,10 +231,12 @@ assets.initialize()
       routes: [
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id/edit-form', method: 'edit' },
         { verb: 'get', action: ':id/nophoto', method: 'nophoto' },
         { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'patch', action: ':id/photo', method: 'patchPhoto' },
+        { verb: 'put', action: ':id' },
         { verb: 'post' }
       ]
     });

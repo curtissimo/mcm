@@ -107,7 +107,7 @@
     <div class="form-controls">
       <div class="pure-controls">
         <a href="/chapter/members" class="pure-button">Cancel</a>
-        <button type="submit" class="pure-button pure-button-primary">Create and email user</button>
+        <button type="submit" class="pure-button pure-button-primary">Create and email member</button>
       </div>
     </div>
   </form>

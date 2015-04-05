@@ -3,10 +3,78 @@ import fs from 'fs';
 import member from '../../models/member';
 
 const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
-const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const lower = 'abcdefghijklmnopqrstuvwxyz'
-const digit = '0123456789'
-const all = upper + lower + digit
+const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const lower = 'abcdefghijklmnopqrstuvwxyz';
+const digit = '0123456789';
+const all = upper + lower + digit;
+const membershipTypes = [
+  { name: 'Full', abbreviation: 'F' },
+  { name: 'Full Lifetime', abbreviation: 'L' },
+  { name: 'Associate', abbreviation: 'A' },
+  { name: 'Associate Lifetime', abbreviation: 'B' }
+];
+const usStates = [
+    { name: '', abbreviation: 'Not set' },
+    { name: 'ALABAMA', abbreviation: 'AL'},
+    { name: 'ALASKA', abbreviation: 'AK'},
+    { name: 'AMERICAN SAMOA', abbreviation: 'AS'},
+    { name: 'ARIZONA', abbreviation: 'AZ'},
+    { name: 'ARKANSAS', abbreviation: 'AR'},
+    { name: 'CALIFORNIA', abbreviation: 'CA'},
+    { name: 'COLORADO', abbreviation: 'CO'},
+    { name: 'CONNECTICUT', abbreviation: 'CT'},
+    { name: 'DELAWARE', abbreviation: 'DE'},
+    { name: 'DISTRICT OF COLUMBIA', abbreviation: 'DC'},
+    { name: 'FEDERATED STATES OF MICRONESIA', abbreviation: 'FM'},
+    { name: 'FLORIDA', abbreviation: 'FL'},
+    { name: 'GEORGIA', abbreviation: 'GA'},
+    { name: 'GUAM', abbreviation: 'GU'},
+    { name: 'HAWAII', abbreviation: 'HI'},
+    { name: 'IDAHO', abbreviation: 'ID'},
+    { name: 'ILLINOIS', abbreviation: 'IL'},
+    { name: 'INDIANA', abbreviation: 'IN'},
+    { name: 'IOWA', abbreviation: 'IA'},
+    { name: 'KANSAS', abbreviation: 'KS'},
+    { name: 'KENTUCKY', abbreviation: 'KY'},
+    { name: 'LOUISIANA', abbreviation: 'LA'},
+    { name: 'MAINE', abbreviation: 'ME'},
+    { name: 'MARSHALL ISLANDS', abbreviation: 'MH'},
+    { name: 'MARYLAND', abbreviation: 'MD'},
+    { name: 'MASSACHUSETTS', abbreviation: 'MA'},
+    { name: 'MICHIGAN', abbreviation: 'MI'},
+    { name: 'MINNESOTA', abbreviation: 'MN'},
+    { name: 'MISSISSIPPI', abbreviation: 'MS'},
+    { name: 'MISSOURI', abbreviation: 'MO'},
+    { name: 'MONTANA', abbreviation: 'MT'},
+    { name: 'NEBRASKA', abbreviation: 'NE'},
+    { name: 'NEVADA', abbreviation: 'NV'},
+    { name: 'NEW HAMPSHIRE', abbreviation: 'NH'},
+    { name: 'NEW JERSEY', abbreviation: 'NJ'},
+    { name: 'NEW MEXICO', abbreviation: 'NM'},
+    { name: 'NEW YORK', abbreviation: 'NY'},
+    { name: 'NORTH CAROLINA', abbreviation: 'NC'},
+    { name: 'NORTH DAKOTA', abbreviation: 'ND'},
+    { name: 'NORTHERN MARIANA ISLANDS', abbreviation: 'MP'},
+    { name: 'OHIO', abbreviation: 'OH'},
+    { name: 'OKLAHOMA', abbreviation: 'OK'},
+    { name: 'OREGON', abbreviation: 'OR'},
+    { name: 'PALAU', abbreviation: 'PW'},
+    { name: 'PENNSYLVANIA', abbreviation: 'PA'},
+    { name: 'PUERTO RICO', abbreviation: 'PR'},
+    { name: 'RHODE ISLAND', abbreviation: 'RI'},
+    { name: 'SOUTH CAROLINA', abbreviation: 'SC'},
+    { name: 'SOUTH DAKOTA', abbreviation: 'SD'},
+    { name: 'TENNESSEE', abbreviation: 'TN'},
+    { name: 'TEXAS', abbreviation: 'TX'},
+    { name: 'UTAH', abbreviation: 'UT'},
+    { name: 'VERMONT', abbreviation: 'VT'},
+    { name: 'VIRGIN ISLANDS', abbreviation: 'VI'},
+    { name: 'VIRGINIA', abbreviation: 'VA'},
+    { name: 'WASHINGTON', abbreviation: 'WA'},
+    { name: 'WEST VIRGINIA', abbreviation: 'WV'},
+    { name: 'WISCONSIN', abbreviation: 'WI'},
+    { name: 'WYOMING', abbreviation: 'WY' }
+];
 
 let inProduction = process.env.NODE_ENV === 'production';
 let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
@@ -62,6 +130,29 @@ function promisify(scope, method) {
       }
     });
   })
+}
+
+function formatDate(s) {
+  let d = moment(s);
+  if (d.isValid()) {
+    return d.format('MM/DD/YYYY');
+  }
+  return '';
+}
+
+function formatPhone(s) {
+  if (s.match(/\d{9}/)) {
+    return s.substring(0, 3) + '-' + s.substring(3, 6) + '-' + s.substring(6);
+  }
+  return s;
+}
+
+function toDate(s) {
+  let d = moment(s);
+  if (d.isValid()) {
+    return d.toDate();
+  }
+  return null;
 }
 
 let presenter = {
@@ -224,6 +315,73 @@ let presenter = {
         });
       })
       .catch(e => ac.error(e));
+  },
+
+  edit(ac) {
+    if (!ac.member.permissions.canManageMembers) {
+      return ac.redirect('/chapter/members');
+    }
+
+    member.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      entity.birthDate = formatDate(entity.birthDate);
+      entity.membership.national.startDate = formatDate(entity.membership.national.startDate);
+      entity.membership.national.endDate = formatDate(entity.membership.national.endDate);
+      entity.membership.local.startDate = formatDate(entity.membership.local.startDate);
+      entity.membership.local.endDate = formatDate(entity.membership.local.endDate);
+      if (entity.membership.national.type === 'L') {
+        entity.membership.national.endDate = 'never';
+      }
+
+      ac.render({
+        data: {
+          member: entity,
+          states: usStates,
+          membershipTypes: membershipTypes,
+          title: `Edit ${entity.firstName} ${entity.lastName}`
+        },
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
+    });
+  },
+
+  put(ac) {
+    if (!ac.member.permissions.canManageMembers) {
+      return ac.redirect('/chapter/members');
+    }
+
+    member.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      Object.assign(entity, ac.body);
+
+      entity.phone = formatPhone(entity.phone);
+      entity.mobile = formatPhone(entity.mobile);
+
+      entity.birthDate = toDate(entity.birthDate);
+      entity.membership.national.startDate = toDate(entity.membership.national.startDate);
+      entity.membership.local.startDate = toDate(entity.membership.local.startDate);
+      entity.membership.local.endDate = toDate(entity.membership.local.endDate);
+      if (entity.membership.national.type === 'L') {
+        entity.membership.national.endDate = new Date(2020, 1, 1);
+      } else {
+        entity.membership.national.endDate = toDate(entity.membership.national.endDate);
+      }
+
+      entity.to(ac.chapterdb).save(saveError => {
+        if (saveError) {
+          return ac.error(saveError);
+        }
+
+        ac.redirect(`/chapter/members/${ac.params.id}`);
+      })
+    });
   },
 
   post(ac) {

@@ -1,3 +1,4 @@
+require('babel-core/polyfill');
 var fs = require('fs');
 var nano = require('nano');
 var crypto = require('crypto');
@@ -194,6 +195,51 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           member.canManageRoadCaptains = true;
         } else if (member.title === 'Activities Officer') {
           member.canAdminCalendar = true;
+        }
+
+        member.phoneNbr = member.phoneNbr.trim().replace(/,/g, '');
+        member.city = member.city.trim().replace(/,/g, '');
+        member.state = member.state.trim().replace(/,/g, '').toUpperCase();
+        if (member.phoneNbr === '000-000-0000' || member.phoneNbr.length === 0) {
+          member.phoneNbr = null;
+        }
+        if (member.cellPhoneNbr === '') {
+          member.cellPhoneNbr = null;
+        }
+        if (member.city.replace(/ /g, '').toLowerCase() === 'sugarland') {
+          member.city = 'Sugar Land';
+        }
+        if (member.city.replace(/ /g, '').toLowerCase() === 'missouricity') {
+          member.city = 'Missouri City';
+        }
+        if (member.city.replace(/ /g, '').toLowerCase() === 'missoricity') {
+          member.city = 'Missouri City';
+        }
+        if (member.city.replace(/ /g, '').toLowerCase() === 'houston') {
+          member.city = 'Houston';
+        }
+        if (member.city.replace(/ /g, '').toLowerCase() === 'rosenburg') {
+          member.city = 'Rosenberg';
+        }
+        if (member.city === 'Felshear') {
+          member.city = 'Fulshear';
+        }
+        if (member.city === 'Suger Land') {
+          member.city = 'Sugar Land';
+        }
+        if (member.address1 && member.address1.toUpperCase().startsWith('X')) {
+          member.address1 = null;
+        }
+        if (member.city.toUpperCase().startsWith('X') || member.city.length === 0) {
+          member.city = null;
+        }
+        if (member.state.toUpperCase().startsWith('X') || member.state.length === 0) {
+          member.state = null;
+        }
+        if (member.zip === '00000' || member.zip.length === 0) {
+          member.zip = null;
+        } else {
+          member.zip = member.zip.toString();
         }
         return {
           _id: member._id,

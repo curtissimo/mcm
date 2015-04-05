@@ -12,7 +12,11 @@
     {{/if}}
     <div class="member-item-personal-information">
       {{#if (phone || mobile) && (privacy.showPhone || viewer.permissions.canManageMembers)}}
-      <div>{{ mobile || phone }}</div>
+      <div>
+        {{#mobile}}{{ mobile }}{{/mobile}}
+        {{#if mobile && phone}} | {{/if}}
+        {{#phone}}{{ phone }}{{/phone}}
+      </div>
       {{/if}}
       {{#if privacy.showEmail || viewer.permissions.canManageMembers}}
       <div><a href="mailto:{{ email }}">{{ email }}</a></div>
