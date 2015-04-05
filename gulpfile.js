@@ -152,11 +152,11 @@ gulp.task('new:presenter', function (cb) {
     if (e) {
       return cb(e)
     }
-    exec('echo "let presenter = {\n  get(ac) {\n    ac.render({});\n  }\n};\n\nexport default presenter;" > src/presenters/' + argv.name + '/presenter.js', function (e) {
+    exec('echo "let presenter = {\n  list(ac) {\n    ac.render({});\n  }\n};\n\nexport default presenter;" > src/presenters/' + argv.name + '/presenter.js', function (e) {
       if (e) {
         return cb(e);
       }
-      exec('touch src/presenters/' + argv.name + '/views/get.ractive', function (e) {
+      exec('touch src/presenters/' + argv.name + '/views/list.ractive', function (e) {
         cb(e);
       });
     });
