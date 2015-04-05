@@ -82,7 +82,6 @@ let presenter = {
     let promises = [];
     let from = member.from(ac.chapterdb);
     for (let id in ac.body.members) {
-      console.log(id);
       promises.push(couchPromise(from, 'get', id));
     }
     Promise.all(promises)
@@ -90,7 +89,6 @@ let presenter = {
         let morePromises = [];
         for (let entity of entities) {
           entity.isRoadCaptain = false;
-          console.log(entity.isRoadCaptain);
           morePromises.push(couchPromise(entity.to(ac.chapterdb), 'save'));
         }
         return Promise.all(morePromises);
