@@ -64,6 +64,10 @@
 }
 
 .pure-form-stacked {
+  p {
+    margin-top: 0;
+  }
+
   .pure-control-group {
     margin-bottom: 1em;
   }
@@ -668,4 +672,18 @@
 .event-item-day-header {
   @include grid-column;
   width: 100%;
+}
+
+.road-captains-maintenance {
+  @include grid;
+}
+
+.road-captains-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.road-captains-item {
+  margin-bottom: .5em;
 }

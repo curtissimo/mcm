@@ -70,6 +70,7 @@ let member = stork.deliver('member', function () {
     this.bool('canManagePrivateDocuments');                   // canAdminPrivateDocuments
     this.bool('canManageDiscussion');                         // canAdminDiscussions
     this.bool('canManageMembers');                            // canAdminMembers
+    this.bool('canManageRoadCaptains');                       // ?
   });
 
   this.object('emailPreferences', function () {
@@ -85,6 +86,24 @@ let member = stork.deliver('member', function () {
   });
 
   this.sort('lastName', 'firstName');
+
+  this.view('onlyOfficers', function (member, emitKey) {
+    if (member.title) {
+      emitKey([ member.lastName, member.firstName ]);
+    }
+  });
+
+  this.view('onlyRoadCaptains', function (member, emitKey) {
+    if (member.isRoadCaptain) {
+      emitKey([ member.lastName, member.firstName ]);
+    }
+  })
+
+  this.view('notRoadCaptains', function (member, emitKey) {
+    if (!member.isRoadCaptain) {
+      emitKey([ member.lastName, member.firstName ]);
+    }
+  })
 
   this.view('byLogin', function (member, emitKey) {
     if (member.email) {

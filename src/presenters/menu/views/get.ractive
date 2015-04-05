@@ -21,21 +21,26 @@
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/private-documents">Chapter documents</a>
     </li>
-    {{#if member.permissions.canManagePermissions}}
+    {{#if permissions.canManagePermissions || permissions.canManageSettings || permissions.canManagePublicDocuments || permissions.canManageRoadCaptains}}
     <li class="pure-menu-heading menu-section">Administration</li>
-      {{#if member.permissions.canManagePermissions}}
+      {{#if permissions.canManagePermissions}}
       <li class="pure-menu-item">
         <a class="pure-menu-link" href="/chapter/security">Change security</a>
       </li>
       {{/if}}
-      {{#if member.permissions.canManageSettings}}
+      {{#if permissions.canManageSettings}}
       <li class="pure-menu-item">
         <a class="pure-menu-link" href="/chapter/settings">Change settings</a>
       </li>
       {{/if}}
-      {{#if member.permissions.canManagePublicDocuments}}
+      {{#if permissions.canManagePublicDocuments}}
       <li class="pure-menu-item">
         <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
+      </li>
+      {{/if}}
+      {{#if permissions.canManageRoadCaptains}}
+      <li class="pure-menu-item">
+        <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
       </li>
       {{/if}}
     {{/if}}

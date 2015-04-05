@@ -187,8 +187,13 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           member.canManagePrivateDocuments = true;
           member.canAdminDiscussions = true;
           member.canAdminMembers = true;
+          member.canManageRoadCaptains = true;
         } else if (member.title === 'Newsletter Editor') {
           member.canAdminNewsletters = true;
+        } else if (member.title === 'Head Road Captain') {
+          member.canManageRoadCaptains = true;
+        } else if (member.title === 'Activities Officer') {
+          member.canAdminCalendar = true;
         }
         return {
           _id: member._id,
@@ -247,7 +252,8 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
             canManagePublicDocuments: !!member.canManagePublicDocuments,
             canManagePrivateDocuments: !!member.canManagePrivateDocuments,
             canManageDiscussions: !!member.canAdminDiscussions,
-            canManageMembers: !!member.canAdminMembers
+            canManageMembers: !!member.canAdminMembers,
+            canManageRoadCaptains: !!member.canManageRoadCaptains
           },
           emailPreferences: {
             getCalendarReminders: member.calReminderEmail,

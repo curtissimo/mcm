@@ -8,7 +8,8 @@ let permissions = {
   'Newsletters': 'canManageNewsletters',
   'Public docs': 'canManagePublicDocuments',
   'Security': 'canManagePermissions',
-  'Settings': 'canManageSettings'
+  'Settings': 'canManageSettings',
+  'Road Captains': 'canManageRoadCaptains'
 };
 
 function promisify(fn) {
