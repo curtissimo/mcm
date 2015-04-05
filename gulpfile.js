@@ -132,7 +132,7 @@ gulp.task('fonts', function () {
 
 gulp.task('images', function () {
   return gulp.src('./src/images/*')
-    .pipe(gulp.dest('./build/files'));
+    .pipe(gulp.dest('./build/public/images'));
 });
 
 gulp.task('label', [ 'build' ], function (cb) {
