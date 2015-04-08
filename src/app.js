@@ -41,7 +41,7 @@ function promisify(scope, method) {
         bad(e);
       }
     });
-  })
+  });
 }
 
 function mergeCouchInsert(db, doc) {
@@ -117,34 +117,44 @@ function mailAndMark({ email, recipients, db }) {
 /////////////////////////////////////////////////////////////////////////////
 // START: RABBITMQ
 let context = rabbit.createContext(rabbitUrl);
-context.on('close', () => process.exit());
 
-let worker = {
-  close() {
-    context.close();
-  }
+let group = {
+  close() {}
 };
 
-context.on('ready', () => {
-  worker = context.socket('WORKER', { persistent: true });
-  worker.on('close', () => context.close());
-  worker.setEncoding('utf8');
+let single = group;
 
-  worker.connect('mcm-mail', () => {
-    worker.on('data', (directive) => {
-      worker.ack();
+context.on('ready', () => {
+  group = context.socket('WORKER', { persistent: true });
+  group.setEncoding('utf8');
+  group.connect('mcm-group-mail', () => {
+    group.on('data', (directive) => {
+      group.ack();
       directive = JSON.parse(directive);
       fetchMail(directive)
         .then(email => populateRecipients(email))
         .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
-        .error(e => console.error(e));
+        .catch(e => console.error(e));
+    });
+  });
+
+  single = context.socket('WORKER', { persistent: true });
+  single.setEncoding('utf8');
+  single.connect('mcm-single-mail', () => {
+    single.on('data', (missive) => {
+      single.ack();
+      missive = JSON.parse(missive);
+      promisify(transporter, 'sendMail', missive)
+        .catch(e => console.error('transporter error:', e));
     });
   });
 });
 
+context.on('close', (...rest) => console.log('Closing context.', rest) || process.exit());
 context.on('error', (...rest) => console.error('Context error', rest));
 
-process.on('SIGINT', () => worker.close());
+process.on('SIGINT', () => context.close());
+process.on('SIGTERM', () => context.close());
 // END: RABBITMQ
 /////////////////////////////////////////////////////////////////////////////
 
@@ -170,7 +180,7 @@ schedule.scheduleJob(rule, () => {
       // Too tired to think. Let's do something smart, here, when I can
       // think better. ;P
     })
-    .error(e => console.error(e));
+    .catch(e => console.error(e));
 });
 // END: SCHEDULED
 /////////////////////////////////////////////////////////////////////////////

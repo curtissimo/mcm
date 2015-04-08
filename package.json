@@ -4,6 +4,7 @@
   "description": "The mailer daemon for the ismymc.com family of sites.",
   "main": "app.js",
   "scripts": {
+    "start": "MCM_DB=http://couchdb:5984 MCM_MAIL_HOST=web-server MCM_RABBIT_URL=amqp://curtis:curtis@web-server node ./build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/curtissimo/mcm-mailer-daemon",
   "devDependencies": {
     "del": "^1.1.1",
+    "flightplan": "^0.6.2",
     "gulp": "^3.8.11",
     "gulp-babel": "^5.0.0"
   },
