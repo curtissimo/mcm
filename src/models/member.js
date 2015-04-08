@@ -97,18 +97,24 @@ let member = stork.deliver('member', function () {
     if (member.isRoadCaptain) {
       emitKey([ member.lastName, member.firstName ]);
     }
-  })
+  });
 
   this.view('notRoadCaptains', function (member, emitKey) {
     if (!member.isRoadCaptain) {
       emitKey([ member.lastName, member.firstName ]);
     }
-  })
+  });
 
   this.view('byLogin', function (member, emitKey) {
     if (member.email) {
       emitKey(member.email);
     }
+    if (member.hogNumber) {
+      emitKey(member.hogNumber);
+    }
+  });
+
+  this.view('byHogNumber', function (member, emitKey) {
     if (member.hogNumber) {
       emitKey(member.hogNumber);
     }

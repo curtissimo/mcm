@@ -22,6 +22,7 @@ if (argv._[0] === 'dist') {
 }
 
 process.env.MCM_DB = 'http://couchdb:5984';
+process.env.MCM_RABBIT_URL = 'amqp://curtis:curtis@web-server';
 
 var forProduction = process.env.NODE_ENV === 'production';
 var reloading = null;
@@ -216,7 +217,10 @@ gulp.task('sass', function () {
 
 gulp.task('serve', [ 'build' ], function () {
   var opts = {
-    env: { MCM_DB: process.env.MCM_DB },
+    env: {
+      MCM_DB: process.env.MCM_DB,
+      MCM_RABBIT_URL: process.env.MCM_RABBIT_URL
+    },
     path: './build/app.js'
   }
   server.listen(opts, function (err) {

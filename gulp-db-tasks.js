@@ -249,7 +249,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           nickName: member.nickName,
           email: member.email.toLowerCase(),
           password: member.password,
-          hogNumber: member.hogNumber.toUpperCase(),
+          hogNumber: member.hogNumber.toUpperCase().replace(/ /g, ''),
           mobile: member.cellPhoneNbr,
           phone: member.phoneNbr,
           sex: member.sex,

@@ -35,3 +35,22 @@
       <button type="submit" class="pure-button pure-button-primary">Submit my credentials</button>
   </form>
 </section>
+<h1 class="banner">Forgot your password?</h1>
+<section>
+  <form class="pure-form pure-form-stacked" method="post" action="/session/help">
+    <fieldset>
+      <label for="hogNumber">
+        Just provide your national H.O.G.&reg; number, below, and we'll send
+        an email to you with some help with your password.
+      </label>
+      <label for="hogNumber">
+        Make sure that you include the letters at the beginning of the number,
+        like "US1234567".
+      </label>
+      <input id="hogNumber" name="hogNumber" type="text" class="pure-input-1" required>
+
+      <input type="hidden" name="X-HTTP-Method-Override" value="put">
+      
+      <button type="submit" class="pure-button pure-button-primary">Send my password to me</button>
+  </form>
+</section>

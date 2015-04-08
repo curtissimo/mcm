@@ -148,6 +148,7 @@ assets.initialize()
     let leslie = new LeslieMvp(app, assets);
     leslie.contextModifier = (req, res, context) => {
       context.chapterdb = req.vars.chapterdb;
+      context.maildrop = process.env.MCM_RABBIT_URL;
       context.settings = req.vars.settings;
       context.account = req.vars.account;
       context.member = req.vars.member;
@@ -170,11 +171,17 @@ assets.initialize()
     leslie.addScript('ractive-legacy');
     leslie.addScript('app');
 
-    leslie.get({ presenterName: 'session' });
-    leslie.put({ presenterName: 'session' });
-    leslie.delete({ presenterName: 'session' });
-
     leslie.get({ presenterName: 'dashboard', uri: '/chapter/dashboard' });
+
+    leslie.routeTo({
+      presenterName: 'session',
+      routes: [
+        { verb: 'get' },
+        { verb: 'put' },
+        { verb: 'put', action: 'help', method: 'help' },
+        { verb: 'delete' }
+      ]
+    });
 
     leslie.routeTo({
       area: 'chapter',

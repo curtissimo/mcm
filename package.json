@@ -32,6 +32,7 @@
     "method-override": "^2.3.2",
     "moment": "^2.9.0",
     "multer": "^0.1.8",
+    "rabbit.js": "^0.4.2",
     "ractive": "^0.7.1",
     "stork-odm": "^0.1.14",
     "systemjs": "^0.15.0"
