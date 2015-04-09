@@ -91,14 +91,15 @@ let presenter = {
         });
       }
       entity = entity[0];
-      getMailbox(ac.maildrop)
+      ac.renderEmails('help', { entity: entity })
+        .then(() => getMailbox(ac.maildrop))
         .then(mailbox => {
           mailbox.post({
             to: `${entity.firstName} ${entity.lastName} <${entity.email}>`,
             from: 'Password Reminder <no-reply@republichog.org>',
             subject: `Your password from ${ac.settings.name}`,
-            text: `Hello, ${entity.firstName}. \n\nSomeone recently requested your password. If you didn\'t, then you can ignore this email. \n\nIf you did, then your password is:\n\n\t${entity.password} \n\nKeep the shiny side up!`,
-            html: `<p>Hello, ${entity.firstName}.</p><p>Someone recently requested your password. If you didn\'t, then you can ignore this email.</p><p>If you did, then your password is:</p><blockquote><b>${entity.password}</b></blockquote><p>Keep the shiny side up!</p>`
+            text: ac.mails.text,
+            html: ac.mails.html
           });
         })
         .then(() => {

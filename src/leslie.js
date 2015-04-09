@@ -3,10 +3,10 @@ import util from 'util';
 import path from 'path';
 import Ractive from 'ractive';
 
-function promisify(fn) {
+function promisify(fn, code) {
   return new Promise((good, bad) => {
     fn((err, value) => {
-      if (err) {
+      if (err || (code && err.code !== code)) {
         return bad(err);
       }
       good(value);
@@ -133,10 +133,11 @@ class View {
 
 /** PRESENTERS ****************************************************************/
 class PresentationContext {
-  constructor(good, bad, assets) {
+  constructor(good, bad, assets, path) {
     this._good = good;
     this._bad = bad;
     this._assets = assets;
+    this._path = path;
   }
 
   addStylesheet(name) {
@@ -178,20 +179,36 @@ class PresentationContext {
   error(e) {
     this._bad(e);
   }
+
+  renderEmails(templateName, data) {
+    let baseFile = `${this._path}/mails/${templateName}`;
+    let htmlFile = fs.readFile.bind(fs, `${baseFile}.html.ractive`, 'utf8');
+    let textFile = fs.readFile.bind(fs, `${baseFile}.text.ractive`, 'utf8');
+    return Promise.all([ promisify(htmlFile), promisify(textFile) ])
+      .then(([ html, text ]) => {
+        html = JSON.parse(html);
+        text = JSON.parse(text);
+        html = new Ractive({ data: data, template: html }).toHTML();
+        text = new Ractive({ data: data, template: text }).toHTML();
+        this.mails = { html, text };
+        return this.mails;
+      });
+  };
 }
 
 class PresenterInvoker {
-  constructor(presenter, methodName, assets, modifier) {
+  constructor(presenter, methodName, assets, modifier, path) {
     this._presenter = presenter;
     this._methodName = methodName;
     this._assets = assets;
     this._modifier = modifier;
+    this._path = path;
   }
 
   invoke() {
     let self = this;
     return new Promise((good, bad) => {
-      let context = new PresentationContext(good, bad, self._assets);
+      let context = new PresentationContext(good, bad, self._assets, self._path);
       context = self._modifier(context);
       self._presenter[self._methodName](context);
     });
@@ -201,7 +218,8 @@ class PresenterInvoker {
 export class Presenter {
   constructor(name, method, assets, modifier, data, isRootRequest) {
     this._name = name;
-    this._loader = Promise.resolve(require(__dirname + `/presenters/${name}/presenter`));
+    this._path = __dirname + `/presenters/${name}`;
+    this._loader = Promise.resolve(require(`${this._path}/presenter`));
     this._method = method;
     this._assets = assets;
     this._modifier = modifier;
@@ -213,7 +231,7 @@ export class Presenter {
   render() {
     let self = this;
     return this._loader
-      .then(m => new PresenterInvoker(m, self._method, self._assets, self._modifier).invoke())
+      .then(m => new PresenterInvoker(m, self._method, self._assets, self._modifier, this._path).invoke())
       .then(({view: v, data: d = {}, presenters: p = {}, layout: l = 'application'}) => {
         this._method = v || this._method;
         for (let key of Object.keys(p)) {
