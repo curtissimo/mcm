@@ -45,7 +45,9 @@ function initModels() {
     comment: null,
     event: null,
     page: null,
-    ride: null
+    ride: null,
+    email: null,
+    recipient: null
   };
 
   var keys = Object.keys(lookup);
@@ -122,7 +124,9 @@ function setUp() {
         promisify(lookup.comment.to(chapterurl), 'sync'),
         promisify(lookup.event.to(chapterurl), 'sync'),
         promisify(lookup.page.to(chapterurl), 'sync'),
-        promisify(lookup.ride.to(chapterurl), 'sync')
+        promisify(lookup.ride.to(chapterurl), 'sync'),
+        promisify(lookup.email.to(chapterurl), 'sync'),
+        promisify(lookup.recipient.to(chapterurl), 'sync')
       ]);
     });
 }
@@ -466,9 +470,87 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
         "rideLegalese": "Routes and destinations are subject to change with little or no notice and more info may be added so check the calendar often for changes. Scroll to the very bottom of the page and there will be an update date so you will know if any changes have been made since the last time you looked and as always be sure to have your light blue membership card for 2015 (you will have to sign a waiver if you don't) and have a full tank of gas. In the event of a cancelation, a notice will be posted on the calendar and an email will go out 1 1/2 hrs before KSU.",
         "type" : "settings"
       });
+      var webmaster1 = lookup.recipient.new({
+        to: 'Webmaster@republichog.org',
+        status: 'received'
+      });
+      var director1 = lookup.recipient.new({
+        to: 'Director@RepublicHOG.org',
+        status: 'received'
+      });
+      var webmaster2 = lookup.recipient.new({
+        to: 'Webmaster@republichog.org',
+        status: 'received'
+      });
+      var director2 = lookup.recipient.new({
+        to: 'Director@RepublicHOG.org',
+        status: 'received'
+      });
+      var webmaster3 = lookup.recipient.new({
+        to: 'Webmaster@republichog.org',
+        status: 'received'
+      });
+      var director3 = lookup.recipient.new({
+        to: 'Director@RepublicHOG.org',
+        status: 'received'
+      });
+      var emails = [
+        lookup.email.new({
+          received: new Date(),
+          sent: new Date(),
+          from: 'Curtis Schlak <curtis@schlak.com>',
+          recipients: [ webmaster1 ],
+          references: '',
+          messageId: '<123.123.123@schlak.com>',
+          subject: 'Hello, Curtis - One.',
+          text: 'This is a test email.',
+          html: '<h1>This is a test email</h1>',
+          headers: {}
+        }),
+        lookup.email.new({
+          received: new Date(),
+          sent: new Date(),
+          from: 'Curtis Schlak <curtis@schlak.com>',
+          recipients: [ webmaster2, director1 ],
+          references: '',
+          messageId: '<123.123.123@schlak.com>',
+          subject: 'Hello, Curtis - Two.',
+          text: 'This is a test email.',
+          html: '<h1>This is a test email</h1>',
+          headers: {}
+        }),
+        lookup.email.new({
+          received: new Date(),
+          sent: new Date(),
+          from: 'Curtis Schlak <curtis@schlak.com>',
+          recipients: [ director2, webmaster3 ],
+          references: '',
+          messageId: '<123.123.123@schlak.com>',
+          subject: 'Hello, Curtis - Three.',
+          text: 'This is a test email.',
+          html: '<h1>This is a test email</h1>',
+          headers: {}
+        }),
+        lookup.email.new({
+          received: new Date(),
+          sent: new Date(),
+          from: 'Curtis Schlak <curtis@schlak.com>',
+          recipients: [ director3 ],
+          references: '',
+          messageId: '<123.123.123@schlak.com>',
+          subject: 'Hello, Curtis - Four.',
+          text: 'This is a test email.',
+          html: '<h1>This is a test email</h1>',
+          headers: {}
+        })
+      ];
       return Promise.all([
         promisify(account.to(masterurl), 'save'),
-        promisify(settings.to(chapterurl), 'save')
+        promisify(settings.to(chapterurl), 'save'),
+        promisify(emails[0].to(chapterurl), 'save'),
+        promisify(emails[1].to(chapterurl), 'save'),
+        promisify(emails[2].to(chapterurl), 'save'),
+        promisify(emails[3].to(chapterurl), 'save')
       ]);
     })
     .then(function () {
