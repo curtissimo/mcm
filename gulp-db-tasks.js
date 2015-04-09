@@ -179,7 +179,18 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
     },
     member: {
       map: function (member) {
-        if (member.title === 'Webmaster' || member.title === 'Director' || member.title === 'Assistant Director') {
+        if (member.title === 'Webmaster') {
+          member.canAdminNewsletters = true;
+          member.canAdminChapterInfo = true;
+          member.canAdminCalendar = true;
+          member.canAdminSecurity = true;
+          member.canManagePublicDocuments = true;
+          member.canManagePrivateDocuments = true;
+          member.canAdminDiscussions = true;
+          member.canAdminMembers = true;
+          member.canManageRoadCaptains = true;
+          member.canManageEmails = true;
+        } else if (member.title === 'Director' || member.title === 'Assistant Director') {
           member.canAdminNewsletters = true;
           member.canAdminChapterInfo = true;
           member.canAdminCalendar = true;
@@ -299,7 +310,8 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
             canManagePrivateDocuments: !!member.canManagePrivateDocuments,
             canManageDiscussions: !!member.canAdminDiscussions,
             canManageMembers: !!member.canAdminMembers,
-            canManageRoadCaptains: !!member.canManageRoadCaptains
+            canManageRoadCaptains: !!member.canManageRoadCaptains,
+            canManageEmails: !!member.canManageEmails
           },
           emailPreferences: {
             getCalendarReminders: member.calReminderEmail,
