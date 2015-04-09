@@ -5,6 +5,11 @@ import nodemailer from 'nodemailer';
 import rabbit from 'rabbit.js';
 import schedule from 'node-schedule';
 
+console.info('MAILER-DAEMON: Environment variables');
+console.info('\tMCM_DB:', process.env.MCM_DB);
+console.info('\tMCM_MAIL_HOST:', process.env.MCM_MAIL_HOST);
+console.info('\tMCM_RABBIT_URL:', process.env.MCM_RABBIT_URL);
+
 let mailHost = process.env.MCM_MAIL_HOST || true;
 let transporter = nodemailer.createTransport({
   port: 587,
@@ -18,6 +23,8 @@ let transporter = nodemailer.createTransport({
     rejectUnauthorized: false
   }
 });
+
+console.info('MAILER-DAEMON: Transport created');
 
 let rabbitUrl = process.env.MCM_RABBIT_URL || true;
 
@@ -125,10 +132,14 @@ let group = {
 let single = group;
 
 context.on('ready', () => {
+  console.info('MAILER-DAEMON: Rabbit context ready.');
   group = context.socket('WORKER', { persistent: true });
   group.setEncoding('utf8');
   group.connect('mcm-group-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-group-mail.');
     group.on('data', (directive) => {
+      console.info('MAILER-DAEMON: Message receivd on mcm-group-mail.');
+      console.info('\tCONTENT:', missive);
       group.ack();
       directive = JSON.parse(directive);
       fetchMail(directive)
@@ -141,7 +152,10 @@ context.on('ready', () => {
   single = context.socket('WORKER', { persistent: true });
   single.setEncoding('utf8');
   single.connect('mcm-single-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-single-mail.');
     single.on('data', (missive) => {
+      console.info('MAILER-DAEMON: Message receivd on mcm-single-mail.');
+      console.info('\tCONTENT:', missive);
       single.ack();
       missive = JSON.parse(missive);
       promisify(transporter, 'sendMail', missive)
