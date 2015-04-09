@@ -21,28 +21,39 @@
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/private-documents">Chapter documents</a>
     </li>
-    {{#if permissions.canManagePermissions || permissions.canManageSettings || permissions.canManagePublicDocuments || permissions.canManageRoadCaptains}}
+    {{#officerEmail}}
+    <li class="pure-menu-heading menu-section">Officers-Only</li>
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/email">Email</a>
+    </li>
+    {{/officerEmail}}
+    {{#if permissions.hasPermission()}}
     <li class="pure-menu-heading menu-section">Administration</li>
-      {{#if permissions.canManagePermissions}}
-      <li class="pure-menu-item">
-        <a class="pure-menu-link" href="/chapter/security">Change security</a>
-      </li>
-      {{/if}}
-      {{#if permissions.canManageSettings}}
-      <li class="pure-menu-item">
-        <a class="pure-menu-link" href="/chapter/settings">Change settings</a>
-      </li>
-      {{/if}}
-      {{#if permissions.canManagePublicDocuments}}
-      <li class="pure-menu-item">
-        <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
-      </li>
-      {{/if}}
-      {{#if permissions.canManageRoadCaptains}}
-      <li class="pure-menu-item">
-        <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
-      </li>
-      {{/if}}
+    {{#if permissions.canManagePermissions}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/security">Change security</a>
+    </li>
+    {{/if}}
+    {{#if permissions.canManageSettings}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/settings">Change settings</a>
+    </li>
+    {{/if}}
+    {{#if permissions.canManagePublicDocuments}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
+    </li>
+    {{/if}}
+    {{#if permissions.canManageRoadCaptains}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
+    </li>
+    {{/if}}
+    {{#if permissions.canManageEmails}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/email-management">Email management</a>
+    </li>
+    {{/if}}
     {{/if}}
     <li class="pure-menu-heading menu-section">Public site</li>
     {{/member}}
