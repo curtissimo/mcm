@@ -56,7 +56,7 @@ plan.remote(function (remote) {
     [ 'MCM_RABBIT_URL', plan.runtime.options.MCM_RABBIT_URL ].join('='),
   ].join(' ');
   var command = 'start /var/www/mcm/mailer-daemon.live/mcm-mailer-daemon.js';
-  if (list.stdout.indexOf('│ mcm-mailer-daemon │') > -1) {
+  if (list.stdout.indexOf('│ mcm-mailer-daemon ') > -1) {
     command = 'restart mcm-mailer-daemon';
   }
   remote.sudo(env + ' pm2 ' + command + ' -u curtis', { user: 'curtis' });
