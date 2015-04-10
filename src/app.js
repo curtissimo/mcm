@@ -131,6 +131,11 @@ let group = {
 
 let single = group;
 
+function fail(message, e) {
+  console.error(message, e);
+  context.close();
+}
+
 context.on('ready', () => {
   console.info('MAILER-DAEMON: Rabbit context ready.');
   group = context.socket('WORKER', { persistent: true });
@@ -165,7 +170,7 @@ context.on('ready', () => {
 });
 
 context.on('close', (...rest) => console.log('Closing context.', rest) || process.exit());
-context.on('error', (...rest) => console.error('Context error', rest));
+context.on('error', e => fail('Context error', e));
 
 process.on('SIGINT', () => context.close());
 process.on('SIGTERM', () => context.close());
