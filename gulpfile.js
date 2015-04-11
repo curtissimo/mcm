@@ -55,7 +55,7 @@ gulp.task('label', [ 'build' ], function (cb) {
 });
 
 gulp.task('watch', [ 'build' ], function () {
-  gulp.watch('./src/**/*.js', [ 'es6' ]);
+  gulp.watch('./src/**/plugins/**/*.js', [ 'es6' ]);
 });
 
 gulp.task('build', [ 'es6', 'config' ]);
