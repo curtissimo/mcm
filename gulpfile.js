@@ -6,17 +6,22 @@ var fs = require('fs');
 var server = null;
 
 gulp.task('clean', function (cb) {
-  del('./build', function (err) {
-    if (err) {
+  del('./build', function (builderr) {
+    if (builderr) {
       return cb(err);
     }
-    del('./dist', cb);
+    del('./dist', function (disterr) {
+      if (disterr) {
+        return cb(disterr);
+      }
+      del('./src/inbound/models', cb);
+    });
   });
 });
 
 gulp.task('grab-models', function (cb) {
-  var path = __dirname + '/../sites/src/models/email.js';
-  var to = __dirname + '/src/models';
+  var path = __dirname + '/../sites/src/models/*.js';
+  var to = __dirname + '/src/inbound/models';
   exec('mkdir -p ' + to, function (e) {
     if (e) {
       return cb(e);
@@ -55,5 +60,5 @@ gulp.task('watch', [ 'build' ], function () {
 
 gulp.task('build', [ 'es6', 'config' ]);
 gulp.task('default', [ 'build' ]);
-gulp.task('dev', [ 'build', 'serve', 'watch' ]);
+gulp.task('dev', [ 'build', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
