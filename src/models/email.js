@@ -1,5 +1,4 @@
 import stork from 'stork-odm';
-import recipient from './recipient.js';
 
 let entity = stork.deliver('email', function () {
   this.datetime('received');
@@ -15,11 +14,11 @@ let entity = stork.deliver('email', function () {
   this.array('recipients');
 
   this.view('byInbox', function (mail, emitKey) {
-    mail.to = mail.to || [];
+    mail.recipients = mail.recipients || [];
 
-    for (var i = 0; i < mail.to.length; i += 1) {
-      if (mail.to[i].status === 'received') {
-        emitKey([ mail.to[i].toLowerCase(), mail.received ]);
+    for (var i = 0; i < mail.recipients.length; i += 1) {
+      if (mail.recipients[i].status === 'received') {
+        emitKey([ mail.recipients[i].to.toLowerCase(), mail.received ]);
       }
     }
   });

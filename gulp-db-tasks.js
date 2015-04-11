@@ -46,8 +46,7 @@ function initModels() {
     event: null,
     page: null,
     ride: null,
-    email: null,
-    recipient: null
+    email: null
   };
 
   var keys = Object.keys(lookup);
@@ -107,28 +106,29 @@ function getAttachment(id, oldName, cb) {
 
 var att = { getAttachment: getAttachment };
 
+function sync() {
+  return Promise.all([
+    promisify(lookup.account.to(masterurl), 'sync'),
+    promisify(lookup.settings.to(chapterurl), 'sync'),
+    promisify(lookup.blog.to(chapterurl), 'sync'),
+    promisify(lookup.member.to(chapterurl), 'sync'),
+    promisify(lookup.newsletter.to(chapterurl), 'sync'),
+    promisify(lookup.document.to(chapterurl), 'sync'),
+    promisify(lookup.discussion.to(chapterurl), 'sync'),
+    promisify(lookup.comment.to(chapterurl), 'sync'),
+    promisify(lookup.event.to(chapterurl), 'sync'),
+    promisify(lookup.page.to(chapterurl), 'sync'),
+    promisify(lookup.ride.to(chapterurl), 'sync'),
+    promisify(lookup.email.to(chapterurl), 'sync')
+  ]);
+}
+
 function setUp() {
   return promisify(dbms.db, 'destroy', db.config.db)
     .then(function () { return promisify(dbms.db, 'create', db.config.db); })
     .then(function () { return promisify(dbms.db, 'destroy', chapterName); })
     .then(function () { return promisify(dbms.db, 'create', chapterName); })
-    .then(function () {
-      return Promise.all([
-        promisify(lookup.account.to(masterurl), 'sync'),
-        promisify(lookup.settings.to(chapterurl), 'sync'),
-        promisify(lookup.blog.to(chapterurl), 'sync'),
-        promisify(lookup.member.to(chapterurl), 'sync'),
-        promisify(lookup.newsletter.to(chapterurl), 'sync'),
-        promisify(lookup.document.to(chapterurl), 'sync'),
-        promisify(lookup.discussion.to(chapterurl), 'sync'),
-        promisify(lookup.comment.to(chapterurl), 'sync'),
-        promisify(lookup.event.to(chapterurl), 'sync'),
-        promisify(lookup.page.to(chapterurl), 'sync'),
-        promisify(lookup.ride.to(chapterurl), 'sync'),
-        promisify(lookup.email.to(chapterurl), 'sync'),
-        promisify(lookup.recipient.to(chapterurl), 'sync')
-      ]);
-    });
+    .then(function () { return sync(); });
 }
 
 gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
@@ -470,36 +470,15 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
         "rideLegalese": "Routes and destinations are subject to change with little or no notice and more info may be added so check the calendar often for changes. Scroll to the very bottom of the page and there will be an update date so you will know if any changes have been made since the last time you looked and as always be sure to have your light blue membership card for 2015 (you will have to sign a waiver if you don't) and have a full tank of gas. In the event of a cancelation, a notice will be posted on the calendar and an email will go out 1 1/2 hrs before KSU.",
         "type" : "settings"
       });
-      var webmaster1 = lookup.recipient.new({
-        to: 'Webmaster@republichog.org',
-        status: 'received'
-      });
-      var director1 = lookup.recipient.new({
-        to: 'Director@RepublicHOG.org',
-        status: 'received'
-      });
-      var webmaster2 = lookup.recipient.new({
-        to: 'Webmaster@republichog.org',
-        status: 'received'
-      });
-      var director2 = lookup.recipient.new({
-        to: 'Director@RepublicHOG.org',
-        status: 'received'
-      });
-      var webmaster3 = lookup.recipient.new({
-        to: 'Webmaster@republichog.org',
-        status: 'received'
-      });
-      var director3 = lookup.recipient.new({
-        to: 'Director@RepublicHOG.org',
-        status: 'received'
-      });
       var emails = [
         lookup.email.new({
           received: new Date(),
           sent: new Date(),
           from: 'Curtis Schlak <curtis@schlak.com>',
-          recipients: [ webmaster1 ],
+          recipients: [{
+            to: 'Webmaster@republichog.org',
+            status: 'received'
+          }],
           references: '',
           messageId: '<123.123.123@schlak.com>',
           subject: 'Hello, Curtis - One.',
@@ -511,7 +490,13 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           received: new Date(),
           sent: new Date(),
           from: 'Curtis Schlak <curtis@schlak.com>',
-          recipients: [ webmaster2, director1 ],
+          recipients: [{
+            to: 'Webmaster@republichog.org',
+            status: 'received'
+          }, {
+            to: 'Director@RepublicHOG.org',
+            status: 'received'
+          }],
           references: '',
           messageId: '<123.123.123@schlak.com>',
           subject: 'Hello, Curtis - Two.',
@@ -523,7 +508,13 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           received: new Date(),
           sent: new Date(),
           from: 'Curtis Schlak <curtis@schlak.com>',
-          recipients: [ director2, webmaster3 ],
+          recipients: [{
+            to: 'Director@RepublicHOG.org',
+            status: 'received'
+          }, {
+            to: 'Webmaster@republichog.org',
+            status: 'received'
+          }],
           references: '',
           messageId: '<123.123.123@schlak.com>',
           subject: 'Hello, Curtis - Three.',
@@ -535,7 +526,10 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           received: new Date(),
           sent: new Date(),
           from: 'Curtis Schlak <curtis@schlak.com>',
-          recipients: [ director3 ],
+          recipients: [{
+            to: 'Director@RepublicHOG.org',
+            status: 'received'
+          }],
           references: '',
           messageId: '<123.123.123@schlak.com>',
           subject: 'Hello, Curtis - Four.',
@@ -619,6 +613,13 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
     .catch(function (e) {
       console.error('ERROR!', e, e.stack);
     });
+});
+
+gulp.task('db:sync', [ 'es6-server' ], function (cb) {
+  initModels();
+  sync()
+    .then(function () { cb(); })
+    .catch(cb);
 });
 
 gulp.task('db:seed', [ 'es6-server' ], function (cb) {
