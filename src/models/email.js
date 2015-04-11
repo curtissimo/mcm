@@ -12,7 +12,7 @@ let entity = stork.deliver('email', function () {
   this.string('html');
   this.object('headers');
 
-  this.composes('recipients', recipient);
+  this.array('recipients');
 
   this.view('byInbox', function (mail, emitKey) {
     mail.to = mail.to || [];
