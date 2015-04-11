@@ -115,6 +115,7 @@ export let hook_queue = (next, connection) => {
         return next(DENY, `5.7.1 Unable to relay for ${rcpt_to}`);
       }
       try {
+        accounts = accounts.map(a => a[0]);
         let promises = [];
         accounts.forEach(a => connection.loginfo('Connecting to(', a.kind, '): ', process.env.MCM_DB, ' ', a.subdomain));
         let accountdbs = accounts.map(a => url.resolve(process.env.MCM_DB, a.subdomain));
@@ -125,6 +126,8 @@ export let hook_queue = (next, connection) => {
         return Promise.all(promises)
       } catch (e) {
         connection.logcrit('ERROR: ERROR: ', e);
+        nexted = true;
+        return next(DENYSOFT, 'Requested action aborted: local error in processing');
       }
     })
     .then(() => { if (!nexted) next(OK); })
