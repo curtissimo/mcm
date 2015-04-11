@@ -46,7 +46,7 @@ class Continuation {
 }
 
 let fn = () => {};
-let connection = { logemerg: fn, loginfo: fn };
+let connection = { logemerg: fn, loginfo: fn, transaction: { notes: {} } };
 
 let accountQueryFails = () => {
   let c = new Continuation();
@@ -95,19 +95,22 @@ let queryErrors = () => {
 let emailDoesNotExist = () => {
   let c = new Continuation();
   initAccountFrom(null, [{ subdomain: 'whatever' }]);
-  initMemberFrom(null, [{ officerEmail: 'carl@carl.org' }]);
+  initMemberFrom(null, [{ officerEmail: 'carl@carl.org', _id: 8 }]);
   hook_rcpt(c.next.bind(c), connection, [ makeParams('bob@bob.com') ]);
   assert.equal(c.code, deny);
   assert.equal(c.msg, 'Bad email address.');
+  assert.equal(connection.transaction.notes['bob@bob.com'], undefined);
+  assert.equal(connection.transaction.notes['carl@carl.com'], undefined);
 };
 
 let emailExists = () => {
   let c = new Continuation();
   initAccountFrom(null, [{ subdomain: 'whatever' }]);
-  initMemberFrom(null, [{ officerEmail: 'bob@bob.com' }]);
+  initMemberFrom(null, [{ officerEmail: 'bob@bob.com', _id: 3 }]);
   hook_rcpt(c.next.bind(c), connection, [ makeParams('bob@bob.com') ]);
   assert.equal(c.code, ok);
   assert.equal(c.msg, undefined);
+  assert.equal(connection.transaction.notes['bob@bob.com'], 3);
 };
 
 export default () => {
