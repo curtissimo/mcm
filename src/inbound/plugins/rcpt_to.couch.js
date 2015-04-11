@@ -37,6 +37,7 @@ export let hook_rcpt = (next, connection, [{ original, user, host }]) => {
         }
         if (officer.officerEmail.toLowerCase() === target) {
           connection.loginfo(`Found recipient: ${officer.firstName} ${officer.lastName} <${officer.officerEmail}>`);
+          connection.transaction.notes[target] = officer._id;
           return next(OK);
         }
       }
