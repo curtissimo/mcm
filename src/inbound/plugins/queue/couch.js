@@ -1,4 +1,5 @@
 import url from 'url';
+import mimelib from 'mimelib';
 import email from '../../models/email';
 import account from '../../models/account';
 
@@ -97,12 +98,21 @@ export let hook_queue = (next, connection) => {
     missive.text = body.body_text_encoded;
   } else {
     for (let child of body.children) {
-      if (child.ct === 'text/html') {
-        missive.html = child.body_text_encoded;
+      let format = '';
+      let translation = s => s;
+      if (child.ct.indexOf('text/html') === 0) {
+        format = 'html';
       }
-      if (child.ct === 'text/plain') {
-        missive.text = child.body_text_encoded;
+      if (child.ct.indexOf('text/plain') === 0) {
+        format = 'text';
       }
+      if (child.header && child.header.headers_decoded) {
+        let transferEncoding = unwrap(child.header.headers_decoded['content-transfer-encoding']);
+        if (transferEncoding === 'quoted-printable') {
+          translation = s => mimelib.decodeQuotedPrintable(s);
+        }
+      }
+      missive[format] = translation(child.body_text_encoded);
     }
   }
 
