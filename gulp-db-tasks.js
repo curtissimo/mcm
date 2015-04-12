@@ -256,6 +256,11 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
         } else {
           member.zip = member.zip.toString();
         }
+        if (member.officerEmail) {
+          var email = member.officerEmail;
+          email = email.substring(0, email.lastIndexOf('@'));
+          member.officerEmail = email;
+        }
         return {
           _id: member._id,
           firstName: member.firstName,
@@ -273,7 +278,7 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
           isRoadCaptain: member.isRoadCaptain,
           isLohMember: member.lohMember,
           title: member.title,
-          officerEmail: member.officerEmail,
+          officerInbox: member.officerEmail,
           motorcycle: {
             model: member.motorcycleModel,
             year: (member.motorcycleYear - 0) || null

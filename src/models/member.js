@@ -23,7 +23,7 @@ let member = stork.deliver('member', function () {
   this.bool('isRoadCaptain');                                 // isRoadCaptain
   this.bool('isLohMember');                                   // lohMember
   this.string('title');                                       // title
-  this.string('officerEmail');                                // officerEmail
+  this.string('officerInbox');                                // officerEmail.substring(up to '@')
 
   this.object('motorcycle', function () {
     this.string('model');                                     // motorcycleModel
