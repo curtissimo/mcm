@@ -1,4 +1,5 @@
 import assert from 'assert';
+import url from 'url';
 import { hook_rcpt } from '../src/inbound/plugins/rcpt_to.couch';
 import member from '../src/inbound/models/member';
 import account from '../src/inbound/models/account';
@@ -105,12 +106,15 @@ let emailDoesNotExist = () => {
 
 let emailExists = () => {
   let c = new Continuation();
-  initAccountFrom(null, [{ subdomain: 'whatever' }]);
+  let subdomain = 'whatever';
+  let fullDomain = url.resolve(process.env.MCM_DB, subdomain);
+  initAccountFrom(null, [{ subdomain: subdomain }]);
   initMemberFrom(null, [{ officerInbox: 'bob', _id: 3 }]);
   hook_rcpt(c.next.bind(c), connection, [ makeParams('bob@bob.com') ]);
   assert.equal(c.code, ok);
   assert.equal(c.msg, undefined);
-  assert.equal(connection.transaction.notes['bob'], 3);
+  assert.equal(connection.transaction.notes['bob@bob.com'].id, 3);
+  assert.equal(connection.transaction.notes['bob@bob.com'].db, fullDomain);
 };
 
 export default () => {

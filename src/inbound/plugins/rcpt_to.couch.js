@@ -30,14 +30,17 @@ export let hook_rcpt = (next, connection, [{ original, user, host }]) => {
         connection.logemerg('Something went wrong with the officers view.', e);
         return next(DENYSOFT, 'Requested action aborted: local error in processing');
       }
-      let target = user.toLowerCase();
+      let target = `${user}@${host}`.toLowerCase();
       for (let officer of officers) {
         if (!officer.officerInbox) {
           continue;
         }
-        if (officer.officerInbox.toLowerCase() === target) {
+        if (officer.officerInbox.toLowerCase() === user.toLowerCase()) {
           connection.loginfo(`Found recipient: ${officer.firstName} ${officer.lastName} <${officer.officerInbox}>`);
-          connection.transaction.notes[target] = officer._id;
+          connection.transaction.notes[target] = {
+            id: officer._id,
+            db: accountdb
+          };
           return next(OK);
         }
       }
