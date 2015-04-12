@@ -34,8 +34,10 @@ plan.remote(function (remote) {
   remote.sudo('npm --production --prefix ' + to + ' install ' + to, { user: 'curtis' });
 
   remote.log('Move inbound plugins and configuration to destination.');
+  var stamp = '/tmp' + pluginsDir + '/dist/stamp.json';
   var fromFiles = '/tmp' + pluginsDir + '/dist/inbound/*';
   var to = '/var/www/mcm/inbound-smtp';
+  remote.sudo('cp ' + stamp + ' ' + to, { user: 'curtis' });
   remote.sudo('cp -R ' + fromFiles + ' ' + to, { user: 'curtis' });
   remote.sudo('rm -rf ' + to + '/node_modules', { user: 'curtis' });
   remote.sudo('mv -f /tmp' + pluginsDir + '/dist/node_modules ' + to, { user: 'curtis' });
@@ -43,6 +45,7 @@ plan.remote(function (remote) {
   remote.log('Move outbound plugins and configuration to destination.');
   var fromFiles = '/tmp' + pluginsDir + '/dist/outbound/*';
   var to = '/var/www/mcm/outbound-smtp';
+  remote.sudo('cp ' + stamp + ' ' + to, { user: 'curtis' });
   remote.sudo('cp -R ' + fromFiles + ' ' + to, { user: 'curtis' });
 
   remote.log('Restart haraka.');
