@@ -95,7 +95,7 @@ let queryErrors = () => {
 let emailDoesNotExist = () => {
   let c = new Continuation();
   initAccountFrom(null, [{ subdomain: 'whatever' }]);
-  initMemberFrom(null, [{ officerEmail: 'carl@carl.org', _id: 8 }]);
+  initMemberFrom(null, [{ officerInbox: 'carl', _id: 8 }]);
   hook_rcpt(c.next.bind(c), connection, [ makeParams('bob@bob.com') ]);
   assert.equal(c.code, deny);
   assert.equal(c.msg, 'Bad email address.');
@@ -106,11 +106,11 @@ let emailDoesNotExist = () => {
 let emailExists = () => {
   let c = new Continuation();
   initAccountFrom(null, [{ subdomain: 'whatever' }]);
-  initMemberFrom(null, [{ officerEmail: 'bob@bob.com', _id: 3 }]);
+  initMemberFrom(null, [{ officerInbox: 'bob', _id: 3 }]);
   hook_rcpt(c.next.bind(c), connection, [ makeParams('bob@bob.com') ]);
   assert.equal(c.code, ok);
   assert.equal(c.msg, undefined);
-  assert.equal(connection.transaction.notes['bob@bob.com'], 3);
+  assert.equal(connection.transaction.notes['bob'], 3);
 };
 
 export default () => {
