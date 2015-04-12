@@ -3,6 +3,16 @@ import mimelib from 'mimelib';
 import email from '../../models/email';
 import account from '../../models/account';
 
+if (typeof DENYSOFT === 'undefined') {
+  var DENYSOFT = 903;
+}
+if (typeof OK === 'undefined') {
+  var OK = 906;
+}
+if (typeof DENY === 'undefined') {
+  var DENY = 902;
+}
+
 function promisify(scope, method) {
   let args = Array.prototype.slice.apply(arguments);
   args.splice(1, 1);
@@ -54,7 +64,6 @@ export let hook_data = (next, connection) => {
 export let hook_queue = (next, connection) => {
   let { mail_from, rcpt_to, header: { headers_decoded: headers }, body } = connection.transaction;
   
-
   let proto = {
     received: new Date(),
     sent: new Date(unwrap(headers.date)),
@@ -120,7 +129,6 @@ export let hook_queue = (next, connection) => {
   getAccounts(rcpt_to, connection.loginfo.bind(connection))
     .then(accounts => {
       if (accounts.length === 0) {
-        connection.loginfo('Could not find an account for any of ', accounts.map(a => a.subdomain));
         nexted = true;
         return next(DENY, `5.7.1 Unable to relay for ${rcpt_to}`);
       }

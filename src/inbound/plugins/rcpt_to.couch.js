@@ -25,27 +25,33 @@ export let hook_rcpt = (next, connection, [{ original, user, host }]) => {
       return next(DENY, `5.7.1 Unable to relay for ${original}`);
     }
     let accountdb = url.resolve(process.env.MCM_DB, accounts[0].subdomain);
-    member.from(accountdb).onlyOfficers((e, officers) => {
-      if (e) {
-        connection.logemerg('Something went wrong with the officers view.', e);
-        return next(DENYSOFT, 'Requested action aborted: local error in processing');
-      }
-      let target = original.toLowerCase();
-      for (let officer of officers) {
-        if (!officer.officerInbox) {
-          continue;
+
+    try {
+      member.from(accountdb).onlyOfficers((e, officers) => {
+        if (e) {
+          connection.logemerg('Something went wrong with the officers view.', e);
+          return next(DENYSOFT, 'Requested action aborted: local error in processing');
         }
-        if (officer.officerInbox.toLowerCase() === user.toLowerCase()) {
-          connection.loginfo(`Found recipient: ${officer.firstName} ${officer.lastName} <${officer.officerInbox}>`);
-          connection.transaction.notes[target] = {
-            id: officer._id,
-            db: accountdb
-          };
-          return next(OK);
+        let target = original.toLowerCase();
+        for (let officer of officers) {
+          if (!officer.officerInbox) {
+            continue;
+          }
+          if (officer.officerInbox.toLowerCase() === user.toLowerCase()) {
+            connection.loginfo(`Found recipient: ${officer.firstName} ${officer.lastName} <${officer.officerInbox}>`);
+            connection.transaction.notes[target] = {
+              id: officer._id,
+              db: accountdb
+            };
+            return next(OK);
+          }
         }
-      }
-      connection.loginfo(`Did not find email: <${original}>`);
-      next(DENY, 'Bad email address.');
-    });
+        connection.loginfo(`Did not find email: <${original}>`);
+        next(DENY, 'Bad email address.');
+      });
+    } catch (e) {
+      connection.logemerg('Something went wrong with couch on the member query.', e);
+      return next(DENYSOFT, 'Requested action aborted: local error in processing');
+    }
   })
 };
