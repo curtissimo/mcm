@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "MCM_DB=http://couchdb:5984 MCM_MAIL_HOST=web-server MCM_RABBIT_URL=amqp://curtis:curtis@web-server node ./build/app.js",
-    "test": "node test/test-loader.js"
+    "test": "mocha --compilers js:babel/register"
   },
   "repository": {
     "type": "git",
