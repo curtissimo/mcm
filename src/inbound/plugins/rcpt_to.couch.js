@@ -30,7 +30,7 @@ export let hook_rcpt = (next, connection, [{ original, user, host }]) => {
         connection.logemerg('Something went wrong with the officers view.', e);
         return next(DENYSOFT, 'Requested action aborted: local error in processing');
       }
-      let target = `${user}@${host}`.toLowerCase();
+      let target = original.toLowerCase();
       for (let officer of officers) {
         if (!officer.officerInbox) {
           continue;
