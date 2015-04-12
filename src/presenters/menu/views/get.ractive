@@ -21,12 +21,12 @@
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/private-documents">Chapter documents</a>
     </li>
-    {{#officerEmail}}
+    {{#officerInbox}}
     <li class="pure-menu-heading menu-section">Officers-Only</li>
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/email">Email</a>
     </li>
-    {{/officerEmail}}
+    {{/officerInbox}}
     {{#if permissions.hasPermission()}}
     <li class="pure-menu-heading menu-section">Administration</li>
     {{#if permissions.canManagePermissions}}
