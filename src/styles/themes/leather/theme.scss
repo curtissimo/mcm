@@ -462,3 +462,65 @@ fieldset {
   font-weight: bold;
 }
 
+.inbox-subject {
+  font-size: 1.1em;
+}
+
+.inbox-from-name:before {
+  display: inline-block;
+  width: 80px;
+  content: 'From: ';
+  font-weight: bold;
+}
+
+.inbox-from-name {
+  display: inline;
+}
+
+.inbox-from-email {
+  display: inline;
+  color: $secondary-text-color;
+}
+
+.inbox-to:before {
+  display: inline-block;
+  width: 80px;
+  content: 'To: ';
+  font-weight: bold;
+}
+
+.inbox-to-entry:last-child:after {
+  content: '';
+}
+
+.inbox-to-entry:after {
+  content: ', ';
+}
+
+.inbox-to-entry {
+  display: inline;
+}
+
+.inbox-sent:before {
+  display: inline-block;
+  width: 80px;
+  content: 'Sent: ';
+  font-weight: bold;
+}
+
+.inbox-received:before {
+  display: inline-block;
+  width: 80px;
+  content: 'Received: ';
+  font-weight: bold;
+}
+
+.inbox-received {
+  color: $secondary-text-color;
+}
+
+.inbox-message {
+  margin-top: 1em;
+  padding-top: 1em;
+  border-top: 1px solid $primary-color-light;
+}

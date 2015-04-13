@@ -1,4 +1,4 @@
-<h1 class="banner">Email for {{ inboxName }}</h1>
+<h1 class="banner">Inbox for {{ inboxName }}</h1>
 <section>
   <ul class="inbox">
     <li class="inbox-entry">
@@ -23,6 +23,10 @@
       <div class="inbox-entry-preview">
         {{ text }}
       </div>
+    </li>
+    {{else}}
+    <li class="inbox-entry stripe-{{(@index + 1) % 2}}">
+      <div class="inbox-entry-summary">No emails</div>
     </li>
     {{/emails}}
   </ul>

@@ -1,0 +1,23 @@
+{{#email}}
+<section>
+  <h1 class="inbox-subject">{{ subject }}</h1>
+  <div class="inbox-from">
+    <div class="inbox-from-name">{{ fromName }}</div>
+    <div class="inbox-from-email">{{ fromEmail }}</div>
+  </div>
+  <ul class="inbox-to">
+    {{#recipients}}
+    <li class="inbox-to-entry">
+      {{ name }}
+    </li>
+    {{/recipients}}
+  </ul>
+  <div class="inbox-sent">
+    {{ sent }}
+  </div>
+  <div class="inbox-received">
+    {{ received }}
+  </div>
+  <div class="inbox-message">{{ text }}</div>
+</section>
+{{/email}}

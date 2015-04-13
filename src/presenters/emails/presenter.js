@@ -11,6 +11,16 @@ let distributionLists = [
   { id: 'onlyRoadCaptains', name: 'Road Captains' },
 ];
 
+function html2text(html) {
+  return html.replace(/\n/g, ' ')
+    .replace(/<\/h\d>/g, '\n\n')
+    .replace(/<br><\/p>/g, '</p>')
+    .replace(/<br>/g, '\n')
+    .replace(/<\/p>/g, '\n\n')
+    .replace(/<[^>]+>/g, '')
+    .trim();
+}
+
 let presenter = {
   list(ac) {
     if (ac.member.officerInbox === undefined) {
@@ -27,7 +37,9 @@ let presenter = {
       emails.reverse();
       for (let missive of emails) {
         missive.received = moment(missive.received).format('MM/DD/YYYY HH:MM A');
-        if (missive.text === undefined) {
+        if (!missive.text && missive.html) {
+          missive.text = html2text(missive.html);
+        } else if (!missive.text) {
           missive.text = '';
         }
         let firstLineBreak = missive.text.indexOf('\n');
@@ -68,19 +80,47 @@ let presenter = {
   },
 
   item(ac) {
-    ac.render({
-      data: {
-        actions: {
-          'Delete': `/chapter/emails/${ac.params.id}/delete-form`,
-          'Reply': `/chapter/emails/${ac.params.id}/reply-form`,
-          'Reply All': `/chapter/emails/${ac.params.id}/reply-all-form`,
+    if (ac.member.officerInbox === undefined) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    email.from(ac.chapterdb).get(ac.params.id, (e, missive) => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      let lastSpace = missive.from.lastIndexOf(' ');
+      if (lastSpace > -1) {
+        missive.fromName = missive.from.substring(0, lastSpace);
+        missive.fromEmail = missive.from.substring(lastSpace + 1);
+      } else {
+        missive.fromEmail = missive.from;
+      }
+      missive.fromEmail = missive.fromEmail.replace(/^</, '').replace(/>$/, '');
+      missive.received = moment(missive.received).format('MMM D, YYYY H:MM A');
+      missive.sent = moment(missive.sent).format('MMM D, YYYY H:MM A');
+
+      if (!missive.text && missive.html) {
+        missive.text = html2text(missive.html);
+      } else if (!missive.text) {
+        missive.text = '';
+      }
+
+      ac.render({
+        data: {
+          email: missive,
+          actions: {
+            'Delete': `/chapter/emails/${ac.params.id}/delete-form`,
+            'Reply': `/chapter/emails/${ac.params.id}/reply-form`,
+            'Reply All': `/chapter/emails/${ac.params.id}/reply-all-form`,
+          },
+          nav: { '<i class="fa fa-chevron-left"></i> Back to emails': '/chapter/emails' },
+          shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/emails' },
+          title: missive.subject
         },
-        nav: { '<i class="fa fa-chevron-left"></i> Back to emails': '/chapter/emails' },
-        shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/emails' },
-        title: `«subject will go here»`
-      },
-      presenters: { menu: 'menu' },
-      layout: 'chapter'
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
     });
   }
 };
