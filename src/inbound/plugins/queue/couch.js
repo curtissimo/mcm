@@ -1,7 +1,6 @@
 import url from 'url';
 import mimelib from 'mimelib';
 import email from '../../models/email';
-import account from '../../models/account';
 
 if (typeof DENYSOFT === 'undefined') {
   var DENYSOFT = 903;
@@ -31,19 +30,6 @@ function promisify(scope, method) {
   })
 }
 
-function getAccounts(receipts, log) {
-  let masterdb = url.resolve(process.env.MCM_DB, '/mcm-master');
-  let set = new Set();
-  for (let receipt of receipts) {
-    set.add(receipt.host);
-  }
-  let values = [];
-  set.forEach(k => values.push(k));
-  let promises = values.map(v => promisify(account.from(masterdb), 'byUrl', v));
-  log('looking for accounts in: ', values, ' with promises ', promises);
-  return Promise.all(promises);
-}
-
 function unwrap(arr, index = 0) {
   if (!Array.isArray(arr)) {
     return null;
@@ -62,8 +48,8 @@ export let hook_data = (next, connection) => {
 };
 
 export let hook_queue = (next, connection) => {
-  let { mail_from, rcpt_to, header: { headers_decoded: headers }, body } = connection.transaction;
-  
+  let { mail_from, notes, rcpt_to, header: { headers_decoded: headers }, body } = connection.transaction;
+  // 
   let proto = {
     received: new Date(),
     sent: new Date(unwrap(headers.date)),
@@ -92,12 +78,15 @@ export let hook_queue = (next, connection) => {
       name = name.trim().replace(/^[\s"]+/, '').replace(/[\s"]+$/, '');
     }
 
-    missive.recipients.push({
+    let recipient = {
       email: email,
-      name: name,
-      status: 'received',
-      id: connection.transaction.notes[email.toLowerCase()]
-    });
+      name: name
+    };
+    if (notes[email.toLowerCase()] && notes[email.toLowerCase()].id) {
+      recipient.status = 'received';
+      recipient.id = notes[email.toLowerCase()].id;
+    }
+    missive.recipients.push(recipient);
   }
   connection.loginfo('recipients:', missive.recipients);
 
@@ -126,17 +115,22 @@ export let hook_queue = (next, connection) => {
   }
 
   let nexted = false;
-  getAccounts(rcpt_to, connection.loginfo.bind(connection))
-    .then(accounts => {
-      if (accounts.length === 0) {
+  let accountSet = new Set();
+  let accountArray = [];
+  for (let key of Object.keys(notes)) {
+    if (typeof notes[key].db === 'string') {
+      accountSet.add(notes[key].db);
+    }
+  }
+  accountSet.forEach(v => accountArray.push(v));
+  Promise.all(accountArray)
+    .then(accountdbs => {
+      if (accountdbs.length === 0) {
         nexted = true;
         return next(DENY, `5.7.1 Unable to relay for ${rcpt_to}`);
       }
       try {
-        accounts = accounts.map(a => a[0]);
         let promises = [];
-        accounts.forEach(a => connection.loginfo('Connecting to(', a.kind, '): ', process.env.MCM_DB, ' ', a.subdomain));
-        let accountdbs = accounts.map(a => url.resolve(process.env.MCM_DB, a.subdomain));
         connection.loginfo('Saving missive to:\n\t', accountdbs.join('\n\t'));
         for (let accountdb of accountdbs) {
           promises.push(promisify(missive.to(accountdb), 'save'));

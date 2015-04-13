@@ -32,13 +32,15 @@ export let hook_rcpt = (next, connection, [{ original, user, host }]) => {
           connection.logemerg('Something went wrong with the officers view.', e);
           return next(DENYSOFT, 'Requested action aborted: local error in processing');
         }
-        let target = original.toLowerCase();
+        let target = original.toLowerCase().replace(/^</, '').replace(/>$/, '');
         for (let officer of officers) {
           if (!officer.officerInbox) {
             continue;
           }
           if (officer.officerInbox.toLowerCase() === user.toLowerCase()) {
-            connection.loginfo(`Found recipient: ${officer.firstName} ${officer.lastName} <${officer.officerInbox}>`);
+            connection.loginfo(`Found recipient:
+              ${officer.firstName} ${officer.lastName} <${officer.officerInbox}>
+              Storing id and account keyed by ${target}`);
             connection.transaction.notes[target] = {
               id: officer._id,
               db: accountdb
@@ -46,7 +48,7 @@ export let hook_rcpt = (next, connection, [{ original, user, host }]) => {
             return next(OK);
           }
         }
-        connection.loginfo(`Did not find email: <${original}>`);
+        connection.loginfo(`Did not find email: <${target}>`);
         next(DENY, 'Bad email address.');
       });
     } catch (e) {

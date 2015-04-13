@@ -45,3 +45,7 @@ let test = () => {
 };
 
 export default test;
+
+if (process.env.RUN) {
+  test();
+}

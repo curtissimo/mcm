@@ -1,7 +1,6 @@
 import assert from 'assert';
 import mimelib from 'mimelib';
 import email from '../src/inbound/models/email';
-import account from '../src/inbound/models/account';
 import { hook_queue } from '../src/inbound/plugins/queue/couch';
 
 /* from haraka */
@@ -20,16 +19,6 @@ email.new = proto => {
   };
   return o;
 };
-
-function initAccountFrom(e, accountsById) {
-  account.from = () => {
-    return {
-      byUrl(id, fn) {
-        process.nextTick(() => fn(e, accountsById[id]));
-      }
-    };
-  };
-}
 
 class Continuation {
   constructor() {
@@ -55,17 +44,15 @@ describe('queue/couch#hook_queue', () => {
   let connection = {};
 
   beforeEach(done => {
-    initAccountFrom(null, {
-      'boberts.example': [],
-      'example.com': [{ subdomain: 'example', kind: 'account' }]
-    });
-
     connection = {
       loginfo: () => {},
-      logcrit: () => {},
-      logemerg: () => {},
+      logcrit: () => console.error,
+      logemerg: () => console.error,
       transaction: {
-        notes: {},
+        notes: {
+          'awesomedude.example.com': 'http://localhost:5984/example',
+          'anotherdude.example.com': 'http://localhost:5984/example'
+        },
         mail_from: [],
         rcpt_to: [{
           original: 'awesomedude@example.com',
@@ -121,11 +108,7 @@ describe('queue/couch#hook_queue', () => {
   });
 
   it('should deny for no accounts', done => {
-    initAccountFrom(null, {
-      'boberts.example': [],
-      'example.com': []
-    });
-    connection.transaction.rcpt_to = [];
+    connection.transaction.notes = {};
     let c = new Continuation();
     hook_queue(c.next.bind(c), connection);
     c.promise.then(() => {
