@@ -235,7 +235,7 @@ gulp.task('serve', [ 'build' ], function () {
         'FirefoxDeveloperEdition'
       ],
       notify: false,
-      startPath: '/session',
+      startPath: '/chapter/emails',
       proxy: 'http://localhost:3000'
     });
   });
@@ -255,6 +255,7 @@ gulp.task('views', function () {
 gulp.task('watch', [ 'build' ], function () {
   gulp.watch([ './build/**/*.js', './build/*-asset-hashes.json' ], [ 'reserve' ]);
 
+  gulp.watch('./src/views/document.html', [ 'html' ]);
   gulp.watch('./src/images/*.*', [ 'images', 'reload' ]);
   gulp.watch('./src/fonts/*.*', [ 'fonts', 'reload' ]);
   gulp.watch('./src/**/*.scss', [ 'sass', 'reload' ]);
@@ -263,7 +264,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch([ './src/presenters/*/scripts/*.js', './src/scripts/*.js' ], [ 'es6-client', 'reload' ]);
 });
 
-gulp.task('build', [ 'sass', 'fonts', 'images', 'es6-server', 'es6-client', 'es3', 'views', 'files-dir', 'files' ]);
+gulp.task('build', [ 'html', 'sass', 'fonts', 'images', 'es6-server', 'es6-client', 'es3', 'views', 'files-dir', 'files' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);

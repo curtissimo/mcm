@@ -1,0 +1,29 @@
+<h1 class="banner">Email for {{ inboxName }}</h1>
+<section>
+  <ul class="inbox">
+    <li class="inbox-entry">
+      <div class="inbox-subject-header">Discussion</div>
+      <div class="inbox-from-header">From</div>
+      <div class="inbox-preview-header">Preview</div>
+    </li>
+    {{#emails}}
+    <li class="inbox-entry stripe-{{(@index + 1) % 2}}">
+      <div class="inbox-entry-summary">
+        <div class="inbox-entry-subject">
+          <a href="/chapter/emails/{{ _id }}">{{ subject }}</a>
+        </div>
+        <div class="inbox-entry-received">
+          received
+          {{{ received }}}
+        </div>
+      </div>
+      <div class="inbox-entry-from">
+        {{ from }}
+      </div>
+      <div class="inbox-entry-preview">
+        {{ text }}
+      </div>
+    </li>
+    {{/emails}}
+  </ul>
+</section>

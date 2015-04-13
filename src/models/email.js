@@ -18,7 +18,9 @@ let entity = stork.deliver('email', function () {
 
     for (var i = 0; i < mail.recipients.length; i += 1) {
       if (mail.recipients[i].status === 'received') {
-        emitKey([ mail.recipients[i].email.toLowerCase(), mail.received ]);
+        var inbox = mail.recipients[i].email.toLowerCase();
+        inbox = inbox.substring(0, inbox.indexOf('@'));
+        emitKey([ inbox, mail.received ]);
       }
     }
   });

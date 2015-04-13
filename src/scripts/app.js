@@ -28,6 +28,63 @@ if (document.querySelectorAll) {
   } catch (e) { console.error(e); }
 }
 
+/*!
+ * Small Walker - v0.1.1 - 5/5/2011
+ * http://benalman.com/
+ * 
+ * Copyright (c) 2011 "Cowboy" Ben Alman
+ * Dual licensed under the MIT and GPL licenses.
+ * http://benalman.com/about/license/
+ */
+
+// Walk the DOM, depth-first (HTML order). Inside the callback, `this` is the
+// element, and the only argument passed is the current depth. If the callback
+// returns false, its children will be skipped.
+// 
+// Based on https://gist.github.com/240274
+
+function walk(node, callback) {
+  var skip, tmp;
+  // This depth value will be incremented as the depth increases and
+  // decremented as the depth decreases. The depth of the initial node is 0.
+  var depth = 0;
+
+  // Always start with the initial element.
+  do {
+    if ( !skip ) {
+      // Call the passed callback in the context of node, passing in the
+      // current depth as the only argument. If the callback returns false,
+      // don't process any of the current node's children.
+      skip = callback.call(node, depth) === false;
+    }
+
+    if ( !skip && (tmp = node.firstChild) ) {
+      // If not skipping, get the first child. If there is a first child,
+      // increment the depth since traversing downwards.
+      depth++;
+    } else if ( tmp = node.nextSibling ) {
+      // If skipping or there is no first child, get the next sibling. If
+      // there is a next sibling, reset the skip flag.
+      skip = false;
+    } else {
+      // Skipped or no first child and no next sibling, so traverse upwards,
+      tmp = node.parentNode;
+      // and decrement the depth.
+      depth--;
+      // Enable skipping, so that in the next loop iteration, the children of
+      // the now-current node (parent node) aren't processed again.
+      skip = true;
+    }
+
+    // Instead of setting node explicitly in each conditional block, use the
+    // tmp var and set it here.
+    node = tmp;
+
+  // Stop if depth comes back to 0 (or goes below zero, in conditions where
+  // the passed node has neither children nore next siblings).
+  } while ( depth > 0 );
+}
+
 document
   .getElementById('main-menu')
   .addEventListener('click', e => {
@@ -102,7 +159,7 @@ for (let i = 0; i < submitters.length; i += 1) {
     let target = e.target || e.srcElement;
 
     if (target.form) {
-      var form = document.getElementById(target.form);
+      var form = document.getElementById(target.form.id || target.form);
       if (form.querySelector(':invalid')) {
         return;
       }
@@ -186,5 +243,48 @@ if (photoChanger) {
       document.getElementById('photo-changer-form').submit();
     });
     photoChanger.parentNode.appendChild(saver);
+  });
+}
+
+let emailForm = document.getElementById('email-form');
+let emailEditor = document.getElementById('email-editor');
+if (emailForm && emailEditor) {
+  let editor = false;
+  emailEditor.addEventListener('load', () => {
+    editor = emailEditor.contentWindow.editor;
+
+    editor.addEventListener('willPaste', e => {
+      walk(e.fragment, function (depth) {
+        if (this.style) {
+          if (this.style.fontFamily) {
+            this.style.fontFamily = '';
+          }
+        }
+        if (this.className) {
+          this.removeAttribute('class');
+        }
+        if (this.title) {
+          this.removeAttribute('title');
+        }
+      });
+    });
+
+    editor.addEventListener('blur', e => {
+      let html = editor.getHTML().replace(/<div><br><\/div>/, '').trim();
+      let text = html.replace(/\n/g, ' ').replace(/<br><\/p>/g, '</p>').replace(/<br>/g, '\n').replace(/<\/p>/g, '\n\n').replace(/<[^>]+>/g, '').trim();
+
+      if (text.length === 0) {
+        return document.getElementById('email-text').innerHTML = '';
+      }
+
+      document.getElementById('email-html').innerHTML = html;
+      document.getElementById('email-text').innerHTML = text;
+    });
+  });
+  emailForm.addEventListener('submit', e => {
+    if (!editor) {
+      return e.preventDefault();
+    }
+    e.preventDefault();
   });
 }

@@ -24,7 +24,7 @@
     {{#officerInbox}}
     <li class="pure-menu-heading menu-section">Officers-Only</li>
     <li class="pure-menu-item">
-      <a class="pure-menu-link" href="/chapter/email">Email</a>
+      <a class="pure-menu-link" href="/chapter/emails">Email</a>
     </li>
     {{/officerInbox}}
     {{#if permissions.hasPermission()}}

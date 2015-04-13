@@ -123,3 +123,18 @@
     display: none;
   }
 }
+
+.is-mostly-hidden {
+  width: 1px;
+  height: 1px;
+  opacity: .01;
+  border: 0;
+  background: transparent;
+}
+
+.is-on-next-element {
+  position: relative;
+  top: 10px;
+  left: 10px;
+}
+

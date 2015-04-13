@@ -195,6 +195,21 @@ assets.initialize()
 
     leslie.routeTo({
       area: 'chapter',
+      presenterName: 'emails',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id/delete-form', method: 'deleteForm' },
+        { verb: 'get', action: ':id/reply-form', method: 'replyForm' },
+        { verb: 'get', action: ':id/reply-all-form', method: 'replyAllForm' },
+        { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'delete' },
+        { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
       presenterName: 'newsletters',
       routes: [
         { verb: 'get' },
@@ -328,7 +343,7 @@ assets.initialize()
     });
 
     if (!inProduction) {
-      let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
+      let dest = process.cwd() + '/build/files';
       console.log('Serving uploaded files from express at ' + dest);
       app.use((req, res, next) => {
         if (res.get('X-Accel-Redirect')) {

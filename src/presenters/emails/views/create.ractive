@@ -1,0 +1,26 @@
+<h1 class="banner">New Email</h1>
+<section>
+  <form class="pure-form pure-form-stacked" id="email-form" method="post" action="/chapter/emails">
+    <label for="subject">Subject</label>
+    <input type="text" id="subject" name="subject" class="pure-input-1" required>
+
+    <label for="toList">To</label>
+    <select name="toList" id="toList">
+      {{#distributionLists}}
+      <option value="{{ project || id }}">{{ name }}</option>
+      {{/distributionLists}}
+    </select>
+
+    <textarea hidden id="email-html" name="html"></textarea>
+    <textarea id="email-text" name="text" class="is-mostly-hidden is-on-next-element" required></textarea>
+
+    <iframe src="/document.html" id="email-editor" class="long-text"></iframe>
+
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/emails" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Send the email</button>
+      </div>
+    </div>
+  </form>
+</section>
