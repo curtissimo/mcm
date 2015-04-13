@@ -1,4 +1,3 @@
-import 'babel-core/polyfill';
 import url from 'url';
 import account from '../models/account';
 import member from '../models/member';

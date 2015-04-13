@@ -50,8 +50,8 @@ describe('queue/couch#hook_queue', () => {
       logemerg: () => console.error,
       transaction: {
         notes: {
-          'awesomedude.example.com': 'http://localhost:5984/example',
-          'anotherdude.example.com': 'http://localhost:5984/example'
+          'awesomedude.example.com': { db: 'http://localhost:5984/example' },
+          'anotherdude.example.com': { db: 'http://localhost:5984/example' }
         },
         mail_from: [],
         rcpt_to: [{
