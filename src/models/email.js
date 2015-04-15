@@ -24,6 +24,13 @@ let entity = stork.deliver('email', function () {
       }
     }
   });
+
+  this.view('bySentBox', function (mail, emitKey) {
+    if (!mail.received) {
+      var sentBox = mail.from.substring(0, mail.from.indexOf('@'));
+      emitKey([ sentBox.toLowerCase(), mail.sent ]);
+    }
+  });
 });
 
 export default entity;

@@ -524,3 +524,9 @@ fieldset {
   padding-top: 1em;
   border-top: 1px solid $primary-color-light;
 }
+
+.pretending-to-be-iframe {
+  position: relative;
+  top: -84px;
+}
+

@@ -271,7 +271,14 @@ if (emailForm && emailEditor) {
 
     editor.addEventListener('blur', e => {
       let html = editor.getHTML().replace(/<div><br><\/div>/, '').trim();
-      let text = html.replace(/\n/g, ' ').replace(/<br><\/p>/g, '</p>').replace(/<br>/g, '\n').replace(/<\/p>/g, '\n\n').replace(/<[^>]+>/g, '').trim();
+      let text = html.replace(/\n/g, ' ')
+        .replace(/<br><\/h[1-6]>/g, '\n\n')
+        .replace(/<\/h[1-6]>/g, '\n\n')
+        .replace(/<br><\/[^>]+>/g, '</p>')
+        .replace(/<br>/g, '\n')
+        .replace(/<\/p>/g, '\n\n')
+        .replace(/<[^>]+>/g, '')
+        .trim();
 
       if (text.length === 0) {
         return document.getElementById('email-text').innerHTML = '';
@@ -285,6 +292,5 @@ if (emailForm && emailEditor) {
     if (!editor) {
       return e.preventDefault();
     }
-    e.preventDefault();
   });
 }

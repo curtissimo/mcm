@@ -1,3 +1,5 @@
+import rabbit from 'rabbit.js';
+import crypto from 'crypto';
 import moment from 'moment';
 import email from '../../models/email';
 
@@ -13,12 +15,26 @@ let distributionLists = [
 
 function html2text(html) {
   return html.replace(/\n/g, ' ')
-    .replace(/<\/h\d>/g, '\n\n')
-    .replace(/<br><\/p>/g, '</p>')
+    .replace(/<br><\/h[1-6]>/g, '\n\n')
+    .replace(/<\/h[1-6]>/g, '\n\n')
+    .replace(/<br><\/[^>]+>/g, '</p>')
     .replace(/<br>/g, '\n')
     .replace(/<\/p>/g, '\n\n')
     .replace(/<[^>]+>/g, '')
     .trim();
+}
+
+function randomValueHex(len) {
+    return crypto.randomBytes(Math.ceil(len / 2))
+      .toString('hex')
+      .slice(0, len);
+}
+
+function getDomain(account) {
+  if (account.domain) {
+    return account.domain;
+  }
+  return `${account.subdomain}.ismymc.com`;
 }
 
 let presenter = {
@@ -120,6 +136,35 @@ let presenter = {
         },
         presenters: { menu: 'menu' },
         layout: 'chapter'
+      });
+    });
+  },
+
+  post(ac) {
+    if (ac.member.officerInbox === undefined) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    ac.body.sent = new Date();
+    ac.body.from = `${ac.member.officerInbox}@${getDomain(ac.account)}`;
+    ac.body.messageId = `<${randomValueHex(8)}.${randomValueHex(10)}@${getDomain(ac.account)}>`;
+    ac.body.group = { view: ac.body.toList };
+
+    let missive = email.new(ac.body);
+    missive.to(ac.chapterdb).save((e, { _id }) => {
+      let context = rabbit.createContext(process.env.MCM_RABBIT_URL);
+      context.on('ready', () => {
+        let socket = context.socket('PUSH', { persistent: true });
+        socket.on('close', () => {
+          context.close();
+        });
+        socket.connect('mcm-group-mail', () => {
+          socket.end(JSON.stringify({
+            id: _id,
+            subdomain: ac.account.subdomain
+          }));
+          ac.redirect('/chapter/emails');
+        });
       });
     });
   }
