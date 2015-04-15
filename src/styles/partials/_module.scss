@@ -708,6 +708,10 @@
   @include min-sm-screen {
     width: 50%;
   }
+
+  @include min-md-screen {
+    width: 33%;
+  }
 }
 
 .inbox-entry-from,
@@ -721,7 +725,7 @@
   }
 
   @include min-md-screen {
-    width: 20%;
+    width: 33%;
   }
 }
 
@@ -732,7 +736,7 @@
 
   @include min-md-screen {
     @include grid-column;
-    width: 30%;
+    width: 33%;
   }
 }
 

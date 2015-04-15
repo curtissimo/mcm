@@ -203,7 +203,7 @@ assets.initialize()
         { verb: 'get', action: ':id/reply-form', method: 'replyForm' },
         { verb: 'get', action: ':id/reply-all-form', method: 'replyAllForm' },
         { verb: 'get', action: ':id', method: 'item' },
-        { verb: 'delete' },
+        { verb: 'delete', action: ':id' },
         { verb: 'post' }
       ]
     });

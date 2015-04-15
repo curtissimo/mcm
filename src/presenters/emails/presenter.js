@@ -43,15 +43,33 @@ let presenter = {
       return ac.redirect('/chapter/dashboard');
     }
 
+    let method = 'byInbox';
+    let headerPrefix = 'Inbox';
+    let secondColumnHeader = 'From';
+    let nav = { 'View sent': '/chapter/emails?sent' };
+    let shortnav = { 'Sent': '/chapter/emails?sent' };
+    if (ac.query.hasOwnProperty('sent')) {
+      method = 'bySentbox';
+      headerPrefix = "Sent Email";
+      nav = { 'View Inbox': '/chapter/emails' };
+      shortnav = { 'Inbox': '/chapter/emails' };
+      secondColumnHeader = 'To';
+    }
+
     let inbox = ac.member.officerInbox.toLowerCase();
     let from = [ inbox, '' ];
     let to = [ inbox, '3' ];
-    email.from(ac.chapterdb).byInbox(from, to, (fromError, emails) => {
+    email.from(ac.chapterdb)[method](from, to, (fromError, emails) => {
       if (fromError) {
         return ac.error(fromError);
       }
       emails.reverse();
       for (let missive of emails) {
+        if (ac.query.hasOwnProperty('sent')) {
+          missive.secondColumnValue = member.projections[missive.group.view].title;
+        } else {
+          missive.secondColumnValue = missive.from.replace(/</g, '&lt;').replace(/"/g, '');
+        }
         missive.received = moment(missive.received).format('MM/DD/YYYY HH:MM A');
         if (!missive.text && missive.html) {
           missive.text = html2text(missive.html);
@@ -67,16 +85,19 @@ let presenter = {
         if (lastSpace > -1) {
           missive.from = missive.from.substring(0, lastSpace);
         }
-        missive.from = missive.from.replace(/</g, '&lt;');
       }
       ac.render({
         data: {
           actions: {
             'Write a new email': '/chapter/emails/create-form'
           },
+          nav: nav,
+          shortnav: shortnav,
           title: `Email for ${ac.member.officerInbox}`,
           inboxName: ac.member.officerInbox,
-          emails: emails
+          secondColumnHeader: secondColumnHeader,
+          emails: emails,
+          headerPrefix: headerPrefix
         },
         presenters: { menu: 'menu' },
         layout: 'chapter'
@@ -95,7 +116,7 @@ let presenter = {
     });
   },
 
-  item(ac) {
+  item(ac, isDelete) {
     if (ac.member.officerInbox === undefined) {
       return ac.redirect('/chapter/dashboard');
     }
@@ -105,6 +126,12 @@ let presenter = {
         return ac.error(e);
       }
 
+      let actions = {
+        'Delete': `/chapter/emails/${ac.params.id}/delete-form`,
+        'Reply': `/chapter/emails/${ac.params.id}/reply-form`,
+        'Reply All': `/chapter/emails/${ac.params.id}/reply-all-form`,
+      };
+
       let lastSpace = missive.from.lastIndexOf(' ');
       if (lastSpace > -1) {
         missive.fromName = missive.from.substring(0, lastSpace);
@@ -113,29 +140,61 @@ let presenter = {
         missive.fromEmail = missive.from;
       }
       missive.fromEmail = missive.fromEmail.replace(/^</, '').replace(/>$/, '');
-      missive.received = moment(missive.received).format('MMM D, YYYY H:MM A');
-      missive.sent = moment(missive.sent).format('MMM D, YYYY H:MM A');
+      if (missive.received) {
+        missive.received = moment(missive.received).format('MMM D, YYYY H:mm A');
+      } else {
+        missive.recipients = [{ name: member.projections[missive.group.view].name }];
+        actions = {
+          'Delete': `/chapter/emails/${ac.params.id}/delete-form`
+        };
+      }
+      missive.sent = moment(missive.sent).format('MMM D, YYYY H:mm A');
 
       if (!missive.text && missive.html) {
         missive.text = html2text(missive.html);
       } else if (!missive.text) {
         missive.text = '';
+      } else {
+        missive.text = missive.text.replace(/\n/g, '<br>');
       }
 
       ac.render({
         data: {
           email: missive,
-          actions: {
-            'Delete': `/chapter/emails/${ac.params.id}/delete-form`,
-            'Reply': `/chapter/emails/${ac.params.id}/reply-form`,
-            'Reply All': `/chapter/emails/${ac.params.id}/reply-all-form`,
-          },
+          actions: actions,
           nav: { '<i class="fa fa-chevron-left"></i> Back to emails': '/chapter/emails' },
           shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/emails' },
-          title: missive.subject
+          title: missive.subject,
+          isDelete: isDelete
         },
         presenters: { menu: 'menu' },
-        layout: 'chapter'
+        layout: 'chapter',
+        view: 'item'
+      });
+    });
+  },
+
+  deleteForm(ac) {
+    this.item(ac, true);
+  },
+
+  delete(ac) {
+    if (ac.member.officerInbox === undefined) {
+      return ac.redirect('/chapter/dashboard');
+    }
+    email.from(ac.chapterdb).get(ac.params.id, (e, missive) => {
+      if (e) {
+        return ac.error(e);
+      }
+      missive.to(ac.chapterdb).destroy(err => {
+        if (err) {
+          return ac.error(err);
+        }
+        if (missive.received) {
+          ac.redirect('/chapter/emails');
+        } else {
+          ac.redirect('/chapter/emails?sent');
+        }
       });
     });
   },
@@ -146,7 +205,7 @@ let presenter = {
     }
 
     ac.body.sent = new Date();
-    ac.body.from = `${ac.member.officerInbox}@${getDomain(ac.account)}`;
+    ac.body.from = `"${ac.member.firstName} ${ac.member.lastName}" <${ac.member.officerInbox}@${getDomain(ac.account)}>`;
     ac.body.messageId = `<${randomValueHex(8)}.${randomValueHex(10)}@${getDomain(ac.account)}>`;
     ac.body.group = { view: ac.body.toList };
 

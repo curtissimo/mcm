@@ -18,16 +18,17 @@ let entity = stork.deliver('email', function () {
 
     for (var i = 0; i < mail.recipients.length; i += 1) {
       if (mail.recipients[i].status === 'received') {
-        var inbox = mail.recipients[i].email.toLowerCase();
+        let inbox = mail.recipients[i].email.toLowerCase();
         inbox = inbox.substring(0, inbox.indexOf('@'));
         emitKey([ inbox, mail.received ]);
       }
     }
   });
 
-  this.view('bySentBox', function (mail, emitKey) {
+  this.view('bySentbox', function (mail, emitKey) {
     if (!mail.received) {
-      var sentBox = mail.from.substring(0, mail.from.indexOf('@'));
+      let angleIndex = mail.from.indexOf('<') + 1;
+      let sentBox = mail.from.substring(angleIndex, mail.from.indexOf('@'));
       emitKey([ sentBox.toLowerCase(), mail.sent ]);
     }
   });

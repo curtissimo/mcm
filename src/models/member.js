@@ -124,6 +124,7 @@ let member = stork.deliver('member', function () {
 member.projections = {
   activeOnly: {
     name: 'All members in good standing',
+    title: 'Active Members',
     projection: (db, callback) => {
       member.from(db).all((e, entities) => {
         if (e) {
@@ -131,7 +132,7 @@ member.projections = {
         }
         let now = new Date();
         let results = [];
-        for (let entity in entities) {
+        for (let entity of entities) {
           if (entity.membership.national.endDate < now) {
             continue;
           }
@@ -146,12 +147,14 @@ member.projections = {
   },
   all: {
     name: 'All chapter members include the expired ones',
+    title: 'Everyone',
     projection: (db, callback) => {
       member.from(db).all(callback);
     }
   },
   localExpiredOnly: {
     name: 'Chapter members with expired local membership',
+    title: 'Local Expired Members',
     projection: (db, callback) => {
       member.from(db).all((e, entities) => {
         if (e) {
@@ -159,7 +162,7 @@ member.projections = {
         }
         let now = new Date();
         let results = [];
-        for (let entity in entities) {
+        for (let entity of entities) {
           if (entity.membership.local.endDate < now) {
             results.push(entity);
           }
@@ -170,6 +173,7 @@ member.projections = {
   },
   nationalExpiredOnly: {
     name: 'Chapter members with expired national membership',
+    title: 'National Expired Members',
     projection: (db, callback) => {
       member.from(db).all((e, entities) => {
         if (e) {
@@ -177,7 +181,7 @@ member.projections = {
         }
         let now = new Date();
         let results = [];
-        for (let entity in entities) {
+        for (let entity of entities) {
           if (entity.membership.national.endDate < now) {
             results.push(entity);
           }
@@ -188,6 +192,7 @@ member.projections = {
   },
   expiredOnly: {
     name: 'Chapter members with expired membership of either kind',
+    title: 'Any Expired Members',
     projection: (db, callback) => {
       member.from(db).all((e, entities) => {
         if (e) {
@@ -195,7 +200,7 @@ member.projections = {
         }
         let now = new Date();
         let results = [];
-        for (let entity in entities) {
+        for (let entity of entities) {
           if (entity.membership.national.endDate < now) {
             results.push(entity);
             continue;
@@ -210,12 +215,14 @@ member.projections = {
   },
   onlyOfficers: {
     name: 'Chapter Officers',
+    title: 'Chapter Officers',
     projection: (db, callback) => {
       member.from(db).onlyOfficers(callback);
     }
   },
   onlyRoadCaptains: {
     name: 'Road Captains',
+    title: 'Road Captains',
     projection: (db, callback) => {
       member.from(db).onlyRoadCaptains(callback);
     }
