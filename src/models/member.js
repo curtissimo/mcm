@@ -121,4 +121,105 @@ let member = stork.deliver('member', function () {
   });
 });
 
+member.projections = {
+  activeOnly: {
+    name: 'All members in good standing',
+    projection: (db, callback) => {
+      member.from(db).all((e, entities) => {
+        if (e) {
+          return callback(e);
+        }
+        let now = new Date();
+        let results = [];
+        for (let entity in entities) {
+          if (entity.membership.national.endDate < now) {
+            continue;
+          }
+          if (entity.membership.local.endDate < now) {
+            continue;
+          }
+          results.push(entity);
+        }
+        callback(null, results);
+      });
+    }
+  },
+  all: {
+    name: 'All chapter members include the expired ones',
+    projection: (db, callback) => {
+      member.from(db).all(callback);
+    }
+  },
+  localExpiredOnly: {
+    name: 'Chapter members with expired local membership',
+    projection: (db, callback) => {
+      member.from(db).all((e, entities) => {
+        if (e) {
+          return callback(e);
+        }
+        let now = new Date();
+        let results = [];
+        for (let entity in entities) {
+          if (entity.membership.local.endDate < now) {
+            results.push(entity);
+          }
+        }
+        callback(null, results);
+      });
+    }
+  },
+  nationalExpiredOnly: {
+    name: 'Chapter members with expired national membership',
+    projection: (db, callback) => {
+      member.from(db).all((e, entities) => {
+        if (e) {
+          return callback(e);
+        }
+        let now = new Date();
+        let results = [];
+        for (let entity in entities) {
+          if (entity.membership.national.endDate < now) {
+            results.push(entity);
+          }
+        }
+        callback(null, results);
+      });
+    }
+  },
+  expiredOnly: {
+    name: 'Chapter members with expired membership of either kind',
+    projection: (db, callback) => {
+      member.from(db).all((e, entities) => {
+        if (e) {
+          return callback(e);
+        }
+        let now = new Date();
+        let results = [];
+        for (let entity in entities) {
+          if (entity.membership.national.endDate < now) {
+            results.push(entity);
+            continue;
+          }
+          if (entity.membership.local.endDate < now) {
+            results.push(entity);
+          }
+        }
+        callback(null, results);
+      });
+    }
+  },
+  onlyOfficers: {
+    name: 'Chapter Officers',
+    projection: (db, callback) => {
+      member.from(db).onlyOfficers(callback);
+    }
+  },
+  onlyRoadCaptains: {
+    name: 'Road Captains',
+    projection: (db, callback) => {
+      member.from(db).onlyRoadCaptains(callback);
+    }
+  }
+};
+
 export default member;

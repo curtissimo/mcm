@@ -1,17 +1,17 @@
 import rabbit from 'rabbit.js';
 import crypto from 'crypto';
 import moment from 'moment';
+import member from '../../models/member';
 import email from '../../models/email';
 
-let distributionLists = [
-  { id: 'all', name: 'All members in good standing', project: 'activeOnly' },
-  { id: 'all', name: 'All chapter members including the expried ones' },
-  { id: 'all', name: 'Chapter members with expired local membership', project: 'localExpiredOnly' },
-  { id: 'all', name: 'Chapter members with expired national membership', project: 'nationalExpiredOnly' },
-  { id: 'all', name: 'Chapter members with expired membership of either kind', project: 'expiredOnly' },
-  { id: 'onlyOfficers', name: 'Chapter officers' },
-  { id: 'onlyRoadCaptains', name: 'Road Captains' },
-];
+let distributionLists = [];
+
+for (let key of Object.keys(member.projections)) {
+  distributionLists.push({
+    id: key,
+    name: member.projections[key].name
+  });
+}
 
 function html2text(html) {
   return html.replace(/\n/g, ' ')
