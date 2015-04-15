@@ -4,6 +4,7 @@ import url from 'url';
 import nodemailer from 'nodemailer';
 import rabbit from 'rabbit.js';
 import schedule from 'node-schedule';
+import member from './models/member.js';
 
 console.info('MAILER-DAEMON: Environment variables');
 console.info('\tMCM_DB:', process.env.MCM_DB);
@@ -60,7 +61,7 @@ function mergeCouchInsert(db, doc) {
 }
 
 function getAccountDb(subdomain) {
-  if (!accountdbs.has(subdomain) === undefined) {
+  if (!accountdbs.has(subdomain)) {
     accountdbs.set(subdomain, nano(url.resolve(dburl, subdomain)));
   }
   return accountdbs.get(subdomain);
@@ -68,30 +69,38 @@ function getAccountDb(subdomain) {
 
 function fetchMail({ subdomain, id }) {
   let db = getAccountDb(subdomain);
-  return promisify(db, 'get', id);
+  return promisify(db, 'get', id)
+    .then(email => {
+      email.db = db;
+      return email;
+    });
 }
 
 function populateRecipients(email) {
-  let db = getAccountDb(subdomain);
   let options = { include_docs: true };
-  return promisify(db, 'view', 'member', email.group.view, options)
+  let db = email.db;
+  delete email.db;
+  console.info('\tProcessing email for:', email.group.view);
+  return promisify(member.projections[email.group.view], 'projection', db)
     .then(members => {
-      let promises = [];
-      for (let [ order, member ] of members.entries()) {
-        let recipient = {
-          to: `${member.firstName} ${member.lastName} <${member.email}>`,
-          $email_recipients_id: email._id,
-          $email_recipients_order: order,
-          kind: 'recipient'
-        };
-        promises.push(mergeCouchInsert(db, recipient));
+      email.recipients = [];
+      for (let m of members) {
+        if (!m.email) {
+          continue;
+        }
+        email.recipients.push({
+          email: m.email,
+          name: `"${m.firstName} ${m.lastName}"`,
+          id: m._id,
+          status: 'queued'
+        });
       }
-      return Promise.all(promises)
+      return promisify(db, 'insert', email);
     })
-    .then(recipients => {
+    .then(() => {
       return {
-        email: email,
-        recipients: recipients,
+        email,
+        recipients: email.recipients,
         db: db
       };
     });
@@ -102,16 +111,17 @@ function mailAndMark({ email, recipients, db }) {
   for (let recipient of recipients) {
     let missive = {
       from: email.from,
-      to: recipient.to,
+      to: `${recipient.name} <${recipient.email}>`,
       subject: email.subject,
       text: email.text,
-      html: email.html
+      html: email.html,
+      messageId: email.messageId,
+      headers: [
+        { key: 'X-Recipient-Id', value: recipient.id },
+        { key: 'x-mua', value: 'what.ismymc.com' }
+      ]
     }
-    let promise = promisify(transporter, 'sendMail', missive)
-      .then(() => {
-        recipient.sent = new Date().toISOString();
-        return mergeCouchInsert(db, recipient);
-      });
+    let promise = promisify(transporter, 'sendMail', missive);
     promises.push(promise);
   }
   return Promise.all(promises);
@@ -143,14 +153,16 @@ context.on('ready', () => {
   group.connect('mcm-group-mail', () => {
     console.info('MAILER-DAEMON: Connected to mcm-group-mail.');
     group.on('data', (directive) => {
-      console.info('MAILER-DAEMON: Message receivd on mcm-group-mail.');
-      console.info('\tCONTENT:', missive);
-      group.ack();
+      console.info('MAILER-DAEMON: Message received on mcm-group-mail.');
+      console.info('\tCONTENT:', directive);
       directive = JSON.parse(directive);
       fetchMail(directive)
         .then(email => populateRecipients(email))
         .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
-        .catch(e => console.error(e));
+        .then(() => group.ack())
+        .catch(e => {
+          console.error(e, e.stack);
+        });
     });
   });
 
@@ -159,7 +171,7 @@ context.on('ready', () => {
   single.connect('mcm-single-mail', () => {
     console.info('MAILER-DAEMON: Connected to mcm-single-mail.');
     single.on('data', (missive) => {
-      console.info('MAILER-DAEMON: Message receivd on mcm-single-mail.');
+      console.info('MAILER-DAEMON: Message received on mcm-single-mail.');
       console.info('\tCONTENT:', missive);
       single.ack();
       missive = JSON.parse(missive);

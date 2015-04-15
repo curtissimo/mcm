@@ -6,6 +6,10 @@ var fs = require('fs');
 var keepup = require('keepup');
 var server = null;
 
+process.env.MCM_RABBIT_URL = 'amqp://curtis:curtis@web-server';
+process.env.MCM_DB = 'http://couchdb:5984';
+process.env.MCM_MAIL_HOST = 'web-server';
+
 gulp.task('clean', function (cb) {
   del('./build', function (err) {
     if (err) {
@@ -19,6 +23,19 @@ gulp.task('es6', function () {
   return gulp.src([ './src/**/*.js' ])
     .pipe(babel())
     .pipe(gulp.dest('./build'));
+});
+
+gulp.task('grab-models', function (cb) {
+  var path = __dirname + '/../sites/src/models/*.js';
+  var to = __dirname + '/src/models';
+  exec('mkdir -p ' + to, function (e) {
+    if (e) {
+      return cb(e);
+    }
+    exec('cp ' + path + ' ' + to, function (err) {
+      cb(err);
+    });
+  });
 });
 
 gulp.task('reload', [ 'es6' ], function () {
@@ -59,7 +76,7 @@ gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/**/*.js', [ 'es6', 'reload' ]);
 });
 
-gulp.task('build', [ 'es6' ]);
+gulp.task('build', [ 'es6', 'grab-models' ]);
 gulp.task('default', [ 'build' ]);
 gulp.task('dev', [ 'build', 'serve', 'watch' ]);
 gulp.task('dist', [ 'label' ]);
