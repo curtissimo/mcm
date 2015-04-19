@@ -2,6 +2,22 @@
   "folders":
   [
     {
+      "path": ".",
+      "name": "root",
+      "folder_exclude_patterns": [
+        "src",
+        "test",
+        "build",
+        "dist",
+        "node_modules"
+      ],
+      "file_exclude_patterns": [
+        "*.scpt",
+        "*.sublime-*",
+        "kill*"
+      ]
+    },
+    {
       "path": "./src",
       "name": "src",
       "folder_exclude_patterns": [
