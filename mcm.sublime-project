@@ -2,26 +2,15 @@
   "folders":
   [
     {
-      "path": "./src/sites",
-      "name": "Chapter Web Sites",
+      "path": "./src",
+      "name": "src",
       "folder_exclude_patterns": [
-        "node_modules",
         "fonts"
       ]
     },
     {
-      "path": "./src/mailer-daemon",
-      "name": "Mailer Daemon",
-      "folder_exclude_patterns": [
-        "node_modules"
-      ]
-    },
-    {
-      "path": "./src/haraka-plugins",
-      "name": "Haraka Plugins",
-      "folder_exclude_patterns": [
-        "node_modules"
-      ]
+      "path": "./test",
+      "name": "test"
     }
   ]
 }
