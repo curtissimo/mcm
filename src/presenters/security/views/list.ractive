@@ -1,0 +1,54 @@
+<h1 class="banner">Security</h1>
+<section class="min-md-screen">
+  Check the boxes below to assign the security settings for any member of the
+  chapter. By checking the box, you give that member the ability to create,
+  edit, and delete items in that area.
+</section>
+<section class="max-sm-screen">
+  <div class="is-error">
+    You need to use this page on a wider screen.
+  </div>
+</section>
+<section class="min-md-screen">
+  <form class="pure-form" action="/chapter/security" method="post" enctype="application/x-www-form-urlencoded">
+    <div class="pure-control-group">
+      <table class="security-table">
+        <thead>
+          <tr>
+            <th class="security-table-permission-label-header">Member</th>
+            {{#permissions:key}}
+            <th class="security-table-permission-header">{{ key }}</th>
+            {{/permissions}}
+          </tr>
+        </thead>
+        <tbody>
+          {{#members:i}}
+          <tr class="stripe-{{ i % 2 }}">
+            <td class="security-table-permission-person">{{ lastName }}, {{ firstName }}</td>
+            {{#~/permissions:key}}
+            <td class="security-table-permission-item">
+              {{#if permissions[.]}}
+              <input value="true" name="members[{{ _id }}][permissions][{{ . }}]" type="checkbox" checked>
+              {{else}}
+              <input value="true" name="members[{{ _id }}][permissions][{{ . }}]" type="checkbox">
+              {{/if}}
+            </td>
+            {{/permissions}}
+          </tr>
+          {{#if i % 10 === 9}}
+          <tr class='security-table-mid-header'>
+            <th class="security-table-permission-label-header">Member</th>
+            {{#each ~/permissions:key}}
+            <th class="security-table-permission-header">{{ key }}</th>
+            {{/each}}
+          </tr>
+          {{/if}}
+          {{/members}}
+        </tbody>
+      </table>
+    </div>
+    <div class="pure-controls">
+      <button type="submit" class="pure-button pure-button-primary">Save</button>
+    </div>
+  </form>
+</section>

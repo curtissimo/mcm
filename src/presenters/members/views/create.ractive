@@ -1,0 +1,114 @@
+<h1 class="banner">Create a new member</h1>
+<section>
+  All right! You have a new member! Just add this minimal information to get
+  them up and running.
+</section>
+<section>
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/members">
+    <div class="form-panel">
+      <fieldset>
+        <legend>Name and stuff</legend>
+        <div class="pure-control-group">
+          <label for="firstName">First name</label>
+          <input type="text" value="{{ firstName }}" name="firstName" id="firstName" required>
+          {{#if errors.firstName}}
+          <div class="form-error">
+            <p>The first name {{ errors.firstName }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="lastName">Last name</label>
+          <input type="text" value="{{ lastName }}" name="lastName" id="lastName" required>
+          {{#if errors.lastName}}
+          <div class="form-error">
+            <p>That last name {{ errors.lastName }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="hogNumber">H.O.G.#</label>
+          <input type="text" value="{{ hogNumber }}" name="hogNumber" id="hogNumber" required>
+          {{#if errors.hogNumber}}
+          <div class="form-error">
+            <p>The H.O.G.# {{ errors.hogNumber }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="email">Email</label>
+          <input type="email" value="{{ email }}" name="email" id="email" required>
+          {{#if errors.email}}
+          <div class="form-error">
+            <p>The email {{ errors.email }}</p>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Privacy</legend>
+        <p>
+          The system has generated a random password. Feel free to change it,
+          if you want. We'll send it to them when we send the email.
+        </p>
+        <div class="pure-control-group">
+          <label for="password">Password</label>
+          <input type="password" value="{{ password }}" name="password" id="password" required>
+          {{#if errors.password}}
+          <div class="form-error">
+            <p>The password {{ errors.password }}</p>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Local Membership Dates</legend>
+        <p>
+          We've put in some reasonable dates for you, here. From today until
+          the end of the year is the default dates for local membership.
+        </p>
+        <div class="pure-control-group">
+          <label for="localJoined">Joined on</label>
+          <input type="date" data-value="{{ localJoinedNative }}" value="{{ localJoined }}" name="localJoined" id="localJoined" required>
+          {{#if errors.localJoined}}
+          <div class="form-error">
+            <p>The joined on date {{ errors.localJoined }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="localExpiration">Expires on</label>
+          <input type="date" data-value="{{ localExpirationNative }}" value="{{ localExpiration }}" name="localExpiration" id="localExpiration" required>
+          {{#if errors.localExpiration}}
+          <div class="form-error">
+            <p>The expires on date {{ errors.localExpiration }}</p>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>National Membership Dates</legend>
+        <p>
+          You may not know these, which is ok. Just leave them blank, if you
+          have to.
+        </p>
+        <div class="pure-control-group">
+          <label for="nationalJoined">Joined on</label>
+          <input type="date" value="{{ nationalJoined }}" name="nationalJoined" id="nationalJoined">
+        </div>
+        <div class="pure-control-group">
+          <label for="nationalExpiration">Expires on</label>
+          <input type="date" value="{{ nationalExpiration }}" name="nationalExpiration" id="nationalExpiration">
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/members" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Create and email member</button>
+      </div>
+    </div>
+  </form>
+</section>

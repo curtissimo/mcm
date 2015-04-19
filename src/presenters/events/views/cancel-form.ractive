@@ -1,0 +1,90 @@
+{{#event}}
+<div class="subbanner">
+  A {{ activity }} sponsored by the {{ sponsor }}
+</div>
+<h1 class="banner under-subbanner">{{ title }}</h1>
+<section>
+  <div class="is-error">
+    This action will cancel this {{ activity }}. Please provide a reason.
+    <form class="pure-form pure-form-stacked" method="post" action="/chapter/events/{{ _id }}">
+      <input type="hidden" name="X-HTTP-Method-Override" value="patch">
+      <textarea id="cancelledReason" name="cancelledReason" class="pure-input-1"></textarea>
+      <div class="form-controls">
+        <div class="pure-controls">
+          <a href="/chapter/events/{{ _id }}" class="pure-button">Cancel this cancellation</a>
+          <button type="submit" class="pure-button pure-button-primary">Cancel this {{ activity }}</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{{#days}}
+<section class="event-item">
+  <div class="event-item-description">
+    <dl>
+      <dt>Description</dt>
+      <dd>{{ description }}</dd>
+    </dl>
+  </div>
+  <div class="event-item-details">
+    <dl>
+      {{#if roadCaptain}}
+      <dt>Road captain</dt>
+      <dd>{{ roadCaptain }}</dd>
+      {{/if}}
+      {{#if location}}
+      <dt>Location</dt>
+      <dd>{{ location }}</dd>
+      {{/if}}
+      {{#if destination}}
+      <dt>Destination</dt>
+      {{#if destinationUrl}}
+      <dd>
+        <a href="{{ destinationUrl }}" target="_blank">{{ destination }}</a>
+      </dd>
+      {{else}}
+      <dd>{{ destination }}</dd>
+      {{/if}}
+      {{/if}}
+      <dt>Date</dt>
+      <dd>{{ formattedDate }}</dd>
+      <dt>Starts at</dt>
+      <dd>{{ meetAt }}</dd>
+      <dt>Ends at</dt>
+      <dd>{{ endsAt }}</dd>
+      <dt>Open to</dt>
+      <dd>
+        {{#if attendance === 'closed'}}
+        any chapter member and one guest.
+        {{elseif attendance === 'open'}}
+        anyone to come and attend the {{ activity }}.
+        {{else}}
+        <i>only</i> chapter members!
+        {{/if}}
+      </dd>
+      {{#routeFiles}}
+      {{#garmin}}
+      <dt>Garmin</dt>
+      <dd>
+        <a href="/chapter/events/{{ _id }}/garmin">{{ fileName }}</a>
+      </dd>
+      {{/garmin}}
+      {{#pdf}}
+      <dt>PDF</dt>
+      <dd>
+        <a href="/chapter/events/{{ _id }}/pdf">{{ fileName }}</a>
+      </dd>
+      {{/pdf}}
+      {{#est}}
+      <dt>Streets &amp; Trips</dt>
+      <dd>
+        <a href="/chapter/events/{{ _id }}/est">{{ fileName }}</a>
+      </dd>
+      {{/est}}
+      {{/routeFiles}}
+    </dl>
+  </div>
+</section>
+{{/days}}
+{{/event}}
+<section class="fine-print">{{ legalese }}</section>

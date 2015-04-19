@@ -1,0 +1,72 @@
+@import 'partials/_media-queries';
+$menu-width: 15em;
+
+#overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: #888;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: none;
+
+  @include min-lg-screen {
+    display: none !important;
+  }
+}
+
+#main-menu {
+  @include min-lg-screen {
+    left: 0;
+  }
+
+  transition: left .3s;
+
+  position: fixed;
+  width: $menu-width;
+  height: 100%;
+  left: -$menu-width;
+  box-sizing: border-box;
+  z-index: 1021;
+  overflow-y: auto;
+
+  &.is-shown {
+    left: 0;
+  }
+}
+
+#main-content {
+  @include min-lg-screen {
+    margin-left: $menu-width;
+  }
+
+  padding-top: 3em;
+
+  > :first-child {
+    margin-top: 0;
+  }
+}
+
+#action-toolbar {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+}
+
+#main-toolbar {
+  overflow: hidden;
+  height: 3em;
+  position: fixed;
+  z-index: 1000;
+}
+
+#debug {
+  background-color: gray;
+
+  @include min-lg-screen {
+    margin-left: $menu-width;
+  }
+}

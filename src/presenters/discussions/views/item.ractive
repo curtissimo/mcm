@@ -1,0 +1,96 @@
+{{#discussion}}
+<section class="discussion-content">
+  <div class="discussion-content-author-photo">
+    <img class="pure-img" src="/chapter/members/{{ author._id }}/photo">
+  </div>
+  <div class="discussion-content-text">
+    <div class="subbanner">
+      Posted in {{ category }} by
+      {{#author}}
+      {{ firstName }}
+      {{ lastName }}
+      {{#if nickName }}
+        ({{ nickName }})
+      {{/if}}
+      {{/author}}
+    </div>
+    <div class="subsubbanner">Written {{ createdOn }}</div>
+    <h1 class="banner under-subbanner followed-by-banner">{{ title }}</h1>
+    <div class="discussion-content-text-copy">{{ content }}</div>
+  </div>
+</section>
+{{#comments}}
+  <div class="discussion-comment stripe-{{(@index + 1) % 2}}">
+    <section class="comment-content">
+      <div class="comment-content-author-photo">
+        <img class="pure-img" src="/chapter/members/{{ author._id }}/photo">
+      </div>
+      <div class="comment-content-author">
+        {{#author}}
+        {{#if private}}
+          {{ firstName }}
+          {{ lastName }}
+          {{#if nickName }}
+            ({{ nickName }})
+          {{/if}}
+        {{else}}
+          <a href="/chapter/members/{{ _id }}">
+            {{ firstName }}
+            {{ lastName }}
+            {{#if nickName }}
+              ({{ nickName }})
+            {{/if}}
+          </a>
+        {{/if}}
+        {{/author}}
+        <span class="not-so-important-text">
+          replied on
+          {{ createdOn }}
+        </span>
+      </div>
+      <div class="comment-content-text">
+        {{#if ~/discussion.title !== this.title}}
+        <h4 class="comment-content-title">{{ title }}</h4>
+        {{/if}}
+        <div>{{ content }}</div>
+        {{#if canManage}}
+        <div class="comment-delete">
+          <a class="delete-link" href="/chapter/discussions/{{ ~/discussion._id }}/comments/{{ _id }}">
+            Delete
+          </a>
+          this comment immediately!
+        </div>
+        {{/if}}
+      </div>
+    </section>
+  </div>
+{{/comments}}
+{{/discussion}}
+<section id="comment-form">
+  <form class="pure-form pure-form-stacked" method="post" action="/chapter/discussions/{{ discussion._id }}/comments">
+    <input type="hidden" name="$discussion_comments_order" value="{{ discussion.comments.length }}">
+    <div class="pure-control-group">
+      <label for="title">Title</label>
+      <input class="pure-input-1" type="text" value="{{ discussion.title }}" name="title" id="title" required>
+      {{#if errors.title}}
+      <div class="form-error">
+        <p>The title {{ errors.title }}</p>
+      </div>
+      {{/if}}
+    </div>
+    <div class="pure-control-group">
+      <label for="content">Message</label>
+      <textarea class="pure-input-1 long-text" name="content" id="content" autofocus required></textarea>
+      {{#if errors.content}}
+      <div class="form-error">
+        <p>The content {{ errors.content }}</p>
+      </div>
+      {{/if}}
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <button type="submit" class="pure-button pure-button-primary">Post your comment</button>
+      </div>
+    </div>
+  </form>
+</section>

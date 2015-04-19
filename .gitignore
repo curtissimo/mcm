@@ -6,6 +6,7 @@ lib-cov
 *.out
 *.pid
 *.gz
+*.sublime-workspace
 
 pids
 logs
@@ -19,3 +20,9 @@ node_modules/
 
 r.js
 assets/css/
+assets/themes/leather/*.css
+lib/**/views/*.js
+
+build/
+dist/
+src/files/**/*.*

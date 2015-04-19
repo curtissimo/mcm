@@ -1,0 +1,28 @@
+<h1 class="banner">Delete a Public Document</h1>
+<section>
+  Check the document below that you want to delete and click the "Delete"
+  button at the bottom.
+  <p class="is-error">
+    You can't undo this! Check and click with caution!
+  </p>
+</section>
+<section>
+  <form class="pure-form" method="post" action="/chapter/public-documents">
+    <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+    <ul class="document-list">
+      {{#documents}}
+      <li>
+        <label for="{{ _id }}">
+          <input type="radio" value="{{ _id }}" name="id" id="{{ _id }}"> {{ this.title }}
+        </label>
+        <br>
+        {{ description }}
+      </li>
+      {{/documents}}
+    </ul>
+    <div class="pure-controls">
+      <a href="/chapter/public-documents" class="pure-button">Cancel</a>
+      <button type="submit" class="pure-button pure-button-primary">Delete</button>
+    </div>
+  </form>
+</section>

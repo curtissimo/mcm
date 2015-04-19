@@ -1,0 +1,9 @@
+Hello, {{ entity.firstName }}. 
+
+Someone recently requested your password. If you didn't, then you can ignore this email. 
+
+If you did, then your password is: 
+
+  {{ entity.password }} 
+
+Keep the shiny side up!

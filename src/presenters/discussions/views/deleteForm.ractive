@@ -1,0 +1,75 @@
+<section>
+  <div class="is-error">
+    This action will delete this discussion and all associated comments. You
+    cannot undo this deletion. Are you sure you want to continue?
+    <form class="pure-form pure-form-stacked" method="post" action="/chapter/discussions/{{ discussion._id }}">
+      <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+      <div class="form-controls">
+        <div class="pure-controls">
+          <a href="/chapter/discussions/{{ discussion._id }}" class="pure-button">Cancel</a>
+          <button type="submit" class="pure-button pure-button-primary">Delete this discussion</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{{#discussion}}
+<section class="discussion-content">
+  <div class="discussion-content-author-photo">
+    <img class="pure-img" src="/chapter/members/{{ author._id }}/photo">
+  </div>
+  <div class="discussion-content-text">
+    <div class="subbanner">
+      Posted in {{ category }} by
+      {{#author}}
+      {{ firstName }}
+      {{ lastName }}
+      {{#if nickName }}
+        ({{ nickName }})
+      {{/if}}
+      {{/author}}
+    </div>
+    <div class="subsubbanner">Written {{ createdOn }}</div>
+    <h1 class="banner under-subbanner followed-by-banner">{{ title }}</h1>
+    <div class="discussion-content-text-copy">{{ content }}</div>
+  </div>
+</section>
+{{#comments}}
+  <div class="discussion-comment stripe-{{(@index + 1) % 2}}">
+    <section class="comment-content">
+      <div class="comment-content-author-photo">
+        <img class="pure-img" src="/chapter/members/{{ author._id }}/photo">
+      </div>
+      <div class="comment-content-author">
+        {{#author}}
+        {{#if private}}
+          {{ firstName }}
+          {{ lastName }}
+          {{#if nickName }}
+            ({{ nickName }})
+          {{/if}}
+        {{else}}
+          <a href="/chapter/members/{{ _id }}">
+            {{ firstName }}
+            {{ lastName }}
+            {{#if nickName }}
+              ({{ nickName }})
+            {{/if}}
+          </a>
+        {{/if}}
+        {{/author}}
+        <span class="not-so-important-text">
+          replied on
+          {{ createdOn }}
+        </span>
+      </div>
+      <div class="comment-content-text">
+        {{#if ~/discussion.title !== this.title}}
+        <h4 class="comment-content-title">{{ title }}</h4>
+        {{/if}}
+        {{ content }}
+      </div>
+    </section>
+  </div>
+{{/comments}}
+{{/discussion}}

@@ -1,0 +1,119 @@
+<h1 class="banner">Events</h1>
+<section class="events-list">
+  <div class="calendar-column-left min-md-screen">
+    {{#months}}
+    <table class="calendar">
+      <thead class="calendar-month-name">
+        <tr>
+          <th colspan="7">{{ name }}</th>
+        </tr>
+      </thead>
+      <thead class="calendar-day-name">
+        <tr>
+          <th>S</th>
+          <th>M</th>
+          <th>T</th>
+          <th>W</th>
+          <th>T</th>
+          <th>F</th>
+          <th>S</th>
+        </tr>
+      </thead>
+      <tbody class="calendar-weeks">
+        {{#weeks}}
+        <tr>
+          {{#this}}
+            {{#if !this}}
+            <td>
+              <span class="day not-a-day"></span>
+            </td>
+            {{elseif event}}
+            <td>
+              <span class="day day-has-event">
+                {{ number }}
+              </span>
+            </td>
+            {{else}}
+            <td>
+              <span class="day">{{ number }}</span>
+            </td>
+            {{/if}}
+          {{/this}}
+        </tr>
+        {{/weeks}}
+      </tbody>
+    </table>
+    {{/months}}
+  </div>
+  <div class="calendar-column-right">
+    <ul class="discussions-category">
+      {{#events:key}}
+      <li class="event-entry stripe-{{(@index + 1) % 2}}">
+        <div class="event-entry-summary">
+          <div class="event-entry-date">
+            <div class="event-entry-date-month">
+              {{ monthNames[this[0].month] }}
+            </div>
+            <div class="event-entry-date-day">
+              {{ this[0].date }}
+            </div>
+          </div>
+          <div class="event-entry-text-holder">
+            {{#each this:i}}
+            <div class="event-entry-text">
+              {{#if routeFiles.garmin}}
+              <div class="event-entry-files min-sm-screen">
+                <ul class="event-entry-files-list">
+                  <li class="event-entry-files-item"><a href="/chapter/events/{{ _id }}/garmin">Garmin</a></li>
+                </ul>
+              </div>
+              {{/if}}
+              <div class="event-entry-icon">
+                {{#if activity === 'movie'}}
+                <i class="fa fa-film"></i>
+                {{elseif activity === 'meeting'}}
+                <i class="fa fa-user"></i>
+                {{elseif activity === 'meal'}}
+                <i class="fa fa-cutlery"></i>
+                {{else}}
+                <i class="fa fa-motorcycle"></i>
+                {{/if}}
+              </div>
+              <div class="event-entry-title">
+                {{#if cancelledReason}}
+                <span class="is-cancelled">Cancelled</span>
+                {{/if}}
+                <a href="/chapter/events/{{ _id }}">{{ title }}</a>
+              </div>
+              {{#if roadCaptain }}
+              <div class="event-entry-rc">
+                Led by {{ roadCaptain }}
+              </div>
+              {{/if}}
+              {{#if ksuAt || meetAt}}
+              <div class="event-entry-ksu">
+                {{#if meetAt}}
+                Meet at {{ meetAt }}
+                {{/if}}
+                {{#if ksuAt && meetAt}}
+                |
+                {{/if}}
+                {{#if ksuAt}}
+                Kick-stands up at {{ ksuAt }}
+                {{/if}}
+              </div>
+              {{/if}}
+              {{#if location }}
+              <div class="event-entry-location">
+                Held at {{ location }}
+              </div>
+              {{/if}}
+            </div>
+            {{/each}}
+          </div>
+        </div>
+      </li>
+      {{/events}}
+    </ul>
+  </div>
+</section>

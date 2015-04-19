@@ -1,0 +1,3 @@
+#!/bin/bash
+
+kill -HUP `top -l 1 | grep node | awk '{ print $1 }'`

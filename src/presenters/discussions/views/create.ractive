@@ -1,0 +1,58 @@
+{{#discussion}}
+<h1 class="banner">New Discussion</h1>
+<section>
+  It's great that you want to start a new discussion to share with the
+  chapter. Just create a title, choose a category, and write the opening
+  remarks to get the ball rolling.
+</section>
+<section>
+  <form class="pure-form pure-form-stacked" method="post" action="/chapter/discussions">
+    <div class="pure-control-group">
+      <label for="category">Category</label>
+      <select name="category" id="category">
+        <option {{#if category === 'Advice'}}selected{{/if}}>Advice</option>
+        <option {{#if category === 'Ride Idea'}}selected{{/if}}>Ride Idea</option>
+        <option {{#if category === 'Maintenance'}}selected{{/if}}>Maintenance</option>
+        <option {{#if category === 'Off-Topic'}}selected{{/if}}>Off-Topic</option>
+      </select>
+      {{#if errors.category}}
+      <div class="form-error">
+        <p>You must select a category</p>
+      </div>
+      {{/if}}
+    </div>
+    <div class="pure-control-group">
+      <label for="title">Title</label>
+      <input class="pure-input-1" type="text" value="{{ this.title }}" name="title" id="title" required>
+      {{#if errors.title}}
+      <div class="form-error">
+        <p>The title {{ errors.title }}</p>
+      </div>
+      {{/if}}
+    </div>
+    <div class="pure-control-group">
+      <label for="content">Message</label>
+      <textarea class="pure-input-1 long-text" name="content" id="content" required>{{ this.content }}</textarea>
+      {{#if errors.content}}
+      <div class="form-error">
+        <p>The content {{ errors.content }}</p>
+      </div>
+      {{/if}}
+    </div>
+    {{#if canManage}}
+    <div class="pure-control-group">
+      <label for="sticky">
+        <input id="sticky" name="sticky" type="checkbox" value="true">
+        Make this discussion sticky
+      </label>
+    </div>
+    {{/if}}
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/discussions" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Start the discussion</button>
+      </div>
+    </div>
+  </form>
+</section>
+{{/discussion}}

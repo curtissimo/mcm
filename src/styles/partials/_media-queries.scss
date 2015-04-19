@@ -1,0 +1,28 @@
+$small-screen-query: "screen and (min-width: 35.5em)";
+$medium-screen-query: "screen and (min-width: 48em)";
+$large-screen-query: "screen and (min-width: 64em)";
+$extra-large-screen-query: "screen and (min-width: 80em)";
+
+@mixin min-sm-screen {
+  @media #{$small-screen-query} {
+    @content;
+  }
+}
+
+@mixin min-md-screen {
+  @media #{$medium-screen-query} {
+    @content;
+  }
+}
+
+@mixin min-lg-screen {
+  @media #{$large-screen-query} {
+    @content;
+  }
+}
+
+@mixin min-xl-screen {
+  @media #{$extra-large-screen-query} {
+    @content;
+  }
+}

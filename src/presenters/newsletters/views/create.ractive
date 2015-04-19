@@ -1,0 +1,47 @@
+<h1 class="banner">Upload a newsletter</h1>
+<section>
+  Congratulations on creating a newsletter for your chapter! Go ahead and fill
+  out the form below and click the submit button!
+</section>
+<section>
+  <form class="pure-form pure-form-aligned" method="post" action="/chapter/newsletters" enctype="multipart/form-data">
+    <fieldset>
+      <div class="pure-control-group">
+        <label for="month">Month for</label>
+        <select id="month" name="month">
+          {{#months:i}}
+            {{#if i === month}}
+              <option value="{{ i }}" selected>{{ . }}</option>
+            {{else}}
+              <option value="{{ i }}">{{ . }}</option>
+            {{/if}}
+          {{/months}}
+        </select>
+        <input class="input-year" type="number" value="{{ year }}" name="year" id="year" required>
+        {{#if errors.year || errors.month}}
+        <div class="form-error">
+          {{#if errors.month}}<p>Month {{errors.month}}</p>{{/if}}
+          {{#if errors.year}}<p>Year {{errors.year}}</p>{{/if}}
+        </div>
+        {{/if}}
+      </div>
+      <div class="pure-control-group">
+        <label for="file">File</label>
+        <input type="file" id="file" name="file" required>
+        {{#if errors.file}}
+        <div class="form-error">
+          <p>You must select a file to upload</p>
+        </div>
+        {{/if}}
+      </div>
+      <div class="pure-control-group">
+        <label for="description">Description</label>
+        <textarea class="long-plain-text" name="description" id="description"></textarea>
+      </div>
+      <div class="pure-controls">
+        <a href="/chapter/newsletters" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Upload</button>
+      </div>
+    </fieldset>
+  </form>
+</section>

@@ -1,0 +1,133 @@
+@import 'media-queries';
+@import 'colors';
+
+.is-error {
+  background-color: $accent-color;
+  padding: 1em;
+  border-radius: .5em;
+  color: $accent-color-text;
+}
+
+.is-xs-screen {
+  display: block;
+
+  @include min-sm-screen {
+    display: none;
+  }
+}
+
+.is-sm-screen {
+  display: none;
+
+  @include min-sm-screen {
+    display: block;
+  }
+
+  @include min-md-screen {
+    display: none;
+  }
+}
+
+.is-md-screen {
+  display: none;
+
+  @include min-md-screen {
+    display: block;
+  }
+
+  @include min-lg-screen {
+    display: none;
+  }
+}
+
+.is-lg-screen {
+  display: none;
+
+  @include min-lg-screen {
+    display: block;
+  }
+
+  @include min-xl-screen {
+    display: none;
+  }
+}
+
+.is-xl-screen {
+  display: none;
+
+  @include min-xl-screen {
+    display: block;
+  }
+}
+
+.min-sm-screen {
+  display: none;
+
+  @include min-sm-screen {
+    display: block;
+  }
+}
+
+.min-md-screen {
+  display: none;
+
+  @include min-md-screen {
+    display: block;
+  }
+}
+
+.min-lg-screen {
+  display: none;
+
+  @include min-lg-screen {
+    display: block;
+  }
+}
+
+.min-xl-screen {
+  display: none;
+
+  @include min-xl-screen {
+    display: block;
+  }
+}
+
+.max-sm-screen {
+  display: block;
+
+  @include min-sm-screen {
+    display: none;
+  }
+}
+
+.max-md-screen {
+  display: block;
+
+  @include min-md-screen {
+    display: none;
+  }
+}
+
+.max-lg-screen {
+  display: block;
+
+  @include min-lg-screen {
+    display: none;
+  }
+}
+
+.max-xl-screen {
+  display: block;
+
+  @include min-xl-screen {
+    display: none;
+  }
+}
+
+.is-mostly-hidden {
+  width: 1px;
+  height: 1px;
+  opacity: .01;
+  border: 0;
+  background: transparent;
+}

@@ -1,0 +1,56 @@
+<h1 class="banner">Log in!</h1>
+<section>
+  <p>
+    Type in your email and password, below, to log into the Members' only portion
+    of the Web site. You can access events, discussion groups, your blog, 
+    newsletters, and more!
+  </p>
+  {{#bad}}
+  <p class="is-error">
+    You did not provide a user name and/or password that matched one created by
+    the Membership officer. Please try again or send an email to you membership
+    officer.
+  </p>
+  {{/bad}}
+  {{#expiredMembership}}
+  <p class="is-error">
+    Your membership has expired. Please contact your membership officer to
+    renew your membership with the chapter.
+  </p>
+  {{/bad}}
+  <form class="pure-form pure-form-stacked" method="post" action="/session">
+    <fieldset>
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" class="pure-input-1" required>
+
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" class="pure-input-1" required>
+
+      <label for="remember" class="pure-checkbox">
+        <input id="remember" name="remember" value="1" type="checkbox" checked> Remember me
+      </label>
+
+      <input type="hidden" name="X-HTTP-Method-Override" value="put">
+      
+      <button type="submit" class="pure-button pure-button-primary">Submit my credentials</button>
+  </form>
+</section>
+<h1 class="banner">Forgot your password?</h1>
+<section>
+  <form class="pure-form pure-form-stacked" method="post" action="/session/help">
+    <fieldset>
+      <label for="hogNumber">
+        Just provide your national H.O.G.&reg; number, below, and we'll send
+        an email to you with some help with your password.
+      </label>
+      <label for="hogNumber">
+        Make sure that you include the letters at the beginning of the number,
+        like "US1234567".
+      </label>
+      <input id="hogNumber" name="hogNumber" type="text" class="pure-input-1" required>
+
+      <input type="hidden" name="X-HTTP-Method-Override" value="put">
+      
+      <button type="submit" class="pure-button pure-button-primary">Send my password to me</button>
+  </form>
+</section>

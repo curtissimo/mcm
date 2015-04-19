@@ -1,0 +1,17 @@
+<h1 class="banner">Sendind an email</h1>
+<section>
+  <p>
+    We got your request. If that H.O.G.&reg; number is registered with this
+    chapter, then you'll receive an email. That will normally happen within
+    a couple of minutes.
+  </p>
+  <p class="is-error">
+    NOTE: If this is the first time for you to receive an email from us, then
+    your email provider may incorrectly label it as SPAM. Please check your
+    SPAM or JUNK mail folders (if such things exist) if you don't see our
+    email within the next 10 minutes, or so.
+  </p>
+  <p>
+    <a href="/chapter/sessions">Return to the login page</a>
+  </p>
+</section>
