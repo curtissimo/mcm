@@ -1,5 +1,9 @@
 #!/bin/bash
 
-for i in `top -l 1 | grep node | awk '{ print $1 }'`
-  do kill -HUP $i
+POW_PID=`curl -H host:pow localhost/status.json | sed 's/{"pid"://' | sed 's/,.*//'`
+
+for i in `top -l 1 | grep node | awk '{ print $1 }'`; do
+  if [ $i != $POW_PID ]; then
+    do kill -HUP $i
+  fi
 done
