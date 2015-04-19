@@ -1,4 +1,5 @@
 var del = require('del');
+var exec = require('child_process').exec;
 var gulp = require('gulp');
 
 process.env.MCM_DB = 'http://couchdb:5984';
@@ -26,15 +27,19 @@ process.on('uncaughtException', function(err) {
   }
 });
 
-gulp.task('clean', function (next) {
-  del([ './build', './dist' ], function (e) {
-    next(e);
-  });
-});
+gulp.task('clean', [ 'dist:clean', 'build:clean' ]);
 
 gulp.task('default', [ 'build' ]);
 
 gulp.task('dev', [ 'run:site', 'watch' ]);
+
+gulp.task('dist', [ 'build' ], function (next) {
+  exec('cp -R ./build ./dist', next);
+});
+
+gulp.task('dist:clean', function (next) {
+  del('./dist', next);
+});
 
 gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/sites/scripts/*.js', [ 'build:es3-client' ]);

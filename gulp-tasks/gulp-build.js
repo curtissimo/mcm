@@ -1,5 +1,6 @@
 var autoprefixer = require('gulp-autoprefixer');
 var babel = require('gulp-babel');
+var del = require('del');
 var fs = require('fs');
 var gulp = require('gulp');
 var hash = require('gulp-hash');
@@ -58,6 +59,10 @@ function syncIfActive() {
 
   return stream;
 }
+
+gulp.task('build:clean', function (next) {
+  del('./build', next);
+});
 
 gulp.task('build:es3-client', function () {
   return gulp.src('./src/sites/scripts/*.js')
