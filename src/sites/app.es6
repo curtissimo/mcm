@@ -1,4 +1,4 @@
-import 'babel-core/polyfill';
+import 'babel/polyfill';
 import express from 'express';
 import path from 'path';
 import { Directive, LeslieMvp } from './leslie';

@@ -1,10 +1,10 @@
-import 'babel-core/polyfill';
+import 'babel/polyfill';
 import nano from 'nano';
 import url from 'url';
 import nodemailer from 'nodemailer';
 import rabbit from 'rabbit.js';
 import schedule from 'node-schedule';
-import member from './models/member.js';
+import member from '../models/member.js';
 
 console.info('MAILER-DAEMON: Environment variables');
 console.info('\tMCM_DB:', process.env.MCM_DB);
