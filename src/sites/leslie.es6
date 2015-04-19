@@ -50,6 +50,7 @@ export class Directive {
 
 export class RedirectDirective extends Directive {
   constructor(href) {
+    super();
     this._href = href;
   }
 
@@ -60,6 +61,7 @@ export class RedirectDirective extends Directive {
 
 export class NotFoundDirective extends Directive {
   constructor() {
+    super();
     this.code = 404;
     this.content = 'Cannot find that resource.';
   }
@@ -67,6 +69,7 @@ export class NotFoundDirective extends Directive {
 
 export class NotModifiedDirective extends Directive {
   constructor() {
+    super();
     this.code = 304;
     this.content = '';
   }
@@ -74,6 +77,7 @@ export class NotModifiedDirective extends Directive {
 
 export class UnauthorizedDirective extends Directive {
   constructor() {
+    super();
     this.code = 401;
     this.content = 'You cannot access this resource.';
   }
@@ -81,6 +85,7 @@ export class UnauthorizedDirective extends Directive {
 
 export class FileDirective extends Directive {
   constructor(path, name = 'attachment', section, download) {
+    super();
     this._path = path;
     this._name = name;
     this._download = download;
