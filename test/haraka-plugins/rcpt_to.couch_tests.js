@@ -1,8 +1,8 @@
 import assert from 'assert';
 import url from 'url';
-import { hook_rcpt } from '../src/inbound/plugins/rcpt_to.couch';
-import member from '../src/inbound/models/member';
-import account from '../src/inbound/models/account';
+import { hook_rcpt } from '../../src/haraka-plugins/inbound/plugins/rcpt_to.couch';
+import member from '../../src/models/member';
+import account from '../../src/models/account';
 
 /* from haraka */
 let deny               = 902;

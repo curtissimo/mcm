@@ -1,7 +1,7 @@
 import assert from 'assert';
 import mimelib from 'mimelib';
-import email from '../src/inbound/models/email';
-import { hook_queue } from '../src/inbound/plugins/queue/couch';
+import email from '../../src/models/email';
+import { hook_queue } from '../../src/haraka-plugins/inbound/plugins/queue/couch';
 
 /* from haraka */
 let deny               = 902;

@@ -1,6 +1,6 @@
 import url from 'url';
-import account from '../models/account';
-import member from '../models/member';
+import account from '../../../models/account';
+import member from '../../../models/member';
 
 if (typeof DENYSOFT === 'undefined') {
   var DENYSOFT = 903;

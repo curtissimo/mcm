@@ -1,5 +1,5 @@
 import assert from 'assert';
-import { hook_data } from '../src/inbound/plugins/queue/couch';
+import { hook_data } from '../../src/haraka-plugins/inbound/plugins/queue/couch';
 
 class Continuation {
   constructor() {

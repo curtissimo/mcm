@@ -1,6 +1,6 @@
 import url from 'url';
 import mimelib from 'mimelib';
-import email from '../../models/email';
+import email from '../../../../models/email';
 
 if (typeof DENYSOFT === 'undefined') {
   var DENYSOFT = 903;
