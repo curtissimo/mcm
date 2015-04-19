@@ -1,0 +1,28 @@
+{
+  "folders":
+  [
+    {
+      "path": "./sites",
+      "name": "Chapter Web Sites",
+      "folder_exclude_patterns": [
+        "node_modules",
+        "build/files",
+        "fonts"
+      ]
+    },
+    {
+      "path": "./mailer-daemon",
+      "name": "Mailer Daemon",
+      "folder_exclude_patterns": [
+        "node_modules"
+      ]
+    },
+    {
+      "path": "./haraka-plugins",
+      "name": "Haraka Plugins",
+      "folder_exclude_patterns": [
+        "node_modules"
+      ]
+    }
+  ]
+}

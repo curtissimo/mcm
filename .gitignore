@@ -23,3 +23,4 @@ r.js
 build/
 dist/
 sites/src/files/**/*.*
+.sublime-workspace
