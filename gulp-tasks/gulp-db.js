@@ -1,4 +1,4 @@
-require('babel-core/polyfill');
+require('babel/polyfill');
 var fs = require('fs');
 var nano = require('nano');
 var crypto = require('crypto');
@@ -52,7 +52,7 @@ function initModels() {
   var keys = Object.keys(lookup);
   for (var i = 0; i < keys.length; i += 1) {
     var key = keys[i];
-    lookup[key] = require('./build/models/' + key);
+    lookup[key] = require('../build/models/' + key);
   }
 }
 
@@ -95,7 +95,7 @@ function getAttachment(id, oldName, cb) {
     var md5 = crypto.createHash('md5');
     md5.update(body);
     var newName = md5.digest('hex') + suffix;
-    fs.writeFile('./src/files/rhog/' + newName, body, function (err2) {
+    fs.writeFile('./src/sites/files/rhog/' + newName, body, function (err2) {
       if (err2) {
         return cb(err2);
       }
@@ -131,7 +131,31 @@ function setUp() {
     .then(function () { return sync(); });
 }
 
-gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
+gulp.task('db:files-dir', function (next) {
+  fs.mkdir('./src', function (e) {
+    if (e && e.code !== 'EEXIST') {
+      return next(e);
+    }
+    fs.mkdir('./src/sites', function (e) {
+      if (e && e.code !== 'EEXIST') {
+        return next(e);
+      }
+      fs.mkdir('./src/sites/files', function (e) {
+        if (e && e.code !== 'EEXIST') {
+          return next(e);
+        }
+        fs.mkdir('./src/sites/files/rhog', function (e) {
+          if (e && e.code !== 'EEXIST') {
+            return next(e);
+          }
+          next();
+        });
+      });
+    });
+  });
+});
+
+gulp.task('db:migrate', [ 'db:files-dir', 'build:es6-server' ], function (cb) {
   initModels();
 
   var nameMap = {
@@ -548,48 +572,11 @@ gulp.task('db:migrate', [ 'es6-server' ], function (cb) {
     });
 });
 
-gulp.task('db:sync', [ 'es6-server' ], function (cb) {
+gulp.task('db:sync', [ 'build:es6-server' ], function (cb) {
   initModels();
   sync()
     .then(function () { cb(); })
     .catch(cb);
-});
-
-gulp.task('db:seed', [ 'es6-server' ], function (cb) {
-  initModels();
-
-  setUp()
-    .then(function () {
-      return promisify(fs, 'readFile', './seed.json', 'utf8');
-    })
-    .then(function (seeds) {
-      seeds = JSON.parse(seeds);
-      var promises = [];
-
-      for (var i = 0; i < seeds.length; i += 1) {
-        var seed = seeds[i];
-        var builder = lookup[seed.type];
-        var instance = builder.new(seed);
-        var url = chapterurl;
-        if (seed.type === 'account') {
-          url = masterurl;
-        } else if (seed.type === 'member') {
-          if (seed.blogs) {
-            for (var j = 0; j < seed.blogs.length; j += 1) {
-              seed.blogs[j] = lookup.blog.new(seed.blogs[j]);
-            }
-          }
-        }
-        var promise = promisify(instance.to(url), 'save');
-        promises.push(promise);
-      }
-      return Promise.all(promises);
-    })
-    .then(function () { cb(); })
-    .catch(function (e) {
-      console.error('ERROR!', e);
-      cb(e);
-    });
 });
 
 };

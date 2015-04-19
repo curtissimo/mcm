@@ -358,6 +358,21 @@ assets.initialize()
         }
         next();
       });
+
+      // Reload assets from gulp directive
+      process.on('message', function (m) {
+        if (m.reloadAssets) {
+          assets.initialize()
+            .then(() => {
+              leslie.addStylesheet('font-awesome');
+              leslie.addStylesheet('app');
+              leslie.addStylesheet('themes/leather/theme');
+              leslie.addScript('ractive-legacy');
+              leslie.addScript('app');
+              process.send({ assetsReloaded: true })
+            });
+        }
+      });
     } else {
       app.use((req, res, next) => {
         if (res.get('X-Accel-Redirect')) {

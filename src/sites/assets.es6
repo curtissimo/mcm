@@ -31,7 +31,7 @@ class ScopedAssets {
   addScript(name) {
     let path = this.getPath(name, 'scripts', 'js');
     let a = '/' + this.translate(path);
-    this._scripts.push(a)
+    this._scripts.push(a);
   }
 
   getPath(name, path, ext) {
@@ -58,13 +58,13 @@ class ScopedAssets {
 
 export class Assets {
   initialize() {
+    this._stylesheets = [];
+    this._scripts = [];
     let options = { encoding: 'utf8' };
     let cssSource = path.join(pwd, 'css-asset-hashes.json');
     let esSource = path.join(pwd, 'es-asset-hashes.json');
     let es3Source = path.join(pwd, 'es3-asset-hashes.json');
-    this._stylesheets = [];
     let self = this;
-    this._scripts = [];
     return promisify(fs.readFile.bind(fs, cssSource, options))
       .then(content => {
         self._translations = JSON.parse(content);
@@ -91,7 +91,7 @@ export class Assets {
     if (a === '/undefined') {
       a = '/scripts/' + this.translate(`${name}.js`);
     }
-    this._scripts.push(a)
+    this._scripts.push(a);
   }
 
   getPath(name, path, ext) {
