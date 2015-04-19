@@ -1,3 +1,5 @@
 #!/bin/bash
 
-kill -HUP `top -l 1 | grep node | awk '{ print $1 }'`
+for i in `top -l 1 | grep node | awk '{ print $1 }'`
+  do kill -HUP $i
+done
