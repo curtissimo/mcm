@@ -1,8 +1,8 @@
 import rabbit from 'rabbit.js';
 import crypto from 'crypto';
 import moment from 'moment';
-import member from '../../models/member';
-import email from '../../models/email';
+import member from '../../../models/member';
+import email from '../../../models/email';
 
 let distributionLists = [];
 

@@ -1,6 +1,6 @@
 import moment from 'moment';
-import event from '../../models/event';
-import ride from '../../models/ride';
+import event from '../../../models/event';
+import ride from '../../../models/ride';
 import fs from 'fs';
 
 let inProduction = process.env.NODE_ENV === 'production';

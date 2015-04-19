@@ -1,5 +1,5 @@
 import fs from 'fs';
-import newsletter from '../../models/newsletter';
+import newsletter from '../../../models/newsletter';
 
 let inProduction = process.env.NODE_ENV === 'production';
 let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];

@@ -1,4 +1,4 @@
-import member from '../../models/member';
+import member from '../../../models/member';
 
 let permissions = {
   'Chapter docs': 'canManagePrivateDocuments',

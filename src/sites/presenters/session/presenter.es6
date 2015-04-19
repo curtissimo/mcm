@@ -1,5 +1,5 @@
 import rabbit from 'rabbit.js';
-import member from '../../models/member';
+import member from '../../../models/member';
 
 function promisify(scope, method) {
   let args = Array.prototype.slice.apply(arguments);

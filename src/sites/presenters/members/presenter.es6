@@ -1,6 +1,6 @@
 import moment from 'moment';
 import fs from 'fs';
-import member from '../../models/member';
+import member from '../../../models/member';
 
 const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

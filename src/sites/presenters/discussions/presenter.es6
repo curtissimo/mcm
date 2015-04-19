@@ -1,7 +1,7 @@
 import moment from 'moment';
-import discussion from '../../models/discussion';
-import commentEntity from '../../models/comment';
-import member from '../../models/member';
+import discussion from '../../../models/discussion';
+import commentEntity from '../../../models/comment';
+import member from '../../../models/member';
 
 function discussionDateComparison(a, b) {
   if (a.createdOn.valueOf() < b.createdOn.valueOf()) {

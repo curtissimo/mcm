@@ -1,4 +1,4 @@
-import settings from '../../models/settings';
+import settings from '../../../models/settings';
 
 let presenter = {
   list(ac) {

@@ -1,4 +1,4 @@
-import member from '../../models/member';
+import member from '../../../models/member';
 
 function couchPromise(scope, method) {
   let args = Array.prototype.slice.apply(arguments);

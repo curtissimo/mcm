@@ -1,5 +1,5 @@
 import fs from 'fs';
-import document from '../../models/document';
+import document from '../../../models/document';
 
 let inProduction = process.env.NODE_ENV === 'production';
 let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
