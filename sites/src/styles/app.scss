@@ -1,0 +1,11 @@
+@import 'partials/_type';
+@import 'partials/_media-queries';
+@import 'partials/_base';
+@import 'partials/_layout';
+@import 'partials/_module';
+@import 'partials/_state';
+
+html, button, input, select, textarea,
+.pure-g [class *= "pure-u"] {
+  font-family: 'Open Sans', sans-serif;
+}

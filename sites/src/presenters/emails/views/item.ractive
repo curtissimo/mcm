@@ -1,0 +1,46 @@
+{{#email}}
+<section>
+  <h1 class="inbox-subject">{{ subject }}</h1>
+  <div class="inbox-from">
+    <div class="inbox-from-name">{{ fromName }}</div>
+    <div class="inbox-from-email">{{ fromEmail }}</div>
+  </div>
+  <ul class="inbox-to">
+    {{#recipients}}
+    <li class="inbox-to-entry">
+      {{ name }}
+    </li>
+    {{else}}
+    <li class="inbox-to-entry">
+      queued for processing...
+    </li>
+    {{/recipients}}
+  </ul>
+  <div class="inbox-sent">
+    {{ sent }}
+  </div>
+  {{#if isDelete}}
+  <section>
+    <div class="is-error">
+      This action will delete this email. You cannot undo this deletion. Are
+      you sure you want to continue?
+      <form class="pure-form pure-form-stacked" method="post" action="/chapter/emails/{{ email._id }}">
+        <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+        <div class="form-controls">
+          <div class="pure-controls">
+            <a href="/chapter/emails/{{ email._id }}" class="pure-button">Cancel</a>
+            <button type="submit" class="pure-button pure-button-primary">Delete this email</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  {{/if}}
+  {{#if received}}
+  <div class="inbox-received">
+    {{ received }}
+  </div>
+  {{/if}}
+  <div class="inbox-message">{{ text }}</div>
+</section>
+{{/email}}

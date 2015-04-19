@@ -1,0 +1,172 @@
+{{#member}}
+<h1 class="banner">Edit {{ firstName }} {{ lastName }}</h1>
+<section>
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/members/{{ _id }}">
+    <input type="hidden" name="X-HTTP-Method-Override" value="put">
+    <div class="form-panel">
+      <fieldset>
+        <legend>Personal information</legend>
+        <div class="pure-control-group">
+          <label for="firstName">First name</label>
+          <input type="text" value="{{ firstName }}" name="firstName" id="firstName" required>
+          {{#if errors.firstName}}
+          <div class="form-error">
+            <p>The first name {{ errors.firstName }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="lastName">Last name</label>
+          <input type="text" value="{{ lastName }}" name="lastName" id="lastName" required>
+          {{#if errors.lastName}}
+          <div class="form-error">
+            <p>That last name {{ errors.lastName }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="nickName">Nickname</label>
+          <input type="text" value="{{ nickName }}" name="nickName" id="nickName">
+        </div>
+        <div class="pure-control-group">
+          <label for="hogNumber">H.O.G.#</label>
+          <input type="text" value="{{ hogNumber }}" name="hogNumber" id="hogNumber" required>
+          {{#if errors.hogNumber}}
+          <div class="form-error">
+            <p>The H.O.G.# {{ errors.hogNumber }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="sex">Sex</label>
+          <select name="sex" id="sex">
+            <option {{#if sex === 'M'}}selected{{/if}} value="M">Male</option>
+            <option {{#if sex === 'F'}}selected{{/if}} value="F">Female</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="birthDate">Birthday</label>
+          <input type="date" placeholder="MM/DD/YYYY" value="{{ birthDate }}" name="birthDate" id="birthDate">
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>National Membership</legend>
+        <div class="pure-control-group">
+          <label for="membership[national][type]">Membership Type</label>
+          <select name="membership[national][type]" id=membership[national][type]>
+            {{#membershipTypes}}
+            <option {{#if abbreviation === membership.national.type}}selected{{/if}} value="{{ abbreviation }}">{{ name }}</option>
+            {{/membershipTypes}}
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="membership[national][startDate]">Joined on</label>
+          <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.national.startDate }}" name="membership[national][startDate]" id="membership[national][startDate]">
+        </div>
+        {{#if membership.national.type === 'L'}}
+        <div class="pure-control-group">
+          <label>Expires on</label>
+          <input type="text" disabled value="never">
+        </div>
+        {{else}}
+        <div class="pure-control-group">
+          <label for="membership[national][endDate]">Expires on</label>
+          <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.national.endDate }}" name="membership[national][endDate]" id="membership[national][endDate]">
+        </div>
+        {{/if}}
+      </fieldset>
+      <fieldset>
+        <legend>Local Membership</legend>
+        <div class="pure-control-group">
+          <label for="membership[local][startDate]">Joined on</label>
+          <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.local.startDate }}" name="membership[local][startDate]" id="membership[local][startDate]">
+        </div>
+        <div class="pure-control-group">
+          <label for="membership[local][endDate]">Expires on</label>
+          <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.local.endDate }}" name="membership[local][endDate]" id="membership[local][endDate]">
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Contact information</legend>
+        <div class="pure-control-group">
+          <label for="email">Email</label>
+          <input type="email" value="{{ email }}" name="email" id="email" required>
+          {{#if errors.email}}
+          <div class="form-error">
+            <p>The email {{ errors.email }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="mobile">Cell phone</label>
+          <input type="text" value="{{ mobile }}" name="mobile" id="mobile">
+        </div>
+        <div class="pure-control-group">
+          <label for="phone">Home phone</label>
+          <input type="text" value="{{ phone }}" name="phone" id="phone">
+        </div>
+      </fieldset>
+      <fieldset>
+        {{#emergencyContact}}
+        <legend>Emergency contact information</legend>
+        <div class="pure-control-group">
+          <label for="emergencyContact[name]">Name</label>
+          <input type="text" value="{{ name }}" name="emergencyContact[name]" id="emergencyContact[name]">
+        </div>
+        <div class="pure-control-group">
+          <label for="emergencyContact[mobile]">Cell phone</label>
+          <input type="text" value="{{ mobile }}" name="emergencyContact[mobile]" id="emergencyContact[mobile]">
+        </div>
+        <div class="pure-control-group">
+          <label for="emergencyContact[phone]">Home phone</label>
+          <input type="text" value="{{ phone }}" name="emergencyContact[phone]" id="emergencyContact[phone]">
+        </div>
+        {{/emergencyContact}}
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        {{#address}}
+        <legend>Address</legend>
+        <div class="pure-control-group">
+          <label for="street1">Street 1</label>
+          <input type="text" value="{{ street1 }}" name="address[street1]" id="street1">
+        </div>
+        <div class="pure-control-group">
+          <label for="street2">Street 2</label>
+          <input type="text" value="{{ street2 }}" name="address[street2]" id="street2">
+        </div>
+        <div class="pure-control-group">
+          <label for="city">City</label>
+          <input type="text" value="{{ city }}" name="address[city]" id="city">
+        </div>
+        <div class="pure-control-group">
+          <label for="state">State</label>
+          <select name="address[state]" id="state">
+            {{#states}}
+            <option {{#if abbreviation === state}}selected{{/if}}>
+              {{ abbreviation }}
+            </option>
+            {{/states}}
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="zip">ZIP</label>
+          <input type="text" value="{{ zip }}" name="address[zip]" id="zip">
+        </div>
+        {{/address}}
+      </fieldset>
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/members/{{ _id }}" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Update member</button>
+      </div>
+    </div>
+  </form>
+</section>
+{{/member}}

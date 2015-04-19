@@ -1,0 +1,55 @@
+<h1 class="banner">Discussions</h1>
+{{#categories}}
+<fieldset class="discussion-group">
+  <legend>{{ . }} Discussion Group</legend>
+  <ul class="discussions-category">
+    <li class="discussions-entry">
+      <div class="discussions-entry-summary-header">Discussion</div>
+      <div class="discussions-entry-comment-count-header"></div>
+      <div class="discussions-entry-last-comment-header">Last comment</div>
+    </li>
+    {{#discussions.get(.)}}
+    <li class="discussions-entry stripe-{{(@index + 1) % 2}}">
+      <div class="discussions-entry-summary">
+        <div class="discussions-entry-title">
+          <a href="/chapter/discussions/{{ _id }}">{{ title }}</a>
+        </div>
+        <div class="discussions-entry-author">
+          by
+          {{ author.firstName }}
+          {{ author.lastName }}
+          {{#if author.nickName }}
+            ({{ author.nickName }})
+          {{/if}}
+        </div>
+        <div class="discussions-entry-created">{{ createdOn }}</div>
+        {{#if sticky}}
+        <div class="discussions-entry-sticky">(sticky)</div>
+        {{/if}}
+      </div>
+      <div class="discussions-entry-comment-count">
+        {{#if comments.length === 0}}
+        No comments
+        {{elseif comments.length === 1}}
+        1 comment
+        {{else}}
+        {{ comments.length }} comments
+        {{/if}}
+      </div>
+      <div class="discussions-entry-last-comment">
+        <div class="discussions-entry-last-comment-author">
+          {{ lastComment.author.firstName }}
+          {{ lastComment.author.lastName }}
+          {{#if lastComment.author.nickName }}
+            ({{ lastComment.author.nickName }})
+          {{/if}}
+        </div>
+        <div class="discussions-entry-last-comment-created">
+          {{ lastComment.createdOn }}
+        </div>
+      </div>
+    </li>
+    {{/discussions}}
+  </ul>
+</fieldset>
+{{/categories}}

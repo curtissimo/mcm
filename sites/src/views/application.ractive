@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, inital-scale=1, maximum-scale=1">
+    {{#stylesheets}}
+    <link rel="stylesheet" href="{{.}}">
+    {{/stylesheets}}
+    {{{ ifltie9 }}}
+    <script src="/scripts/shiv.js"></script>
+    {{{ endif }}}
+  </head>
+  <body>
+    <div id="main-menu" class="main-menu">
+    {{{ menu }}}
+    </div>
+    <div id="main-toolbar" class="max-lg-screen toolbar">
+      <div class="toolbar-item">
+        <a href="#" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+      </div>
+    </div>
+    <div id="main-content">
+      {{{ content }}}
+    </div>
+    <div id="overlay"></div>
+    {{#scripts}}
+    <script src="{{ . }}"></script>
+    {{/scripts}}
+  </body>
+</html>

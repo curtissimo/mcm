@@ -1,0 +1,45 @@
+<h1 class="banner">Chapter Settings</h1>
+<section>
+  This page contains a collection of settings for the chapter. Refer to each
+  section for an explanation of each setting.
+</section>
+<section>
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/settings">
+    <div class="form-panel">
+      <fieldset>
+        <legend>Chapter name</legend>
+        <p>
+          Change this name to change what visitors to the site see wherever
+          your chapter's name gets referenced.
+        </p>
+        <div class="pure-control-group">
+          <label for="name">Chapter name</label>
+          <input type="text" value="{{ settings.name }}" name="name" id="name" required>
+          {{#if errors.name}}
+          <div class="form-error">
+            <p>The first name {{ errors.name }}</p>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Ride Legalese</legend>
+        <p>
+          If you want some message containing caveats appearing at the end
+          of each ride announcement, put it in here.
+        </p>
+        <div class="pure-control-group">
+          <textarea class="pure-input-1 long-text" name="rideLegalese">{{ settings.rideLegalese }}</textarea>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/members" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Save settings</button>
+      </div>
+    </div>
+  </form>
+</section>

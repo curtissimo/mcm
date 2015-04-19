@@ -1,0 +1,55 @@
+{{#member}}
+<h1 class="banner">{{ lastName }}, {{ firstName }}</h1>
+<div class="member-item">
+  <div class="member-item-information">
+    {{#if private}}
+    <div class="is-hidden"><span>Hidden</span></div>
+    {{/if}}
+    {{#if photoPath}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
+    {{else}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/images/unknown-user.jpg">
+    {{/if}}
+    <div class="member-item-personal-information">
+      {{#if (phone || mobile) && (privacy.showPhone || viewer.permissions.canManageMembers)}}
+      <div>
+        {{#mobile}}{{ mobile }}{{/mobile}}
+        {{#if mobile && phone}} | {{/if}}
+        {{#phone}}{{ phone }}{{/phone}}
+      </div>
+      {{/if}}
+      {{#if privacy.showEmail || viewer.permissions.canManageMembers}}
+      <div><a href="mailto:{{ email }}">{{ email }}</a></div>
+      {{/if}}
+      {{#if privacy.showAddress || viewer.permissions.canManageMembers}}
+        {{#address}}
+        <div>
+          {{#if street1}}{{ street1 }}<br>{{/if}}
+          {{#if street2}}{{ street2 }}<br>{{/if}}
+          {{ city }}, {{ state }} {{ zip }}
+        </div>
+        {{/address}}
+      {{/if}}
+    </div>
+    {{#if achievements}}
+    <ul class="member-item-achievement-list">
+      {{#achievements}}
+      <li class="member-item-achievement">{{ this.toString() }}</li>
+      {{/achievements}}
+    </ul>
+    {{/if}}
+  </div>
+  <div class="member-item-blog-entries">
+    {{#blogs}}
+    <article class="member-item-blog-entry">
+      <header>
+        <h2>{{ this.createdOn }}</h2>
+        <h1>{{ this.title }}</h1>
+      </header>
+      <p>{{ this.content }}</p>
+    </article>
+    {{else}}
+    <h2>{{ firstName }} hasn't posted any entries, yet.</h2>
+    {{/blogs}}
+  </div>
+{{/member}}

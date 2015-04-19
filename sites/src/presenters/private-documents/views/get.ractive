@@ -1,0 +1,17 @@
+<h1 class="banner">Chapter Documents</h1>
+<section>
+  Here you can find resources that can help you communicate with and about
+  your chapter. Just click a link below to download the document of your
+  choice.
+</section>
+<section>
+  <ul class="document-list">
+    {{#documents}}
+    <li>
+      <a href="/chapter/private-documents/{{ _id }}">{{ this.title }}</a>
+      <br>
+      {{ description }}
+    </li>
+    {{/documents}}
+  </ul>
+</section>

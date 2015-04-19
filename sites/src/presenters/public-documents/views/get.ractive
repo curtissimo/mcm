@@ -1,0 +1,19 @@
+<h1 class="banner">Public Documents</h1>
+<section>
+  {{#if documents.length}}
+  Click a link below to download the indicated document.
+  {{else}}
+  This chapter hasn't shared any documents, yet.
+  {{/if}}
+</section>
+<section>
+  <ul class="document-list">
+    {{#documents}}
+    <li>
+      <a href="/chapter/public-documents/{{ _id }}">{{ this.title }}</a>
+      <br>
+      {{ description }}
+    </li>
+    {{/documents}}
+  </ul>
+</section>

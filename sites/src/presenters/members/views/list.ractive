@@ -1,0 +1,46 @@
+<h1 class="banner">Chapter Members</h1>
+<ul class="members-list">
+  {{#members:i}}
+    {{#if members[i].length }}
+    <li class="members-list-item">
+      <div class="members-list-letter-label">{{ letters[i] }}</div>
+      <ul class="members-list-tile-holder">
+        {{#members[i]}}
+        <li class="member-list-tile-column">
+          <a href="/chapter/members/{{ _id }}">
+            <div class="member-list-tile">
+              {{#if isNewMember}}
+              <div class="is-new-member"><span>New!</span></div>
+              {{/if}}
+              {{#if private}}
+              <div class="is-hidden"><span>Hidden</span></div>
+              {{/if}}
+              {{#if photoPath}}
+              <img width="250" class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
+              {{else}}
+              <img width="250" class="{{#private}}private-person{{/private}} pure-img" src="/images/unknown-user.jpg">
+              {{/if}}
+              <div class="member-list-tile-information">
+                {{#if nickName}}
+                <div class="member-list-tile-nickName">{{ nickName }}</div>
+                {{/if}}
+                <div class="member-list-tile-name">{{ lastName }}, {{ firstName }}</div>
+                {{#if this.title}}
+                <div class="member-list-tile-title">{{ this.title }}</div>
+                {{/if}}
+                {{#if isRoadCaptain}}
+                <div class="member-list-tile-road-captain">Road Captain</div>
+                {{/if}}
+                {{#if achievements}}
+                <div class="member-list-tile-achievement">{{ this.achievements[0] }}</div>
+                {{/if}}
+              </div>
+            </div>
+          </a>
+        </li>
+        {{/members[i]}}
+      </ul>
+    </li>
+    {{/if}}
+  {{/members}}
+</ul>

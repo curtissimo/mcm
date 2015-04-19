@@ -1,0 +1,42 @@
+{{#member}}
+<h1 class="banner">{{ lastName }}, {{ firstName }}</h1>
+<div class="member-item">
+  <div class="member-item-information">
+    {{#if private}}
+    <div class="is-hidden"><span>Hidden</span></div>
+    {{/if}}
+    {{#if photoPath}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
+    {{else}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/images/unknown-user.jpg">
+    {{/if}}
+    <form id="photo-changer-form" class="off-screen" method="post" action="/chapter/members/{{ member._id }}/photo" enctype="multipart/form-data">
+      <input type="hidden" name="X-HTTP-Method-Override" value="patch">
+      <input type="file" id="photo" name="photo">
+    </form>
+    <div class="member-item-personal-information">
+      <div>
+        <label id="photo-changer" for="photo" class="link-like">Change Photo</label>
+      </div>
+      <div>Mobile: {{ mobile}}</div>
+      <div>Home: {{ phone }}</div>
+      <div>{{ email }}</div>
+      {{#address}}
+      <div>
+        {{#if street1}}{{ street1 }}<br>{{/if}}
+        {{#if street2}}{{ street2 }}<br>{{/if}}
+        {{ city }}, {{ state }} {{ zip }}
+      </div>
+      {{/address}}
+    </div>
+    {{#if achievements}}
+    <ul class="member-item-achievement-list">
+      {{#achievements}}
+      <li class="member-item-achievement">{{ this.toString() }}</li>
+      {{/achievements}}
+    </ul>
+    {{/if}}
+  </div>
+  <div class="member-item-blog-entries">
+  </div>
+{{/member}}

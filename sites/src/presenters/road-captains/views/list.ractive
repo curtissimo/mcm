@@ -1,0 +1,60 @@
+<h1 class="banner">Road Captains</h1>
+<section class="road-captains-maintenance">
+  <div class="form-panel">
+    <form method="post" action="/chapter/road-captains" class="pure-form pure-form-stacked">
+      <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+      <fieldset>
+        <legend>Current Road Captains' roster</legend>
+        <p>
+          Check any of the Road Captains below and click the button to remove
+          them from the Road Captains' roster.
+        </p>
+        <ul class="road-captains-list">
+          {{#captains}}
+          <li class="road-captains-item">
+            <label for="members[{{ _id }}][isRoadCaptain]" class="pure-checkbox">
+              <input type="checkbox" id="members[{{ _id }}][isRoadCaptain]" name="members[{{ _id }}][isRoadCaptain]" value="false">
+              {{ lastName }}, {{ firstName }}
+              {{#nickName}}
+              ({{ nickName }})
+              {{/nickName}}
+            </label>
+          </li>
+          {{/captains}}
+        </ul>
+      </fieldset>
+        <div class="pure-form-controls">
+          <button type="sumbmit" class="pure-button pure-button-primary">
+            Remove selected Road Captains
+          </button>
+        </div>
+    </form>
+  </div>
+  <div class="form-panel">
+    <form method="post" action="/chapter/road-captains" class="pure-form pure-form-stacked">
+      <fieldset>
+        <legend>Add a new Road Captain</legend>
+        <div class="pure-control-group">
+          <label for="id">
+            Select a member to make a Road Captain
+          </label>
+          <select name="id" id="id">
+            {{#notCaptains}}
+            <option value="{{ _id }}">
+              {{ lastName }}, {{ firstName }}
+              {{#nickName}}
+              ({{ nickName }})
+              {{/nickName}}
+            </option>
+            {{/notCaptains}}
+          </select>
+        </div>
+        <div class="pure-form-controls">
+          <button type="sumbmit" class="pure-button pure-button-primary">
+            Add to the Road Captains roster
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

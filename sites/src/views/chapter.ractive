@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, inital-scale=1, maximum-scale=1">
+    {{#stylesheets}}
+    <link rel="stylesheet" href="{{ . }}">
+    {{/stylesheets}}
+    {{{ ifltie9 }}}
+    <script src="/scripts/shiv.js"></script>
+    {{{ endif }}}
+  </head>
+  <body>
+    <div id="main-menu" class="main-menu">
+    {{{ menu }}}
+    </div>
+    <div id="main-toolbar" class="max-lg-screen toolbar">
+      <div class="toolbar-section">
+        <div class="toolbar-left">
+          <a href="#" class="toolbar-item" id="main-toolbar-show-menu"><i class="fa fa-bars"></i></a>
+          {{#if shortnav}}
+            {{#shortnav:url}}
+            <a class="toolbar-item" href="{{ . }}">{{{ @key }}}</a>
+            {{/shortnav}}
+          {{/if}}
+        </div>
+      </div>
+      <div class="toolbar-section">
+        <div class="toolbar-right">
+          {{#if actions}}
+          <a class="toolbar-item" href="#" id="main-toolbar-show-actions"><i class="fa fa-ellipsis-v"></i></a>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    {{#if actions}}
+    <div class="max-lg-screen">
+      <div id="secondary-actions" class="secondary-actions">
+        <ul class="secondary-actions-list">
+          {{#actions:url}}
+          <li><a class="secondary-action" href="{{ . }}">{{ @key }}</a></li>
+          {{/actions}}
+        </ul>
+      </div>
+    </div>
+    {{/if}}
+    <div id="main-content">
+      <div id="action-toolbar" class="min-lg-screen toolbar action-toolbar">
+        {{#if !!(actions || nav)}}
+          <div class="toolbar-section toolbar-left">
+            {{#nav:url}}
+            <a class="toolbar-item pure-button" href="{{ . }}">{{{ @key }}}</a>
+            {{/nav}}
+          </div>
+          <div class="toolbar-section toolbar-right">
+            {{#actions:url}}
+            <a class="toolbar-item pure-button" href="{{ . }}">{{ @key }}</a>
+            {{/actions}}
+          </div>
+        {{else}}
+          <div class="toolbar-section">
+            <div class="pure-button pure-button-disabled normal-cursor">{{{ '&nbsp;' }}}</div>
+          </div>
+        {{/if}}
+      </div>
+      {{{ content }}}
+    </div>
+    <div id="overlay"></div>
+    {{#scripts}}
+    <script src="{{ . }}"></script>
+    {{/scripts}}
+  </body>
+</html>

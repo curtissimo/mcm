@@ -1,0 +1,246 @@
+[ { "domain" : "localhost",
+    "name" : "Republic H.O.G.",
+    "subdomain" : "rhog",
+    "type" : "account"
+  },
+  { "name" : "Republic H.O.G.",
+    "rideLegalese": "Routes and destinations are subject to change with little or no notice and more info may be added so check the calendar often for changes. Scroll to the very bottom of the page and there will be an update date so you will know if any changes have been made since the last time you looked and as always be sure to have your light blue membership card for 2015 (you will have to sign a waiver if you don't) and have a full tank of gas. In the event of a cancelation, a notice will be posted on the calendar and an email will go out 1 1/2 hrs before KSU.",
+    "type" : "settings"
+  },
+  { "_id": "20934029834092834",
+    "email" : "curtis@schlak.com",
+    "firstName" : "Curtis",
+    "hogNumber" : "US123456",
+    "lastName" : "Schlak",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "curtis",
+    "permissions" : { "canManageMembers" : true,
+        "canManageNewsletters" : true,
+        "canManageSettings": true,
+        "canManageEvents": true,
+        "canManagePermissions": true,
+        "canManagePublicDocuments": true,
+        "canManagePrivateDocuments": true,
+        "canManageDiscussions": true
+      },
+    "title" : "Webmaster",
+    "type" : "member"
+  },
+  { "_id": "98293492378497234",
+    "achievements" : [ { "description" : "Secretary",
+          "from" : 2012,
+          "to" : 2014
+        },
+        { "description" : "LOH Director",
+          "from" : 2011,
+          "to" : 2011
+        },
+        { "description" : "Most miles",
+          "on" : [ 2014,
+              11
+            ]
+        }
+      ],
+    "blogs": [
+      { "title": "First post!", "content": "Hello, world!", "createdOn": "2014-01-02T14:05:02.000Z" },
+      { "title": "Second post!", "content": "Hello, world! Again!", "createdOn": "2014-03-02T14:05:02.000Z" }
+    ],
+    "email" : "leslie@schlak.com",
+    "firstName" : "Leslie",
+    "hogNumber" : "US123457",
+    "lastName" : "Schlak",
+    "membership" : { "local" : { "endDate" : "2013-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2013-12-31T06:00:00.000Z" }
+      },
+    "nickName" : "Stinger",
+    "password" : "leslie",
+    "permissions" : { "canManageMembers" : true,
+        "canManageNewsletters" : true,
+        "canManageSettings": true,
+        "canManageEvents": true,
+        "canManagePermissions": true,
+        "canManagePublicDocuments": true,
+        "canManagePrivateDocuments": true,
+        "canManageDiscussions": true
+      },
+    "title" : "Sergeant at Arms",
+    "type" : "member"
+  },
+  { "_id": "54632230487239",
+    "email" : "isaac@schlak.com",
+    "firstName" : "Isaac",
+    "hogNumber" : "US123458",
+    "lastName" : "Schlak",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "isaac",
+    "permissions" : {  },
+    "private" : true,
+    "type" : "member"
+  },
+  { "achievements" : [ { "description" : "Most miles",
+          "on" : [ 2015,
+              11
+            ]
+        },
+        { "description" : "Most miles",
+          "on" : [ 2014,
+              9
+            ]
+        }
+      ],
+    "email" : "gabby@burgard.com",
+    "firstName" : "Gabrielle",
+    "hogNumber" : "US123459",
+    "lastName" : "Burgard",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "gabby",
+    "permissions" : {  },
+    "privacy" : { "showEmail" : true },
+    "type" : "member"
+  },
+  { "address" : { "city" : "Stafford",
+        "state" : "TX",
+        "street1" : "123 Main St.",
+        "zip" : "77071"
+      },
+    "email" : "bryan@ray.com",
+    "firstName" : "Bryan",
+    "hogNumber" : "US123460",
+    "lastName" : "Ray",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "bryan",
+    "permissions" : {  },
+    "privacy" : { "showAddress" : true },
+    "type" : "member"
+  },
+  { "email" : "kylie@ray.com",
+    "firstName" : "Kylie",
+    "hogNumber" : "US123461",
+    "lastName" : "Ray",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z" },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "mobile" : "832-555-1212",
+    "password" : "kylie",
+    "permissions" : {  },
+    "privacy" : { "showPhone" : true },
+    "type" : "member"
+  },
+  { "email" : "philip@mateescu.com",
+    "firstName" : "Philip",
+    "hogNumber" : "US123462",
+    "lastName" : "Mateescu",
+    "membership" : { "local" : { "endDate" : "2016-12-31T06:00:00.000Z",
+            "startDate" : "2015-03-01T06:00:00.000Z"
+          },
+        "national" : { "endDate" : "2016-12-31T06:00:00.000Z" }
+      },
+    "password" : "philip",
+    "permissions" : {  },
+    "type" : "member"
+  },
+  {
+    "_id": "34789237472934723487",
+    "type": "discussion",
+    "title": "Hearken unto me!",
+    "content": "I have a loud voice.",
+    "authorId": "20934029834092834",
+    "category": "Off-Topic"
+  },
+  {
+    "type": "comment",
+    "title": "Shut UP!",
+    "content": "Really? Do you have to be so loud?",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "34789237472934723487",
+    "$discussion_comments_order": 0
+  },
+  {
+    "type": "comment",
+    "title": "Okay, honey...",
+    "content": "I'll take my crazy outside.",
+    "authorId": "20934029834092834",
+    "$discussion_comments_id": "34789237472934723487",
+    "$discussion_comments_order": 1
+  },
+  {
+    "type": "comment",
+    "title": "Hearken unto me!",
+    "content": "Why do you have to be so weird?",
+    "authorId": "54632230487239",
+    "$discussion_comments_id": "34789237472934723487",
+    "$discussion_comments_order": 2
+  },
+  {
+    "_id": "38476837485734765",
+    "type": "discussion",
+    "title": "I want a good hamburger!",
+    "content": "Anyone know where to get one?",
+    "authorId": "20934029834092834",
+    "category": "Off-Topic"
+  },
+  {
+    "type": "comment",
+    "title": "Hubcap Grill!",
+    "content": "Great burgers! Great buns! Great fries!",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "38476837485734765",
+    "$discussion_comments_order": 0
+  },
+  {
+    "type": "comment",
+    "title": "Let's go!",
+    "content": "Maybe on Sunday?",
+    "authorId": "20934029834092834",
+    "$discussion_comments_id": "38476837485734765",
+    "$discussion_comments_order": 1
+  },
+  {
+    "type": "comment",
+    "title": "Can't",
+    "content": "Nope. They're closed on Sunday.",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "38476837485734765",
+    "$discussion_comments_order": 2
+  },
+  {
+    "_id": "1029371102397",
+    "type": "discussion",
+    "title": "Ride idea",
+    "content": "Wouldn't it be great to ride to Pasadena?",
+    "authorId": "20934029834092834",
+    "category": "Ride Idea"
+  },
+  {
+    "type": "comment",
+    "title": "Ride idea",
+    "content": "No.",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "1029371102397",
+    "$discussion_comments_order": 0
+  },
+  {
+    "type": "comment",
+    "title": "Ride idea",
+    "content": "Oh. Ok.",
+    "authorId": "20934029834092834",
+    "$discussion_comments_id": "1029371102397",
+    "$discussion_comments_order": 1
+  },
+  {
+    "type": "comment",
+    "title": "Ride idea",
+    "content": "Hey, so what do you want for dinner?",
+    "authorId": "98293492378497234",
+    "$discussion_comments_id": "1029371102397",
+    "$discussion_comments_order": 2
+  }
+]
