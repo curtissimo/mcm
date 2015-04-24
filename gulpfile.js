@@ -1,14 +1,23 @@
-var del = require('del');
-var exec = require('child_process').exec;
 var gulp = require('gulp');
 
-process.env.MCM_DB = 'http://couchdb:5984';
-process.env.MCM_MAIL_HOST = 'web-server';
-process.env.MCM_RABBIT_URL = 'amqp://curtis:curtis@web-server';
+if (!process.env.MCM_DB) {
+  process.env.MCM_DB = 'http://couchdb:5984';
+}
+if (!process.env.MCM_MAIL_HOST) {
+  process.env.MCM_MAIL_HOST = 'web-server';
+}
+if (!process.env.MCM_RABBIT_URL) {
+  process.env.MCM_RABBIT_URL = 'amqp://curtis:curtis@web-server';
+}
+
+if (!process.env.DOMAIN) {
+  process.env.DOMAIN = 'rhog.ismymc.dev';
+}
 
 require('./gulp-tasks/gulp-db').initialize(gulp, process.env.MCM_DB);
 var sync = require('./gulp-tasks/gulp-build').sync;
 var webserver = require('./gulp-tasks/gulp-run')(sync).webserver;
+require('./gulp-tasks/gulp-dist');
 
 process.on('uncaughtException', function(err) {
   console.error('UNCAUGHT EXCEPTION:');
@@ -32,14 +41,6 @@ gulp.task('clean', [ 'dist:clean', 'build:clean' ]);
 gulp.task('default', [ 'build' ]);
 
 gulp.task('dev', [ 'run:site', 'watch' ]);
-
-gulp.task('dist', [ 'build' ], function (next) {
-  exec('cp -R ./build ./dist', next);
-});
-
-gulp.task('dist:clean', function (next) {
-  del('./dist', next);
-});
 
 gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/sites/scripts/*.js', [ 'build:es3-client' ]);

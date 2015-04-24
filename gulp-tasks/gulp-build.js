@@ -131,8 +131,8 @@ gulp.task('build:fonts', function () {
 });
 
 gulp.task('build:haraka-config', function () {
-  return gulp.src('./src/haraka-plugins/**/config/*')
-    .pipe(gulp.dest('./build/haraka-plugins'));
+  return gulp.src('./src/haraka/**/config/*')
+    .pipe(gulp.dest('./build/haraka'));
 });
 
 gulp.task('build:html', function () {
@@ -164,6 +164,11 @@ gulp.task('build:sass', function () {
     .pipe(syncIfActive());
 });
 
+gulp.task('build:shell-scripts', function () {
+  return gulp.src('./src/**/*.sh')
+    .pipe(gulp.dest('./build'));
+});
+
 gulp.task('build:views', function () {
   return gulp.src('./src/**/*.ractive')
     .pipe(ractive())
@@ -181,6 +186,7 @@ gulp.task('build', [
   'build:html',
   'build:images',
   'build:sass',
+  'build:shell-scripts',
   'build:views'
 ]);
 

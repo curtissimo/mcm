@@ -1,0 +1,21 @@
+server {
+    listen 80;
+    listen [::]:80;
+
+    server_name {{ DOMAIN }};
+    root /var/www/mcm/mcm.live/sites/public/;
+    passenger_enabled on;
+
+    client_max_body_size 2M;
+
+    location /mcm-files/ {
+        internal;
+        alias /var/www/mcm/files/;
+        log_not_found on;
+        log_subrequest on;
+    }
+
+    passenger_env_var MCM_DB {{ MCM_DB }};
+    passenger_env_var MCM_RABBIT_URL {{ MCM_RABBIT_URL }};
+    passenger_env_var MCM_MAIL_HOST {{ MCM_MAIL_HOST }};
+}
