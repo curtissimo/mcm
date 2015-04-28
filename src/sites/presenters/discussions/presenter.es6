@@ -34,6 +34,14 @@ function getMembers(ac, cb) {
 
 let presenter = {
   list(ac) {
+    let archived = false;
+    let nav = { 'View archived discussions': '/chapter/discussions?archived' };
+    let shortnav = { 'Archived': '/chapter/discussions?archived' };
+    if (ac.query.hasOwnProperty('archived')) {
+      archived = true;
+      nav = { 'View active discussions': '/chapter/discussions' };
+      shortnav = { 'Active': '/chapter/discussions' };
+    }
     getMembers(ac, (e, membersMap) => {
       discussion.from(ac.chapterdb).withComments((e, discussions) => {
         if (e) {
@@ -41,10 +49,15 @@ let presenter = {
         }
         let discussionMap = new Map();
         for (let d of discussions) {
+          if (d.archived === undefined) {
+            d.archived = false;
+          }
           if (!discussionMap.has(d.category)) {
             discussionMap.set(d.category, []);
           }
-          discussionMap.get(d.category).push(d);
+          if (d.archived === archived) {
+            discussionMap.get(d.category).push(d);
+          }
         }
         for (let categorized of discussionMap.values()) {
           categorized.sort((a, b) => {
@@ -75,6 +88,8 @@ let presenter = {
         }
         ac.render({
           data: {
+            nav: nav,
+            shortnav: shortnav,
             title: 'Discussions',
             categories: categories,
             discussions: discussionMap,
@@ -107,6 +122,7 @@ let presenter = {
         }
         let actions = {};
         if (ac.member.permissions.canManageDiscussions) {
+          actions['Archive this discussion'] = `/chapter/discussions/${d._id}/archive`;
           actions['Delete this discussion'] = `/chapter/discussions/${d._id}/delete-form`;
         }
         actions['Comment on this'] = 'javascript:showComments()';
@@ -154,6 +170,19 @@ let presenter = {
           presenters: { menu: 'menu' },
           layout: 'chapter'
         });
+      });
+    });
+  },
+
+  archive(ac) {
+    if (!ac.member.permissions.canManageDiscussions) {
+      ac.redirect(`/chapter/discussions/${ac.params.id}`);
+    }
+
+    discussion.from(ac.chapterdb).withComments(ac.params.id, (e, d) => {
+      d.archived = true;
+      d.to(ac.chapterdb).save(saveErr => {
+        ac.redirect('/chapter/discussions');
       });
     });
   },

@@ -270,6 +270,7 @@ assets.initialize()
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create-form', method: 'create' },
         { verb: 'get', action: ':id/delete-form', method: 'deleteForm' },
+        { verb: 'get', action: ':id/archive', method: 'archive' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post', action: ':id/comments', method: 'createComment' },
         { verb: 'post' },

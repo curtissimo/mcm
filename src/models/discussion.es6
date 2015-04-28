@@ -7,6 +7,7 @@ let discussion = stork.deliver('discussion', function () {
   this.string('authorId', { required: true, minLength: 1 });    // author.id
   this.string('category', { required: true, minLength: 1 });    // category
   this.bool('sticky');                                          // sticky
+  this.bool('archived');                                        // ?
   this.timestamps();
   
   this.composes('comments', comment);
