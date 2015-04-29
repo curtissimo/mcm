@@ -37,10 +37,10 @@ function syncIfActive() {
         sync.reloadAssets(function () {
           refreshing = false;
           sync.reload();
-          self.push(file);
-          cb();
         });
       }, 250);
+      self.push(file);
+      cb();
     }
 
     if (file.isStream() && sync.active) {
