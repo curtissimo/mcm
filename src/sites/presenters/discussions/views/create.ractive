@@ -11,9 +11,9 @@
       <label for="category">Category</label>
       <select name="category" id="category">
         <option {{#if category === 'Advice'}}selected{{/if}}>Advice</option>
-        <option {{#if category === 'Ride Idea'}}selected{{/if}}>Ride Idea</option>
+        <option {{#if category === 'Rides and Events'}}selected{{/if}}>Rides and Events</option>
         <option {{#if category === 'Maintenance'}}selected{{/if}}>Maintenance</option>
-        <option {{#if category === 'Off-Topic'}}selected{{/if}}>Off-Topic</option>
+        <option {{#if category === 'Off Topic'}}selected{{/if}}>Off Topic</option>
       </select>
       {{#if errors.category}}
       <div class="form-error">

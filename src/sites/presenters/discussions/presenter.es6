@@ -35,6 +35,7 @@ function getMembers(ac, cb) {
 let presenter = {
   list(ac) {
     let archived = false;
+    let lastMonth = moment().subtract(1, 'month');
     let nav = { 'View archived discussions': '/chapter/discussions?archived' };
     let shortnav = { 'Archived': '/chapter/discussions?archived' };
     if (ac.query.hasOwnProperty('archived')) {
@@ -55,6 +56,23 @@ let presenter = {
           if (!discussionMap.has(d.category)) {
             discussionMap.set(d.category, []);
           }
+          d.title = d.title || '«no title»';
+          d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
+          d.author = membersMap.get(d.authorId);
+          if (d.comments.length > 0) {
+            for (let comment of d.comments) {
+              comment.author = membersMap.get(comment.authorId);
+              comment.createdOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
+            }
+            d.lastComment = d.comments[d.comments.length - 1];
+            if (moment(d.lastComment.createdOn).isBefore(lastMonth)) {
+              d.archived = true;
+            }
+          } else {
+            if (moment(d.createdOn).isBefore(lastMonth)) {
+              d.archived = true;
+            }
+          }
           if (d.archived === archived) {
             discussionMap.get(d.category).push(d);
           }
@@ -74,18 +92,6 @@ let presenter = {
           });
         }
         let categories = Array.from(discussionMap.keys()).sort();
-        for (let d of discussions) {
-          d.title = d.title || '«no title»';
-          d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
-          d.author = membersMap.get(d.authorId);
-          if (d.comments.length > 0) {
-            for (let comment of d.comments) {
-              comment.author = membersMap.get(comment.authorId);
-              comment.createdOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
-            }
-            d.lastComment = d.comments[d.comments.length - 1];
-          }
-        }
         ac.render({
           data: {
             nav: nav,
@@ -122,8 +128,10 @@ let presenter = {
         }
         let actions = {};
         if (ac.member.permissions.canManageDiscussions) {
-          actions['Archive this discussion'] = `/chapter/discussions/${d._id}/archive`;
-          actions['Delete this discussion'] = `/chapter/discussions/${d._id}/delete-form`;
+          if (!d.archived) {
+            actions['Archive'] = `/chapter/discussions/${d._id}/archive`;
+          }
+          actions['Delete'] = `/chapter/discussions/${d._id}/delete-form`;
         }
         actions['Comment on this'] = 'javascript:showComments()';
         ac.render({
@@ -182,7 +190,7 @@ let presenter = {
     discussion.from(ac.chapterdb).withComments(ac.params.id, (e, d) => {
       d.archived = true;
       d.to(ac.chapterdb).save(saveErr => {
-        ac.redirect('/chapter/discussions');
+        ac.redirect(`/chapter/discussions/${ac.params.id}`);
       });
     });
   },
