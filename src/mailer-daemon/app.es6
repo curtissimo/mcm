@@ -172,7 +172,6 @@ context.on('ready', () => {
     console.info('MAILER-DAEMON: Connected to mcm-single-mail.');
     single.on('data', (missive) => {
       console.info('MAILER-DAEMON: Message received on mcm-single-mail.');
-      console.info('\tCONTENT:', missive);
       single.ack();
       missive = JSON.parse(missive);
       promisify(transporter, 'sendMail', missive)
