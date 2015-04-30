@@ -2,6 +2,7 @@ require('babel/polyfill');
 var fs = require('fs');
 var nano = require('nano');
 var crypto = require('crypto');
+var html2text = require('../build/mailUtils').html2text;
 var lookup = {};
 
 Promise.hash = function (o) {
@@ -182,7 +183,7 @@ gulp.task('db:migrate', [ 'db:files-dir', 'build:es6-server' ], function (cb) {
         return {
           _id: topic._id,
           title: topic.subject,
-          content: topic.message,
+          content: html2text(topic.message),
           authorId: topic.author.id,
           category: topic.category,
           sticky: topic.sticky
@@ -196,7 +197,7 @@ gulp.task('db:migrate', [ 'db:files-dir', 'build:es6-server' ], function (cb) {
         return {
           _id: comment._id,
           title: comment.subject,
-          content: comment.message,
+          content: html2text(comment.message),
           authorId: comment.author.id,
           '$discussion_comments_id': comment.topic,
           '$discussion_comments_order': new Date(comment.enteredDate).valueOf()

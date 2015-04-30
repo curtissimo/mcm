@@ -1,7 +1,9 @@
+import rabbit from 'rabbit.js';
 import moment from 'moment';
 import discussion from '../../../models/discussion';
 import commentEntity from '../../../models/comment';
 import member from '../../../models/member';
+import { postMailDirective } from '../../../mailUtils';
 
 function discussionDateComparison(a, b) {
   if (a.createdOn.valueOf() < b.createdOn.valueOf()) {
@@ -118,12 +120,14 @@ let presenter = {
         if (!d) {
           return ac.notFound();
         }
+        d.content = d.content.replace(/\n/g, '<br>');
         d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
         d.author = membersMap.get(d.authorId);
         if (d.comments.length > 0) {
           for (let comment of d.comments) {
             comment.author = membersMap.get(comment.authorId);
             comment.createdOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
+            comment.content = comment.content.replace(/\n/g, '<br>');
           }
         }
         let actions = {};
@@ -260,7 +264,13 @@ let presenter = {
         if (e) {
           return ac.error(e);
         }
-        ac.redirect(`/chapter/discussions/${ac.params.id}`);
+        let directive = {
+          id: c._id,
+          subdomain: ac.account.subdomain
+        };
+        postMailDirective('mcm-discussion-mail', directive)
+          .then(() => ac.redirect(`/chapter/discussions/${ac.params.id}`))
+          .catch(e => ac.redirect(`/chapter/discussions/${ac.params.id}`));
       });
     } else {
       ac.redirect(`/chapter/discussions/${ac.params.id}`);
@@ -278,7 +288,13 @@ let presenter = {
         if (e) {
           return ac.error(e);
         }
-        ac.redirect('/chapter/discussions');
+        let directive = {
+          id: d._id,
+          subdomain: ac.account.subdomain
+        };
+        postMailDirective('mcm-discussion-mail', directive)
+          .then(() => ac.redirect('/chapter/discussions'))
+          .catch(e => ac.redirect('/chapter/discussions'));
       });
     } else {
       let errors = {};

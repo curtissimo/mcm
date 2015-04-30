@@ -119,6 +119,12 @@ let member = stork.deliver('member', function () {
       emitKey(member.hogNumber);
     }
   });
+
+  this.view('wantingDiscussions', function(member, emitKey) {
+    if (member.emailPreferences && member.emailPreferences.getDiscussions) {
+      emitKey(null);
+    }
+  });
 });
 
 member.projections = {
@@ -225,6 +231,13 @@ member.projections = {
     title: 'Road Captains',
     projection: (db, callback) => {
       member.from(db).onlyRoadCaptains(callback);
+    }
+  },
+  discussionRecipients: {
+    name: 'Chapter members that receive discussion posts',
+    title: 'Discussion Recipients',
+    projection: (db, callback) => {
+      member.from(db).wantingDiscussions(callback);
     }
   }
 };

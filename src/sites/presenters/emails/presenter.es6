@@ -1,8 +1,7 @@
-import rabbit from 'rabbit.js';
-import crypto from 'crypto';
 import moment from 'moment';
 import member from '../../../models/member';
 import email from '../../../models/email';
+import { html2text, randomValueHex, getDomain, postMailDirective } from '../../../mailUtils';
 
 let distributionLists = [];
 
@@ -11,30 +10,6 @@ for (let key of Object.keys(member.projections)) {
     id: key,
     name: member.projections[key].name
   });
-}
-
-function html2text(html) {
-  return html.replace(/\n/g, ' ')
-    .replace(/<br><\/h[1-6]>/g, '\n\n')
-    .replace(/<\/h[1-6]>/g, '\n\n')
-    .replace(/<br><\/[^>]+>/g, '</p>')
-    .replace(/<br>/g, '\n')
-    .replace(/<\/p>/g, '\n\n')
-    .replace(/<[^>]+>/g, '')
-    .trim();
-}
-
-function randomValueHex(len) {
-    return crypto.randomBytes(Math.ceil(len / 2))
-      .toString('hex')
-      .slice(0, len);
-}
-
-function getDomain(account) {
-  if (account.domain) {
-    return account.domain;
-  }
-  return `${account.subdomain}.ismymc.com`;
 }
 
 let presenter = {
@@ -212,31 +187,18 @@ let presenter = {
 
     let missive = email.new(ac.body);
     missive.to(ac.chapterdb).save((e, { _id }) => {
-      try {
-        let context = rabbit.createContext(process.env.MCM_RABBIT_URL);
-        context.on('error', e => {
+      let directive = {
+        id: _id,
+        subdomain: ac.account.subdomain
+      };
+      postMailDirective('mcm-group-mail', directive)
+        .then(() => ac.redirect('/chapter/emails'))
+        .catch(e => {
           if (e.code === 'ETIMEDOUT') {
-            ac.redirect('/chapter/emails?error=unavailable');
+            return ac.redirect('/chapter/emails?error=unavailable');
           }
           ac.error(e);
         });
-        context.on('ready', () => {
-          let socket = context.socket('PUSH', { persistent: true });
-          socket.on('close', () => {
-            context.close();
-          });
-          socket.connect('mcm-group-mail', () => {
-            socket.end(JSON.stringify({
-              id: _id,
-              subdomain: ac.account.subdomain
-            }));
-            ac.redirect('/chapter/emails');
-          });
-        });
-      } catch(e) {
-        console.error('in catch', e);
-        ac.redirect('/chapter/emails');
-      }
     });
   }
 };

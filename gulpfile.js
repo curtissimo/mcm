@@ -7,7 +7,7 @@ if (!process.env.MCM_MAIL_HOST) {
   process.env.MCM_MAIL_HOST = 'web-server';
 }
 if (!process.env.MCM_RABBIT_URL) {
-  process.env.MCM_RABBIT_URL = 'amqp://curtis:curtis@web-server';
+  process.env.MCM_RABBIT_URL = 'amqp://republichog:antigone123@web-server';
 }
 
 if (!process.env.DOMAIN) {

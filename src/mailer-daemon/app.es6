@@ -3,8 +3,10 @@ import nano from 'nano';
 import url from 'url';
 import nodemailer from 'nodemailer';
 import rabbit from 'rabbit.js';
+import moment from 'moment';
 import schedule from 'node-schedule';
 import member from '../models/member.js';
+import { text2html, randomValueHex } from '../mailUtils';
 
 console.info('MAILER-DAEMON: Environment variables');
 console.info('\tMCM_DB:', process.env.MCM_DB);
@@ -76,6 +78,44 @@ function fetchMail({ subdomain, id }) {
     });
 }
 
+function fetchDiscussion({ subdomain, id }) {
+  let db = getAccountDb(subdomain);
+  let email = {
+    from: null,
+    html: null,
+    messageId: null,
+    group: { view: 'discussionRecipients' },
+    sent: null,
+    subject: null,
+    text: null,
+    headers: {}
+  };
+  return promisify(db, 'get', id)
+    .then(discussion => {
+      email.html = discussion.content;
+      email.messageId = `${randomValueHex(8)}.${dicussion._id}@${subdomain}.ismymc.com`;
+      email.sent = moment(discussion.createdOn).toDate();
+      email.subject = discussion.title;
+      email.text = text2html(discussion.content);
+      email.from = `"Discussions" <${dicussion._id}@${subdomain}.ismymc.com>`;
+      email.headers['X-Discussion-Id'] = discussion._id
+      return promisify(db, 'get', d.authorId);
+    })
+    .then(author => {
+      email.html = `<html><head><style>* { font-size: 16px; }</style></head>
+      <body>
+      <h1 style="font-size: 20px"><a href="http://${subdomain}.ismymc.com/chapter/discussions/${email.headers['X-Discussion-Id']}" style="text-decoration: none;">${email.subject}</a></h1>
+      <h2 style="font-size: 18px">Written by ${author.firstName} ${author.lastName}</h2>
+      ${email.html}
+      </body>`;
+      email.text = `${email.subject}
+      Written by ${author.firstName} ${author.lastName}
+
+      ${email.text}`;
+      return email;
+    });
+}
+
 function populateRecipients(email) {
   let options = { include_docs: true };
   let db = email.db;
@@ -140,6 +180,7 @@ let group = {
 };
 
 let single = group;
+let discussion = group;
 
 function fail(message, e) {
   console.error(message, e);
@@ -160,6 +201,24 @@ context.on('ready', () => {
         .then(email => populateRecipients(email))
         .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
         .then(() => group.ack())
+        .catch(e => {
+          console.error(e, e.stack);
+        });
+    });
+  });
+
+  discussion = context.socket('WORKER', { persistent: true });
+  discussion.setEncoding('utf8');
+  discussion.connect('mcm-discussion-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-discussion-mail.');
+    discussion.on('data', (directive) => {
+      console.info('MAILER-DAEMON: Message received on mcm-discussion-mail.');
+      console.info('\tCONTENT:', directive);
+      directive = JSON.parse(directive);
+      fetchDiscussion(directive)
+        .then(email => populateRecipients(email))
+        .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
+        .then(() => discussion.ack())
         .catch(e => {
           console.error(e, e.stack);
         });
