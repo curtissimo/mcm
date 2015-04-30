@@ -53,9 +53,6 @@ let presenter = {
           if (d.archived === undefined) {
             d.archived = false;
           }
-          if (!discussionMap.has(d.category)) {
-            discussionMap.set(d.category, []);
-          }
           d.title = d.title || '«no title»';
           d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
           d.author = membersMap.get(d.authorId);
@@ -74,6 +71,9 @@ let presenter = {
             }
           }
           if (d.archived === archived) {
+            if (!discussionMap.has(d.category)) {
+              discussionMap.set(d.category, []);
+            }
             discussionMap.get(d.category).push(d);
           }
         }
