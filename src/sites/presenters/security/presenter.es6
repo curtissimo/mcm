@@ -10,7 +10,8 @@ let permissions = {
   'Security': 'canManagePermissions',
   'Settings': 'canManageSettings',
   'Road Captains': 'canManageRoadCaptains',
-  'Emails': 'canManageEmails'
+  'Emails': 'canManageEmails',
+  'Officers': 'canManageOfficers'
 };
 
 function promisify(fn) {

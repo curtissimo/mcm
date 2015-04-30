@@ -195,6 +195,16 @@ assets.initialize()
 
     leslie.routeTo({
       area: 'chapter',
+      presenterName: 'officers',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'put' },
+        { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
       presenterName: 'emails',
       routes: [
         { verb: 'get', method: 'list' },

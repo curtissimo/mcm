@@ -294,3 +294,19 @@ if (emailForm && emailEditor) {
     }
   });
 }
+
+let officerInbox = document.getElementById('officerInbox');
+let title = document.getElementById('title');
+if (officerInbox && title) {
+  function inbox(value) {
+    return value.replace(/[^A-Z0-9]/gi, '').toLowerCase();
+  }
+  title.addEventListener('keydown', () => {
+    setTimeout(() => {
+      officerInbox.value = inbox(title.value);
+    }, 0);
+  });
+  officerInbox.addEventListener('blur', () => {
+    officerInbox.value = inbox(officerInbox.value);
+  });
+}

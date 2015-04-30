@@ -1,0 +1,77 @@
+<h1 class="banner">Officers</h1>
+<section class="officer-maintenance">
+  <div class="form-panel">
+    <form method="post" action="/chapter/officers" class="pure-form pure-form-aligned">
+      <input type="hidden" name="X-HTTP-Method-Override" value="put">
+      <fieldset>
+        <legend>Current Officers</legend>
+        <p>
+          Change the assignements of Chapter members to the appropriate officer
+          title, below. If the officer slot is empty, choose the blank option
+          at the top of the list.
+        </p>
+        {{#titles:i}}
+        <div class="pure-control-group officer-assignment">
+          <label for="officers[{{ . }}]">
+            {{ . }}
+          </label>
+          <select name="officers[{{ . }}]" id="officers[{{ . }}]">
+            <option></option>
+            {{#members}}
+            <option value="{{ _id }}" {{#if title === titles[i]}}selected{{/if}}>
+              {{ lastName }}, {{ firstName }}
+              {{#nickName}}
+              ({{ nickName }})
+              {{/nickName}}
+            </option>
+            {{/members}}
+          </select>
+        </div>
+        {{/titles}}
+      </fieldset>
+      <div class="pure-controls officer-controls">
+        <button type="sumbmit" class="pure-button pure-button-primary">
+          Update officers
+        </button>
+      </div>
+    </form>
+  </div>
+  <div class="form-panel">
+    <form method="post" action="/chapter/officers" class="pure-form pure-form-aligned">
+      <fieldset>
+        <legend>New Officer Title</legend>
+        <p>
+          Need a new officer? Create one here and assign the member to that
+          new title.
+        </p>
+        <div class="pure-control-group">
+          <label for="title">Title</label>
+          <input name="title" id="title" required>
+        </div>
+        <div class="pure-control-group">
+          <label for="officerInbox">Inbox</label>
+          <input name="officerInbox" id="officerInbox" required>
+        </div>
+        <div class="pure-control-group">
+          <label for="member">Member</label>
+          <select name="member" id="member" required>
+            <option></option>
+            {{#members}}
+            <option value="{{ _id }}">
+              {{ lastName }}, {{ firstName }}
+              {{#nickName}}
+              ({{ nickName }})
+              {{/nickName}}
+            </option>
+            {{/members}}
+          </select>
+        </div>
+      </fieldset>
+      <div class="pure-controls">
+        <button type="sumbmit" class="pure-button pure-button-primary">
+          Add this new title
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

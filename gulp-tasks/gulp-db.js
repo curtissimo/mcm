@@ -218,6 +218,7 @@ gulp.task('db:migrate', [ 'db:files-dir', 'build:es6-server' ], function (cb) {
           member.canAdminMembers = true;
           member.canManageRoadCaptains = true;
           member.canManageEmails = true;
+          member.canManageOfficers = true;
         } else if (member.title === 'Director' || member.title === 'Assistant Director') {
           member.canAdminNewsletters = true;
           member.canAdminChapterInfo = true;
@@ -228,6 +229,7 @@ gulp.task('db:migrate', [ 'db:files-dir', 'build:es6-server' ], function (cb) {
           member.canAdminDiscussions = true;
           member.canAdminMembers = true;
           member.canManageRoadCaptains = true;
+          member.canManageOfficers = true;
         } else if (member.title === 'Newsletter Editor') {
           member.canAdminNewsletters = true;
         } else if (member.title === 'Head Road Captain') {

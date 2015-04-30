@@ -89,7 +89,7 @@ let member = stork.deliver('member', function () {
 
   this.view('onlyOfficers', function (member, emitKey) {
     if (member.title) {
-      emitKey([ member.lastName, member.firstName ]);
+      emitKey([ member.title ]);
     }
   });
 

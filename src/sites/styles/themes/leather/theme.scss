@@ -534,3 +534,16 @@ fieldset {
   top: -84px;
 }
 
+.officer-maintenance .officer-assignment label {
+  width: 100%;
+  text-align: left;
+
+  @include min-md-screen {
+    width: 11em;
+    text-align: right;
+  }
+}
+
+.officer-maintenance .officer-controls {
+  margin-left: 12.2em;
+}

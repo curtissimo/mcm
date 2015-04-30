@@ -49,6 +49,11 @@
       <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
     </li>
     {{/if}}
+    {{#if permissions.canManageOfficers}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/officers">Manage officers</a>
+    </li>
+    {{/if}}
     {{#if permissions.canManageEmails}}
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/email-management">Email management</a>
