@@ -159,7 +159,7 @@ for (let i = 0; i < submitters.length; i += 1) {
     let target = e.target || e.srcElement;
 
     if (target.form) {
-      var form = document.getElementById(target.form.id || target.form);
+      var form = target.form;
       if (form.querySelector(':invalid')) {
         return;
       }
