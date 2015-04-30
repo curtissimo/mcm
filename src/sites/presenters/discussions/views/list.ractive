@@ -22,7 +22,7 @@
             ({{ author.nickName }})
           {{/if}}
         </div>
-        <div class="discussions-entry-created">{{ createdOn }}</div>
+        <div class="discussions-entry-created">{{ writtenOn }}</div>
         {{#if sticky}}
         <div class="discussions-entry-sticky">(sticky)</div>
         {{/if}}
@@ -45,7 +45,7 @@
           {{/if}}
         </div>
         <div class="discussions-entry-last-comment-created">
-          {{ lastComment.createdOn }}
+          {{ lastComment.writtenOn }}
         </div>
       </div>
     </li>

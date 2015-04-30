@@ -87,8 +87,17 @@ gulp.task('build:es6-client', function () {
     .pipe(syncIfActive());
 });
 
+gulp.task('build:es6-mailer', function () {
+  return gulp.src([ './src/mailer-daemon/*.es6' ])
+    .pipe(babel())
+    .pipe(rename(function (path) {
+      path.extname = '.js';
+    }))
+    .pipe(gulp.dest('./build/mailer-daemon'));
+});
+
 gulp.task('build:es6-server', function () {
-  return gulp.src([ './src/**/*.es6', '!./src/sites/scripts/*.es6' ])
+  return gulp.src([ './src/**/*.es6', '!./src/sites/scripts/*.es6', '!./src/mailer-daemon/*.es6' ])
     .pipe(babel())
     .pipe(rename(function (path) {
       path.extname = '.js';

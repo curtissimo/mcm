@@ -56,12 +56,12 @@ let presenter = {
             d.archived = false;
           }
           d.title = d.title || '«no title»';
-          d.createdOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
+          d.writtenOn = moment(d.createdOn).format('ddd MM/DD/YYYY h:mm a');
           d.author = membersMap.get(d.authorId);
           if (d.comments.length > 0) {
             for (let comment of d.comments) {
               comment.author = membersMap.get(comment.authorId);
-              comment.createdOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
+              comment.writtenOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
             }
             d.lastComment = d.comments[d.comments.length - 1];
             if (moment(d.lastComment.createdOn).isBefore(lastMonth)) {

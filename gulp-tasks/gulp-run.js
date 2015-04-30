@@ -1,15 +1,27 @@
 var gulp = require('gulp');
-var webserver = require('gulp-develop-server');
+var server = require('gulp-develop-server');
 
 var reloading = false;
+var isWeb = false;
 var sync;
 
+gulp.task('run:mailer', [ 'build:es6-mailer' ], function (next) {
+  var serverOpts = {
+    env: process.env,
+    path: './build/mailer-daemon/app.js'
+  };
+  server.listen(serverOpts);
+});
+
 gulp.task('run:refresh', [ 'build:es6-server' ], function (next) {
+  if (!isWeb) {
+    return next();
+  }
   if (reloading) {
     clearTimeout(reloading);
   }
   reloading = setTimeout(function () {
-    webserver.restart(function (err) {
+    server.restart(function (err) {
       if (err) {
         console.error(err);
         sync.exit();
@@ -22,7 +34,17 @@ gulp.task('run:refresh', [ 'build:es6-server' ], function (next) {
   });
 });
 
+gulp.task('run:remail', [ 'build:es6-mailer' ], function (next) {
+  if (isWeb) {
+    return next();
+  }
+  server.restart(function (err) {
+    next(err);
+  });
+});
+
 gulp.task('run:site', [ 'build' ], function (next) {
+  isWeb = true;
   var serverOpts = {
     env: process.env,
     path: './build/sites/app.js'
@@ -38,7 +60,7 @@ gulp.task('run:site', [ 'build' ], function (next) {
     startPath: '/chapter/emails',
     proxy: 'http://localhost:3000'
   };
-  webserver.listen(serverOpts, function (err) {
+  server.listen(serverOpts, function (err) {
     if (err) {
       return console.error(err);
     }
@@ -49,15 +71,15 @@ gulp.task('run:site', [ 'build' ], function (next) {
 module.exports = function (browserSync) {
   sync = browserSync;
   sync.reloadAssets = function (next) {
-    if (!webserver.child) {
+    if (!server.child) {
       return next();
     }
-    webserver.child.once('message', function (m) {
+    server.child.once('message', function (m) {
       if (m.assetsReloaded) {
         next();
       }
     });
-    webserver.child.send({ reloadAssets: true });
+    server.child.send({ reloadAssets: true });
   };
-  return webserver;
+  return server;
 };

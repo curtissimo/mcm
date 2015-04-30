@@ -40,12 +40,18 @@ gulp.task('clean', [ 'dist:clean', 'build:clean' ]);
 
 gulp.task('default', [ 'build' ]);
 
+gulp.task('mailer', [ 'run:mailer', 'watch:mailer' ]);
+
 gulp.task('dev', [ 'run:site', 'watch' ]);
 
 gulp.task('watch', [ 'build' ], function () {
   gulp.watch('./src/sites/scripts/*.js', [ 'build:es3-client' ]);
   gulp.watch('./src/sites/scripts/*.es6', [ 'build:es6-client' ]);
-  gulp.watch([ './src/**/*.es6', '!./src/sites/scripts/*.es6' ], [ 'run:refresh' ]);
+  gulp.watch([ './src/**/*.es6', '!./src/mailer-daemon/app.es6', '!./src/sites/scripts/*.es6' ], [ 'run:refresh' ]);
   gulp.watch('./src/sites/**/*.scss', [ 'build:sass' ]);
   gulp.watch('./src/**/*.ractive', [ 'build:views' ]);
+});
+
+gulp.task('watch:mailer', [ 'build:es6-mailer' ], function () {
+  gulp.watch('./src/mailer-daemon/app.es6', [ 'run:remail' ]);
 });

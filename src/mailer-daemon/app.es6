@@ -88,18 +88,19 @@ function fetchDiscussion({ subdomain, id }) {
     sent: null,
     subject: null,
     text: null,
-    headers: {}
+    headers: {},
+    db: db
   };
   return promisify(db, 'get', id)
     .then(discussion => {
-      email.html = discussion.content;
-      email.messageId = `${randomValueHex(8)}.${dicussion._id}@${subdomain}.ismymc.com`;
+      email.html = text2html(discussion.content);
+      email.messageId = `${randomValueHex(8)}.${discussion._id}@${subdomain}.ismymc.com`;
       email.sent = moment(discussion.createdOn).toDate();
       email.subject = discussion.title;
-      email.text = text2html(discussion.content);
-      email.from = `"Discussions" <${dicussion._id}@${subdomain}.ismymc.com>`;
+      email.text = discussion.content;
+      email.from = `"Discussions" <${discussion._id}@${subdomain}.ismymc.com>`;
       email.headers['X-Discussion-Id'] = discussion._id
-      return promisify(db, 'get', d.authorId);
+      return promisify(db, 'get', discussion.authorId);
     })
     .then(author => {
       email.html = `<html><head><style>* { font-size: 16px; }</style></head>
@@ -109,9 +110,9 @@ function fetchDiscussion({ subdomain, id }) {
       ${email.html}
       </body>`;
       email.text = `${email.subject}
-      Written by ${author.firstName} ${author.lastName}
+Written by ${author.firstName} ${author.lastName}
 
-      ${email.text}`;
+${email.text}`;
       return email;
     });
 }

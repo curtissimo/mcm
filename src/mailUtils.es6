@@ -34,7 +34,6 @@ export function getDomain(account) {
 export function postMailDirective(topic, directive) {
   return new Promise((good, bad) => {
     try {
-      console.log('MCM_RABBIT_URL:', process.env.MCM_RABBIT_URL);
       let context = rabbit.createContext(process.env.MCM_RABBIT_URL);
       context.on('error', e => {
         bad(e);
