@@ -1,4 +1,14 @@
 <h1 class="banner">{{ headerPrefix }} for {{ inboxName }}</h1>
+{{#error}}
+<section>
+  <p class="is-error">
+    {{#if error === 'unavailable'}}
+    The email server appears to be down. We've notified technical support and
+    they're looking at it, ASAP!
+    {{/if}}
+  </p>
+</section>
+{{/error}}
 <section>
   <ul class="inbox">
     {{#if emails.length}}

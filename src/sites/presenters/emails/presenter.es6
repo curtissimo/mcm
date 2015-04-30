@@ -97,7 +97,8 @@ let presenter = {
           inboxName: ac.member.officerInbox,
           secondColumnHeader: secondColumnHeader,
           emails: emails,
-          headerPrefix: headerPrefix
+          headerPrefix: headerPrefix,
+          error: ac.query.error
         },
         presenters: { menu: 'menu' },
         layout: 'chapter'
@@ -211,20 +212,31 @@ let presenter = {
 
     let missive = email.new(ac.body);
     missive.to(ac.chapterdb).save((e, { _id }) => {
-      let context = rabbit.createContext(process.env.MCM_RABBIT_URL);
-      context.on('ready', () => {
-        let socket = context.socket('PUSH', { persistent: true });
-        socket.on('close', () => {
-          context.close();
+      try {
+        let context = rabbit.createContext(process.env.MCM_RABBIT_URL);
+        context.on('error', e => {
+          if (e.code === 'ETIMEDOUT') {
+            ac.redirect('/chapter/emails?error=unavailable');
+          }
+          ac.error(e);
         });
-        socket.connect('mcm-group-mail', () => {
-          socket.end(JSON.stringify({
-            id: _id,
-            subdomain: ac.account.subdomain
-          }));
-          ac.redirect('/chapter/emails');
+        context.on('ready', () => {
+          let socket = context.socket('PUSH', { persistent: true });
+          socket.on('close', () => {
+            context.close();
+          });
+          socket.connect('mcm-group-mail', () => {
+            socket.end(JSON.stringify({
+              id: _id,
+              subdomain: ac.account.subdomain
+            }));
+            ac.redirect('/chapter/emails');
+          });
         });
-      });
+      } catch(e) {
+        console.error('in catch', e);
+        ac.redirect('/chapter/emails');
+      }
     });
   }
 };
