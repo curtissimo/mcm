@@ -195,6 +195,20 @@ assets.initialize()
 
     leslie.routeTo({
       area: 'chapter',
+      presenterName: 'polls',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id/edit-form', method: 'edit' },
+        { verb: 'get', action: ':id/delete-form', method: 'delete' },
+        { verb: 'post' },
+        { verb: 'put', action: ':id' },
+        { verb: 'delete', action: ':id', method: 'destroy' }
+      ]
+    })
+
+    leslie.routeTo({
+      area: 'chapter',
       presenterName: 'officers',
       routes: [
         { verb: 'get', method: 'list' },

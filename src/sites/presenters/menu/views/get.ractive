@@ -21,13 +21,30 @@
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/private-documents">Chapter documents</a>
     </li>
-    {{#officerInbox}}
+    {{#if permissions.hasOfficerPermissions()}}
     <li class="pure-menu-heading menu-section">Officers-Only</li>
+    {{#officerInbox}}
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/emails">Email</a>
     </li>
     {{/officerInbox}}
-    {{#if permissions.hasPermission()}}
+    {{#if permissions.canManagePublicDocuments}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
+    </li>
+    {{/if}}
+    {{#if permissions.canManagePolls}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/polls">Road captain polls</a>
+    </li>
+    {{/if}}
+    {{#if permissions.canManageRoadCaptains}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
+    </li>
+    {{/if}}
+    {{/if}}
+    {{#if permissions.hasAdminPermissions()}}
     <li class="pure-menu-heading menu-section">Administration</li>
     {{#if permissions.canManagePermissions}}
     <li class="pure-menu-item">
@@ -37,16 +54,6 @@
     {{#if permissions.canManageSettings}}
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/settings">Change settings</a>
-    </li>
-    {{/if}}
-    {{#if permissions.canManagePublicDocuments}}
-    <li class="pure-menu-item">
-      <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
-    </li>
-    {{/if}}
-    {{#if permissions.canManageRoadCaptains}}
-    <li class="pure-menu-item">
-      <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
     </li>
     {{/if}}
     {{#if permissions.canManageOfficers}}

@@ -1,11 +1,17 @@
 let presenter = {
   get(ac) {
     if (ac.member) {
-      ac.member.permissions.hasPermission = function () {
-        return this.canManagePermissions
-            || this.canManageSettings
+      ac.member.permissions.hasOfficerPermissions = function () {
+        return this.canManagePolls
+            || ac.member.officerInbox
             || this.canManagePublicDocuments
             || this.canManageRoadCaptains;
+      };
+      ac.member.permissions.hasAdminPermissions = function () {
+        return this.canManagePermissions
+            || this.canManageSettings
+            || this.canManageOfficers
+            || this.canManageEmails;
       };
     }
     let data = {
