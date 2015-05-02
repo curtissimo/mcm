@@ -58,6 +58,9 @@ function initModels() {
     var key = keys[i];
     lookup[key] = require('../build/models/' + key);
   }
+
+  lookup.poll = require('../build/models/poll').poll;
+  lookup.response = require('../build/models/poll').response;
 }
 
 exports.initialize = function (gulp, db) {
@@ -123,7 +126,9 @@ function sync() {
     promisify(lookup.event.to(chapterurl), 'sync'),
     promisify(lookup.page.to(chapterurl), 'sync'),
     promisify(lookup.ride.to(chapterurl), 'sync'),
-    promisify(lookup.email.to(chapterurl), 'sync')
+    promisify(lookup.email.to(chapterurl), 'sync'),
+    promisify(lookup.poll.to(chapterurl), 'sync'),
+    promisify(lookup.response.to(chapterurl), 'sync')
   ]);
 }
 
@@ -353,7 +358,9 @@ gulp.task('db:migrate', [ 'db:files-dir', 'build:es6-server' ], function (cb) {
             canManageDiscussions: !!member.canAdminDiscussions,
             canManageMembers: !!member.canAdminMembers,
             canManageRoadCaptains: !!member.canManageRoadCaptains,
-            canManageEmails: !!member.canManageEmails
+            canManageEmails: !!member.canManageEmails,
+            canManagePolls: !!member.canManagePolls,
+            canManageOfficers: !!member.canManageOfficers
           },
           emailPreferences: {
             getCalendarReminders: member.calReminderEmail,
