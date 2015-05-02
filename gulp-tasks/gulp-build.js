@@ -38,27 +38,32 @@ function newerOptionsForHash(dest, ext) {
     dest: dest,
     ext: ext,
     map: function(src) {
-      var dest = join(process.cwd(), dest, src);
-      dest = dest.replace(re, replacement);
-      var result = glob.sync(dest);
-      if (result.length === 0) {
+      try {
+        var d = join(process.cwd(), dest, src);
+        d = d.replace(re, replacement);
+        var result = glob.sync(d);
+        if (result.length === 0) {
+          return '';
+        }
+        if (result.length === 1) {
+          return join(dirname(src), basename(result[0]));
+        }
+        var newest = null;
+        for (var i = 0; i < result.length; i += 1) {
+          try {
+            var stat = fs.statSync(result[i]);
+          } catch (e) {
+            continue;
+          }
+          if (newest === null || result[newest].mtime < stat.mtime) {
+            newest = i;
+          }
+        }
+        return join(dirname(src), basename(result[newest]));
+      } catch (e) {
+        console.error(e);
         return '';
       }
-      if (result.length === 1) {
-        return join(dirname(src), basename(result[0]));
-      }
-      var newest = null;
-      for (var i = 0; i < result.length; i += 1) {
-        try {
-          var stat = fs.statSync(result[i]);
-        } catch (e) {
-          continue;
-        }
-        if (newest === null || result[newest].mtime < stat.mtime) {
-          newest = i;
-        }
-      }
-      return join(dirname(src), basename(result[newest]));
     }
   };
 }
@@ -223,6 +228,7 @@ gulp.task('build:shell-scripts', function () {
 
 gulp.task('build:views', function () {
   return gulp.src('./src/**/*.ractive')
+    .pipe(newer('./build'))
     .pipe(ractive())
     .pipe(gulp.dest('./build'))
     .pipe(syncIfActive());
