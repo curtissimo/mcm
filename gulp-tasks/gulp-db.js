@@ -2,7 +2,10 @@ require('babel/polyfill');
 var fs = require('fs');
 var nano = require('nano');
 var crypto = require('crypto');
-var html2text = require('../build/mailUtils').html2text;
+var html2text = null;
+try {
+html2text = require('../build/mailUtils').html2text;
+} catch (e) {}
 var lookup = {};
 
 Promise.hash = function (o) {
