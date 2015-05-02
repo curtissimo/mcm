@@ -1,10 +1,15 @@
 var autoprefixer = require('gulp-autoprefixer');
 var babel = require('gulp-babel');
+var basename = require('path').basename;
 var del = require('del');
+var dirname = require('path').dirname;
 var fs = require('fs');
+var glob = require('glob');
 var gulp = require('gulp');
 var hash = require('gulp-hash');
+var join = require('path').join;
 var jsmin = require('gulp-jsmin');
+var newer = require('gulp-newer');
 var ractive = require('gulp-ractive');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
@@ -66,6 +71,19 @@ gulp.task('build:clean', function (next) {
 
 gulp.task('build:es3-client', function () {
   return gulp.src('./src/sites/scripts/*.js')
+    .pipe(newer({
+      dest: './build/sites/public/scripts',
+      ext: '.js',
+      map: function(src) {
+        var dest = join(process.cwd(), './build/sites/public/scripts', src);
+        dest = dest.replace(/\.js$/, '-*.js');
+        var result = glob.sync(dest);
+        if (result.length === 0) {
+          return '';
+        }
+        return basename(result[0]);
+      }
+    }))
     .pipe(jsmin())
     .pipe(hash())
     .pipe(gulp.dest('./build/sites/public/scripts'))
@@ -98,6 +116,10 @@ gulp.task('build:es6-mailer', function () {
 
 gulp.task('build:es6-server', function () {
   return gulp.src([ './src/**/*.es6', '!./src/sites/scripts/*.es6', '!./src/mailer-daemon/*.es6' ])
+    .pipe(newer({
+      dest: './build',
+      ext: '.js'
+    }))
     .pipe(babel())
     .pipe(rename(function (path) {
       path.extname = '.js';
@@ -156,7 +178,31 @@ gulp.task('build:images', function () {
 
 gulp.task('build:sass', function () {
   var options = { precision: 10 };
-  var stream = gulp.src('./src/sites/**/*.scss');
+  var stream = gulp.src('./src/sites/**/*.scss')
+    .pipe(newer({
+      dest: './build/sites/public',
+      ext: '.css',
+      map: function(src) {
+        var dest = join(process.cwd(), './build/sites/public', src);
+        dest = dest.replace(/\.css$/, '-*.css');
+        var result = glob.sync(dest);
+        if (result.length === 0) {
+          return '';
+        }
+        var newest = null;
+        for (var i = 0; i < result.length; i += 1) {
+          try {
+            var stat = fs.statSync(result[i]);
+          } catch (e) {
+            continue;
+          }
+          if (newest === null || result[newest].mtime < stat.mtime) {
+            newest = i;
+          }
+        }
+        return join(dirname(src), basename(result[newest]));
+      }
+    }));
   var inProduction = process.env.NODE_ENV === 'production';
   if (!inProduction) {
     stream = stream.pipe(sourcemaps.init())
