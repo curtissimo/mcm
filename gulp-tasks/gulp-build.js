@@ -31,6 +31,38 @@ var AUTOPREFIXER_BROWSERS = [
 
 var refreshing = null;
 
+function newerOptionsForHash(dest, ext) {
+  var re = new RegExp('\\' + ext + '$');
+  var replacement = '-[^-]*' + ext;
+  return {
+    dest: dest,
+    ext: ext,
+    map: function(src) {
+      var dest = join(process.cwd(), dest, src);
+      dest = dest.replace(re, replacement);
+      var result = glob.sync(dest);
+      if (result.length === 0) {
+        return '';
+      }
+      if (result.length === 1) {
+        return join(dirname(src), basename(result[0]));
+      }
+      var newest = null;
+      for (var i = 0; i < result.length; i += 1) {
+        try {
+          var stat = fs.statSync(result[i]);
+        } catch (e) {
+          continue;
+        }
+        if (newest === null || result[newest].mtime < stat.mtime) {
+          newest = i;
+        }
+      }
+      return join(dirname(src), basename(result[newest]));
+    }
+  };
+}
+
 function syncIfActive() {
   var stream = through.obj(function(file, enc, cb) {
     var self = this;
@@ -71,19 +103,7 @@ gulp.task('build:clean', function (next) {
 
 gulp.task('build:es3-client', function () {
   return gulp.src('./src/sites/scripts/*.js')
-    .pipe(newer({
-      dest: './build/sites/public/scripts',
-      ext: '.js',
-      map: function(src) {
-        var dest = join(process.cwd(), './build/sites/public/scripts', src);
-        dest = dest.replace(/\.js$/, '-*.js');
-        var result = glob.sync(dest);
-        if (result.length === 0) {
-          return '';
-        }
-        return basename(result[0]);
-      }
-    }))
+    .pipe(newer(newerOptionsForHash('./build/sites/public/scripts', '.js')))
     .pipe(jsmin())
     .pipe(hash())
     .pipe(gulp.dest('./build/sites/public/scripts'))
@@ -179,30 +199,7 @@ gulp.task('build:images', function () {
 gulp.task('build:sass', function () {
   var options = { precision: 10 };
   var stream = gulp.src('./src/sites/**/*.scss')
-    .pipe(newer({
-      dest: './build/sites/public',
-      ext: '.css',
-      map: function(src) {
-        var dest = join(process.cwd(), './build/sites/public', src);
-        dest = dest.replace(/\.css$/, '-*.css');
-        var result = glob.sync(dest);
-        if (result.length === 0) {
-          return '';
-        }
-        var newest = null;
-        for (var i = 0; i < result.length; i += 1) {
-          try {
-            var stat = fs.statSync(result[i]);
-          } catch (e) {
-            continue;
-          }
-          if (newest === null || result[newest].mtime < stat.mtime) {
-            newest = i;
-          }
-        }
-        return join(dirname(src), basename(result[newest]));
-      }
-    }));
+    .pipe(newer(newerOptionsForHash('./build/sites/public', '.css')));
   var inProduction = process.env.NODE_ENV === 'production';
   if (!inProduction) {
     stream = stream.pipe(sourcemaps.init())
