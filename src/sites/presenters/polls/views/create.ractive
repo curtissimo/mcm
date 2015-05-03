@@ -1,1 +1,43 @@
-create.ractive
+<h1 class="banner">Create a new Road Captain poll</h1>
+<section>
+  <p>
+    You can create a new poll for your road captains, here. Just fill out the
+    name and, then, two or three options. You can just leave the third option
+    blank if you don't need to use it.
+  </p>
+  <p>
+    The first option that you create will have some special meaning. The first
+    option that you provide will have a special color in the email that goes
+    out and will appear on the poll page with the first responder.
+  </p>
+  <form class="pure-form pure-form-stacked" method="post" action="/chapter/polls">
+    <fieldset>
+      <legend>General information</legend>
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" class="pure-input-1" required>
+
+      <label for="open" class="pure-checkbox">
+        <input type="checkbox" name="open" id="open" value="true">
+        Check this box to immediately open this poll
+      </label>
+    </fieldset>
+    <fieldset>
+      <legend>Options</legend>
+      <label for="options[0][name]">Option 1</label>
+      <input id="options[0][name]" name="options[0][name]" class="pure-input-1" required>
+
+      <label for="options[1][name]">Option 2</label>
+      <input id="options[1][name]" name="options[1][name]" class="pure-input-1" required>
+
+      <label for="options[2][name]">Option 3</label>
+      <input id="options[2][name]" name="options[2][name]" class="pure-input-1">
+    </fieldset>
+
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/polls" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Create the new poll</button>
+      </div>
+    </div>
+  </form>
+</section>

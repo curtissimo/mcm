@@ -547,3 +547,15 @@ fieldset {
 .officer-maintenance .officer-controls {
   margin-left: 12.2em;
 }
+
+.polls-entry-opened-on-header,
+.polls-entry-reply-count-header,
+.polls-entry-closed-on-header,
+.polls-entry-created-on-header,
+.polls-entry-name-header {
+  font-weight: bold;
+}
+
+.poll dt {
+  font-weight: bold;
+}

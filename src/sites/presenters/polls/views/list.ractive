@@ -1,1 +1,68 @@
-list.ractive
+<h1 class="banner">Manage Polls</h1>
+{{#if polls.length === 0}}
+<section>
+  Please click the "Create" action in the upper left to create a new Road
+  Captain poll.
+</section>
+{{/if}}
+{{#if polls.open.length > 0}}
+<fieldset>
+  <legend>Open polls</legend>
+  <ul class="polls-category">
+    <li class="polls-entry">
+      <div class="polls-entry-name-header">Name</div>
+      <div class="polls-entry-opened-on-header">Opened On</div>
+      <div class="polls-entry-reply-count-header">First Respondant</div>
+    </li>
+    {{#polls.open}}
+    <li class="polls-entry stripe-{{(@index + 1) % 2}}">
+      <div class="polls-entry-name">
+        <a href="/chapter/polls/{{ _id }}">{{ name }}</a>
+      </div>
+      <div class="polls-entry-opened-on">{{ updated }}</div>
+      <div class="polls-entry-reply-count">{{ firstRespondant }}</div>
+    </li>
+    {{/polls.open}}
+  </ul>
+</fieldset>
+{{/if}}
+{{#if polls.closed.length > 0}}
+<fieldset>
+  <legend>Closed polls</legend>
+  <ul class="polls-category">
+    <li class="polls-entry">
+      <div class="polls-entry-name-header">Name</div>
+      <div class="polls-entry-closed-on-header">Closed On</div>
+      <div class="polls-entry-reply-count-header">Number of Replies</div>
+    </li>
+    {{#polls.closed}}
+    <li class="polls-entry stripe-{{(@index + 1) % 2}}">
+      <div class="polls-entry-name">
+        <a href="/chapter/polls/{{ _id }}">{{ name }}</a>
+      </div>
+      <div class="polls-entry-closed-on">{{ updated }}</div>
+      <div class="polls-entry-reply-count">{{ responses.length }}</div>
+    </li>
+    {{/polls.closed}}
+  </ul>
+</fieldset>
+{{/if}}
+{{#if polls.unopened.length > 0}}
+<fieldset>
+  <legend>Unopened polls</legend>
+  <ul class="polls-category">
+    <li class="polls-entry">
+      <div class="polls-entry-name-header">Name</div>
+      <div class="polls-entry-created-on-header">Created On</div>
+    </li>
+    {{#polls.unopened}}
+    <li class="polls-entry stripe-{{(@index + 1) % 2}}">
+      <div class="polls-entry-name">
+        <a href="/chapter/polls/{{ _id }}">{{ name }}</a>
+      </div>
+      <div class="polls-entry-created-on">{{ created }}</div>
+    </li>
+    {{/polls.unopened}}
+  </ul>
+</fieldset>
+{{/if}}

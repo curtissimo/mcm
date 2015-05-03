@@ -1,0 +1,41 @@
+{{#poll}}
+<h1 class="banner">{{ name }}</h1>
+{{#if open === undefined}}
+<section>
+  <form method="post" action="/chapter/polls/{{ _id }}">
+    <input type="hidden" name="X-HTTP-Method-Override" value="patch">
+    <input type="hidden" name="directive[op]" value="replace">
+    <input type="hidden" name="directive[path]" value="/open">
+    <input type="hidden" name="directive[value]" value="true">
+    <button type="submit" class="pure-button pure-button-primary">
+      Open this poll
+    </button>
+  </form>
+</section>
+{{/if}}
+{{#if open}}
+<section>
+  <form method="post" action="/chapter/polls/{{ _id }}">
+    <input type="hidden" name="X-HTTP-Method-Override" value="patch">
+    <input type="hidden" name="directive[op]" value="replace">
+    <input type="hidden" name="directive[path]" value="/open">
+    <input type="hidden" name="directive[value]" value="false">
+    <button type="submit" class="pure-button pure-button-primary">
+      Close this poll
+    </button>
+  </form>
+</section>
+{{/if}}
+<section>
+  <dl class="poll">
+    <dt>Option 1</dt>
+    <dd>{{ options[0].name }}</dd>
+    <dt>Option 2</dt>
+    <dd>{{ options[1].name }}</dd>
+    {{#if options.length === 3}}
+    <dt>Option 3</dt>
+    <dd>{{ options[2].name }}</dd>
+    {{/if}}
+  </dl>
+</section>
+{{/poll}}

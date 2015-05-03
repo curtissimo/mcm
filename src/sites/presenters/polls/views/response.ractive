@@ -1,0 +1,7 @@
+<section>
+Congratulations
+{{#member}}{{ firstName }} {{ lastName }}{{/member}}!
+</section>
+<section>
+We've recorded your response for {{ poll.name }}.
+</section>

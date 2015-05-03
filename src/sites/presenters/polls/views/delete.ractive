@@ -1,1 +1,18 @@
-delete.ractive
+{{#poll}}
+<h1 class="banner">{{ name }}</h1>
+<section>
+  <div class="is-error">
+    This action will delete this poll and any responses in regard to it. Are
+    you sure you want to continue?
+    <form class="pure-form pure-form-stacked" method="post" action="/chapter/polls/{{ _id }}">
+      <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+      <div class="form-controls">
+        <div class="pure-controls">
+          <a href="/chapter/polls/{{ _id }}" class="pure-button">Cancel</a>
+          <button type="submit" class="pure-button pure-button-primary">Delete this poll</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+{{/poll}}

@@ -198,11 +198,13 @@ assets.initialize()
       presenterName: 'polls',
       routes: [
         { verb: 'get', method: 'list' },
+        { verb: 'get', action: ':id/:option/:memberId', method: 'response' },
         { verb: 'get', action: 'create-form', method: 'create' },
         { verb: 'get', action: ':id/edit-form', method: 'edit' },
         { verb: 'get', action: ':id/delete-form', method: 'delete' },
+        { verb: 'get', action: ':id', method: 'item' },
         { verb: 'post' },
-        { verb: 'put', action: ':id' },
+        { verb: 'patch', action: ':id' },
         { verb: 'delete', action: ':id', method: 'destroy' }
       ]
     })
