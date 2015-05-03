@@ -203,8 +203,7 @@ gulp.task('build:images', function () {
 
 gulp.task('build:sass', function () {
   var options = { precision: 10 };
-  var stream = gulp.src('./src/sites/**/*.scss')
-    .pipe(newer(newerOptionsForHash('./build/sites/public', '.css')));
+  var stream = gulp.src('./src/sites/**/*.scss');
   var inProduction = process.env.NODE_ENV === 'production';
   if (!inProduction) {
     stream = stream.pipe(sourcemaps.init())
@@ -245,7 +244,8 @@ gulp.task('build', [
   'build:images',
   'build:sass',
   'build:shell-scripts',
-  'build:views'
+  'build:views',
+  'build:es6-mailer'
 ]);
 
 exports.sync = sync;
