@@ -6,6 +6,7 @@ import rabbit from 'rabbit.js';
 import moment from 'moment';
 import schedule from 'node-schedule';
 import member from '../models/member.js';
+import Ractive from 'ractive';
 import { text2html, randomValueHex } from '../mailUtils';
 
 console.info('MAILER-DAEMON: Environment variables');
@@ -99,7 +100,7 @@ function fetchDiscussion({ subdomain, id }) {
       email.subject = discussion.title;
       email.text = discussion.content;
       email.from = `"Discussions" <${discussion._id}@${subdomain}.ismymc.com>`;
-      email.headers['X-Discussion-Id'] = discussion._id
+      email.headers['X-Discussion-Id'] = discussion._id;
       return promisify(db, 'get', discussion.authorId);
     })
     .then(author => {
@@ -114,6 +115,44 @@ Written by ${author.firstName} ${author.lastName}
 
 ${email.text}`;
       return email;
+    });
+}
+
+function fetchPolls({ subdomain, id, initiatorId }) {
+  let db = getAccountDb(subdomain);
+  let promises = [
+    promisify(db, 'get', id),
+    promisify(member.projections.onlyRoadCaptains, 'projection', db),
+    promisify(db, 'get', id)
+  ];
+  return Promise.all(promises)
+    .then(([ poll, roadCaptains, initiator ]) => {
+      let sender = `"New Poll" <no-reply@${subdomain}.ismymc.com>`;
+      let emails = [];
+
+      for (let recipient of roadCaptains) {
+        let data = {
+          poll: poll,
+          roadCaptain: recipient,
+          subdomain: subdomain
+        };
+        let html = new Ractive({
+          template: pollTemplate,
+          data: data
+        }).toHTML();
+        let email = {
+          from: sender,
+          html: html,
+          subject: poll.name,
+          to: `"${recipient.firstName} ${recipient.lastName}" <${recipient.email}>`,
+          text: "You must use an email client that can display HTML to respond to this poll.\n"
+        };
+        emails.push(email);
+      }
+      return {
+        emails: emails,
+        db: db
+      };
     });
 }
 
@@ -145,6 +184,15 @@ function populateRecipients(email) {
         db: db
       };
     });
+}
+
+function mailMany(emails) {
+  let promises = [];
+  for (let email of emails) {
+    let promise = promisify(transporter, 'sendMail', email);
+    promises.push(promise);
+  }
+  return Promise.all(promises);
 }
 
 function mailAndMark({ email, recipients, db }) {
@@ -182,6 +230,7 @@ let group = {
 
 let single = group;
 let discussion = group;
+let poll = group;
 
 function fail(message, e) {
   console.error(message, e);
@@ -220,6 +269,23 @@ context.on('ready', () => {
         .then(email => populateRecipients(email))
         .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
         .then(() => discussion.ack())
+        .catch(e => {
+          console.error(e, e.stack);
+        });
+    });
+  });
+
+  poll = context.socket('WORKER', { persistent: true });
+  poll.setEncoding('utf8');
+  poll.connect('mcm-poll-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-poll-mail.');
+    poll.on('data', (directive) => {
+      console.info('MAILER-DAEMON: Message received on mcm-poll-mail.');
+      console.info('\tCONTENT:', directive);
+      directive = JSON.parse(directive);
+      fetchPolls(directive)
+        .then(({ emails, db }) => mailMany(emails))
+        .then(() => poll.ack())
         .catch(e => {
           console.error(e, e.stack);
         });
@@ -274,3 +340,22 @@ schedule.scheduleJob(rule, () => {
 });
 // END: SCHEDULED
 /////////////////////////////////////////////////////////////////////////////
+
+let pollTemplate = `<html>
+<head></head>
+<body style="font-family:sans-serif;font-size:16px;">
+<div>A new poll has opened:</div>
+<div style="font-weight:bold;">{{ poll.name }}</div>
+<div style="margin-top:1em;text-align:center;">
+<a style="max-width:400px;background-color:#1CB841;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/0/{{ roadCaptain._id }}">{{ poll.options[0].name }}</a>
+</div>
+<div style="margin-top:1em;text-align:center;">
+<a style="max-width:400px;background-color:#42B8DD;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/1/{{ roadCaptain._id }}">{{ poll.options[1].name }}</a>
+</div>
+{{#if poll.options.length === 3}}
+<div style="margin-top:1em;text-align:center;">
+<a style="max-width:400px;background-color:#E6E6E5;color:black;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/2/{{ roadCaptain._id }}">{{ poll.options[2].name }}</a>
+</div>
+{{/if}}
+</body>
+</html>`;

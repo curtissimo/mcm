@@ -228,10 +228,13 @@ let presenter = {
         return ac.error(e);
       }
       if (entity.open) {
-        postMailDirective('mcm-poll-mail', {
+        return postMailDirective('mcm-poll-mail', {
           id: entity._id,
-          subdomain: ac.account.subdomain
-        });
+          subdomain: ac.account.subdomain,
+          initiatorId: ac.member._id
+        })
+        .then(() => ac.redirect('/chapter/polls'))
+        .catch(e => ac.error(e));
       }
       ac.redirect('/chapter/polls');
     });
