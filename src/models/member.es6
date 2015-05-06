@@ -125,6 +125,12 @@ let member = stork.deliver('member', function () {
       emitKey(null);
     }
   });
+
+  this.view('wantingCalendarEvents', function(member, emitKey) {
+    if (member.emailPreferences && member.emailPreferences.getCalendarReminders) {
+      emitKey(null);
+    }
+  });
 });
 
 member.projections = {

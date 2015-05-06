@@ -7,7 +7,7 @@ import moment from 'moment';
 import schedule from 'node-schedule';
 import member from '../models/member.js';
 import Ractive from 'ractive';
-import { text2html, randomValueHex } from '../mailUtils';
+import { text2html, randomValueHex, html2text } from '../mailUtils';
 
 console.info('MAILER-DAEMON: Environment variables');
 console.info('\tMCM_DB:', process.env.MCM_DB);
@@ -328,13 +328,47 @@ schedule.scheduleJob(rule, () => {
       for (let account of accounts) {
         let db = getAccountDb(account.subdomain);
         let options = { include_docs: true, key: date };
-        promises.push(promisify(db, 'view', 'event', 'byDate', options));
+        promises.push(promisify(db, 'view', 'member', 'wantingCalendarEvents', { include_docs: true }));
+        promises.push(promisify(db, 'view', 'event', 'byReminderDates', options));
+        promises.push(promisify(db, 'view', 'ride', 'byReminderDates', options));
       }
       return Promise.all(promises);
     })
     .then(resultsBySubdomain => {
-      // Too tired to think. Let's do something smart, here, when I can
-      // think better. ;P
+      for(let i = 0; i < resultsBySubdomain.length; i += 3) {
+        members = resultsBySubdomain[i];
+        events = resultsBySubdomain[i + 1];
+        rides = resultsBySubdomain[i + 2];
+      }
+      let content = [];
+      for (let i = 0; i < rides.length; i += 1) {
+        content.push(new Ractive({
+          template: eventTemplates.ride,
+          data: { event: rides[i] }
+        }).toHTML());
+      }
+      for (let i = 0; i < events.length; i += 1) {
+        content.push(new Ractive({
+          template: eventTemplates[events[i].activity],
+          data: { event: events[i] }
+        }).toHTML());
+      }
+      content = new Ractive({
+        template: eventMailTemplate,
+        data: { events: content }
+      }).toHTML();
+
+      let emails = [];
+      for (let m of members) {
+        emails.push({
+          to: `"${m.firstName} ${m.lastName}" <m.email>`,
+          from: '"Upcoming Chapter Events" <no-reply@what.ismymc.com>',
+          subject: 'Upcoming Events',
+          html: content,
+          text: html2text(content)
+        });
+      }
+      return mailMany(emails);
     })
     .catch(e => console.error(e));
 });
@@ -349,13 +383,53 @@ let pollTemplate = `<html>
 <div style="margin-top:1em;text-align:center;">
 <a style="max-width:400px;background-color:#1CB841;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/0/{{ roadCaptain._id }}">{{ poll.options[0].name }}</a>
 </div>
+<div>&nbsp;</div>
 <div style="margin-top:1em;text-align:center;">
 <a style="max-width:400px;background-color:#42B8DD;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/1/{{ roadCaptain._id }}">{{ poll.options[1].name }}</a>
 </div>
 {{#if poll.options.length === 3}}
+<div>&nbsp;</div>
 <div style="margin-top:1em;text-align:center;">
 <a style="max-width:400px;background-color:#E6E6E5;color:black;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/2/{{ roadCaptain._id }}">{{ poll.options[2].name }}</a>
 </div>
 {{/if}}
 </body>
 </html>`;
+
+let eventTemplates = {
+  meal: `<div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Meal:</span> {{ title }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">On:</span> {{ event.days[0].month + 1 }}/{{ event.days[0].date }}/{{ event.days[0].year }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">When:</span> {{ event.days[0].meetAt }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Where:</span> {{ event.days[0].location }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;margin-top:8px;">{{ event.days[0].description }}</div>`,
+  meeting: `<div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Meeting:</span> {{ title }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">On:</span> {{ event.days[0].month + 1 }}/{{ event.days[0].date }}/{{ event.days[0].year }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">When:</span> {{ event.days[0].meetAt }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Where:</span> {{ event.days[0].location }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;margin-top:8px;">{{ event.days[0].description }}</div>`,
+  movie: `<div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Movie:</span> {{ title }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">On:</span> {{ event.days[0].month + 1 }}/{{ event.days[0].date }}/{{ event.days[0].year }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">When:</span> {{ event.days[0].meetAt }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Where:</span> {{ event.days[0].location }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;margin-top:8px;">{{ event.days[0].description }}</div>`,
+  ride: `<div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Ride:</span> {{ title }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">On:</span> {{ event.days[0].month + 1 }}/{{ event.days[0].date }}/{{ event.days[0].year }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Meet at:</span> {{ event.days[0].meetAt }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">KSU:</span> {{ event.days[0].ksuAt }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Start from:</span> {{ event.days[0].startFrom }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Going to:</span> {{ event.days[0].destination }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;"><span style="font-weight:bold">Led by:</span> {{ event.days[0].roadCaptain }}</div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;margin-top:8px;">{{ event.days[0].description }}</div>`,
+};
+
+let eventMailTemplate = `<html>
+<head></head>
+<body>
+<div style="font-family:Helvetica,Arial,serif;font-size: 16px;border-bottom:1px solid #CCC;">Upcoming Events</div>
+{{#events}}
+<hr style="margin-top:16px;margin-botton:16px;">
+{{ . }}
+{{/events}}
+</body>
+</html>`;
+

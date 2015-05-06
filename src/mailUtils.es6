@@ -8,6 +8,7 @@ export function html2text(html) {
     .replace(/<br><\/[^>]+>/g, '</p>')
     .replace(/<br>/g, '\n')
     .replace(/<\/p>/g, '\n\n')
+    .replace(/<\/div>/g, '\n\n')
     .replace(/<[^>]+>/g, '')
     .trim();
 }

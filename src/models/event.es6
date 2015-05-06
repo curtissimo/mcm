@@ -15,7 +15,16 @@ let event = stork.deliver('event', function () {    // type === 'event' && activ
     }
   });
 
-/*  
+  this.view("byReminderDates", (event, emitKey) => {
+    for (var i = 0; i < 1; i += 1) {
+      for (var j = 1; j < 6; j += 2) {
+        var d = new Date(event.days[i].year, event.days[i].month, event.days[i].date - j);
+        emitKey([d.getFullYear(), d.getMonth(), d.getDate()]);
+      }
+    }
+  });
+
+  /*  
   this.number('year', { required: true });          // from «date» or based on computation
   this.number('month', { required: true });         // from «date» or based on computation
   this.number('date', { required: true });          // from «date» or based on computation
