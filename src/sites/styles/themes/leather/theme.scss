@@ -562,7 +562,7 @@ fieldset {
 
 .read-only-field {
   vertical-align: middle;
-}
+}_
 
 .member-item-communication-preferences {
   text-align: center;
@@ -577,4 +577,18 @@ fieldset {
   box-shadow: 0px 1px 4px #666666;
   margin: .5em;
   padding-top: 1em;
+}
+
+.member-item-blog-entries {
+  padding-left: 1em;
+  display: none;
+}
+
+.member-item-information {
+  text-align: center;
+}
+
+.edit-your-personal-information {
+  margin-top: 1em;
+  display: block;
 }

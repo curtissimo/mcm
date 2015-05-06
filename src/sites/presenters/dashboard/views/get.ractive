@@ -30,14 +30,16 @@
       </div>
       {{/address}}
       {{/if}}
-      <a href="/chapter/members/{{ member._id }}/edit-form">Edit your personal information</a>
+      <div class="edit-your-personal-information">
+        <a href="/chapter/members/{{ member._id }}/edit-form">Edit your personal information</a>
+      </div>
     </div>
     <div class="member-item-communication-preferences">
       <a href="#" id="edit-email-preferences">Edit your email preferences</a>
       <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/emailPreferences" id="email-preferences">
         <input type="hidden" value="patch" name="X-HTTP-Method-Override">
         <fieldset class="ancillary-form-panel">
-          <button class="pure-button pure-button-primary">Update preferences</button>
+          <button type="submit" class="pure-button pure-button-primary">Update preferences</button>
           <label class="pure-checkbox">
             <input type="checkbox" name="emailPreferences[getCalendarReminders]" value="1" {{#if member.emailPreferences.getCalendarReminders}}checked{{/if}}>
             Get calendar reminders
@@ -46,8 +48,12 @@
             <input type="checkbox" name="emailPreferences[getDiscussions]" value="1" {{#if member.emailPreferences.getDiscussions}}checked{{/if}}>
             Get discussions
           </label>
+          <button type="button" class="pure-button" id="cancel-edit-email-preferences">Cancel changes</button>
         </fieldset>
       </form>
+    </div>
+    <div>
+      <a href="#" id="create-blog-entry">Create a blog entry</a>
     </div>
     {{#if achievements}}
     <ul class="member-item-achievement-list">
@@ -57,6 +63,16 @@
     </ul>
     {{/if}}
   </div>
-  <div class="member-item-blog-entries">
+  <div id="blog-entry-form" class="member-item-blog-entries">
+    <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ member._id }}/blogs">
+      <fieldset>
+        <legend>Create a new blog entry</legend>
+        <label for="blog[title]">Title</label>
+        <input type="text" name="blog[title]" id="blog[title]" class="pure-input-1">
+        <label for="blog[content]">Content</label>
+        <textarea type="text" name="blog[content]" id="blog[content]" class="pure-input-1 long-text"></textarea>
+        <button type="submit" class="pure-button pure-button-primary">Submit</button>
+      </fieldset>
+    </form>
   </div>
 {{/member}}

@@ -312,11 +312,27 @@ if (officerInbox && title) {
 }
 
 let editEmailPreferences = document.getElementById('edit-email-preferences');
+let cancelEditEmailPreferences = document.getElementById('cancel-edit-email-preferences');
 if (editEmailPreferences) {
   editEmailPreferences.addEventListener('click', e => {
     e.preventDefault();
     let target = e.target || e.srcElement;
     target.style.display = 'none';
     document.getElementById('email-preferences').style.display = 'block';
+  });
+
+  cancelEditEmailPreferences.addEventListener('click', e => {
+    editEmailPreferences.style.display = 'inline';
+    document.getElementById('email-preferences').style.display = 'none';
+  });
+}
+
+let createBlogEntry = document.getElementById('create-blog-entry');
+if (createBlogEntry) {
+  createBlogEntry.addEventListener('click', e => {
+    e.preventDefault();
+    let target = e.target || e.srcElement;
+    target.style.display = 'none';
+    document.getElementById('blog-entry-form').style.display = 'block';
   });
 }
