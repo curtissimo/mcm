@@ -54,26 +54,46 @@
       <fieldset>
         <legend>National Membership</legend>
         <div class="pure-control-group">
-          <label for="membership[national][type]">Membership Type</label>
-          <select name="membership[national][type]" id=membership[national][type]>
+          <label for="membership[national][type]">Type</label>
+          {{#if canManageMembers}}
+          <select name="membership[national][type]" id="membership[national][type]">
             {{#membershipTypes}}
             <option {{#if abbreviation === membership.national.type}}selected{{/if}} value="{{ abbreviation }}">{{ name }}</option>
             {{/membershipTypes}}
           </select>
+          {{else}}
+          {{#membershipTypes}}
+          {{#if abbreviation === membership.national.type}}
+          <span class="read-only-field">{{ name }}</span>
+          {{/if}}
+          {{/membershipTypes}}
+          {{/if}}
         </div>
         <div class="pure-control-group">
           <label for="membership[national][startDate]">Joined on</label>
+          {{#if canManageMembers}}
           <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.national.startDate }}" name="membership[national][startDate]" id="membership[national][startDate]">
+          {{else}}
+          <span class="read-only-field">{{ membership.national.startDate }}</span>
+          {{/if}}
         </div>
         {{#if membership.national.type === 'L'}}
         <div class="pure-control-group">
           <label>Expires on</label>
+          {{#if canManageMembers}}
           <input type="text" disabled value="never">
+          {{else}}
+          <span class="read-only-field">never</span>
+          {{/if}}
         </div>
         {{else}}
         <div class="pure-control-group">
           <label for="membership[national][endDate]">Expires on</label>
+          {{#if canManageMembers}}
           <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.national.endDate }}" name="membership[national][endDate]" id="membership[national][endDate]">
+          {{else}}
+          <span class="read-only-field">{{ membership.national.endDate }}</span>
+          {{/if}}
         </div>
         {{/if}}
       </fieldset>
@@ -81,11 +101,19 @@
         <legend>Local Membership</legend>
         <div class="pure-control-group">
           <label for="membership[local][startDate]">Joined on</label>
+          {{#if canManageMembers}}
           <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.local.startDate }}" name="membership[local][startDate]" id="membership[local][startDate]">
+          {{else}}
+          <span class="read-only-field">{{ membership.local.startDate }}</span>
+          {{/if}}
         </div>
         <div class="pure-control-group">
           <label for="membership[local][endDate]">Expires on</label>
+          {{#if canManageMembers}}
           <input type="date" placeholder="MM/DD/YYYY" value="{{ membership.local.endDate }}" name="membership[local][endDate]" id="membership[local][endDate]">
+          {{else}}
+          <span class="read-only-field">{{ membership.local.endDate }}</span>
+          {{/if}}
         </div>
       </fieldset>
     </div>

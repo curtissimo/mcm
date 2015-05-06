@@ -559,3 +559,22 @@ fieldset {
 .poll dt {
   font-weight: bold;
 }
+
+.read-only-field {
+  vertical-align: middle;
+}
+
+.member-item-communication-preferences {
+  text-align: center;
+}
+
+.ancillary-form {
+  display: none;
+}
+
+.pure-form .ancillary-form-panel {
+  border-radius: 2px;
+  box-shadow: 0px 1px 4px #666666;
+  margin: .5em;
+  padding-top: 1em;
+}

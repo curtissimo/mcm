@@ -317,8 +317,28 @@ let presenter = {
       .catch(e => ac.error(e));
   },
 
+  patchEmailPreferences(ac) {
+    if (ac.member._id !== ac.params.id) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    if (ac.body.emailPreferences === undefined) {
+      ac.body.emailPreferences = {};
+    }
+    ac.member.emailPreferences.getCalendarReminders = !!ac.body.emailPreferences.getCalendarReminders;
+    ac.member.emailPreferences.getDiscussions = !!ac.body.emailPreferences.getDiscussions;
+
+    ac.member.to(ac.chapterdb).save(e => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      ac.redirect('/chapter/dashboard');
+    });
+  },
+
   edit(ac) {
-    if (!ac.member.permissions.canManageMembers) {
+    if (!ac.member.permissions.canManageMembers && ac.member._id !== ac.params.id) {
       return ac.redirect('/chapter/members');
     }
 
@@ -338,6 +358,7 @@ let presenter = {
 
       ac.render({
         data: {
+          canManageMembers: ac.member.permissions.canManageMembers,
           member: entity,
           states: usStates,
           membershipTypes: membershipTypes,
@@ -350,7 +371,7 @@ let presenter = {
   },
 
   put(ac) {
-    if (!ac.member.permissions.canManageMembers) {
+    if (!ac.member.permissions.canManageMembers && ac.member._id !== ac.params.id) {
       return ac.redirect('/chapter/members');
     }
 
@@ -373,13 +394,20 @@ let presenter = {
       } else {
         entity.membership.national.endDate = toDate(entity.membership.national.endDate);
       }
+      if (entity.address.state.length > 2) {
+        entity.address.state = '';
+      }
 
       entity.to(ac.chapterdb).save(saveError => {
         if (saveError) {
           return ac.error(saveError);
         }
 
-        ac.redirect(`/chapter/members/${ac.params.id}`);
+        if (ac.member.permissions.canManageMembers) {
+          return ac.redirect(`/chapter/members/${ac.params.id}`);
+        }
+
+        ac.redirect('/chapter/dashboard');
       })
     });
   },

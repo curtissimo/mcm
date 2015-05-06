@@ -21,6 +21,7 @@
       <div>Mobile: {{ mobile}}</div>
       <div>Home: {{ phone }}</div>
       <div>{{ email }}</div>
+      {{#if address}}
       {{#address}}
       <div>
         {{#if street1}}{{ street1 }}<br>{{/if}}
@@ -28,6 +29,25 @@
         {{ city }}, {{ state }} {{ zip }}
       </div>
       {{/address}}
+      {{/if}}
+      <a href="/chapter/members/{{ member._id }}/edit-form">Edit your personal information</a>
+    </div>
+    <div class="member-item-communication-preferences">
+      <a href="#" id="edit-email-preferences">Edit your email preferences</a>
+      <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/emailPreferences" id="email-preferences">
+        <input type="hidden" value="patch" name="X-HTTP-Method-Override">
+        <fieldset class="ancillary-form-panel">
+          <button class="pure-button pure-button-primary">Update preferences</button>
+          <label class="pure-checkbox">
+            <input type="checkbox" name="emailPreferences[getCalendarReminders]" value="1" {{#if member.emailPreferences.getCalendarReminders}}checked{{/if}}>
+            Get calendar reminders
+          </label>
+          <label class="pure-checkbox">
+            <input type="checkbox" name="emailPreferences[getDiscussions]" value="1" {{#if member.emailPreferences.getDiscussions}}checked{{/if}}>
+            Get discussions
+          </label>
+        </fieldset>
+      </form>
     </div>
     {{#if achievements}}
     <ul class="member-item-achievement-list">

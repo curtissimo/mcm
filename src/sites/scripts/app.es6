@@ -310,3 +310,13 @@ if (officerInbox && title) {
     officerInbox.value = inbox(officerInbox.value);
   });
 }
+
+let editEmailPreferences = document.getElementById('edit-email-preferences');
+if (editEmailPreferences) {
+  editEmailPreferences.addEventListener('click', e => {
+    e.preventDefault();
+    let target = e.target || e.srcElement;
+    target.style.display = 'none';
+    document.getElementById('email-preferences').style.display = 'block';
+  });
+}

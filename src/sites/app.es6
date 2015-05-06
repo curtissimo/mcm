@@ -284,6 +284,7 @@ assets.initialize()
         { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'patch', action: ':id/photo', method: 'patchPhoto' },
+        { verb: 'patch', action: ':id/emailPreferences', method: 'patchEmailPreferences' },
         { verb: 'put', action: ':id' },
         { verb: 'post' }
       ]
