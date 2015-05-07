@@ -142,7 +142,7 @@
       <div class="mileage-history">
         <h2>Mileage history</h2>
         {{#if mileage.length > 0}}
-        <table class="pure-table">
+        <table class="pure-table pure-table-striped">
           <thead>
             <tr>
               <th>Month</th>
