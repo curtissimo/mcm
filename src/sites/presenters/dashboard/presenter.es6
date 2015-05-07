@@ -1,7 +1,8 @@
+import moment from 'moment';
 import event from '../../../models/event';
 import ride from '../../../models/ride';
+import blog from '../../../models/blog';
 
-// let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
 let months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
 function nullLen(s) {
@@ -35,6 +36,8 @@ let presenter = {
           break;
         }
       }
+    } else {
+      ac.member.mileage = [];
     }
     ac.member.mileage.sort(function (a, b) {
       if (a[0] < b[0]) {
@@ -51,19 +54,30 @@ let presenter = {
       }
       return 0;
     });
-    ac.render({
-      data: {
-        hasRecordedMileage: hasRecordedMileage,
-        mileageMonth: months[d.getMonth()],
-        mileageYear: d.getFullYear(),
-        member: ac.member,
-        title: 'My Page',
-        months: months
-      },
-      presenters: {
-        menu: 'menu'
-      },
-      layout: 'chapter'
+    let from = [ ac.member._id ];
+    let to = [ ac.member._id, '3' ];
+    blog.from(ac.chapterdb).byAuthorAndDate(from, to, (e, entities) => {
+      if (e) {
+        return ac.error(e);
+      }
+      for (let entity of entities) {
+        entity.createdOn = moment(entity.createdOn).format('MMM DD, YYYY');
+      }
+      ac.render({
+        data: {
+          blogs: entities,
+          hasRecordedMileage: hasRecordedMileage,
+          mileageMonth: months[d.getMonth()],
+          mileageYear: d.getFullYear(),
+          member: ac.member,
+          title: 'My Page',
+          months: months
+        },
+        presenters: {
+          menu: 'menu'
+        },
+        layout: 'chapter'
+      });
     });
   }
 };

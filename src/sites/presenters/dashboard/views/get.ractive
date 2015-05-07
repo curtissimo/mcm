@@ -131,8 +131,17 @@
           </fieldset>
         </form>
       </div>
+      <div class="your-blogs">
+        <h2>Your blog entries</h2>
+        {{#blogs}}
+        <div class="your-blog-entry">
+        {{ createdOn }}: <a href="/chapter/members/{{ member._id }}#blog-{{ _id }}">{{ title }}</a>
+        </div>
+        {{/blogs}}
+      </div>
       <div class="mileage-history">
-        <h2>Mileage History</h2>
+        <h2>Mileage history</h2>
+        {{#if mileage.length > 0}}
         <table class="pure-table">
           <thead>
             <tr>
@@ -149,6 +158,9 @@
             {{/mileage}}
           </tbody>
         </table>
+        {{else}}
+        You have not submitted any mileage to the activities director.
+        {{/if}}
       </div>
     </div>
   </div>

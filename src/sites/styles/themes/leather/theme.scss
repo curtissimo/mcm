@@ -610,12 +610,6 @@ fieldset {
 
 
 .mileage-history {
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
   h2 {
     font-size: 1em;
     margin-top: 0;
@@ -633,4 +627,12 @@ fieldset {
   font-weight: bold;
   color: $secondary-text-color;
   cursor: not-allowed;
+}
+
+.your-blogs {
+  margin-bottom: 1em;
+  h2 {
+    font-size: 1em;
+    margin: 0;
+  }
 }

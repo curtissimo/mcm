@@ -239,7 +239,15 @@ let presenter = {
           blog.content = blog.content.replace(/\n/g, '<br>');
         }
       }
-      member.blogs.reverse();
+      member.blogs.sort((a, b) => {
+        if (a.createdOn.valueOf() < b.createdOn.valueOf()) {
+          return 1;
+        }
+        if (a.createdOn.valueOf() > b.createdOn.valueOf()) {
+          return -1;
+        }
+        return 0;
+      });
       let editKey = `Edit ${member.firstName}`;
       let editValue = `/chapter/members/${member._id}/edit-form`;
       let actions = null;
