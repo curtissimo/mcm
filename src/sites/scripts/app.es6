@@ -327,6 +327,22 @@ if (editEmailPreferences) {
   });
 }
 
+let editPrivacyPreferences = document.getElementById('edit-privacy-preferences');
+let cancelEditPrivacyPreferences = document.getElementById('cancel-edit-privacy-preferences');
+if (editPrivacyPreferences) {
+  editPrivacyPreferences.addEventListener('click', e => {
+    e.preventDefault();
+    let target = e.target || e.srcElement;
+    target.style.display = 'none';
+    document.getElementById('privacy-preferences').style.display = 'block';
+  });
+
+  cancelEditPrivacyPreferences.addEventListener('click', e => {
+    editPrivacyPreferences.style.display = 'inline';
+    document.getElementById('privacy-preferences').style.display = 'none';
+  });
+}
+
 let createBlogEntry = document.getElementById('create-blog-entry');
 if (createBlogEntry) {
   createBlogEntry.addEventListener('click', e => {
