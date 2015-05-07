@@ -591,5 +591,46 @@ fieldset {
   display: block;
 }
 
-.create-a-blog-entry {
+.mileage-input {
+  margin-bottom: 1em;
+
+  label {
+    margin-bottom: .25em;
+    display: block;
+  }
+}
+
+.mileage-input-field {
+  text-align: center;
+}
+
+.mileage-button-holder {
+  margin-bottom: .5em;
+}
+
+
+.mileage-history {
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  h2 {
+    font-size: 1em;
+    margin-top: 0;
+  }
+}
+
+.link-placeholder {
+  display: none;
+  font-weight: bold;
+  color: $secondary-text-color;
+  cursor: not-allowed;
+}
+
+.link-placeholder-visible {
+  font-weight: bold;
+  color: $secondary-text-color;
+  cursor: not-allowed;
 }

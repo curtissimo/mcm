@@ -4,7 +4,32 @@
   <div class="member-item-information">
     <div class="create-a-blog-entry">
       <a href="#" id="create-blog-entry">Create a blog entry</a>
+      <span id="create-blog-entry-placeholder" class="link-placeholder">Create a blog entry</span>
     </div>
+    {{#if !hasRecordedMileage}}
+    <div class="member-item-mileage">
+      <a href="#" id="edit-mileage">Enter last month's mileage</a>
+      <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/mileage" id="mileage">
+        <input type="hidden" value="patch" name="X-HTTP-Method-Override">
+        <fieldset class="ancillary-form-panel">
+          <div class="mileage-input">
+            <label for="mileage[input]">Mileage for {{ mileageMonth }} {{ mileageYear }}</label>
+            <input class="mileage-input-field" type="number" placeholder="1234" name="mileage" id="mileage[input]" required>
+          </div>
+          <div class="mileage-button-holder">
+            <button type="submit" class="pure-button pure-button-primary">Update mileage</button>
+          </div>
+          <div>
+            <button type="button" class="pure-button" id="cancel-edit-mileage">Cancel changes</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    {{else}}
+    <div class="member-item-mileage">
+      <span class="link-placeholder-visible">Enter last month's mileage</span>
+    </div>
+    {{/if}}
     <div class="member-item-communication-preferences">
       <a href="#" id="edit-email-preferences">Edit your email preferences</a>
       <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/emailPreferences" id="email-preferences">
@@ -89,19 +114,42 @@
     </ul>
     {{/if}}
   </div>
-  <div id="blog-entry-form" class="member-item-blog-entries ancillary-form">
-    <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ member._id }}/blogs">
-      <fieldset>
-        <legend>Create a new blog entry</legend>
-        <label for="blog[title]">Title</label>
-        <input type="text" name="blog[title]" id="blog[title]" class="pure-input-1">
-        <label for="blog[content]">Content</label>
-        <textarea type="text" name="blog[content]" id="blog[content]" class="pure-input-1 long-text"></textarea>
-        <div class="pure-control-group">
-          <button id="cancel-create-blog-entry" type="button" class="pure-button">Cancel</button>
-          <button type="submit" class="pure-button pure-button-primary">Submit</button>
-        </div>
-      </fieldset>
-    </form>
+  <div class="dashboard-aggregates">
+    <div class="dashboard-aggregates-padder">
+      <div id="blog-entry-form" class="ancillary-form">
+        <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ member._id }}/blogs">
+          <fieldset>
+            <legend>Create a new blog entry</legend>
+            <label for="blog[title]">Title</label>
+            <input type="text" name="blog[title]" id="blog[title]" class="pure-input-1">
+            <label for="blog[content]">Content</label>
+            <textarea type="text" name="blog[content]" id="blog[content]" class="pure-input-1 long-text"></textarea>
+            <div class="pure-control-group">
+              <button id="cancel-create-blog-entry" type="button" class="pure-button">Cancel</button>
+              <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="mileage-history">
+        <h2>Mileage History</h2>
+        <table class="pure-table">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Mileage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#mileage}}
+            <tr>
+              <td>{{ months[this[1]] }} {{ this[0] }}</td>
+              <td>{{ this[2] }} miles</td>
+            </tr>
+            {{/mileage}}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 {{/member}}

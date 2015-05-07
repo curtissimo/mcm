@@ -221,6 +221,14 @@ assets.initialize()
 
     leslie.routeTo({
       area: 'chapter',
+      presenterName: 'reports',
+      routes: [
+        { verb: 'get', action: 'mileage', method: 'mileage' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
       presenterName: 'emails',
       routes: [
         { verb: 'get', method: 'list' },
@@ -285,6 +293,7 @@ assets.initialize()
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'patch', action: ':id/photo', method: 'patchPhoto' },
         { verb: 'patch', action: ':id/privacy', method: 'patchPrivacy' },
+        { verb: 'patch', action: ':id/mileage', method: 'patchMileage' },
         { verb: 'patch', action: ':id/emailPreferences', method: 'patchEmailPreferences' },
         { verb: 'put', action: ':id' },
         { verb: 'post', action: ':id/blogs', method: 'createBlog' },

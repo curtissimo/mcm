@@ -327,6 +327,22 @@ if (editEmailPreferences) {
   });
 }
 
+let editMileage = document.getElementById('edit-mileage');
+let cancelEditMileage = document.getElementById('cancel-edit-mileage');
+if (editMileage) {
+  editMileage.addEventListener('click', e => {
+    e.preventDefault();
+    let target = e.target || e.srcElement;
+    target.style.display = 'none';
+    document.getElementById('mileage').style.display = 'block';
+  });
+
+  cancelEditMileage.addEventListener('click', e => {
+    editMileage.style.display = 'inline';
+    document.getElementById('mileage').style.display = 'none';
+  });
+}
+
 let editPrivacyPreferences = document.getElementById('edit-privacy-preferences');
 let cancelEditPrivacyPreferences = document.getElementById('cancel-edit-privacy-preferences');
 if (editPrivacyPreferences) {
@@ -351,10 +367,13 @@ if (createBlogEntry) {
     let target = e.target || e.srcElement;
     target.style.display = 'none';
     document.getElementById('blog-entry-form').style.display = 'block';
+    document.getElementById('create-blog-entry-placeholder').style.display = 'inline';
+    document.getElementById('blog[title]').focus();
   });
 
   cancelCreateBlogEntry.addEventListener('click', () => {
     createBlogEntry.style.display = 'inline';
     document.getElementById('blog-entry-form').style.display = 'none';
+    document.getElementById('create-blog-entry-placeholder').style.display = 'none';
   });
 }

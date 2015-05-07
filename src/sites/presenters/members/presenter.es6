@@ -365,6 +365,27 @@ let presenter = {
     });
   },
 
+  patchMileage(ac) {
+    if (ac.member._id !== ac.params.id) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    if (ac.member.mileage === undefined) {
+      ac.member.mileage = [];
+    }
+    let d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    ac.member.mileage.push([ d.getFullYear(), d.getMonth(), parseInt(ac.body.mileage) ]);
+
+    ac.member.to(ac.chapterdb).save(e => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      ac.redirect('/chapter/dashboard');
+    });
+  },
+
   edit(ac) {
     if (!ac.member.permissions.canManageMembers && ac.member._id !== ac.params.id) {
       return ac.redirect('/chapter/members');
