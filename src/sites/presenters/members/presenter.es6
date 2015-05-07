@@ -230,11 +230,16 @@ let presenter = {
           };
         }
       }
-      for (let blog of (member.blogs || [])) {
+      if (member.blogs === undefined) {
+        member.blogs = [];
+      }
+      for (let blog of member.blogs) {
         if (blog && blog.createdOn) {
           blog.createdOn = moment(blog.createdOn).format('dddd MMM DD, YYYY');
+          blog.content = blog.content.replace(/\n/g, '<br>');
         }
       }
+      member.blogs.reverse();
       let editKey = `Edit ${member.firstName}`;
       let editValue = `/chapter/members/${member._id}/edit-form`;
       let actions = null;
