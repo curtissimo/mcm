@@ -2,38 +2,34 @@
 <h1 class="banner">{{ lastName }}, {{ firstName }}</h1>
 <div class="member-item">
   <div class="member-item-information">
-    {{#if private}}
-    <div class="is-hidden"><span>Hidden</span></div>
-    {{/if}}
-    {{#if photoPath}}
-    <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
-    {{else}}
-    <img class="{{#private}}private-person{{/private}} pure-img" src="/images/unknown-user.jpg">
-    {{/if}}
-    <form id="photo-changer-form" class="off-screen" method="post" action="/chapter/members/{{ member._id }}/photo" enctype="multipart/form-data">
-      <input type="hidden" name="X-HTTP-Method-Override" value="patch">
-      <input type="file" id="photo" name="photo">
-    </form>
-    <div class="member-item-personal-information">
-      <div>
-        <label id="photo-changer" for="photo" class="link-like">Change Photo</label>
-      </div>
-      <div>Mobile: {{ mobile}}</div>
-      <div>Home: {{ phone }}</div>
-      <div>{{ email }}</div>
-      {{#if address}}
-      {{#address}}
-      <div>
-        {{#if street1}}{{ street1 }}<br>{{/if}}
-        {{#if street2}}{{ street2 }}<br>{{/if}}
-        {{ city }}, {{ state }} {{ zip }}
-      </div>
-      {{/address}}
-      {{/if}}
-      <div class="edit-your-personal-information">
-        <a href="/chapter/members/{{ member._id }}/edit-form">Edit your personal information</a>
-      </div>
+    <div class="create-a-blog-entry">
+      <a href="#" id="create-blog-entry">Create a blog entry</a>
+      <span id="create-blog-entry-placeholder" class="link-placeholder">Create a blog entry</span>
     </div>
+    {{#if !hasRecordedMileage}}
+    <div class="member-item-mileage">
+      <a href="#" id="edit-mileage">Enter last month's mileage</a>
+      <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/mileage" id="mileage">
+        <input type="hidden" value="patch" name="X-HTTP-Method-Override">
+        <fieldset class="ancillary-form-panel">
+          <div class="mileage-input">
+            <label for="mileage[input]">Mileage for {{ mileageMonth }} {{ mileageYear }}</label>
+            <input class="mileage-input-field" type="number" placeholder="1234" name="mileage" id="mileage[input]" required>
+          </div>
+          <div class="mileage-button-holder">
+            <button type="submit" class="pure-button pure-button-primary">Update mileage</button>
+          </div>
+          <div>
+            <button type="button" class="pure-button" id="cancel-edit-mileage">Cancel changes</button>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+    {{else}}
+    <div class="member-item-mileage">
+      <span class="link-placeholder-visible">Enter last month's mileage</span>
+    </div>
+    {{/if}}
     <div class="member-item-communication-preferences">
       <a href="#" id="edit-email-preferences">Edit your email preferences</a>
       <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/emailPreferences" id="email-preferences">
@@ -52,8 +48,63 @@
         </fieldset>
       </form>
     </div>
-    <div>
-      <a href="#" id="create-blog-entry">Create a blog entry</a>
+    <div class="member-item-privacy-preferences">
+      <a href="#" id="edit-privacy-preferences">Edit your privacy settings</a>
+      <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/privacy" id="privacy-preferences">
+        <input type="hidden" value="patch" name="X-HTTP-Method-Override">
+        <fieldset class="ancillary-form-panel">
+          <button type="submit" class="pure-button pure-button-primary">Update privacy</button>
+          <label class="pure-checkbox">
+            <input type="checkbox" name="private" value="1" {{#if member.private}}checked{{/if}}>
+            Hide me in the member list
+          </label>
+          <label class="pure-checkbox">
+            <input type="checkbox" name="privacy[showEmail]" value="1" {{#if member.privacy.showEmail}}checked{{/if}}>
+            Show my email address
+          </label>
+          <label class="pure-checkbox">
+            <input type="checkbox" name="privacy[showPhone]" value="1" {{#if member.privacy.showPhone}}checked{{/if}}>
+            Show my phone number
+          </label>
+          <label class="pure-checkbox">
+            <input type="checkbox" name="privacy[showAddress]" value="1" {{#if member.privacy.showAddress}}checked{{/if}}>
+            Show my address
+          </label>
+          <button type="button" class="pure-button" id="cancel-edit-privacy-preferences">Cancel changes</button>
+        </fieldset>
+      </form>
+    </div>
+    {{#if private}}
+    <div class="is-hidden"><span>Hidden</span></div>
+    {{/if}}
+    {{#if photoPath}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
+    {{else}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/images/unknown-user.jpg">
+    {{/if}}
+    <form id="photo-changer-form" class="off-screen" method="post" action="/chapter/members/{{ member._id }}/photo" enctype="multipart/form-data">
+      <input type="hidden" name="X-HTTP-Method-Override" value="patch">
+      <input type="file" id="photo" name="photo">
+    </form>
+    <div class="member-item-personal-information">
+      <div>
+        <label id="photo-changer" for="photo" class="link-like">Change Photo</label>
+      </div>
+      <div class="edit-your-personal-information">
+        <a href="/chapter/members/{{ member._id }}/edit-form">Edit your personal information</a>
+      </div>
+      <div>Mobile: {{ mobile}}</div>
+      <div>Home: {{ phone }}</div>
+      <div>{{ email }}</div>
+      {{#if address}}
+      {{#address}}
+      <div>
+        {{#if street1}}{{ street1 }}<br>{{/if}}
+        {{#if street2}}{{ street2 }}<br>{{/if}}
+        {{ city }}, {{ state }} {{ zip }}
+      </div>
+      {{/address}}
+      {{/if}}
     </div>
     {{#if achievements}}
     <ul class="member-item-achievement-list">
@@ -63,16 +114,54 @@
     </ul>
     {{/if}}
   </div>
-  <div id="blog-entry-form" class="member-item-blog-entries">
-    <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ member._id }}/blogs">
-      <fieldset>
-        <legend>Create a new blog entry</legend>
-        <label for="blog[title]">Title</label>
-        <input type="text" name="blog[title]" id="blog[title]" class="pure-input-1">
-        <label for="blog[content]">Content</label>
-        <textarea type="text" name="blog[content]" id="blog[content]" class="pure-input-1 long-text"></textarea>
-        <button type="submit" class="pure-button pure-button-primary">Submit</button>
-      </fieldset>
-    </form>
+  <div class="dashboard-aggregates">
+    <div class="dashboard-aggregates-padder">
+      <div id="blog-entry-form" class="ancillary-form">
+        <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ member._id }}/blogs">
+          <fieldset>
+            <legend>Create a new blog entry</legend>
+            <label for="blog[title]">Title</label>
+            <input type="text" name="blog[title]" id="blog[title]" class="pure-input-1">
+            <label for="blog[content]">Content</label>
+            <textarea type="text" name="blog[content]" id="blog[content]" class="pure-input-1 long-text"></textarea>
+            <div class="pure-control-group">
+              <button id="cancel-create-blog-entry" type="button" class="pure-button">Cancel</button>
+              <button type="submit" class="pure-button pure-button-primary">Submit</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      <div class="your-blogs">
+        <h2>Your blog entries</h2>
+        {{#blogs}}
+        <div class="your-blog-entry">
+        {{ createdOn }}: <a href="/chapter/members/{{ member._id }}#blog-{{ _id }}">{{ title }}</a>
+        </div>
+        {{/blogs}}
+      </div>
+      <div class="mileage-history">
+        <h2>Mileage history</h2>
+        {{#if mileage.length > 0}}
+        <table class="pure-table pure-table-striped">
+          <thead>
+            <tr>
+              <th>Month</th>
+              <th>Mileage</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#mileage}}
+            <tr>
+              <td>{{ months[this[1]] }} {{ this[0] }}</td>
+              <td>{{ this[2] }} miles</td>
+            </tr>
+            {{/mileage}}
+          </tbody>
+        </table>
+        {{else}}
+        You have not submitted any mileage to the activities director.
+        {{/if}}
+      </div>
+    </div>
   </div>
 {{/member}}

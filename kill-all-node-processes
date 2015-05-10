@@ -3,7 +3,7 @@
 POW_PID=`curl -H host:pow localhost/status.json | sed 's/{"pid"://' | sed 's/,.*//'`
 
 for i in `top -l 1 | grep node | awk '{ print $1 }'`; do
-  if [ $i != $POW_PID ]; then
+#  if [ $i != $POW_PID ]; then
     kill -HUP $i
-  fi
+#  fi
 done

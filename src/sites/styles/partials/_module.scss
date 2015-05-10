@@ -389,6 +389,19 @@
   margin: 1em 0 0 0;
 }
 
+.dashboard-aggregates {
+  @include grid-column;
+  width: 100%;
+
+  @include min-sm-screen {
+    width: 65%;
+  }
+}
+
+.dashboard-aggregates-padder {
+  padding-left: 1em;
+}
+
 .member-item-blog-entries {
   @include grid-column;
   width: 100%;

@@ -562,10 +562,10 @@ fieldset {
 
 .read-only-field {
   vertical-align: middle;
-}_
+}
 
-.member-item-communication-preferences {
-  text-align: center;
+.member-item-privacy-preferences {
+  margin-bottom: 1em;
 }
 
 .ancillary-form {
@@ -581,7 +581,6 @@ fieldset {
 
 .member-item-blog-entries {
   padding-left: 1em;
-  display: none;
 }
 
 .member-item-information {
@@ -589,6 +588,52 @@ fieldset {
 }
 
 .edit-your-personal-information {
-  margin-top: 1em;
   display: block;
+}
+
+.mileage-input {
+  margin-bottom: 1em;
+
+  label {
+    margin-bottom: .25em;
+    display: block;
+  }
+}
+
+.mileage-input-field {
+  text-align: center;
+}
+
+.mileage-button-holder {
+  margin-bottom: .5em;
+}
+
+
+.mileage-history {
+  h2 {
+    font-size: 1em;
+    margin-top: 0;
+  }
+}
+
+.link-placeholder {
+  display: none;
+  font-weight: bold;
+  color: $secondary-text-color;
+  cursor: not-allowed;
+}
+
+.link-placeholder-visible {
+  font-weight: bold;
+  color: $secondary-text-color;
+  cursor: not-allowed;
+}
+
+.your-blogs {
+  margin-bottom: 2em;
+
+  h2 {
+    font-size: 1em;
+    margin: 0;
+  }
 }

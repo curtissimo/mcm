@@ -41,6 +41,7 @@
   </div>
   <div class="member-item-blog-entries">
     {{#blogs}}
+    <a name="blog-{{ _id }}"></a>
     <article class="member-item-blog-entry">
       <header>
         <h2>{{ this.createdOn }}</h2>

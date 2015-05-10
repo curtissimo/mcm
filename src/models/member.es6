@@ -17,6 +17,7 @@ let member = stork.deliver('member', function () {
   this.timestamps();
 
   this.array('achievements');
+  this.array('mileage');
 
   this.composes('blogs', blog);
 

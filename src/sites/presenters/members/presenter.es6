@@ -1,6 +1,7 @@
 import moment from 'moment';
 import fs from 'fs';
 import member from '../../../models/member';
+import blog from '../../../models/blog';
 
 const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -229,11 +230,24 @@ let presenter = {
           };
         }
       }
-      for (let blog of (member.blogs || [])) {
+      if (member.blogs === undefined) {
+        member.blogs = [];
+      }
+      for (let blog of member.blogs) {
         if (blog && blog.createdOn) {
           blog.createdOn = moment(blog.createdOn).format('dddd MMM DD, YYYY');
+          blog.content = blog.content.replace(/\n/g, '<br>');
         }
       }
+      member.blogs.sort((a, b) => {
+        if (a.createdOn.valueOf() < b.createdOn.valueOf()) {
+          return 1;
+        }
+        if (a.createdOn.valueOf() > b.createdOn.valueOf()) {
+          return -1;
+        }
+        return 0;
+      });
       let editKey = `Edit ${member.firstName}`;
       let editValue = `/chapter/members/${member._id}/edit-form`;
       let actions = null;
@@ -337,6 +351,49 @@ let presenter = {
     });
   },
 
+  patchPrivacy(ac) {
+    if (ac.member._id !== ac.params.id) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    if (ac.body.privacy === undefined) {
+      ac.body.privacy = {};
+    }
+    ac.member.private = !!ac.body.private;
+    ac.member.privacy.showEmail = !!ac.body.privacy.showEmail;
+    ac.member.privacy.showPhone = !!ac.body.privacy.showPhone;
+    ac.member.privacy.showAddress = !!ac.body.privacy.showAddress;
+
+    ac.member.to(ac.chapterdb).save(e => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      ac.redirect('/chapter/dashboard');
+    });
+  },
+
+  patchMileage(ac) {
+    if (ac.member._id !== ac.params.id) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    if (ac.member.mileage === undefined) {
+      ac.member.mileage = [];
+    }
+    let d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    ac.member.mileage.push([ d.getFullYear(), d.getMonth(), parseInt(ac.body.mileage) ]);
+
+    ac.member.to(ac.chapterdb).save(e => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      ac.redirect('/chapter/dashboard');
+    });
+  },
+
   edit(ac) {
     if (!ac.member.permissions.canManageMembers && ac.member._id !== ac.params.id) {
       return ac.redirect('/chapter/members');
@@ -409,6 +466,22 @@ let presenter = {
 
         ac.redirect('/chapter/dashboard');
       })
+    });
+  },
+
+  createBlog(ac) {
+    if (ac.member._id !== ac.params.id) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    let entity = blog.new(ac.body.blog);
+    entity['$member_blogs_id'] = ac.member._id;
+    entity['$member_blogs_order'] = new Date().valueOf();
+    entity.to(ac.chapterdb).save(e => {
+      if (e) {
+        return ac.error(e);
+      }
+      ac.redirect('/chapter/dashboard');
     });
   },
 

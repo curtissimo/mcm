@@ -28,6 +28,9 @@
       <a class="pure-menu-link" href="/chapter/emails">Email</a>
     </li>
     {{/officerInbox}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/reports/mileage">Mileage report</a>
+    </li>
     {{#if permissions.canManagePublicDocuments}}
     <li class="pure-menu-item">
       <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
