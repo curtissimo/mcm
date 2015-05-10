@@ -51,7 +51,7 @@ plan.local(function (local) {
   local.transfer(filesToCopy, destDir, { exec: { cwd: cwd } });
 
   local.log('Removing chapter files from distribution');
-  local.exec('rm -rf ./dist/files');
+  local.exec('rm -rf ./dist/sites/files');
 
   local.log('Copy application files to remote hosts');
   cwd = path.join(process.cwd(), 'dist');
