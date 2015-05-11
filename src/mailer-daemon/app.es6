@@ -351,6 +351,10 @@ schedule.scheduleJob(rule, () => {
         rides = resultsBySubdomain[i + 2];
         host = resultsBySubdomain[i + 3];
 
+        if (rides.rows.length + events.rows.length === 0) {
+          continue;
+        }
+
         members = members.rows.map(m => m.doc);
         events = events.rows.map(e => e.doc);
         rides = rides.rows.map(r => r.doc);
@@ -386,7 +390,6 @@ schedule.scheduleJob(rule, () => {
             text: html2text(content)
           });
         }
-        console.log(emails);
         promises.push(mailMany(emails));
       }
       return Promise.all(promises);
