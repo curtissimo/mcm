@@ -320,6 +320,7 @@ process.on('SIGTERM', () => context.close());
 // START: SCHEDULED
 let rule = new schedule.RecurrenceRule();
 rule.hour = 2;
+rule.minute = 0;
 
 schedule.scheduleJob(rule, () => {
   promisify(masterdb, 'view', 'account', 'all', { include_docs: true })
