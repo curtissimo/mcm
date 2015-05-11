@@ -101,7 +101,7 @@ function fetchDiscussion({ subdomain, id, domain }) {
       email.sent = moment(discussion.createdOn).toDate();
       email.subject = discussion.title;
       email.text = discussion.content;
-      email.from = `"Discussions" <${id}@${host}>`;
+      email.from = `"Discussions from ${host}" <${id}@${host}>`;
       email.headers['X-Discussion-Id'] = id;
       return promisify(db, 'get', discussion.authorId);
     })
