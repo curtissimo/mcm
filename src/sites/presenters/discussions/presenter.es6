@@ -266,7 +266,8 @@ let presenter = {
         }
         let directive = {
           id: c._id,
-          subdomain: ac.account.subdomain
+          subdomain: ac.account.subdomain,
+          domain: ac.account.domain
         };
         postMailDirective('mcm-discussion-mail', directive)
           .then(() => ac.redirect(`/chapter/discussions/${ac.params.id}`))
@@ -290,7 +291,8 @@ let presenter = {
         }
         let directive = {
           id: d._id,
-          subdomain: ac.account.subdomain
+          subdomain: ac.account.subdomain,
+          domain: ac.account.domain
         };
         postMailDirective('mcm-discussion-mail', directive)
           .then(() => ac.redirect('/chapter/discussions'))

@@ -79,7 +79,7 @@ function fetchMail({ subdomain, id }) {
     });
 }
 
-function fetchDiscussion({ subdomain, id }) {
+function fetchDiscussion({ subdomain, id, domain }) {
   let db = getAccountDb(subdomain);
   let email = {
     from: null,
@@ -92,21 +92,23 @@ function fetchDiscussion({ subdomain, id }) {
     headers: {},
     db: db
   };
+  let host = domain || `${subdomain}.ismymc.com`;
   return promisify(db, 'get', id)
     .then(discussion => {
+      let id = discussion['$discussion_comments_id'] || discussion._id;
       email.html = text2html(discussion.content);
-      email.messageId = `${randomValueHex(8)}.${discussion._id}@${subdomain}.ismymc.com`;
+      email.messageId = `${randomValueHex(8)}.${id}@${host}`;
       email.sent = moment(discussion.createdOn).toDate();
       email.subject = discussion.title;
       email.text = discussion.content;
-      email.from = `"Discussions" <${discussion._id}@${subdomain}.ismymc.com>`;
-      email.headers['X-Discussion-Id'] = discussion._id;
+      email.from = `"Discussions" <${id}@${host}>`;
+      email.headers['X-Discussion-Id'] = id;
       return promisify(db, 'get', discussion.authorId);
     })
     .then(author => {
       email.html = `<html><head><style>* { font-size: 16px; }</style></head>
       <body>
-      <h1 style="font-size: 20px"><a href="http://${subdomain}.ismymc.com/chapter/discussions/${email.headers['X-Discussion-Id']}" style="text-decoration: none;">${email.subject}</a></h1>
+      <h1 style="font-size: 20px"><a href="http://${host}/chapter/discussions/${email.headers['X-Discussion-Id']}" style="text-decoration: none;">${email.subject}</a></h1>
       <h2 style="font-size: 18px">Written by ${author.firstName} ${author.lastName}</h2>
       ${email.html}
       </body>`;
