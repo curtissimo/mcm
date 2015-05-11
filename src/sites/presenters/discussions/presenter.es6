@@ -210,7 +210,7 @@ let presenter = {
       }
       d.to(ac.chapterdb).destroy(e => {
         if (e) {
-          return ac.redirect('/chapter/discussions');
+          return ac.error(e);
         }
         for (let c in d.comments) {
           if (c.to) {
