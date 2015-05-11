@@ -41,6 +41,9 @@ plan.target('uat', {
 });
 
 plan.local(function (local) {
+  local.log('Clean build.');
+  local.exec('gulp clean');
+
   local.log('Run distribution target');
   local.exec(shellenv() + ' gulp dist');
   local.exec('cp ./package.json ./dist');
@@ -89,9 +92,10 @@ plan.remote(function (remote) {
   var d = plan.runtime.options.DOMAIN;
   var fromD = path.join(live, d);
   remote.log('Configure nginx');
-  remote.sudo('mv ' + fromD + ' /etc/nginx/sites-available', { user: 'curtis' });
-  remote.sudo('ln -snf /etc/nginx/sites-available/' + d + ' /etc/nginx/sites-enabled/' + d, { user: 'curtis' });
-  remote.exec('sudo /usr/sbin/nginx -s reload', { user: 'curtis', exec: { pty: true } });
   remote.exec('mkdir -p ' + live + '/sites/tmp/', { user: 'curtis' });
   remote.exec('touch ' + live + '/sites/tmp/restart.txt', { user: 'curtis' });
+  remote.sudo('cp ' + fromD + ' /etc/nginx/sites-available', { user: 'curtis' });
+  remote.sudo('rm -f /etc/nginx/sites-enabled/' + d, { user: 'curtis' });
+  remote.sudo('ln -snf /etc/nginx/sites-available/' + d + ' /etc/nginx/sites-enabled/' + d, { user: 'curtis' });
+  remote.exec('sudo /usr/sbin/nginx -s reload', { user: 'curtis', exec: { pty: true } });
 });
