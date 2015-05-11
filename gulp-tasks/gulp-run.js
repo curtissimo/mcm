@@ -64,7 +64,10 @@ gulp.task('run:site', [ 'build' ], function (next) {
     if (err) {
       return console.error(err);
     }
-    sync.init(syncOpts, next);
+    next();
+    setTimeout(function () {
+      sync.init(syncOpts);
+    }, 1000);
   });
 });
 
