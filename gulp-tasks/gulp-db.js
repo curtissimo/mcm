@@ -253,6 +253,7 @@ gulp.task('db:migrate', [ 'db:files-dir', 'build:es6-server' ], function (cb) {
         member.phoneNbr = member.phoneNbr.trim().replace(/,/g, '');
         member.city = member.city.trim().replace(/,/g, '');
         member.state = member.state.trim().replace(/,/g, '').toUpperCase();
+        member.zip = member.zip || '';
         if (member.phoneNbr === '000-000-0000' || member.phoneNbr.length === 0) {
           member.phoneNbr = null;
         }
