@@ -40,6 +40,18 @@ plan.target('uat', {
   DOMAIN: 'beta.republichog.org'
 });
 
+plan.target('production', {
+  host: 'curweb2.curtissimo.com',
+  username: 'curtis',
+  agent: process.env.SSH_AUTH_SOCK
+}, {
+  MCM_MAIL_HOST: 'localhost',
+  MCM_DB: 'http://192.168.180.173:5984',
+  MCM_RABBIT_URL: 'amqp://mcm:RZZbbB6FjRBcG7@localhost',
+  NODE_ENV: 'production',
+  DOMAIN: 'republichog.org'
+});
+
 plan.local(function (local) {
   local.log('Clean build.');
   local.exec('gulp clean');
