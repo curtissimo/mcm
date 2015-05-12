@@ -1,0 +1,8 @@
+<div class="image-holder">
+  <h1 class="name-holder">{{ title }}</h1>
+  <img width="100%" class="pure-img" src="/home/photo">
+</div>
+<p>events: {{ events.length }}</p>
+<p>rides: {{ rides.length }}</p>
+<p>docs: {{ docs.length }}</p>
+<p><a target="_blank" href="http://republichog.shutterfly.com">Chapter Photos</a></p>

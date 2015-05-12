@@ -4,7 +4,7 @@ import ride from '../../../models/ride';
 import fs from 'fs';
 
 let inProduction = process.env.NODE_ENV === 'production';
-let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
+let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/sites/files';
 
 let monthNames = [
   'January',

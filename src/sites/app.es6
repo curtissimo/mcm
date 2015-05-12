@@ -130,6 +130,12 @@ app.use('/chapter/members', multer({
   }
 }));
 
+app.use('/chapter/settings', multer({
+  limits: {
+    putSingleFilesInArray: true
+  }
+}));
+
 app.use(methodOverride((req, res) => {
   if (req.body && req.body['X-HTTP-Method-Override']) {
     var method = req.body['X-HTTP-Method-Override'];
@@ -362,6 +368,14 @@ assets.initialize()
       ]
     });
 
+    leslie.routeTo({
+      presenterName: 'home',
+      routes: [
+        { verb: 'get', action: 'photo', method: 'photo' },
+        { verb: 'get'}
+      ]
+    });
+
     app.get('/images/:name', (req, res, next) => {
       let name = req.params.name;
       res.type(name.substring(name.lastIndexOf('.')));
@@ -371,7 +385,7 @@ assets.initialize()
     });
 
     app.get('/', (req, res) => {
-      res.redirect('/session');
+      res.redirect('/home');
     });
 
     app.use((err, req, res, next) => {
@@ -382,7 +396,7 @@ assets.initialize()
     });
 
     if (!inProduction) {
-      let dest = process.cwd() + '/build/files';
+      let dest = process.cwd() + '/build/sites/files';
       console.log('Serving uploaded files from express at ' + dest);
       app.use((req, res, next) => {
         if (res.get('X-Accel-Redirect')) {

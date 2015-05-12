@@ -1,4 +1,8 @@
+import fs from 'fs';
 import settings from '../../../models/settings';
+
+let inProduction = process.env.NODE_ENV === 'production';
+let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
 
 let presenter = {
   list(ac) {
@@ -28,19 +32,53 @@ let presenter = {
       return ac.redirect('/chapter/dashboard');
     }
 
+    if (!Array.isArray(ac.files.chapterPhoto)) {
+      if (ac.files.chapterPhoto) {
+        ac.files.chapterPhoto = [ ac.files.chapterPhoto ];
+      } else {
+        ac.files.chapterPhoto = [];
+      }
+    }
+
     settings.from(ac.chapterdb).all((e, s) => {
       if (e) {
         return ac.error(e);
       }
       s = s[0];
-      Object.assign(s, ac.body);
+      s.rideLegalese = ac.body.rideLegalese;
+      s.name = ac.body.name;
       s.to(ac.chapterdb).save(e => {
         if (e) {
           return ac.error(e);
         }
         ac.settings.name = s.name;
         ac.settings.rideLegalese = s.rideLegalese;
-        ac.redirect('/chapter/settings');
+
+        if (ac.files.chapterPhoto.length > 0) {
+          let file = ac.files.chapterPhoto[0];
+          let newDir = dest + '/' + ac.account.subdomain;
+          let newPath = dest + '/' + ac.account.subdomain + '/' + file.name;
+          fs.mkdir(newDir, () => {
+            fs.rename(file.path, newPath, () => {
+              settings.from(ac.chapterdb).all((e, s) => {
+                if (e) {
+                  return ac.error(e);
+                }
+                s = s[0];
+                s.photo = file.name;
+                s.to(ac.chapterdb).save(e => {
+                  if (e) {
+                    return ac.error(e);
+                  }
+                  ac.settings.photo = file.name;
+                  ac.redirect('/chapter/settings');
+                });
+              });
+            });
+          });
+        } else {
+          ac.redirect('/chapter/settings');
+        }
       });
     });
   }

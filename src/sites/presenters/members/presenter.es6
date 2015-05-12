@@ -78,7 +78,7 @@ const usStates = [
 ];
 
 let inProduction = process.env.NODE_ENV === 'production';
-let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/files';
+let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
 
 function rand (max) {
   return Math.floor(Math.random() * max);

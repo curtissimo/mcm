@@ -3,7 +3,7 @@ import newsletter from '../../../models/newsletter';
 
 let inProduction = process.env.NODE_ENV === 'production';
 let months = [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
-let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
+let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
 
 let presenter = {
   get(ac) {

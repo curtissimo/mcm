@@ -4,7 +4,7 @@
   section for an explanation of each setting.
 </section>
 <section>
-  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/settings">
+  <form class="pure-form pure-form-aligned form-layout" method="post" enctype="multipart/form-data" action="/chapter/settings">
     <div class="form-panel">
       <fieldset>
         <legend>Chapter name</legend>
@@ -33,6 +33,24 @@
         <div class="pure-control-group">
           <textarea class="pure-input-1 long-text" name="rideLegalese">{{ settings.rideLegalese }}</textarea>
         </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Chapter Photo</legend>
+        <p>
+          You can change the photo shown on the home page by uploading a new
+          one, here.
+        </p>
+        <div class="pure-control-group">
+          <input class="pure-input-1" name="chapterPhoto" type="file">
+        </div>
+        {{#if settings.photo}}
+        <p>Currently set to:</p>
+        <div>
+          <img class="pure-img" width="100%" src="/home/photo">
+        </div>
+        {{/if}}
       </fieldset>
     </div>
     <div class="form-controls">

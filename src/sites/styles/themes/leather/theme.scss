@@ -637,3 +637,25 @@ fieldset {
     margin: 0;
   }
 }
+
+#public-main-content {
+  .image-holder {
+    background-color: black;
+    position: relative;
+    overflow-y: hidden;
+    
+    img {
+      display: block;
+      margin: auto;
+    }
+
+    .name-holder {
+      color: white;
+      font-weight: 100;
+      font-size: 104pt;
+      position: absolute;
+      bottom: -0.75em;
+      right: 0.1em;
+    }
+  }
+}
