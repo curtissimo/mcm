@@ -2,7 +2,7 @@ import fs from 'fs';
 import document from '../../../models/document';
 
 let inProduction = process.env.NODE_ENV === 'production';
-let dest = inProduction ? process.cwd() + '/files' : process.cwd() + '/build/files';
+let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
 
 let presenter = {
   get(ac) {
