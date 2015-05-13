@@ -91,16 +91,31 @@
           </fieldset>
           <fieldset>
             <legend>Files</legend>
-            <div class="pure-control-group">
-              <label for="garmin{{ i }}">Garmin</label>
+            <div class="pure-form-stacked-control-group">
+              <label for="garmin{{ i }}">
+                Garmin
+                {{#if days[i].routeFiles.garmin}}
+                (<a href="/chapter/events/{{ _id }}/garmin">{{ days[i].routeFiles.garmin.fileName }}</a>)
+                {{/if}}
+              </label>
               <input type="file" name="days[{{ i }}][garmin]" id="garmin{{ i }}">
             </div>
-            <div class="pure-control-group">
-              <label for="pdf{{ i }}">PDF</label>
+            <div class="pure-form-stacked-control-group">
+              <label for="pdf{{ i }}">
+                PDF
+                {{#if days[i].routeFiles.pdf}}
+                (<a href="/chapter/events/{{ _id }}/pdf">{{ days[i].routeFiles.pdf.fileName }}</a>)
+                {{/if}}
+              </label>
               <input type="file" name="days[{{ i }}][pdf]" id="pdf{{ i }}">
             </div>
-            <div class="pure-control-group">
-              <label for="est{{ i }}">Streets &amp; Trips</label>
+            <div class="pure-form-stacked-control-group">
+              <label for="est{{ i }}">
+                Streets &amp; Trips
+                {{#if days[i].routeFiles.est}}
+                (<a href="/chapter/events/{{ _id }}/est">{{ days[i].routeFiles.est.fileName }}</a>)
+                {{/if}}
+              </label>
               <input type="file" name="days[{{ i }}][est]" id="est{{ i }}">
             </div>
           </fieldset>

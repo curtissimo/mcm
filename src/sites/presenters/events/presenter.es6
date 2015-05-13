@@ -613,38 +613,70 @@ let presenter = {
         })
       });
     } else {
-      ride.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
-        let startDate = moment(ac.body.date).toDate();
-        
-        entity.title = ac.body.title;
-        entity.sponsor = ac.body.sponsor;
-        entity.attendance = ac.body.attendance;
-        entity.days = [];
-        for (let [ i, value ] of ac.body.days.entries()) {
-          entity.days.push({
-            year: startDate.getFullYear(),
-            month: startDate.getMonth(),
-            date: startDate.getDate(),
-            destination: value.destination,
-            roadCaptain: value.roadCaptain,
-            startFrom: value.startFrom,
-            meetAt: value.meetAt,
-            ksuAt: value.ksuAt,
-            endsAt: value.endsAt,
-            destinationUrl: value.destinationUrl,
-            description: value.description
+      let promises = [];
+      for (let fileKey of Object.keys(ac.files)) {
+        let file = ac.files[fileKey];
+        let newPath = `${dest}/${ac.account.subdomain}/${file.name}`;
+        file.newPath = newPath;
+        let promise = promisify(fs, 'rename', file.path, newPath);
+        promises.push(promise);
+      }
+      Promise.all(promises)
+        .then(() => {
+          ride.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
+            let startDate = moment(ac.body.date).toDate();
+            let fileNames = [ 'garmin', 'pdf', 'est' ];
+
+            entity.title = ac.body.title;
+            entity.sponsor = ac.body.sponsor;
+            entity.attendance = ac.body.attendance;
+            let days = [];
+            for (let [ i, value ] of ac.body.days.entries()) {
+              for (let fileName of fileNames) {
+                let key = `days[${i}][${fileName}]`;
+                if (entity.days[i] && entity.days[i].routeFiles && entity.days[i].routeFiles[fileName]) {
+                  if (!value.routeFiles) {
+                    value.routeFiles = {};
+                  }
+                  value.routeFiles[fileName] = entity.days[i].routeFiles[fileName];
+                }
+                if (ac.files[key]) {
+                  if (!value.routeFiles) {
+                    value.routeFiles = {};
+                  }
+                  value.routeFiles[fileName] = {
+                    fileName: ac.files[key].originalname,
+                    path: ac.files[key].newPath
+                  };
+                }
+              }
+              days.push({
+                year: startDate.getFullYear(),
+                month: startDate.getMonth(),
+                date: startDate.getDate(),
+                destination: value.destination,
+                roadCaptain: value.roadCaptain,
+                startFrom: value.startFrom,
+                meetAt: value.meetAt,
+                ksuAt: value.ksuAt,
+                endsAt: value.endsAt,
+                destinationUrl: value.destinationUrl,
+                description: value.description,
+                routeFiles: value.routeFiles
+              });
+              startDate.setDate(startDate.getDate() + 1);
+            }
+            entity.days = days;
+
+            entity.to(ac.chapterdb).save(e => {
+              if (e) {
+                return ac.error(e);
+              }
+
+              ac.redirect(`/chapter/events/${entity._id}`);
+            });
           });
-          startDate.setDate(startDate.getDate() + 1);
-        }
-
-        entity.to(ac.chapterdb).save(e => {
-          if (e) {
-            return ac.error(e);
-          }
-
-          ac.redirect('/chapter/events');
-        })
-      });
+        });
     }
   },
 
