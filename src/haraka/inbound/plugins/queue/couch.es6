@@ -91,9 +91,23 @@ export let hook_queue = (next, connection) => {
   connection.loginfo('recipients:', missive.recipients);
 
   if (body.children.length === 0 && body.is_html) {
-    missive.html = body.body_text_encoded;
+    let translation = s => s;
+    if (headers) {
+      let transferEncoding = unwrap(headers['content-transfer-encoding']);
+      if (transferEncoding === 'quoted-printable') {
+        translation = s => mimelib.decodeQuotedPrintable(s);
+      }
+    }
+    missive.html = translation(body.body_text_encoded);
   } else if(body.children.length === 0) {
-    missive.text = body.body_text_encoded;
+    let translation = s => s;
+    if (headers) {
+      let transferEncoding = unwrap(headers['content-transfer-encoding']);
+      if (transferEncoding === 'quoted-printable') {
+        translation = s => mimelib.decodeQuotedPrintable(s);
+      }
+    }
+    missive.text = translation(body.body_text_encoded);
   } else {
     for (let child of body.children) {
       let format = '';
