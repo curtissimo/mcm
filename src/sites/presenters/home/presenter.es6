@@ -40,8 +40,8 @@ let presenter = {
     let to = [ followingMonth.getFullYear(), followingMonth.getMonth(), followingMonth.getDate() ];
 
     let promises = [
-      couchPromise(event.from(ac.chapterdb), 'byDate', from, to),
-      couchPromise(ride.from(ac.chapterdb), 'byDate', from, to),
+      couchPromise(event.from(ac.chapterdb), 'byDistinctDate', from, to),
+      couchPromise(ride.from(ac.chapterdb), 'byDistinctDate', from, to),
       couchPromise(doc.from(ac.chapterdb), 'publicOnly')
     ];
 

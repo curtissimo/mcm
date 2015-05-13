@@ -15,6 +15,10 @@ let event = stork.deliver('event', function () {    // type === 'event' && activ
     }
   });
 
+  this.view("byDistinctDate", (event, emitKey) => {
+    emitKey([ event.days[0].year, event.days[0].month, event.days[0].date ]);
+  });
+
   this.view("byReminderDates", (event, emitKey) => {
     for (var i = 0; i < 1; i += 1) {
       for (var j = 1; j < 6; j += 2) {
