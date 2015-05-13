@@ -1,6 +1,7 @@
 import event from '../../../models/event';
 import ride from '../../../models/ride';
 import doc from '../../../models/document';
+import { text2html } from '../../../mailUtils';
 
 let months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
@@ -55,12 +56,14 @@ let presenter = {
           evt.monthName = months[evt.month];
           if (evt.activity) {
             evt.activity = evt.activity[0].toUpperCase() + evt.activity.substring(1);
+            evt.description = text2html(evt.description);
           }
         }
 
         for (let r of rides) {
           Object.assign(r, r.days[0]);
           r.monthName = months[r.month];
+          r.description = text2html(r.description);
         }
 
         ac.render({
