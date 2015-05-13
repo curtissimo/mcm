@@ -53,7 +53,9 @@ let presenter = {
         for (let evt of events) {
           Object.assign(evt, evt.days[0]);
           evt.monthName = months[evt.month];
-          evt.activity = evt.activity[0].toUpperCase() + evt.activity.substring(1);
+          if (evt.activity) {
+            evt.activity = evt.activity[0].toUpperCase() + evt.activity.substring(1);
+          }
         }
 
         for (let r of rides) {

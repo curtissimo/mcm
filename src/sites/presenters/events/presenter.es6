@@ -510,7 +510,7 @@ let presenter = {
       ac.redirect('/chapter/events');
     }
 
-    event.from(ac.chapterdb).get(ac.params.id, (e, r) => {
+    stork.from(ac.chapterdb).get([ event, ride ], ac.params.id, (e, r) => {
       if (e) {
         return ac.error(e);
       }

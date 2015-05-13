@@ -240,3 +240,12 @@ section {
 .site-content-event-calendar-month {
   display: inline;
 }
+
+.is-cancelled {
+  font-size: .875em;
+  display: inline-block;
+  padding: .25em .5em;
+  border-radius: .25em;
+  background-color: $accent-color;
+  color: $accent-color-text;
+}
