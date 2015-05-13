@@ -1,0 +1,219 @@
+{{#ride}}
+<h1 class="banner" id="totally-editing-a-thing">Edit "{{ title }}"</h1>
+<section>
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/events/{{ _id }}" enctype="muLtipart/form-data">
+    <input type="hidden" name="activity" value="ride">
+    <input type="hidden" value="put" name="X-HTTP-Method-Override">
+    <div class="form-panel">
+      <fieldset>
+        <legend>General Information</legend>
+        <div class="pure-control-group">
+          <label for="title">Name</label>
+          <input type="text" value="{{ title }}" name="title" id="title" required>
+          {{#if errors.title}}
+          <div class="form-error">
+            <p>The name {{ errors.title }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="sponsor">Sponsor</label>
+          <select name="sponsor" id="sponsor">
+            <option {{#if sponsor == 'chapter'}}selected{{/if}} value="chapter">Chapter</option>
+            <option {{#if sponsor == 'dealer'}}selected{{/if}} value="dealer">Dealer</option>
+            <option {{#if sponsor == 'outside'}}selected{{/if}} value="outside">Third-Party</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="attendance">Attendance</label>
+          <select name="attendance" id="attendance">
+            <option {{#if attendance == 'closed'}}selected{{/if}} value="closed">Member + 1 guest</option>
+            <option {{#if attendance == 'member'}}selected{{/if}} value="member">Only members</option>
+            <option {{#if attendance == 'open'}}selected{{/if}} value="open">Anyone</option>
+          </select>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>When</legend>
+        <div class="pure-control-group">
+          <label for="schedule">Occurs</label>
+          <select name="schedule" id="schedule">
+            <option {{#if days.length === 1}}selected{{/if}} value="once">On one day</option>
+            <option {{#if days.length > 1}}selected{{/if}} value="range">On multiple days</option>
+          </select>
+        </div>
+        <div id="occurs-once" class="pure-control-group when-specifier {{#if days.length === 1}}is-shown{{/if}}">
+          <label for="date">On</label>
+          <input type="date" placeholder="MM/DD/YYYY" id="date" name="date" value="{{ days[0].formattedDate }}">
+        </div>
+        <div id="occurs-range" class="when-specifier {{#if days.length > 1}}is-shown{{/if}}">
+          <div class="pure-control-group">
+            <label for="startDate">From</label>
+            <input type="date" placeholder="MM/DD/YYYY" id="startDate" name="startDate" value="{{ days[0].formattedDate }}">
+          </div>
+          <div class="pure-control-group">
+            <label for="endDate">For</label>
+            <select id="numberOfDays" name="numberOfDays">
+              <option {{#if days.length == 2}}selected{{/if}}>2</option>
+              <option {{#if days.length == 3}}selected{{/if}}>3</option>
+              <option {{#if days.length == 4}}selected{{/if}}>4</option>
+              <option {{#if days.length == 5}}selected{{/if}}>5</option>
+              <option {{#if days.length == 6}}selected{{/if}}>6</option>
+              <option {{#if days.length == 7}}selected{{/if}}>7</option>
+              <option {{#if days.length == 8}}selected{{/if}}>8</option>
+              <option {{#if days.length == 9}}selected{{/if}}>9</option>
+              <option {{#if days.length == 10}}selected{{/if}}>10</option>
+              <option {{#if days.length == 11}}selected{{/if}}>11</option>
+              <option {{#if days.length == 12}}selected{{/if}}>12</option>
+              <option {{#if days.length == 13}}selected{{/if}}>13</option>
+              <option {{#if days.length == 14}}selected{{/if}}>14</option>
+            </select>
+            days
+            <input type="hidden" id="endDate" name="endDate">
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div id="day-details" class="pure-input-1">
+      {{#days:i}}
+      <div class="pure-input-1 section">
+        {{#if days.length > 1}}
+        <section class="section-header">Day {{ i + 1 }}</section>
+        {{/if}}
+        <div class="form-panel">
+          <fieldset>
+            <legend>Description</legend>
+            <div class="pure-control-group">
+              <textarea class="pure-input-1 long-text" name="days[{{ i }}][description]" id="description{{ i }}" required>{{ days[i].description }}</textarea>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Files</legend>
+            <div class="pure-control-group">
+              <label for="garmin{{ i }}">Garmin</label>
+              <input type="file" name="days[{{ i }}][garmin]" id="garmin{{ i }}">
+            </div>
+            <div class="pure-control-group">
+              <label for="pdf{{ i }}">PDF</label>
+              <input type="file" name="days[{{ i }}][pdf]" id="pdf{{ i }}">
+            </div>
+            <div class="pure-control-group">
+              <label for="est{{ i }}">Streets &amp; Trips</label>
+              <input type="file" name="days[{{ i }}][est]" id="est{{ i }}">
+            </div>
+          </fieldset>
+        </div>
+        <div class="form-panel">
+          <fieldset>
+            <legend>Where and Times</legend>
+            <div class="pure-control-group">
+              <label for="roadCaptain{{ i }}">Led by</label>
+              <input type="text" value="{{ days[i].roadCaptain }}" placeholder="someone's name" name="days[{{ i }}][roadCaptain]" id="roadCaptain{{ i }}" required>
+            </div>
+            <div class="pure-control-group">
+              <label for="start{{ i }}">starting from</label>
+              <input type="text" value="{{ days[i].startFrom }}" placeholder="where you starting?" name="days[{{ i }}][startFrom]" id="start{{ i }}" required>
+            </div>
+            <div class="pure-control-group">
+              <label for="meetAt{{ i }}">at</label>
+              <input type="text" value="{{ days[i].meetAt }}" placeholder="a time like 9am" name="days[{{ i }}][meetAt]" id="meetAt{{ i }}" required>
+            </div>
+            <div class="pure-control-group">
+              <label for="ksuAt{{ i }}">with KSU at</label>
+              <input type="text" value="{{ days[i].ksuAt }}" placeholder="a time like 9am" name="days[{{ i }}][ksuAt]" id="ksuAt{{ i }}" required>
+            </div>
+            <div class="pure-control-group">
+              <label for="endsAt{{ i }}">ending around</label>
+              <input type="text" value="{{ days[i].endsAt }}" placeholder="a time like 9am" name="days[{{ i }}][endsAt]" id="endsAt{{ i }}" required>
+            </div>
+            <div class="pure-control-group">
+              <label for="destination{{ i }}">to location</label>
+              <input type="text" value="{{ days[i].destination }}" placeholder="a time like 9am" name="days[{{ i }}][destination]" id="destination{{ i }}" required>
+            </div>
+            <div class="pure-control-group">
+              <label for="destinationUrl{{ i }}">with Web site</label>
+              <input type="text" value="{{ days[i].destinationUrl }}" placeholder="a time like 9am" name="days[{{ i }}][destinationUrl]" id="destinationUrl{{ i }}" required>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      {{/days}}
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/events" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Save these changes</button>
+      </div>
+    </div>
+  </form>
+</section>
+<script type="text/ractive" id="day-detail-template">
+{{ "{{#days:i}}" }}
+<div class="pure-input-1 section">
+  {{ "{{#if days.length > 1}}" }}
+  <section class="section-header">
+    Day {{ "{{i + 1}}" }}
+  </section>
+  {{ "{{/if}}" }}
+  <div class="form-panel">
+    <fieldset>
+      <legend>Description</legend>
+      <div class="pure-control-group">
+        <textarea class="pure-input-1 long-text" name="days[{{ '{{ i }}' }}][description]" id="description{{ '{{ i }}' }}" required></textarea>
+      </div>
+    </fieldset>
+    <fieldset class="ride-files-group">
+      <legend>Files</legend>
+      <div class="pure-control-group">
+        <label for="garmin{{ '{{ i }}' }}">Garmin</label>
+        <input type="file" name="days[{{ '{{ i }}' }}][garmin]" id="garmin{{ '{{ i }}' }}">
+      </div>
+      <div class="pure-control-group">
+        <label for="pdf{{ '{{ i }}' }}">PDF</label>
+        <input type="file" name="days[{{ '{{ i }}' }}][pdf]" id="pdf{{ '{{ i }}' }}">
+      </div>
+      <div class="pure-control-group">
+        <label for="est{{ '{{ i }}' }}">Streets &amp; Trips</label>
+        <input type="file" name="days[{{ '{{ i }}' }}][est]" id="est{{ '{{ i }}' }}">
+      </div>
+    </fieldset>
+  </div>
+  <div class="form-panel">
+    <fieldset>
+      <legend>Where and Times</legend>
+      <div class="pure-control-group">
+        <label for="roadCaptain{{ '{{ i }}' }}">Led by</label>
+        <input type="text" placeholder="someone's name" name="days[{{ '{{ i }}' }}][roadCaptain]" id="roadCaptain{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="start{{ '{{ i }}' }}">starting from</label>
+        <input type="text" placeholder="where you starting?" name="days[{{ '{{ i }}' }}][startFrom]" id="start{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="meetAt{{ '{{ i }}' }}">at</label>
+        <input type="text" placeholder="a time like 9am" name="days[{{ '{{ i }}' }}][meetAt]" id="meetAt{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="ksuAt{{ '{{ i }}' }}">with KSU at</label>
+        <input type="text" placeholder="a time like 9:30am" name="days[{{ '{{ i }}' }}][ksuAt]" id="ksuAt{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="endsAt{{ '{{ i }}' }}">ending around</label>
+        <input type="text" placeholder="a time like noon" name="days[{{ '{{ i }}' }}][endsAt]" id="endsAt{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="destination{{ '{{ i }}' }}">to location</label>
+        <input type="text" placeholder="where you going?" name="days[{{ '{{ i }}' }}][destination]" id="destination{{ '{{ i }}' }}" required>
+      </div>
+      <div class="pure-control-group">
+        <label for="destinationUrl{{ '{{ i }}' }}">with Web site</label>
+        <input type="text" placeholder="does it have a URL?" name="days[{{ '{{ i }}' }}][destinationUrl]" id="destinationUrl{{ '{{ i }}' }}">
+      </div>
+    </fieldset>
+  </div>
+</div>
+{{ "{{/days}}" }}
+</script>
+{{/ride}}

@@ -612,6 +612,39 @@ let presenter = {
           ac.redirect('/chapter/events');
         })
       });
+    } else {
+      ride.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
+        let startDate = moment(ac.body.date).toDate();
+        
+        entity.title = ac.body.title;
+        entity.sponsor = ac.body.sponsor;
+        entity.attendance = ac.body.attendance;
+        entity.days = [];
+        for (let [ i, value ] of ac.body.days.entries()) {
+          entity.days.push({
+            year: startDate.getFullYear(),
+            month: startDate.getMonth(),
+            date: startDate.getDate(),
+            destination: value.destination,
+            roadCaptain: value.roadCaptain,
+            startFrom: value.startFrom,
+            meetAt: value.meetAt,
+            ksuAt: value.ksuAt,
+            endsAt: value.endsAt,
+            destinationUrl: value.destinationUrl,
+            description: value.description
+          });
+          startDate.setDate(startDate.getDate() + 1);
+        }
+
+        entity.to(ac.chapterdb).save(e => {
+          if (e) {
+            return ac.error(e);
+          }
+
+          ac.redirect('/chapter/events');
+        })
+      });
     }
   },
 

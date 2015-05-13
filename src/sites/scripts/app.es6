@@ -206,6 +206,7 @@ if (schedule) {
       }
     }
     if (numberOfDays) {
+      initRactive();
       ractive.set('days', days);
     }
   });
@@ -218,21 +219,30 @@ if (numberOfDays) {
     for (let i = 0; i < number; i += 1) {
       days.push(true);
     }
+    initRactive();
     ractive.set('days', days);
   });
 }
 
 let ractive = null;
-if (document.getElementById('day-details')) {
-  let data = {
-    days: [ true ]
-  };
+function initRactive(data) {
+  if (ractive) {
+    return;
+  }
 
   ractive = new Ractive({
     el: '#day-details',
     template: '#day-detail-template',
     data: data
   });
+}
+
+if (document.getElementById('day-details') && !document.getElementById('totally-editing-a-thing')) {
+  let data = {
+    days: [ true ]
+  };
+
+  initRactive(data);
 }
 
 let photoChanger = document.getElementById('photo-changer');
