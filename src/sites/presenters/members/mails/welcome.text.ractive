@@ -1,0 +1,10 @@
+Welcome to {{ chapterName }}! Thanks for joining.
+
+Head on over to {{ host }} and you can sign in. You'll need this email
+address and your password which is
+
+    {{ password }}
+
+We look forward to you joining us in all of our chapter activities.
+
+Keep the shiny side up!

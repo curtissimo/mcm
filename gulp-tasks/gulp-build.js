@@ -228,7 +228,7 @@ gulp.task('build:shell-scripts', function () {
 gulp.task('build:views', function () {
   return gulp.src('./src/**/*.ractive')
     .pipe(newer('./build'))
-    .pipe(ractive())
+    .pipe(ractive({ preserveWhitespace: true }))
     .pipe(gulp.dest('./build'))
     .pipe(syncIfActive());
 });

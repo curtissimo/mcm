@@ -2,6 +2,7 @@ import moment from 'moment';
 import fs from 'fs';
 import member from '../../../models/member';
 import blog from '../../../models/blog';
+import { postMailDirective } from '../../../mailUtils';
 
 const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -519,7 +520,28 @@ let presenter = {
         if (e) {
           return ac.error(e);
         }
-        ac.redirect('/chapter/members');
+
+        let host = ac.account.domain;
+        if (!host) {
+          host = `${ac.account.subdomain}.ismymc.com`;
+        }
+        let directive = {
+          chapterName: ac.settings.name,
+          host: host,
+          password: m.password
+        };
+        ac.renderEmails('welcome', directive)
+          .then(() => {
+            postMailDirective('mcm-single-mail', {
+              to: `"${m.firstName} ${m.lastName}" <${m.email}>`,
+              from: `"${ac.settings.name}" <no-reply@${host}>`,
+              subject: `Welcome to ${ac.settings.name}`,
+              text: ac.mails.text,
+              html: ac.mails.html
+            });
+          })
+          .then(() => ac.redirect('/chapter/members'))
+          .catch(e => ac.error(e));
       });
     } else {
       let errors = {};
