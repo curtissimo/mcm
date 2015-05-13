@@ -17,64 +17,173 @@
     </h2>
     <div class="site-content-section-content">{{ settings.description }}</div>
   </section>
-  <section class="site-content-section blue-section">
+  <section class="site-content-section grey-section">
     <h2 class="site-content-section-title">
       <i class="left fa fa-motorcycle white"></i>
       Rides
     </h2>
-    <div class="site-content-section-content">
-      Here's a list of our upcoming rides. Click the ride and check out the
-      details that describe the journey!
+    <div class="site-content-section-content upcoming-rides-preamble">
+      We love to ride! Here are the upcoming rides for the chapter over the
+      next couple of months. Click on a ride title and discover the details of
+      that day's journey.
     </div>
-    <div class="form-layout">
-      <div class="form-panel">
+    <div class="site-content-event-list-container">
+      <div class="site-content-event-list-panel">
+        <ul id="ride-list" class="site-content-event-list">
+          {{#rides}}
+            {{#if @index === 0}}
+            <li class="site-content-event-list-item site-content-event-list-selected" data-id="{{ _id }}">
+              <div class="site-content-event-calendar">
+                <div class="site-content-event-calendar-month">{{ monthName }}</div>
+                <div class="site-content-event-calendar-day">{{ date }}</div>
+              </div>
+              <div class="site-content-event-list-item-title">{{ title }}</div>
+            </li>
+            {{else}}
+            <li class="site-content-event-list-item" data-id="{{ _id }}">
+              <div class="site-content-event-calendar">
+                <div class="site-content-event-calendar-month">{{ monthName }}</div>
+                <div class="site-content-event-calendar-day">{{ date }}</div>
+              </div>
+              <div class="site-content-event-list-item-title">{{ title }}</div>
+            </li>
+            {{/if}}
+          {{/rides}}
+        </ul>
+      </div>
+      <div class="site-content-event-detail-panel">
+        {{#rides}}
+          {{#if @index === 0}}
+          <div class="site-content-event-detail-pane site-content-event-detail-pane-selected" id="detail-{{ _id }}">
+            <h3 class="site-content-event-detail-pane-title">{{ title }} on {{ monthName }} {{ date }}</h3>
+            <h3 class="site-content-event-detail-pane-location">
+              Ride to
+              {{#if destinationUrl}}
+              <a href="{{ destinationUrl }}" target="_blank">{{ destination }}</a>
+              {{else}}
+              {{ destination }}
+              {{/if}}
+            </h3>
+            <p>{{ description }}</p>
+          </div>
+          {{else}}
+          <div class="site-content-event-detail-pane" id="detail-{{ _id }}">
+            <h3 class="site-content-event-detail-pane-title">{{ title }} on {{ monthName }} {{ date }}</h3>
+            <h3 class="site-content-event-detail-pane-location">
+              Ride to
+              {{#if destinationUrl}}
+              <a href="{{ destinationUrl }}" target="_blank">{{ destination }}</a>
+              {{else}}
+              {{ destination }}
+              {{/if}}
+            </h3>
+            <p>{{ description }}</p>
+          </div>
+          {{/if}}
+        {{/rides}}
+      </div>
+    </div>
+  </section>
+  <section class="site-content-section blue-section">
+    <h2 class="site-content-section-title">
+      <i class="left fa fa-calendar white"></i>
+      Events
+    </h2>
+    <div class="site-content-section-content upcoming-events-preamble">
+      Here's a list of our upcoming events. Click the event and check out the
+      details that describe the event.
+    </div>
+    <div class="site-content-event-list-container">
+      <div class="site-content-event-list-panel">
         <ul id="event-list" class="site-content-event-list">
           {{#events}}
             {{#if @index === 0}}
             <li class="site-content-event-list-item site-content-event-list-selected" data-id="{{ _id }}">
-              {{ days[0].month }}/{{ days[0].date }}/{{ days[0].year }}<br>
-              {{ title }}
+              <div class="site-content-event-calendar">
+                <div class="site-content-event-calendar-month">{{ monthName }}</div>
+                <div class="site-content-event-calendar-day">{{ date }}</div>
+              </div>
+              <div class="site-content-event-list-item-title">{{ title }}</div>
             </li>
             {{else}}
             <li class="site-content-event-list-item" data-id="{{ _id }}">
-              {{ days[0].month }}/{{ days[0].date }}/{{ days[0].year }}<br>
-              {{ title }}
+              <div class="site-content-event-calendar">
+                <div class="site-content-event-calendar-month">{{ monthName }}</div>
+                <div class="site-content-event-calendar-day">{{ date }}</div>
+              </div>
+              <div class="site-content-event-list-item-title">{{ title }}</div>
             </li>
             {{/if}}
           {{/events}}
         </ul>
       </div>
-      <div class="form-panel">
+      <div class="site-content-event-detail-panel">
         {{#events}}
           {{#if @index === 0}}
           <div class="site-content-event-detail-pane site-content-event-detail-pane-selected" id="detail-{{ _id }}">
-            <dl>
-              {{#if location}}
-              <dt>Location</dt>
-              <dd>{{ location }}</dd>
-              {{/if}}
-              {{#if destination}}
-              <dt>Destination</dt>
-              {{#if destinationUrl}}
-              <dd>
-                <a href="{{ destinationUrl }}" target="_blank">{{ destination }}</a>
-              </dd>
+            <h3 class="site-content-event-detail-pane-title">{{ title }} on {{ monthName }} {{ date }}</h3>
+            <h3 class="site-content-event-detail-pane-location">
+              {{ activity }} at
+              {{#if locationUrl}}
+              <a href="{{ locationUrl }}" target="_blank">{{ location }}</a>
               {{else}}
-              <dd>{{ destination }}</dd>
+              {{ location }}
               {{/if}}
-              {{/if}}
-            </dl>
+            </h3>
+            <p>{{ description }}</p>
           </div>
           {{else}}
           <div class="site-content-event-detail-pane" id="detail-{{ _id }}">
-            
+            <h3 class="site-content-event-detail-pane-title">{{ title }} on {{ monthName }} {{ date }}</h3>
+            <h3 class="site-content-event-detail-pane-location">
+              {{ activity }} at
+              {{#if locationUrl}}
+              <a href="{{ locationUrl }}" target="_blank">{{ location }}</a>
+              {{else}}
+              {{ location }}
+              {{/if}}
+            </h3>
+            <p>{{ description }}</p>
           </div>
           {{/if}}
         {{/events}}
       </div>
     </div>
   </section>
-  <p>rides: {{ rides.length }}</p>
-  <p>docs: {{ docs.length }}</p>
-  <p><a target="_blank" href="http://republichog.shutterfly.com">Chapter Photos</a></p>
+  {{#if settings.photoUrl}}
+  <section class="site-content-section orange-section">
+    <h2 class="site-content-section-title">
+      <i class="left fa fa-camera white"></i>
+      Photographs
+    </h2>
+    <div class="site-content-section-content">
+      We maintain our Chapter pictures and photos over at
+      <a href="{{ settings.photoUrl }}" target="_blank">{{ settings.photoUrl }}</a>.
+    </div>
+  </section>
+  {{/if}}
+  {{#if docs.length}}
+  <section class="site-content-section amber-section">
+    <h2 class="site-content-section-title">
+      <i class="left fa fa-file-text-o"></i>
+      Public Documents
+    </h2>
+      <table class="pure-table pure-table-horizontal" style="width: 100%;">
+        <thead>
+          <tr>
+            <th>Document</th>
+            <td>Description</td>
+          </tr>
+        </thead>
+        <tbody>
+          {{#docs}}
+          <tr>
+            <td><a href="/chapter/public-documents/{{ _id }}">{{ title }}</a></td>
+            <td>{{ description }}</td>
+          </tr>
+          {{/docs}}
+        </tbody>
+      </table>
+  </section>
+  {{/if}}
 </div>

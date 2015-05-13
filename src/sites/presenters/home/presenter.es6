@@ -2,6 +2,8 @@ import event from '../../../models/event';
 import ride from '../../../models/ride';
 import doc from '../../../models/document';
 
+let months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+
 function couchPromise(scope, method) {
   let args = Array.prototype.slice.apply(arguments);
   args.splice(1, 1);
@@ -34,7 +36,7 @@ let presenter = {
     followingMonth.setDate(1);
     followingMonth.setMonth(followingMonth.getMonth() + 2);
 
-    let from = [ thisMonth.getFullYear(), thisMonth.getMonth(), thisMonth.getDate() ];
+    let from = [ today.getFullYear(), today.getMonth(), today.getDate() ];
     let to = [ followingMonth.getFullYear(), followingMonth.getMonth(), followingMonth.getDate() ];
 
     let promises = [
@@ -45,6 +47,20 @@ let presenter = {
 
     Promise.all(promises)
       .then(([events, rides, docs]) => {
+        events = events.filter(e => e.attendance !== 'member');
+        rides = rides.filter(e => e.attendance !== 'member');
+
+        for (let evt of events) {
+          Object.assign(evt, evt.days[0]);
+          evt.monthName = months[evt.month];
+          evt.activity = evt.activity[0].toUpperCase() + evt.activity.substring(1);
+        }
+
+        for (let r of rides) {
+          Object.assign(r, r.days[0]);
+          r.monthName = months[r.month];
+        }
+
         ac.render({
           data: {
             member: ac.member,

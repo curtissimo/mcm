@@ -44,7 +44,10 @@ let presenter = {
       if (e) {
         return ac.error(e);
       }
+      ac.body.photoUrl = ac.body.photoUrl || '';
+
       s = s[0];
+      s.photoUrl = ac.body.photoUrl.trim();
       s.rideLegalese = ac.body.rideLegalese;
       s.name = ac.body.name;
       s.description = ac.body.description.replace(/<div><br><\/div>/g, '');
@@ -55,6 +58,7 @@ let presenter = {
         ac.settings.name = s.name;
         ac.settings.rideLegalese = s.rideLegalese;
         ac.settings.description = s.description;
+        ac.settings.photoUrl = s.photoUrl;
 
         if (ac.files.chapterPhoto.length > 0) {
           let file = ac.files.chapterPhoto[0];

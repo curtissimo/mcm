@@ -18,6 +18,10 @@
           {{/if}}
         </div>
         <div class="pure-form-stacked-control-group">
+          <label for="photoUrl">Photo site</label>
+          <input type="text" value="{{ settings.photoUrl }}" name="photoUrl" id="photoUrl" class="pure-input-1">
+        </div>
+        <div class="pure-form-stacked-control-group">
           <label for="chapter-description-editor">Chapter description</label>
           <iframe src="/document.html" id="chapter-description-editor" class="long-text"></iframe>
           <textarea hidden name="description" id="chapter-description" name="description">{{ settings.description }}</textarea>

@@ -399,6 +399,9 @@ let eventList = document.getElementById('event-list');
 if (eventList) {
   eventList.addEventListener('click', e => {
     let target = e.target || e.srcElement;
+    while (target && target.tagName !== 'LI') {
+      target = target.parentNode;
+    }
     let dataId = target.getAttribute('data-id');
     let items = eventList.querySelectorAll('.site-content-event-list-item');
     for (let i = 0; i < items.length; i += 1) {
@@ -406,7 +409,30 @@ if (eventList) {
       item.className = item.className.replace(' site-content-event-list-selected', '');
     }
     target.className += ' site-content-event-list-selected';
-    let panes = document.getElementsByClassName('site-content-event-detail-pane');
+    let panes = eventList.parentNode.parentNode.querySelectorAll('.site-content-event-detail-pane');
+    for (let i = 0; i < panes.length; i += 1) {
+      let pane = panes[i];
+      pane.className = pane.className.replace(' site-content-event-detail-pane-selected', '');
+    }
+    document.getElementById('detail-' + dataId).className += ' site-content-event-detail-pane-selected';
+  });
+}
+
+let rideList = document.getElementById('ride-list');
+if (rideList) {
+  rideList.addEventListener('click', e => {
+    let target = e.target || e.srcElement;
+    while (target && target.tagName !== 'LI') {
+      target = target.parentNode;
+    }
+    let dataId = target.getAttribute('data-id');
+    let items = rideList.querySelectorAll('.site-content-event-list-item');
+    for (let i = 0; i < items.length; i += 1) {
+      let item = items[i];
+      item.className = item.className.replace(' site-content-event-list-selected', '');
+    }
+    target.className += ' site-content-event-list-selected';
+    let panes = rideList.parentNode.parentNode.querySelectorAll('.site-content-event-detail-pane');
     for (let i = 0; i < panes.length; i += 1) {
       let pane = panes[i];
       pane.className = pane.className.replace(' site-content-event-detail-pane-selected', '');
