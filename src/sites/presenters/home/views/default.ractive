@@ -157,7 +157,7 @@
       Photographs
     </h2>
     <div class="site-content-section-content">
-      We maintain our Chapter pictures and photos over at
+      We keep all of our Chapter photos and videos over at
       <a href="{{ settings.photoUrl }}" target="_blank">{{ settings.photoUrl }}</a>.
     </div>
   </section>
