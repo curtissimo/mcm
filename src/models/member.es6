@@ -159,7 +159,7 @@ member.projections = {
     }
   },
   all: {
-    name: 'All chapter members include the expired ones',
+    name: 'All chapter members including the expired ones',
     title: 'Everyone',
     projection: (db, callback) => {
       member.from(db).all(callback);
@@ -245,6 +245,19 @@ member.projections = {
     title: 'Discussion Recipients',
     projection: (db, callback) => {
       member.from(db).wantingDiscussions(callback);
+    }
+  },
+  onlyFemaleMembers: {
+    name: 'Only female members',
+    title: 'Only female members',
+    projection: (db, callback) => {
+      member.from(db).wantingDiscussions((e, entities) => {
+        if (e) {
+          return callback(e);
+        }
+        entities = entities.filter(e => e.sex === 'F');
+        return callback(undefined, entities);
+      });
     }
   }
 };
