@@ -423,10 +423,14 @@ let presenter = {
       if (e) {
         return ac.error(e);
       }
-      if (!r || !r.days[0].routeFiles || !r.days[0].routeFiles.est) {
+      let index = ac.params.index - 0;
+      if (isNaN(index)) {
         return ac.notFound();
       }
-      let est = r.days[0].routeFiles.est;
+      if (!r || !r.days[index].routeFiles || !r.days[index].routeFiles.est) {
+        return ac.notFound();
+      }
+      let est = r.days[index].routeFiles.est;
       ac.file(est.path, est.fileName, ac.account.subdomain);
     });
   },
@@ -436,10 +440,14 @@ let presenter = {
       if (e) {
         return ac.error(e);
       }
-      if (!r || !r.days[0].routeFiles || !r.days[0].routeFiles.pdf) {
+      let index = ac.params.index - 0;
+      if (isNaN(index)) {
         return ac.notFound();
       }
-      let pdf = r.days[0].routeFiles.pdf;
+      if (!r || !r.days[index].routeFiles || !r.days[index].routeFiles.pdf) {
+        return ac.notFound();
+      }
+      let pdf = r.days[index].routeFiles.pdf;
       ac.file(pdf.path, pdf.fileName, ac.account.subdomain);
     });
   },
@@ -449,10 +457,14 @@ let presenter = {
       if (e) {
         return ac.error(e);
       }
-      if (!r || !r.days[0].routeFiles || !r.days[0].routeFiles.garmin) {
+      let index = ac.params.index - 0;
+      if (isNaN(index)) {
         return ac.notFound();
       }
-      let garmin = r.days[0].routeFiles.garmin;
+      if (!r || !r.days[index].routeFiles || !r.days[index].routeFiles.garmin) {
+        return ac.notFound();
+      }
+      let garmin = r.days[index].routeFiles.garmin;
       ac.file(garmin.path, garmin.fileName, ac.account.subdomain);
     });
   },
@@ -494,7 +506,7 @@ let presenter = {
 
       ac.render({
         data: {
-          title: `Edit ${entity.name}`,
+          title: `Edit ${entity.title}`,
           event: entity,
           ride: entity
         },
