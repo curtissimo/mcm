@@ -217,6 +217,11 @@
   }
 }
 
+.full-form-panel {
+  @include grid-column;
+  width: 100%;
+}
+
 .form-controls {
   @include grid-column();
   width: 100%;

@@ -1,0 +1,100 @@
+{{#event}}
+<h1 class="banner">Edit "{{ title }}"</h1>
+<section>
+  <form class="pure-form pure-form-aligned form-layout" method="post" action="/chapter/events/{{ _id }}">
+    <input type="hidden" value="put" name="X-HTTP-Method-Override">
+    <div class="form-panel">
+      <fieldset>
+        <legend>General Information</legend>
+        <div class="pure-control-group">
+          <label for="activity">Activity</label>
+          <select name="activity" id="activity">
+            <option {{#if activity == 'meeting'}}selected{{/if}} value="meeting">Meeting</option>
+            <option {{#if activity == 'meal'}}selected{{/if}} value="meal">Meal</option>
+            <option {{#if activity == 'movie'}}selected{{/if}} value="movie">Movie</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="title">Name</label>
+          <input type="text" value="{{ event.title }}" name="title" id="title" required>
+          {{#if errors.title}}
+          <div class="form-error">
+            <p>The title {{ errors.title }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="sponsor">Sponsor</label>
+          <select name="sponsor" id="sponsor">
+            <option {{#if sponsor == 'chapter'}}selected{{/if}} value="chapter">Chapter</option>
+            <option {{#if sponsor == 'dealer'}}selected{{/if}} value="dealer">Dealer</option>
+            <option {{#if sponsor == 'outside'}}selected{{/if}} value="outside">Third-Party</option>
+          </select>
+        </div>
+        <div class="pure-control-group">
+          <label for="attendance">Attendance</label>
+          <select name="attendance" id="attendance">
+            <option {{#if attendance == 'closed'}}selected{{/if}} value="closed">Member + 1 guest</option>
+            <option {{#if attendance == 'member'}}selected{{/if}} value="member">Only members</option>
+            <option {{#if attendance == 'open'}}selected{{/if}} value="open">Anyone</option>
+          </select>
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Description</legend>
+        <div class="pure-control-group">
+          <textarea class="pure-input-1 long-text" name="days[][description]" id="description" required>{{ days[0].description }}</textarea>
+        </div>
+      </fieldset>
+    </div>
+    <div class="full-form-panel">
+      <fieldset>
+        <legend>Where and Times</legend>
+        <div class="pure-control-group">
+          <label for="location">Location</label>
+          <input class="long-plain-text" type="text" placeholder="where's it at?" value="{{ days[0].location }}" name="days[][location]" id="location" required>
+          {{#if errors.location}}
+          <div class="form-error">
+            <p>The location {{ errors.location }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="locationUrl">Web site</label>
+          <input class="long-plain-text" type="text" placeholder="does it have a URL?" value="{{ days[0].locationUrl }}" name="days[][locationUrl]" id="locationUrl">
+        </div>
+        <div class="pure-control-group">
+          <label for="date">On</label>
+          <input type="date" placeholder="MM/DD/YYYY" id="date" value="{{ days[0].formattedDate }}" name="days[][date]">
+        </div>
+        <div class="pure-control-group">
+          <label for="meetAt">Starts at</label>
+          <input type="text" placeholder="a time like 9am" value="{{ days[0].meetAt }}" name="days[][meetAt]" id="meetAt" required>
+          {{#if errors.meetAt}}
+          <div class="form-error">
+            <p>The start at time {{ errors.meetAt }}</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-control-group">
+          <label for="endsAt">Ends around</label>
+          <input type="text" placeholder="a time like noon" value="{{ days[0].endsAt }}" name="days[][endsAt]" id="endsAt" required>
+          {{#if errors.endsAt}}
+          <div class="form-error">
+            <p>The end time {{ errors.endsAt }}</p>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/events" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Save the changes</button>
+      </div>
+    </div>
+  </form>
+</section>
+{{/event}}

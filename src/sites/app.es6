@@ -338,7 +338,7 @@ assets.initialize()
         { verb: 'get', action: ':id', method: 'item' },
         { verb: 'patch', action: ':id', method: 'patch' },
         { verb: 'post' },
-        { verb: 'put', action: ':id', method: 'update' },
+        { verb: 'put', action: ':id' },
         { verb: 'delete', action: ':id' }
       ]
     });

@@ -3,6 +3,7 @@ import event from '../../../models/event';
 import ride from '../../../models/ride';
 import fs from 'fs';
 import stork from 'stork-odm';
+import { text2html } from '../../../mailUtils';
 
 let inProduction = process.env.NODE_ENV === 'production';
 let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
@@ -394,10 +395,11 @@ let presenter = {
           if (!value.cancelledReason) {
             actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
           }
-          // actions['Edit ' + value.activity] = `/chapter/events/${value._id}/edit-form`;
+          actions['Edit ' + value.activity] = `/chapter/events/${value._id}/edit-form`;
         }
         for (let day of value.days) {
           day.formattedDate = moment(new Date(day.year, day.month, day.date)).format('MM/DD/YYYY');
+          day.description = text2html(day.description);
         }
         ac.render({
           data: {
@@ -481,9 +483,13 @@ let presenter = {
         return ac.error(e);
       }
 
-      let view = 'create-other';
+      let view = 'edit-other';
       if (entity.kind === 'ride') {
-        view = 'create-ride';
+        view = 'edit-ride';
+      }
+
+      for (let day of entity.days) {
+        day.formattedDate = moment([ day.year, day.month, day.date ]).format('YYYY-MM-DD');
       }
 
       ac.render({
@@ -592,7 +598,21 @@ let presenter = {
       ac.redirect('/chapter/events');
     }
 
-    ac.error('not implemented');
+    if (ac.body.activity !== 'ride') {
+      event.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
+        if (e) {
+          return ac.error(e);
+        }
+        let proto = eventFactory.once(ac.body)[0];
+        Object.assign(entity, proto);
+        entity.to(ac.chapterdb).save(e => {
+          if (e) {
+            return ac.error(e);
+          }
+          ac.redirect('/chapter/events');
+        })
+      });
+    }
   },
 
   delete(ac) {
