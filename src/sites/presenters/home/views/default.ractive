@@ -1,8 +1,80 @@
 <div class="image-holder">
-  <h1 class="name-holder">{{ title }}</h1>
+  <h1 class="name-holder">{{ settings.name }}</h1>
   <img width="100%" class="pure-img" src="/home/photo">
 </div>
-<p>events: {{ events.length }}</p>
-<p>rides: {{ rides.length }}</p>
-<p>docs: {{ docs.length }}</p>
-<p><a target="_blank" href="http://republichog.shutterfly.com">Chapter Photos</a></p>
+<nav class="public-nav">
+{{#member}}
+  <a href="/chapter">Go to Members' Area</a>
+{{else}}
+  <a href="/chapter/session">Log in</a>
+{{/member}}
+</nav>
+<div class="site-content">
+  <section class="site-content-section green-section">
+    <h2 class="site-content-section-title">
+      <i class="left fa fa-question-circle white"></i>
+      About
+    </h2>
+    <div class="site-content-section-content">{{ settings.description }}</div>
+  </section>
+  <section class="site-content-section blue-section">
+    <h2 class="site-content-section-title">
+      <i class="left fa fa-motorcycle white"></i>
+      Rides
+    </h2>
+    <div class="site-content-section-content">
+      Here's a list of our upcoming rides. Click the ride and check out the
+      details that describe the journey!
+    </div>
+    <div class="form-layout">
+      <div class="form-panel">
+        <ul id="event-list" class="site-content-event-list">
+          {{#events}}
+            {{#if @index === 0}}
+            <li class="site-content-event-list-item site-content-event-list-selected" data-id="{{ _id }}">
+              {{ days[0].month }}/{{ days[0].date }}/{{ days[0].year }}<br>
+              {{ title }}
+            </li>
+            {{else}}
+            <li class="site-content-event-list-item" data-id="{{ _id }}">
+              {{ days[0].month }}/{{ days[0].date }}/{{ days[0].year }}<br>
+              {{ title }}
+            </li>
+            {{/if}}
+          {{/events}}
+        </ul>
+      </div>
+      <div class="form-panel">
+        {{#events}}
+          {{#if @index === 0}}
+          <div class="site-content-event-detail-pane site-content-event-detail-pane-selected" id="detail-{{ _id }}">
+            <dl>
+              {{#if location}}
+              <dt>Location</dt>
+              <dd>{{ location }}</dd>
+              {{/if}}
+              {{#if destination}}
+              <dt>Destination</dt>
+              {{#if destinationUrl}}
+              <dd>
+                <a href="{{ destinationUrl }}" target="_blank">{{ destination }}</a>
+              </dd>
+              {{else}}
+              <dd>{{ destination }}</dd>
+              {{/if}}
+              {{/if}}
+            </dl>
+          </div>
+          {{else}}
+          <div class="site-content-event-detail-pane" id="detail-{{ _id }}">
+            
+          </div>
+          {{/if}}
+        {{/events}}
+      </div>
+    </div>
+  </section>
+  <p>rides: {{ rides.length }}</p>
+  <p>docs: {{ docs.length }}</p>
+  <p><a target="_blank" href="http://republichog.shutterfly.com">Chapter Photos</a></p>
+</div>

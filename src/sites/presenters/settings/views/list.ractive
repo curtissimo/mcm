@@ -4,22 +4,23 @@
   section for an explanation of each setting.
 </section>
 <section>
-  <form class="pure-form pure-form-aligned form-layout" method="post" enctype="multipart/form-data" action="/chapter/settings">
+  <form id="settings-form" class="pure-form pure-form-aligned form-layout" method="post" enctype="multipart/form-data" action="/chapter/settings">
     <div class="form-panel">
       <fieldset>
-        <legend>Chapter name</legend>
-        <p>
-          Change this name to change what visitors to the site see wherever
-          your chapter's name gets referenced.
-        </p>
-        <div class="pure-control-group">
+        <legend>Chapter information</legend>
+        <div class="pure-form-stacked-control-group">
           <label for="name">Chapter name</label>
-          <input type="text" value="{{ settings.name }}" name="name" id="name" required>
+          <input type="text" value="{{ settings.name }}" name="name" id="name" class="pure-input-1" required>
           {{#if errors.name}}
           <div class="form-error">
             <p>The first name {{ errors.name }}</p>
           </div>
           {{/if}}
+        </div>
+        <div class="pure-form-stacked-control-group">
+          <label for="chapter-description-editor">Chapter description</label>
+          <iframe src="/document.html" id="chapter-description-editor" class="long-text"></iframe>
+          <textarea hidden name="description" id="chapter-description" name="description">{{ settings.description }}</textarea>
         </div>
       </fieldset>
     </div>

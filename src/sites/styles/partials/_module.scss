@@ -89,6 +89,20 @@
   }
 }
 
+.pure-form-stacked-control-group {
+  margin-bottom: .5em;
+
+  label {
+    padding: 0.25em;
+    display: block;
+    margin: 0;
+
+    &:first-child {
+      padding-top: 0;
+    }
+  }
+}
+
 .pure-form-aligned {
   p {
     margin-top: 0;

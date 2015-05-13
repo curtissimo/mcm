@@ -47,12 +47,14 @@ let presenter = {
       s = s[0];
       s.rideLegalese = ac.body.rideLegalese;
       s.name = ac.body.name;
+      s.description = ac.body.description.replace(/<div><br><\/div>/g, '');
       s.to(ac.chapterdb).save(e => {
         if (e) {
           return ac.error(e);
         }
         ac.settings.name = s.name;
         ac.settings.rideLegalese = s.rideLegalese;
+        ac.settings.description = s.description;
 
         if (ac.files.chapterPhoto.length > 0) {
           let file = ac.files.chapterPhoto[0];

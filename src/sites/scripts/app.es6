@@ -85,18 +85,19 @@ function walk(node, callback) {
   } while ( depth > 0 );
 }
 
-document
-  .getElementById('main-menu')
-  .addEventListener('click', e => {
+let mainMenu = document.getElementById('main-menu');
+if (mainMenu) {
+  mainMenu.addEventListener('click', e => {
     let target = e.target || e.srcElement;
     if (target.tagName !== 'A') {
       e.preventDefault();
     }
   });
+}
 
-document
-  .getElementById('overlay')
-  .addEventListener('click', e => {
+let overlay = document.getElementById('overlay');
+if (overlay) {
+  overlay.addEventListener('click', e => {
     e.preventDefault();
     let mainMenu = document.getElementById('main-menu');
     mainMenu.className = mainMenu.className.replace(/is-shown/g, '');
@@ -104,10 +105,11 @@ document
       .getElementById('overlay')
       .style.display = 'none';
   });
+}
 
-document
-  .getElementById('main-toolbar-show-menu')
-  .addEventListener('click', e => {
+let mainToolbarShowMenu = document.getElementById('main-toolbar-show-menu');
+if (mainToolbarShowMenu) {
+  mainToolbarShowMenu.addEventListener('click', e => {
     e.preventDefault();
     document
       .getElementById('main-menu')
@@ -116,6 +118,7 @@ document
       .getElementById('overlay')
       .style.display = 'block';
   });
+}
 
 let showActionsButton = document.getElementById('main-toolbar-show-actions');
 if (showActionsButton) {
@@ -243,6 +246,20 @@ if (photoChanger) {
       document.getElementById('photo-changer-form').submit();
     });
     photoChanger.parentNode.appendChild(saver);
+  });
+}
+
+let settingsForm = document.getElementById('settings-form');
+let chapterDescription = document.getElementById('chapter-description');
+let chapterDescriptionEditor = document.getElementById('chapter-description-editor');
+if (chapterDescription && chapterDescriptionEditor && settingsForm) {
+  let editor = false;
+  chapterDescriptionEditor.addEventListener('load', () => {
+    editor = chapterDescriptionEditor.contentWindow.editor;
+    editor.setHTML(chapterDescription.value);
+  });
+  settingsForm.addEventListener('submit', e => {
+    chapterDescription.value = editor.getHTML();
   });
 }
 
@@ -375,5 +392,25 @@ if (createBlogEntry) {
     createBlogEntry.style.display = 'inline';
     document.getElementById('blog-entry-form').style.display = 'none';
     document.getElementById('create-blog-entry-placeholder').style.display = 'none';
+  });
+}
+
+let eventList = document.getElementById('event-list');
+if (eventList) {
+  eventList.addEventListener('click', e => {
+    let target = e.target || e.srcElement;
+    let dataId = target.getAttribute('data-id');
+    let items = eventList.querySelectorAll('.site-content-event-list-item');
+    for (let i = 0; i < items.length; i += 1) {
+      let item = items[i];
+      item.className = item.className.replace(' site-content-event-list-selected', '');
+    }
+    target.className += ' site-content-event-list-selected';
+    let panes = document.getElementsByClassName('site-content-event-detail-pane');
+    for (let i = 0; i < panes.length; i += 1) {
+      let pane = panes[i];
+      pane.className = pane.className.replace(' site-content-event-detail-pane-selected', '');
+    }
+    document.getElementById('detail-' + dataId).className += ' site-content-event-detail-pane-selected';
   });
 }

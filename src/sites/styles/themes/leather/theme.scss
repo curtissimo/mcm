@@ -650,12 +650,23 @@ fieldset {
     }
 
     .name-holder {
+      margin: 0;
+      padding: 0;
       color: white;
       font-weight: 100;
-      font-size: 104pt;
+      font-size: 48px;
+      font-size: 10vw;
       position: absolute;
-      bottom: -0.75em;
+      bottom: 0.125em;
       right: 0.1em;
+      text-shadow: 3px 3px 4px black;
     }
+  }
+
+  .site-content {
+    box-shadow: 0px 3px 3px black;
+    background-color: white;
+    max-width: 800px;
+    margin: auto;
   }
 }

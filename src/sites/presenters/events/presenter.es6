@@ -2,6 +2,7 @@ import moment from 'moment';
 import event from '../../../models/event';
 import ride from '../../../models/ride';
 import fs from 'fs';
+import stork from 'stork-odm';
 
 let inProduction = process.env.NODE_ENV === 'production';
 let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
@@ -393,7 +394,7 @@ let presenter = {
           if (!value.cancelledReason) {
             actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
           }
-          actions['Edit ' + value.activity] = `/chapter/events/${value._id}/edit-form`;
+          // actions['Edit ' + value.activity] = `/chapter/events/${value._id}/edit-form`;
         }
         for (let day of value.days) {
           day.formattedDate = moment(new Date(day.year, day.month, day.date)).format('MM/DD/YYYY');
@@ -475,12 +476,26 @@ let presenter = {
       ac.redirect('/chapter/events');
     }
 
-    ac.render({
-      data: {
-        title: 'Edit «event name»'
-      },
-      presenters: { menu: 'menu' },
-      layout: 'chapter'
+    stork.from(ac.chapterdb).get([ event, ride ], ac.params.id, (e, entity) => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      let view = 'create-other';
+      if (entity.kind === 'ride') {
+        view = 'create-ride';
+      }
+
+      ac.render({
+        data: {
+          title: `Edit ${entity.name}`,
+          event: entity,
+          ride: entity
+        },
+        presenters: { menu: 'menu' },
+        layout: 'chapter',
+        view: view
+      });
     });
   },
 

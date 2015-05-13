@@ -22,6 +22,8 @@ function couchPromise(scope, method) {
 
 let presenter = {
   get(ac) {
+    ac.addStylesheet('area');
+
     let today = new Date();
     let thisMonth = new Date();
     thisMonth.setDate(1);
@@ -45,9 +47,11 @@ let presenter = {
       .then(([events, rides, docs]) => {
         ac.render({
           data: {
+            member: ac.member,
             events: events,
             rides: rides,
             docs: docs,
+            settings: ac.settings,
             title: ac.settings.name
           },
           view: 'default',
