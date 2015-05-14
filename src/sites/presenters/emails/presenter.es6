@@ -1,7 +1,7 @@
 import moment from 'moment';
 import member from '../../../models/member';
 import email from '../../../models/email';
-import { html2text, randomValueHex, getDomain, postMailDirective } from '../../../mailUtils';
+import { text2html, html2text, randomValueHex, getDomain, postMailDirective } from '../../../mailUtils';
 
 let distributionLists = [];
 
@@ -41,7 +41,11 @@ let presenter = {
       emails.reverse();
       for (let missive of emails) {
         if (ac.query.hasOwnProperty('sent')) {
-          missive.secondColumnValue = member.projections[missive.group.view].title;
+          if (missive.group && member.projections[missive.group.view]) {
+            missive.secondColumnValue = member.projections[missive.group.view].title;
+          } else {
+            missive.secondColumnValue = missive.for.replace(/</g, '&lt;').replace(/"/g, '');
+          }
         } else {
           missive.secondColumnValue = missive.from.replace(/</g, '&lt;').replace(/"/g, '');
         }
@@ -107,7 +111,7 @@ let presenter = {
       let actions = {
         'Delete': `/chapter/emails/${ac.params.id}/delete-form`,
         'Reply': `/chapter/emails/${ac.params.id}/reply-form`,
-        'Reply All': `/chapter/emails/${ac.params.id}/reply-all-form`,
+        // 'Reply All': `/chapter/emails/${ac.params.id}/reply-all-form`,
       };
 
       let lastSpace = missive.from.lastIndexOf(' ');
@@ -121,7 +125,12 @@ let presenter = {
       if (missive.received) {
         missive.received = moment(missive.received).format('MMM D, YYYY H:mm A');
       } else {
-        missive.recipients = [{ name: member.projections[missive.group.view].name }];
+        if (missive.group && member.projections[missive.group.view]) {
+          missive.recipients = member.projections[missive.group.view].title;
+        } else {
+          missive.recipients = missive.for.replace(/</g, '&lt;').replace(/"/g, '');
+        }
+        missive.recipients = [{ name: missive.recipients }];
         actions = {
           'Delete': `/chapter/emails/${ac.params.id}/delete-form`
         };
@@ -156,6 +165,37 @@ let presenter = {
     this.item(ac, true);
   },
 
+  replyForm(ac) {
+    email.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
+      let fromName = entity.from
+        .replace(/</, '&amp;lt;')
+        .replace(/>/, '&amp;gt;');
+      let sent = moment(entity.sent).format('MMM DD, YYYY');
+      entity.newReferences = `${entity.references} ${entity.messageId}`.trim();
+      entity.replyText = `\n\n> ${entity.text.replace(/\n/g, '\n> ')}`;
+      entity.replyHtml = `<html>
+        <head></head>
+        <body>
+          <br>
+          <br>
+          <blockquote>
+            <div>On ${sent}, ${fromName} wrote:<br></div>
+            <div><br></div>
+            <div>${text2html(entity.text)}</div>
+          </blockquote>
+        </body>
+      </html>`;
+      ac.render({
+        data: {
+          email: entity
+        },
+        presenters: { menu: 'menu' },
+        layout: 'chapter',
+        view: 'reply'
+      });
+    });
+  },
+
   delete(ac) {
     if (ac.member.officerInbox === undefined) {
       return ac.redirect('/chapter/dashboard');
@@ -177,11 +217,7 @@ let presenter = {
     });
   },
 
-  post(ac) {
-    if (ac.member.officerInbox === undefined) {
-      return ac.redirect('/chapter/dashboard');
-    }
-
+  postGroup(ac) {
     ac.body.sent = new Date();
     ac.body.from = `"${ac.member.firstName} ${ac.member.lastName}" <${ac.member.officerInbox}@${getDomain(ac.account)}>`;
     ac.body.messageId = `<${randomValueHex(8)}.${randomValueHex(10)}@${getDomain(ac.account)}>`;
@@ -202,6 +238,36 @@ let presenter = {
           ac.error(e);
         });
     });
+  },
+
+  postReply(ac) {
+    ac.body.sent = new Date();
+    ac.body.from = `"${ac.member.firstName} ${ac.member.lastName}" <${ac.member.officerInbox}@${getDomain(ac.account)}>`;
+    ac.body.messageId = `<${randomValueHex(8)}.${randomValueHex(10)}@${getDomain(ac.account)}>`;
+
+    let missive = email.new(ac.body);
+    missive.to(ac.chapterdb).save((e, { _id }) => {
+      ac.body.to = ac.body.for;
+      postMailDirective('mcm-single-mail', ac.body)
+        .then(() => ac.redirect('/chapter/emails'))
+        .catch(e => {
+          if (e.code === 'ETIMEDOUT') {
+            return ac.redirect('/chapter/emails?error=unavailable');
+          }
+          ac.error(e);
+        });
+    });
+  },
+
+  post(ac) {
+    if (ac.member.officerInbox === undefined) {
+      return ac.redirect('/chapter/dashboard');
+    }
+
+    if (ac.body.toList) {
+      return this.postGroup(ac);
+    }
+    this.postReply(ac);
   }
 };
 

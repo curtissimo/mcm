@@ -1,0 +1,26 @@
+{{#email}}
+<h1 class="banner">New Email</h1>
+<section>
+  <form class="pure-form pure-form-stacked" id="email-form" method="post" action="/chapter/emails">
+    <label>To: {{ from.replace(/</g, '&lt;') }}</label>
+    <input type="hidden" value="{{ from }}" name="for">
+
+    <label for="subject">RE: {{ subject }}</label>
+    <input type="hidden" value="RE: {{ subject }}" id="subject" name="subject">
+    <input type="hidden" value="{{ newReferences }}" name="references">
+
+    <textarea hidden id="email-html" name="html">{{ replyHtml }}</textarea>
+
+    <iframe src="/document.html" id="email-editor" class="long-text"></iframe>
+
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/emails/{{ _id }}" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Send the email</button>
+      </div>
+    </div>
+
+    <textarea id="email-text" name="text" class="is-mostly-hidden pretending-to-be-iframe" required>{{ replyText }}</textarea>
+  </form>
+</section>
+{{/email}}

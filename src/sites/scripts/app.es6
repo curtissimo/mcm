@@ -275,10 +275,15 @@ if (chapterDescription && chapterDescriptionEditor && settingsForm) {
 
 let emailForm = document.getElementById('email-form');
 let emailEditor = document.getElementById('email-editor');
+let emailHtml = document.getElementById('email-html');
 if (emailForm && emailEditor) {
   let editor = false;
   emailEditor.addEventListener('load', () => {
     editor = emailEditor.contentWindow.editor;
+
+    if (emailHtml && emailHtml.value) {
+      editor.setHTML(emailHtml.value);
+    }
 
     editor.addEventListener('willPaste', e => {
       walk(e.fragment, function (depth) {
@@ -298,10 +303,17 @@ if (emailForm && emailEditor) {
 
     editor.addEventListener('blur', e => {
       let html = editor.getHTML().replace(/<div><br><\/div>/, '').trim();
-      let text = html.replace(/\n/g, ' ')
+      emailHtml.innerHTML = html;
+
+      let text = html;
+      let blockquote = text.match(/<blockquote>.*<\/blockquote>/);
+      if (blockquote) {
+        text = text.replace(blockquote[0], blockquote[0].replace(/<div>/g, '<div>> '));
+      }
+      text = text.replace(/\n/g, ' ')
         .replace(/<br><\/h[1-6]>/g, '\n\n')
         .replace(/<\/h[1-6]>/g, '\n\n')
-        .replace(/<br><\/[^>]+>/g, '</p>')
+        .replace(/<br><\/[^>]+>/g, '\n')
         .replace(/<br>/g, '\n')
         .replace(/<\/p>/g, '\n\n')
         .replace(/<[^>]+>/g, '')
@@ -311,7 +323,6 @@ if (emailForm && emailEditor) {
         return document.getElementById('email-text').innerHTML = '';
       }
 
-      document.getElementById('email-html').innerHTML = html;
       document.getElementById('email-text').innerHTML = text;
     });
   });
