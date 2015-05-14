@@ -129,7 +129,7 @@ let presenter = {
           });
 
           for (let r of entity.responses) {
-            let created = moment(entity.createdOn);
+            let created = moment(r.createdOn);
             r.respondant = membersMap.get(r.respondantId);
             r.createdDate = created.format('YYYY-MM-DD');
             r.createdTime = created.format('H:mm:ss a');
