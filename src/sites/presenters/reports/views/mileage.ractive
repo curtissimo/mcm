@@ -1,4 +1,20 @@
 <section>
+  <form class="pure-form">
+    <fieldset>
+    <select name="year">
+      {{#years}}
+      <option {{#if year == this}}selected{{/if}}>{{ . }}</option>
+      {{/years}}
+    </select>
+    <select name="month">
+      <option value="">Full Year</option>
+      {{#months}}
+      <option {{#if @index == month}}selected{{/if}} value="{{ @index }}">{{ . }}</option>
+      {{/months}}
+    </select>
+    <button class="pure-button pure-button-primary" type="submit">Change</button>
+  </form>
+  <h2>Report for {{ months[month] }} {{ year }}</h2>
   <table class="pure-table pure-table-striped">
     <thead>
       <tr>
@@ -9,10 +25,14 @@
       </tr>
     </thead>
     <tbody>
+      <tr>
+        <th colspan="2">Total mileage:</th>
+        <th colspan="2">{{ total }} miles</th>
+      </tr>
       {{#entries}}
       <tr>
         <td>{{ year }}</td>
-        <td>{{ month }}</td>
+        <td>{{ months[month] }}</td>
         <td>{{ miles }}</td>
         <td>{{ who.lastName }}, {{ who.firstName }}</td>
       </tr>

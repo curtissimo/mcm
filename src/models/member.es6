@@ -132,6 +132,15 @@ let member = stork.deliver('member', function () {
       emitKey(null);
     }
   });
+
+  this.view('withMonthlyMileage', function(member, emitKey) {
+    if (member.mileage) {
+      for (var i = 0; i < member.mileage.length; i += 1) {
+        var mileage = member.mileage[i];
+        emitKey([ mileage[0], mileage[1] ]);
+      }
+    }
+  });
 });
 
 member.projections = {

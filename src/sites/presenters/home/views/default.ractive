@@ -15,7 +15,10 @@
       <i class="left fa fa-question-circle white"></i>
       About
     </h2>
-    <div class="site-content-section-content">{{ settings.description }}</div>
+    <div class="site-content-section-content">
+      <h3>Our members have ridden a total of {{ totalMiles }} miles so far this year!</h3>
+      {{ settings.description }}
+    </div>
   </section>
   <section class="site-content-section grey-section">
     <h2 class="site-content-section-title">

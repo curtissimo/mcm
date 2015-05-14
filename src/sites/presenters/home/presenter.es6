@@ -1,3 +1,4 @@
+import member from '../../../models/member';
 import event from '../../../models/event';
 import ride from '../../../models/ride';
 import doc from '../../../models/document';
@@ -43,13 +44,23 @@ let presenter = {
     let promises = [
       couchPromise(event.from(ac.chapterdb), 'byDistinctDate', from, to),
       couchPromise(ride.from(ac.chapterdb), 'byDistinctDate', from, to),
-      couchPromise(doc.from(ac.chapterdb), 'publicOnly')
+      couchPromise(doc.from(ac.chapterdb), 'publicOnly'),
+      couchPromise(member.from(ac.chapterdb), 'all')
     ];
 
     Promise.all(promises)
-      .then(([events, rides, docs]) => {
+      .then(([events, rides, docs, members]) => {
         events = events.filter(e => e.attendance !== 'member');
         rides = rides.filter(e => e.attendance !== 'member');
+
+        let total = 0;
+        for (let m of members) {
+          if (m.mileage) {
+            for (let mileage of m.mileage) {
+              total += mileage[2];
+            }
+          }
+        }
 
         for (let evt of events) {
           Object.assign(evt, evt.days[0]);
@@ -68,6 +79,7 @@ let presenter = {
 
         ac.render({
           data: {
+            totalMiles: total,
             member: ac.member,
             events: events,
             rides: rides,
