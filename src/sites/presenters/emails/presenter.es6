@@ -51,11 +51,13 @@ let presenter = {
         } else if (!missive.text) {
           missive.text = '';
         }
-        let firstLineBreak = missive.text.indexOf('\n');
-        if (firstLineBreak > 50) {
-          missive.text = missive.text.substring(0, firstLineBreak) + '...';
-        }
         missive.text = missive.text.replace(/</g, '&lt;').replace(/\n/g, '<br>');
+        if (missive.text.length > 50) {
+          let firstSpace = missive.text.substring(49).indexOf(' ');
+          if (firstSpace > -1) {
+            missive.text = missive.text.substring(0, 49 + firstSpace) + '...';
+          }
+        }
         let lastSpace = missive.from.lastIndexOf(' ');
         if (lastSpace > -1) {
           missive.from = missive.from.substring(0, lastSpace);
