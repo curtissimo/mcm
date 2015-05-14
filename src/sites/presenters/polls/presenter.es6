@@ -81,7 +81,7 @@ let presenter = {
             }
           }
           if (entity.firstRespondant === undefined) {
-            entity.firstRespondant = 'No responses, yet.';
+            entity.firstRespondant = 'No option 1 responses, yet.';
           }
           if (entity.open === undefined) {
             polls.unopened.push(entity);
