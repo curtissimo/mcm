@@ -131,8 +131,8 @@ let presenter = {
           for (let r of entity.responses) {
             let created = moment(r.createdOn);
             r.respondant = membersMap.get(r.respondantId);
-            r.createdDate = created.format('YYYY-MM-DD');
-            r.createdTime = created.format('H:mm:ss a');
+            r.createdDate = created.format('MMM DD, YYYY');
+            r.createdTime = created.format('h:mm:ss a');
             if (!entity.options[r.option].count) {
               entity.options[r.option].count = 0;
             }
