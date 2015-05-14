@@ -1,0 +1,62 @@
+<h1 class="banner">LOH</h1>
+<section class="road-captains-maintenance">
+  <div class="form-panel">
+    <form method="post" action="/chapter/loh" class="pure-form pure-form-stacked">
+      <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+      <fieldset>
+        <legend>Current LOH roster</legend>
+        <p>
+          Check any of the LOH members below and click the button to remove
+          them from the LOH roster.
+        </p>
+        <ul class="road-captains-list">
+          {{#loh}}
+          <li class="road-captains-item">
+            <label for="members[{{ _id }}][isLoh]" class="pure-checkbox">
+              <input type="checkbox" id="members[{{ _id }}][isLoh]" name="members[{{ _id }}][isLoh]" value="false">
+              {{ lastName }}, {{ firstName }}
+              {{#nickName}}
+              ({{ nickName }})
+              {{/nickName}}
+            </label>
+          </li>
+          {{/loh}}
+        </ul>
+      </fieldset>
+        <div class="pure-form-controls">
+          <button type="sumbmit" class="pure-button pure-button-primary">
+            Remove selected LOH members
+          </button>
+        </div>
+    </form>
+  </div>
+  {{#if notLoh.length > 0}}
+  <div class="form-panel">
+    <form method="post" action="/chapter/loh" class="pure-form pure-form-stacked">
+      <fieldset>
+        <legend>Add a new LOH member</legend>
+        <div class="pure-control-group">
+          <label for="id">
+            Select a member to add her
+          </label>
+          <select name="id" id="id">
+            {{#notLoh}}
+            <option value="{{ _id }}">
+              {{ lastName }}, {{ firstName }}
+              {{#nickName}}
+              ({{ nickName }})
+              {{/nickName}}
+            </option>
+            {{/notLoh}}
+          </select>
+        </div>
+        <div class="pure-form-controls">
+          <button type="sumbmit" class="pure-button pure-button-primary">
+            Add to the LOH roster
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  {{/if}}
+</section>

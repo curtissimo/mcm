@@ -10,6 +10,7 @@ let permissions = {
   'Security': 'canManagePermissions',
   'Settings': 'canManageSettings',
   'Road Captains': 'canManageRoadCaptains',
+  'LOH': 'canManageLoh',
   'Emails': 'canManageEmails',
   'Officers': 'canManageOfficers'
 };

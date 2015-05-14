@@ -201,6 +201,16 @@ assets.initialize()
 
     leslie.routeTo({
       area: 'chapter',
+      presenterName: 'loh',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'delete' },
+        { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
       presenterName: 'polls',
       routes: [
         { verb: 'get', method: 'list' },

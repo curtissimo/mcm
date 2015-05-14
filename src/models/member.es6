@@ -100,6 +100,12 @@ let member = stork.deliver('member', function () {
     }
   });
 
+  this.view('onlyLoh', function (member, emitKey) {
+    if (member.isLoh) {
+      emitKey([ member.lastName, member.firstName ]);
+    }
+  });
+
   this.view('notRoadCaptains', function (member, emitKey) {
     if (!member.isRoadCaptain) {
       emitKey([ member.lastName, member.firstName ]);
@@ -249,6 +255,13 @@ member.projections = {
       member.from(db).onlyRoadCaptains(callback);
     }
   },
+  onlyLoh: {
+    name: 'LOH Members',
+    title: 'LOH Members',
+    projection: (db, callback) => {
+      member.from(db).onlyLoh(callback);
+    }
+  },
   discussionRecipients: {
     name: 'Chapter members that receive discussion posts',
     title: 'Discussion Recipients',
@@ -265,6 +278,21 @@ member.projections = {
           return callback(e);
         }
         entities = entities.filter(e => e.sex === 'F');
+        entities.sort((a, b) => {
+          if (a.lastName < b.lastName) {
+            return -1;
+          }
+          if (a.lastName > b.lastName) {
+            return 1;
+          }
+          if (a.firstName < b.firstName) {
+            return -1;
+          }
+          if (a.firstName > b.firstName) {
+            return 1;
+          }
+          return 0;
+        });
         return callback(undefined, entities);
       });
     }

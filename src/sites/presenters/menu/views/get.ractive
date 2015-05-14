@@ -46,6 +46,11 @@
       <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
     </li>
     {{/if}}
+    {{#if permissions.canManageLoh}}
+    <li class="pure-menu-item">
+      <a class="pure-menu-link" href="/chapter/loh">Manage LOH</a>
+    </li>
+    {{/if}}
     {{/if}}
     {{#if permissions.hasAdminPermissions()}}
     <li class="pure-menu-heading menu-section">Administration</li>
