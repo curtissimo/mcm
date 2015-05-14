@@ -1,12 +1,17 @@
 <h1 class="banner">Chapter Members</h1>
+<section>
+  <form class="pure-form" id="members-list-filter-form">
+    <input placeholder="type to filter the list" id="members-list-filter" class="pure-input-1">
+  </form>
+</section>
 <ul class="members-list">
   {{#members:i}}
     {{#if members[i].length }}
-    <li class="members-list-item">
+    <li class="members-list-item" data-key="{{ sectionKeys[i] }}">
       <div class="members-list-letter-label">{{ letters[i] }}</div>
       <ul class="members-list-tile-holder">
         {{#members[i]}}
-        <li class="member-list-tile-column">
+        <li class="member-list-tile-column" data-key="{{ key }}">
           <a href="/chapter/members/{{ _id }}">
             <div class="member-list-tile">
               {{#if isNewMember}}

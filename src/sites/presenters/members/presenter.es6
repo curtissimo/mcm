@@ -175,13 +175,17 @@ let presenter = {
       if (e) {
         return ac.error(e);
       }
+      let sectionKeys = [];
       let memberIndex = 0;
       for (let i = 0; i < lower.length; i += 1) {
         let letter = lower[i];
         let currentSection = [];
+        let currentSectionKey = [];
         organizedMembers.push(currentSection);
         while (memberIndex < members.length && members[memberIndex].lastName[0].toLowerCase() == letter) {
           let m = members[memberIndex];
+          m.key = `|${m.firstName.toLowerCase()}|${m.lastName.toLowerCase()}`;
+          currentSectionKey.push(m.key);
           memberIndex += 1;
           if (!ac.member.permissions.canManageMembers && m.private) {
             continue;
@@ -205,8 +209,10 @@ let presenter = {
             }
           }
         }
+        sectionKeys.push(currentSectionKey.join(''));
       }
       data.members = organizedMembers;
+      data.sectionKeys = sectionKeys;
       ac.render({
         data: data,
         presenters: { menu: 'menu' },
