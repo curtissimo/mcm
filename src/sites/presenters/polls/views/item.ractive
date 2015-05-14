@@ -29,12 +29,90 @@
 <section>
   <dl class="poll">
     <dt>Option 1</dt>
-    <dd>{{ options[0].name }}</dd>
+    <dd>
+      {{ options[0].name }}
+      <table class="pure-table pure-table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Person</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if options[0].count > 0}}
+          {{#responses}}
+          {{#if option === 0}}
+          <tr>
+            <td>{{ createdDate }}</td>
+            <td>{{ createdTime }}</td>
+            <td>{{ respondant.firstName }} {{ respondant.lastName }}</td>
+          </tr>
+          {{/if}}
+          {{/responses}}
+          {{else}}
+          <tr><td colspan="3">No responses, yet</td></tr>
+          {{/if}}
+        </tbody>
+      </table>
+    </dd>
     <dt>Option 2</dt>
-    <dd>{{ options[1].name }}</dd>
+    <dd>
+      {{ options[1].name }}
+      <table class="pure-table pure-table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Person</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if options[1].count > 0}}
+          {{#responses}}
+          {{#if option === 1}}
+          <tr>
+            <td>{{ createdDate }}</td>
+            <td>{{ createdTime }}</td>
+            <td>{{ respondant.firstName }} {{ respondant.lastName }}</td>
+          </tr>
+          {{/if}}
+          {{/responses}}
+          {{else}}
+          <tr><td colspan="3">No responses, yet</td></tr>
+          {{/if}}
+        </tbody>
+      </table>
+    </dd>
     {{#if options.length === 3}}
     <dt>Option 3</dt>
-    <dd>{{ options[2].name }}</dd>
+    <dd>
+      {{ options[2].name }}
+      <table class="pure-table pure-table-striped">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Person</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if options[2].count > 0}}
+          {{#responses}}
+          {{#if option === 2}}
+          <tr>
+            <td>{{ createdDate }}</td>
+            <td>{{ createdTime }}</td>
+            <td>{{ respondant.firstName }} {{ respondant.lastName }}</td>
+          </tr>
+          {{/if}}
+          {{/responses}}
+          {{else}}
+          <tr><td colspan="3">No responses, yet</td></tr>
+          {{/if}}
+        </tbody>
+      </table>
+    </dd>
     {{/if}}
   </dl>
 </section>

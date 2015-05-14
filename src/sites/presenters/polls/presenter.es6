@@ -111,23 +111,48 @@ let presenter = {
       return ac.redirect('/chapter/dashboard');
     }
     
-    poll.from(ac.chapterdb).get(ac.params.id, (e, entity) => {
-      if (e) {
-        return ac.error(e);
-      }
+    getMembers(ac, (memberError, membersMap) => {
+      poll.from(ac.chapterdb).withResponses(ac.params.id, (e, entity) => {
+        if (e) {
+          return ac.error(e);
+        }
 
-      ac.render({
-        data: {
-          poll: entity,
-          title: entity.name,
-          nav: { '<i class="fa fa-chevron-left"></i> Back to polls': '/chapter/polls' },
-          shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/polls' },
-          actions: {
-            'Delete': `/chapter/polls/${entity._id}/delete-form`
+        if (entity.responses.length > 0) {
+          entity.responses.sort((a, b) => {
+            if (a.createdOn.valueOf() < b.createdOn.valueOf()) {
+              return -1;
+            }
+            if (a.createdOn.valueOf() > b.createdOn.valueOf()) {
+              return 1;
+            }
+            return 0;
+          });
+
+          for (let r of entity.responses) {
+            let created = moment(entity.createdOn);
+            entity.respondant = membersMap.get(r.respondantId);
+            entity.createdDate = created.format('YYYY-MM-DD');
+            entity.createdTime = created.format('H:mm:ss a');
+            if (!entity.options[r.option].count) {
+              entity.options[r.option].count = 0;
+            }
+            entity.options[r.option].count += 1;
           }
-        },
-        layout: 'chapter',
-        presenters: { menu: 'menu' }
+        }
+
+        ac.render({
+          data: {
+            poll: entity,
+            title: entity.name,
+            nav: { '<i class="fa fa-chevron-left"></i> Back to polls': '/chapter/polls' },
+            shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/polls' },
+            actions: {
+              'Delete': `/chapter/polls/${entity._id}/delete-form`
+            }
+          },
+          layout: 'chapter',
+          presenters: { menu: 'menu' }
+        });
       });
     });
   },

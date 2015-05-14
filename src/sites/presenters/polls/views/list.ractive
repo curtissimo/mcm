@@ -12,7 +12,7 @@
     <li class="polls-entry">
       <div class="polls-entry-name-header">Name</div>
       <div class="polls-entry-opened-on-header">Opened On</div>
-      <div class="polls-entry-reply-count-header">First Respondant</div>
+      <div class="polls-entry-reply-count-header">First Option 1 Respondant</div>
     </li>
     {{#polls.open}}
     <li class="polls-entry stripe-{{(@index + 1) % 2}}">
