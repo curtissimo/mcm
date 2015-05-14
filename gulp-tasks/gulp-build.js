@@ -197,8 +197,8 @@ gulp.task('build:html', function () {
 });
 
 gulp.task('build:images', function () {
-  return gulp.src('./src/sites/images/*')
-    .pipe(gulp.dest('./build/sites/public/images'));
+  return gulp.src('./src/sites/**/*.{png,jpg,gif}')
+    .pipe(gulp.dest('./build/sites/public'));
 });
 
 gulp.task('build:sass', function () {

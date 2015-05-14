@@ -66,19 +66,19 @@
       {{#garmin}}
       <dt>Garmin</dt>
       <dd>
-        <a href="/chapter/events/{{ _id }}/garmin">{{ fileName }}</a>
+        <a href="/chapter/events/{{ _id }}/garmin/{{ @index }}">{{ fileName }}</a>
       </dd>
       {{/garmin}}
       {{#pdf}}
       <dt>PDF</dt>
       <dd>
-        <a href="/chapter/events/{{ _id }}/pdf">{{ fileName }}</a>
+        <a href="/chapter/events/{{ _id }}/pdf/{{ @index }}">{{ fileName }}</a>
       </dd>
       {{/pdf}}
       {{#est}}
       <dt>Streets &amp; Trips</dt>
       <dd>
-        <a href="/chapter/events/{{ _id }}/est">{{ fileName }}</a>
+        <a href="/chapter/events/{{ _id }}/est/{{ @index }}">{{ fileName }}</a>
       </dd>
       {{/est}}
       {{/routeFiles}}

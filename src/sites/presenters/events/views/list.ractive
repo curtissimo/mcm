@@ -64,7 +64,7 @@
               {{#if routeFiles.garmin}}
               <div class="event-entry-files min-sm-screen">
                 <ul class="event-entry-files-list">
-                  <li class="event-entry-files-item"><a href="/chapter/events/{{ _id }}/garmin">Garmin</a></li>
+                  <li class="event-entry-files-item"><a href="/chapter/events/{{ _id }}/garmin/{{ @index }}">Garmin</a></li>
                 </ul>
               </div>
               {{/if}}
