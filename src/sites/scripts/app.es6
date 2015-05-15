@@ -1,3 +1,5 @@
+Ractive.DEBUG = false;
+
 let pd = Event.prototype.preventDefault;
 Event.prototype.preventDefault = function () {
   if (pd) {
@@ -502,5 +504,14 @@ if (memberListFilter && memberListFilterForm) {
         }
       }
     }, 250);
+  });
+}
+
+let dateControls = document.querySelectorAll('input[type="date"]');
+for (let i = 0; i < dateControls.length; i += 1) {
+  let control = dateControls[i];
+  new Pikaday({
+    field: control,
+    format: 'MM/DD/YYYY'
   });
 }

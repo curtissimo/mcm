@@ -176,6 +176,8 @@ assets.initialize()
     leslie.addStylesheet('app');
     leslie.addStylesheet('themes/leather/theme');
     leslie.addScript('ractive-legacy');
+    leslie.addScript('moment');
+    leslie.addScript('pikaday');
     leslie.addScript('app');
 
     leslie.get({ presenterName: 'dashboard', uri: '/chapter/dashboard' });
@@ -432,6 +434,8 @@ assets.initialize()
               leslie.addStylesheet('app');
               leslie.addStylesheet('themes/leather/theme');
               leslie.addScript('ractive-legacy');
+              leslie.addScript('moment');
+              leslie.addScript('pikaday');
               leslie.addScript('app');
               process.send({ assetsReloaded: true })
             });

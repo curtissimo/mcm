@@ -1,5 +1,6 @@
 @import '../../partials/_media-queries';
 @import '../../partials/_colors.scss';
+@import '../../partials/_pikaday.scss';
 
 iframe {
   color: #333;
@@ -116,7 +117,7 @@ a, .link-like {
   }
 }
 
-.is-hidden {
+.is-hidden-member {
   width: 0;
   height: 0;
   border-top: 100px solid #666;

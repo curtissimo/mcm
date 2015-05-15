@@ -18,7 +18,7 @@
               <div class="is-new-member"><span>New!</span></div>
               {{/if}}
               {{#if private}}
-              <div class="is-hidden"><span>Hidden</span></div>
+              <div class="is-hidden-member"><span>Hidden</span></div>
               {{/if}}
               {{#if photoPath}}
               <img width="250" class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
