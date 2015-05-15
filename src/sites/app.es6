@@ -412,7 +412,6 @@ assets.initialize()
         if (res.get('X-Accel-Redirect')) {
           let path = res.get('X-Accel-Redirect').replace('/mcm-files', dest);
           res.set('X-Accel-Redirect', '');
-          console.log(path);
           return res.sendFile(path, {
             headers: {
               'Content-Type': res.get('Content-Type'),
