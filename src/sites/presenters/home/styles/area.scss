@@ -29,7 +29,6 @@ html, body {
 
 .public-nav {
   box-shadow: 0px 2px 2px black;
-  background-color: #666;
   text-align: center;
   padding: .5em 0;
   background-color: $accent-color;
@@ -249,4 +248,16 @@ section {
   border-radius: .25em;
   background-color: $accent-color;
   color: $accent-color-text;
+}
+
+
+.sponsor-banner {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: .25em 0;
+
+  a {
+    color: $accent-color;
+  }
 }

@@ -58,6 +58,29 @@
         {{/if}}
       </fieldset>
     </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Chapter Sponsor</legend>
+        <div class="pure-form-stacked-control-group">
+          <label for="sponsor[name]">Dealership name</label>
+          <input type="text" value="{{ settings.sponsor.name }}" name="sponsor[name]" id="sponsor[name]" class="pure-input-1" required>
+          {{#if errors.sponsor.name}}
+          <div class="form-error">
+            <p>You must provide the name of the sponsoring dealership.</p>
+          </div>
+          {{/if}}
+        </div>
+        <div class="pure-form-stacked-control-group">
+          <label for="sponsor[url]">Dealership Web site</label>
+          <input type="text" value="{{ settings.sponsor.url }}" name="sponsor[url]" id="sponsor[url]" class="pure-input-1" required>
+          {{#if errors.sponsor.url}}
+          <div class="form-error">
+            <p>You must provide a Web site for the sponsoring dealership.</p>
+          </div>
+          {{/if}}
+        </div>
+      </fieldset>
+    </div>
     <div class="form-controls">
       <div class="pure-controls">
         <a href="/chapter/members" class="pure-button">Cancel</a>

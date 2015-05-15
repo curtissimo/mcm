@@ -1,3 +1,7 @@
+<div class="sponsor-banner">
+  This chapter sponsored by
+  <a href="http://{{ settings.sponsor.url }}" target="_blank">{{ settings.sponsor.name }}</a>
+</div>
 <div class="image-holder">
   <h1 class="name-holder">{{ settings.name }}</h1>
   <img width="100%" class="pure-img" src="/home/photo">
