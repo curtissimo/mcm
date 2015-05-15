@@ -477,12 +477,12 @@ if (memberListFilter && memberListFilterForm) {
     timeout = setTimeout(function () {
       for (let i = 0; i < sections.length; i += 1) {
         let section = sections[i];
-        if (value.length === 0) {
-          section.style.display = 'flex';
+        if (value.length === 1) {
+          section.style.display = '';
         } else {
           let key = section.getAttribute('data-key');
           if (key.indexOf(value) > -1) {
-            section.style.display = 'flex';
+            section.style.display = '';
           } else {
             section.style.display = 'none';
           }
@@ -490,12 +490,12 @@ if (memberListFilter && memberListFilterForm) {
       }
       for (let i = 0; i < tiles.length; i += 1) {
         let tile = tiles[i];
-        if (value.length === 0) {
-          tile.style.display = 'inline-block';
+        if (value.length === 1) {
+          tile.style.display = '';
         } else {
           let key = tile.getAttribute('data-key');
           if (key.indexOf(value) > -1) {
-            tile.style.display = 'inline-block';
+            tile.style.display = '';
           } else {
             tile.style.display = 'none';
           }
