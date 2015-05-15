@@ -80,6 +80,10 @@ a, .link-like {
     background-color: $accent-color;
     color: $accent-color-text;
 
+    .pure-menu-link {
+      color: $accent-color-text !important;
+    }
+
     .pure-menu-link,
     .pure-menu-link:visited {
       color: $primary-color-light-text;

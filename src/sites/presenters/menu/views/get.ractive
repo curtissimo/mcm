@@ -3,51 +3,51 @@
   <ul class="pure-menu-list">
     {{#member}}
     <li class="pure-menu-heading">Members-Only</li>
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.myPage }}">
       <a class="pure-menu-link" href="/chapter/dashboard">My Page</a>
     </li>
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.events }}">
       <a class="pure-menu-link" href="/chapter/events">Events</a>
     </li>
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.members }}">
       <a class="pure-menu-link" href="/chapter/members">Members</a>
     </li>
-    <li class="pure-menu-item">
-      <a class="pure-menu-link" href="/chapter/newsletters">Newletters</a>
+    <li class="pure-menu-item {{ is.newsletters }}">
+      <a class="pure-menu-link" href="/chapter/newsletters">Newsletters</a>
     </li>
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.discussions }}">
       <a class="pure-menu-link" href="/chapter/discussions">Discussions</a>
     </li>
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.privateDocs }}">
       <a class="pure-menu-link" href="/chapter/private-documents">Chapter documents</a>
     </li>
     {{#if permissions.hasOfficerPermissions()}}
     <li class="pure-menu-heading menu-section">Officers-Only</li>
     {{#officerInbox}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.inbox }}">
       <a class="pure-menu-link" href="/chapter/emails">Email</a>
     </li>
     {{/officerInbox}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.mileage }}">
       <a class="pure-menu-link" href="/chapter/reports/mileage">Mileage report</a>
     </li>
     {{#if permissions.canManagePublicDocuments}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.publicDocs }}">
       <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
     </li>
     {{/if}}
     {{#if permissions.canManagePolls}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.polls }}">
       <a class="pure-menu-link" href="/chapter/polls">Road captain polls</a>
     </li>
     {{/if}}
     {{#if permissions.canManageRoadCaptains}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.roadCaptains }}">
       <a class="pure-menu-link" href="/chapter/road-captains">Manage road captains</a>
     </li>
     {{/if}}
     {{#if permissions.canManageLoh}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.loh }}">
       <a class="pure-menu-link" href="/chapter/loh">Manage LOH</a>
     </li>
     {{/if}}
@@ -55,22 +55,22 @@
     {{#if permissions.hasAdminPermissions()}}
     <li class="pure-menu-heading menu-section">Administration</li>
     {{#if permissions.canManagePermissions}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.security }}">
       <a class="pure-menu-link" href="/chapter/security">Change security</a>
     </li>
     {{/if}}
     {{#if permissions.canManageSettings}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.settings }}">
       <a class="pure-menu-link" href="/chapter/settings">Change settings</a>
     </li>
     {{/if}}
     {{#if permissions.canManageOfficers}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.officers }}">
       <a class="pure-menu-link" href="/chapter/officers">Manage officers</a>
     </li>
     {{/if}}
     {{#if permissions.canManageEmails}}
-    <li class="pure-menu-item">
+    <li class="pure-menu-item {{ is.emailMgmt }}">
       <a class="pure-menu-link" href="/chapter/email-management">Email management</a>
     </li>
     {{/if}}

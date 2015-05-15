@@ -163,6 +163,7 @@ assets.initialize()
       context.files = req.files;
       context.query = req.query;
       context.params = req.params;
+      context.path = req.path;
       context.referer = req.get('Referer');
       context.cookie = (name, value, options) => res.cookie(name, value, options);
       context.clearCookie = (name) => res.clearCookie(name);
