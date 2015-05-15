@@ -46,7 +46,13 @@
           <tr>
             <td>{{ createdDate }}</td>
             <td>{{ createdTime }}</td>
-            <td>{{ respondant.firstName }} {{ respondant.lastName }}</td>
+            <td>
+              {{ respondant.firstName }}
+              {{ respondant.lastName }}
+              {{#if respondant.nickName}}
+              ({{ respondant.nickName }})
+              {{/if}}
+            </td>
           </tr>
           {{/if}}
           {{/responses}}
@@ -74,7 +80,13 @@
           <tr>
             <td>{{ createdDate }}</td>
             <td>{{ createdTime }}</td>
-            <td>{{ respondant.firstName }} {{ respondant.lastName }}</td>
+            <td>
+              {{ respondant.firstName }}
+              {{ respondant.lastName }}
+              {{#if respondant.nickName}}
+              ({{ respondant.nickName }})
+              {{/if}}
+            </td>
           </tr>
           {{/if}}
           {{/responses}}
@@ -103,7 +115,13 @@
           <tr>
             <td>{{ createdDate }}</td>
             <td>{{ createdTime }}</td>
-            <td>{{ respondant.firstName }} {{ respondant.lastName }}</td>
+            <td>
+              {{ respondant.firstName }}
+              {{ respondant.lastName }}
+              {{#if respondant.nickName}}
+              ({{ respondant.nickName }})
+              {{/if}}
+            </td>
           </tr>
           {{/if}}
           {{/responses}}
