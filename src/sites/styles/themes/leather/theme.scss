@@ -134,6 +134,18 @@ a, .link-like {
   }
 }
 
+.pure-table-striped tr:nth-child(2n-1) td.is-member-expired {
+  background-color: #E57373;
+  color: black;
+  font-weight: bold;
+}
+
+.pure-table-striped tr:nth-child(2n) td.is-member-expired {
+  background-color: #EF9A9A;
+  color: black;
+  font-weight: bold;
+}
+
 .private-person {
   opacity: .5;
 }

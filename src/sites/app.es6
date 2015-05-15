@@ -242,7 +242,8 @@ assets.initialize()
       area: 'chapter',
       presenterName: 'reports',
       routes: [
-        { verb: 'get', action: 'mileage', method: 'mileage' }
+        { verb: 'get', action: 'mileage', method: 'mileage' },
+        { verb: 'get', action: 'membership', method: 'membership' }
       ]
     });
 

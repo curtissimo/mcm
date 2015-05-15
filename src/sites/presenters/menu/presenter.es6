@@ -14,6 +14,10 @@ let presenter = {
         return this.canManagePolls
             || ac.member.officerInbox
             || this.canManagePublicDocuments
+            || this.canManagePolls
+            || this.canManageLoh
+            || this.canManageEvents
+            || this.canManageMembers
             || this.canManageRoadCaptains;
       };
       ac.member.permissions.hasAdminPermissions = function () {
@@ -40,7 +44,8 @@ let presenter = {
       security: p('security'),
       settings: p('settings'),
       officers: p('officers'),
-      emailMgmt: p('email-management')
+      emailMgmt: p('email-management'),
+      membership: p('reports/membership')
     }
     let data = {
       name: ac.settings.name,

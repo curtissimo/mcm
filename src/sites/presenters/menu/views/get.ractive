@@ -28,9 +28,16 @@
       <a class="pure-menu-link" href="/chapter/emails">Email</a>
     </li>
     {{/officerInbox}}
+    {{#if permissions.canManageEvents}}
     <li class="pure-menu-item {{ is.mileage }}">
       <a class="pure-menu-link" href="/chapter/reports/mileage">Mileage report</a>
     </li>
+    {{/if}}
+    {{#if permissions.canManageMembers}}
+    <li class="pure-menu-item {{ is.membership }}">
+      <a class="pure-menu-link" href="/chapter/reports/membership">Membership statuses</a>
+    </li>
+    {{/if}}
     {{#if permissions.canManagePublicDocuments}}
     <li class="pure-menu-item {{ is.publicDocs }}">
       <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>

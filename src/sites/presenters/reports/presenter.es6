@@ -1,8 +1,110 @@
 import member from '../../../models/member';
+import moment from 'moment';
 
 let months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
 let presenter = {
+  membership(ac) {
+    member.from(ac.chapterdb).all((e, entities) => {
+      if (e) {
+        return ac.error(e);
+      }
+
+      let foreverAgo = new Date(0).valueOf();
+      let now = new Date();
+      let oneMonth = new Date(now.valueOf());
+      let twoMonth = new Date(now.valueOf());
+      let threeMonth = new Date(now.valueOf());
+      let forever = new Date(2200, 1, 1);
+      oneMonth.setMonth(oneMonth.getMonth() + 1);
+      twoMonth.setMonth(twoMonth.getMonth() + 2);
+      threeMonth.setMonth(threeMonth.getMonth() + 3);
+      oneMonth = oneMonth.valueOf();
+      twoMonth = twoMonth.valueOf();
+      threeMonth = threeMonth.valueOf();
+
+      if (ac.query.hasOwnProperty('csv')) {
+        let culled = [];
+
+        for (let entity of entities) {
+          entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
+          entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
+          let national = entity.membership.national.endDate.valueOf();
+          let local = entity.membership.local.endDate.valueOf();
+          let nationalExpired = foreverAgo <= national && national < threeMonth;
+          let localExpired = foreverAgo <= local && local < threeMonth;
+          if (localExpired || nationalExpired) {
+            culled.push(entity);
+          }
+        }
+        return ac.csv('membership.csv', culled, 'lastName', 'firstName', 'hogNumber', 'local', 'national', 'phone', 'email');
+      }
+
+      let sections = [{
+        title: 'Expired',
+        from: foreverAgo,
+        to: now,
+        members: []
+      },{
+        title: 'Expires within the next month',
+        from: now,
+        to: oneMonth,
+        members: []
+      }, {
+        title: 'Expires within the next two months',
+        from: oneMonth,
+        to: twoMonth,
+        members: []
+      }, {
+        title: 'Expires within the next three months',
+        from: twoMonth,
+        to: threeMonth,
+        members: []
+      }, {
+        ignoreExpired: true,
+        title: 'A while off',
+        from: threeMonth,
+        to: forever,
+        members: []
+      }];
+
+      for (let entity of entities) {
+        entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
+        entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
+        let national = entity.membership.national.endDate.valueOf();
+        let local = entity.membership.local.endDate.valueOf();
+        for (let section of sections) {
+          let nationalExpired = section.from <= national && national < section.to;
+          let localExpired = section.from <= local && local < section.to;
+          if (!section.ignoreExpired) {
+            if (nationalExpired) {
+              entity.nationalClass = 'is-member-expired';
+            }
+            if (localExpired) {
+              entity.localClass = 'is-member-expired';
+            }
+          }
+          if (nationalExpired || localExpired) {
+            section.members.push(entity);
+            break;
+          }
+        }
+      }
+
+      ac.render({
+        data: {
+          sections: sections,
+          actions: {
+            'Export': '/chapter/reports/membership?csv'
+          },
+          title: "Membership report for the chapter"
+        },
+        layout: 'chapter',
+        presenters: { menu: 'menu' }
+      });
+    });
+  },
+
   mileage(ac) {
     let now = new Date();
     let mileageProcessFor = new Set();

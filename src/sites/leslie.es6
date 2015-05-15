@@ -40,9 +40,13 @@ Promise.hash = o => {
 
 /** DIRECTIVES ****************************************************************/
 export class Directive {
+  constructor() {
+    this.mimeType = 'text/html';
+  }
+
   handle(res, next) {
     if (this.code < 400) {
-      return res.status(this.code).end(this.content);
+      return res.status(this.code).type(this.mimeType).end(this.content);
     }
     next(this);
   }
@@ -80,6 +84,29 @@ export class UnauthorizedDirective extends Directive {
     super();
     this.code = 401;
     this.content = 'You cannot access this resource.';
+  }
+}
+
+export class CsvDirective extends Directive {
+  constructor(fileName, data, ...fields) {
+    super();
+    this.code = 200;
+    this.mimeType = 'text/csv';
+    let content = [];
+    for (let datum of data) {
+      let row = [];
+      for (let field of fields) {
+        row.push(datum[field]);
+      }
+      content.push(row.join(','));
+    }
+    this.content = content.join('\n');
+    this.fileName = fileName;
+  }
+
+  handle(res, next) {
+    res.set('Content-Disposition', `attachment; filename=${this.fileName}`);
+    super.handle(res, next);
   }
 }
 
@@ -179,6 +206,10 @@ class PresentationContext {
 
   file(path, name, section) {
     this._bad(new FileDirective(path, name, section, true));
+  }
+
+  csv(data, ...fields) {
+    this._bad(new CsvDirective(data, ...fields));
   }
 
   error(e) {

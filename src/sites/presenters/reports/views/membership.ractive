@@ -1,0 +1,32 @@
+{{#sections}}
+{{#if !ignoreExpired}}
+<section>
+  <h2>{{ title }}</h2>
+  <table class="pure-table pure-table-striped">
+    <thead>
+      <tr>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>HOG#</th>
+        <th>Local</th>
+        <th>National</th>
+        <th>Phone</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#members}}
+      <tr>
+        <td>{{ lastName }}</td>
+        <td>{{ firstName }}</td>
+        <td>{{ hogNumber }}</td>
+        <td class="{{ localClass }}">{{ local }}</td>
+        <td class="{{ nationalClass }}">{{ national }}</td>
+        <td>{{ mobile || phone }}</td>
+        <td>{{ email }}</td>
+      {{/members}}
+    </tbody>
+  </table>
+</section>
+{{/if}}
+{{/sections}}
