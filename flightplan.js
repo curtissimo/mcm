@@ -60,10 +60,11 @@ plan.local(function (local) {
   local.exec(shellenv() + ' gulp dist');
   local.exec('cp ./package.json ./dist');
 
-  local.log('Syncing chapter files to destination');
-  var cwd = path.join(process.cwd(), 'src', 'sites');
-  var filesToCopy = local.exec('find files -type f', { silent: true, exec: { cwd: cwd } });
-  local.transfer(filesToCopy, destDir, { exec: { cwd: cwd } });
+  /* NO LONGER SYNCING FILES */
+  // local.log('Syncing chapter files to destination');
+  // var cwd = path.join(process.cwd(), 'src', 'sites');
+  // var filesToCopy = local.exec('find files -type f', { silent: true, exec: { cwd: cwd } });
+  // local.transfer(filesToCopy, destDir, { exec: { cwd: cwd } });
 
   local.log('Removing chapter files from distribution');
   local.exec('rm -rf ./dist/sites/files');
@@ -101,13 +102,14 @@ plan.remote(function (remote) {
   remote.sudo(shellenv() + ' pm2 start ' + mailerDaemon, { user: 'curtis' });
   remote.sudo(shellenv() + ' pm2 save', { user: 'curtis' });
 
-  var d = plan.runtime.options.DOMAIN;
-  var fromD = path.join(live, d);
-  remote.log('Configure nginx');
+  /* NO LONGER UPDATE NGINX */
+  // var d = plan.runtime.options.DOMAIN;
+  // var fromD = path.join(live, d);
+  // remote.log('Configure nginx');
   remote.exec('mkdir -p ' + live + '/sites/tmp/', { user: 'curtis' });
   remote.exec('touch ' + live + '/sites/tmp/restart.txt', { user: 'curtis' });
-  remote.sudo('cp ' + fromD + ' /etc/nginx/sites-available', { user: 'curtis' });
-  remote.sudo('rm -f /etc/nginx/sites-enabled/' + d, { user: 'curtis' });
-  remote.sudo('ln -snf /etc/nginx/sites-available/' + d + ' /etc/nginx/sites-enabled/' + d, { user: 'curtis' });
+  // remote.sudo('cp ' + fromD + ' /etc/nginx/sites-available', { user: 'curtis' });
+  // remote.sudo('rm -f /etc/nginx/sites-enabled/' + d, { user: 'curtis' });
+  // remote.sudo('ln -snf /etc/nginx/sites-available/' + d + ' /etc/nginx/sites-enabled/' + d, { user: 'curtis' });
   remote.exec('sudo /usr/sbin/nginx -s reload', { user: 'curtis', exec: { pty: true } });
 });
