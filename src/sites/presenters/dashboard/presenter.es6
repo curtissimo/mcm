@@ -24,6 +24,17 @@ let presenter = {
         ac.member.address = null;
       }
     }
+    for (let achievement of (ac.member.achievements || [])) {
+      if (achievement.on) {
+        achievement.toString = () => {
+          return `${achievement.description} - ${months[achievement.on[1]]} ${achievement.on[0]}`;
+        };
+      } else {
+        achievement.toString = () => {
+          return `${achievement.description} ${achievement.from} - ${achievement.to}`;
+        };
+      }
+    }
     let d = new Date();
     d.setMonth(d.getMonth() - 1);
     let year = d.getFullYear();

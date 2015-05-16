@@ -1,0 +1,67 @@
+<h1 class="banner">Create an achievement</h1>
+<section>
+  <form class="pure-form pure-form-aligned" method="post" action="/chapter/achievements">
+    <fieldset>
+      <div class="pure-control-group">
+        <label for="member">Member</label>
+        <select name="memberId" id="member">
+          <option value="">Choose a member...</option>
+          {{#members}}
+          <option value="{{ _id }}">
+            {{ lastName }},
+            {{ firstName }}
+            {{#if nickName}}
+            ({{ nickName }})
+            {{/if}}
+          </option>
+          {{/members}}
+        </select>
+      </div>
+      <div class="pure-control-group">
+        <label for="description">Description</label>
+        <input type="text" name="achievement[description]" id="description" maxlength="20">
+      </div>
+      <div class="pure-control-group">
+        <label for="achievement-type">What kind?</label>
+        <select id="achievement-type">
+          <option value="">Select a type...</option>
+          <option value="month">For a month</option>
+          <option value="year-span">Across years</option>
+        </select>
+      </div>
+      <div id="achievement-details"></div>
+    </fieldset>
+  </form>
+</section>
+<script type="text/ractive" id="month-template">
+  <div class="pure-control-group">
+    <label for="month">Month</label>
+    <select id="month" name="achievement[on][1]">
+      {{#months}}
+      <option value="{{ @index }}">{{ . }}</option>
+      {{/months}}
+    </select>
+  </div>
+  <div class="pure-control-group">
+    <label for="year">Year</label>
+    <input type="number" id="year" name="achievement[on][0]" required>
+  </div>
+  <div class="pure-controls">
+    <a href="/chapter/achievements" class="pure-button">Cancel</a>
+    <button type="submit" class="pure-button pure-button-primary">Add achievement</button>
+  </div>
+</script>
+<script type="text/ractive" id="year-span-template">
+  <div class="pure-control-group">
+    <label for="from">From year</label>
+    <input type="number" id="from" name="achievement[from]" required>
+  </div>
+  <div class="pure-control-group">
+    <label for="to">To year</label>
+    <input type="number" id="to" name="achievement[to]" required>
+  </div>
+  <div class="pure-controls">
+    <a href="/chapter/achievements" class="pure-button">Cancel</a>
+    <button type="submit" class="pure-button pure-button-primary">Add achievement</button>
+  </div>
+</script>

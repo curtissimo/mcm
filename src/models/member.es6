@@ -147,6 +147,12 @@ let member = stork.deliver('member', function () {
       }
     }
   });
+
+  this.view('onlyWithAchievements', function(member, emitKey) {
+    if (member.achievements && member.achievements.length > 0) {
+      emitKey([ member.lastName, member.firstName ]);
+    }
+  });
 });
 
 member.projections = {

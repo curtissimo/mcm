@@ -32,6 +32,9 @@
     <li class="pure-menu-item {{ is.mileage }}">
       <a class="pure-menu-link" href="/chapter/reports/mileage">Mileage report</a>
     </li>
+    <li class="pure-menu-item {{ is.achievements }}">
+      <a class="pure-menu-link" href="/chapter/achievements">Manage achievements</a>
+    </li>
     {{/if}}
     {{#if permissions.canManageMembers}}
     <li class="pure-menu-item {{ is.membership }}">

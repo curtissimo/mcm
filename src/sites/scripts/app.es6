@@ -515,3 +515,20 @@ for (let i = 0; i < dateControls.length; i += 1) {
     format: 'MM/DD/YYYY'
   });
 }
+
+let achievementType = document.getElementById('achievement-type');
+if (achievementType) {
+  achievementType.addEventListener('change', e => {
+    let target = e.target || e.srcElement;
+    let value = target.options[target.selectedIndex].value;
+    let template = document.getElementById(value + '-template');
+    if (template) {
+      ractive = new Ractive({
+        el: '#achievement-details',
+        template: template.innerHTML
+      });
+    } else {
+      document.getElementById('achievement-details').innerHTML = '';
+    }
+  });
+}

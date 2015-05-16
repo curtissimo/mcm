@@ -359,6 +359,16 @@ assets.initialize()
 
     leslie.routeTo({
       area: 'chapter',
+      presenterName: 'achievements',
+      routes: [
+        { verb: 'get', method: 'list' },
+        { verb: 'get', action: 'create', method: 'create' },
+        { verb: 'post' }
+      ]
+    });
+
+    leslie.routeTo({
+      area: 'chapter',
       presenterName: 'security',
       routes: [
         { verb: 'get', method: 'list' },

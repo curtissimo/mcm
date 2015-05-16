@@ -32,6 +32,7 @@ let presenter = {
       myPage: p('dashboard'),
       events: p('events'),
       members: p('members'),
+      achievements: p('achievements'),
       newsletters: p('newsletters'),
       discussions: p('discussions'),
       privateDocs: p('private-documents'),
