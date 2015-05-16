@@ -513,15 +513,24 @@
 .discussion-content-author-photo {
   float: left;
   width: 200px;
+  display: none;
+
+  @include min-sm-screen {
+    display: block;
+  }
 }
 
 .discussion-content-text {
-  margin-left: 200px;
+  @include min-sm-screen {
+    margin-left: 200px;
+  }
 }
 
 .comment-content-text,
 .comment-content-author {
-  margin-left: 175px;
+  @include min-sm-screen {
+    margin-left: 175px;
+  }
 }
 
 .comment-content-author {
@@ -531,6 +540,11 @@
 .comment-content-author-photo {
   float: left;
   width: 150px;
+  display: none;
+
+  @include min-sm-screen {
+    display: block;
+  }
 }
 
 .events-list {

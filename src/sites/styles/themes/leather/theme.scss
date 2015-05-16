@@ -329,6 +329,11 @@ fieldset {
 .discussion-content,
 .discussion-comment {
   margin-bottom: 3em;
+  padding-left: 0;
+
+  @include min-sm-screen {
+    padding-left: 0.5em;
+  }
 }
 
 .not-so-important-text {
