@@ -23,7 +23,10 @@
             {{ months[on[1]] }}
             {{ on[0] }}
           {{else}}
-            {{ from }} - {{ to }}
+            {{ from }}
+            {{#if this.to}}
+            - {{ to }}
+            {{/if}}
           {{/if}}
         </td>
       </tr>

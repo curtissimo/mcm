@@ -50,7 +50,8 @@ let presenter = {
         entity.achievements = [];
       }
 
-      entity.achievements.push(ac.body.achievement);
+      entity.achievements.unshift(ac.body.achievement);
+
       entity.to(ac.chapterdb).save(e => {
         if (e) {
           return ac.error(e);

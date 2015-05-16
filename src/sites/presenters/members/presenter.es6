@@ -196,9 +196,13 @@ let presenter = {
               achievement.toString = () => {
                 return `${achievement.description} - ${months[achievement.on[1]]} ${achievement.on[0]}`;
               };
-            } else {
+            } else if (achievement.hasOwnProperty('from') && achievement.to) {
               achievement.toString = () => {
                 return `${achievement.description} ${achievement.from} - ${achievement.to}`;
+              };
+            } else {
+              achievement.toString = () => {
+                return `${achievement.description} ${achievement.from}`;
               };
             }
           }
@@ -222,31 +226,35 @@ let presenter = {
   },
 
   item(ac) {
-    member.from(ac.chapterdb).withBlogs(ac.params.id, function (e, member) {
+    member.from(ac.chapterdb).withBlogs(ac.params.id, function (e, m) {
       if (e) {
         return ac.error(e);
       }
-      for (let achievement of (member.achievements || [])) {
+      for (let achievement of (m.achievements || [])) {
         if (achievement.on) {
           achievement.toString = () => {
             return `${achievement.description} - ${months[achievement.on[1]]} ${achievement.on[0]}`;
           };
-        } else {
+        } else if (achievement.hasOwnProperty('from') && achievement.to) {
           achievement.toString = () => {
             return `${achievement.description} ${achievement.from} - ${achievement.to}`;
           };
+        } else {
+          achievement.toString = () => {
+            return `${achievement.description} ${achievement.from}`;
+          };
         }
       }
-      if (member.blogs === undefined) {
-        member.blogs = [];
+      if (m.blogs === undefined) {
+        m.blogs = [];
       }
-      for (let blog of member.blogs) {
+      for (let blog of m.blogs) {
         if (blog && blog.createdOn) {
           blog.createdOn = moment(blog.createdOn).format('dddd MMM DD, YYYY');
           blog.content = blog.content.replace(/\n/g, '<br>');
         }
       }
-      member.blogs.sort((a, b) => {
+      m.blogs.sort((a, b) => {
         if (a.createdOn.valueOf() < b.createdOn.valueOf()) {
           return 1;
         }
@@ -255,8 +263,8 @@ let presenter = {
         }
         return 0;
       });
-      let editKey = `Edit ${member.firstName}`;
-      let editValue = `/chapter/members/${member._id}/edit-form`;
+      let editKey = `Edit ${m.firstName}`;
+      let editValue = `/chapter/members/${m._id}/edit-form`;
       let actions = null;
       if (ac.member.permissions.canManageMembers) {
         actions = { [editKey]: editValue };
@@ -266,9 +274,9 @@ let presenter = {
           nav: { '<i class="fa fa-chevron-left"></i> Back to members': '/chapter/members' },
           shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/members' },
           actions: actions,
-          member: member,
+          member: m,
           viewer: ac.member,
-          title: member.nickName || `${member.firstName} ${member.lastName}`
+          title: m.nickName || `${m.firstName} ${m.lastName}`
         },
         presenters: { menu: 'menu' },
         layout: 'chapter'

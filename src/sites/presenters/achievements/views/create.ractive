@@ -26,6 +26,7 @@
         <select id="achievement-type">
           <option value="">Select a type...</option>
           <option value="month">For a month</option>
+          <option value="year">For a year</option>
           <option value="year-span">Across years</option>
         </select>
       </div>
@@ -45,6 +46,16 @@
   <div class="pure-control-group">
     <label for="year">Year</label>
     <input type="number" id="year" name="achievement[on][0]" required>
+  </div>
+  <div class="pure-controls">
+    <a href="/chapter/achievements" class="pure-button">Cancel</a>
+    <button type="submit" class="pure-button pure-button-primary">Add achievement</button>
+  </div>
+</script>
+<script type="text/ractive" id="year-template">
+  <div class="pure-control-group">
+    <label for="from">From year</label>
+    <input type="number" id="from" name="achievement[from]" required>
   </div>
   <div class="pure-controls">
     <a href="/chapter/achievements" class="pure-button">Cancel</a>

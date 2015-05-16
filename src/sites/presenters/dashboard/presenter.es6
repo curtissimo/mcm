@@ -29,9 +29,13 @@ let presenter = {
         achievement.toString = () => {
           return `${achievement.description} - ${months[achievement.on[1]]} ${achievement.on[0]}`;
         };
-      } else {
+      } else if (achievement.hasOwnProperty('from') && achievement.to) {
         achievement.toString = () => {
           return `${achievement.description} ${achievement.from} - ${achievement.to}`;
+        };
+      } else {
+        achievement.toString = () => {
+          return `${achievement.description} ${achievement.from}`;
         };
       }
     }
