@@ -58,6 +58,7 @@
         {{else}}
         <i>only</i> chapter members!
         {{/if}}
+        ({{ attendance }})
       </dd>
       {{#routeFiles}}
       {{#garmin}}
