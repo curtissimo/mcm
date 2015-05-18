@@ -137,7 +137,7 @@ function promisify(scope, method) {
 function formatDate(s) {
   let d = moment(s);
   if (d.isValid()) {
-    return d.format('MM/DD/YYYY');
+    return d.format('YYYY-MM-DD');
   }
   return '';
 }
