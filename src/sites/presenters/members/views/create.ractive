@@ -71,7 +71,7 @@
         </p>
         <div class="pure-control-group">
           <label for="localJoined">Joined on</label>
-          <input type="date" data-value="{{ localJoinedNative }}" value="{{ localJoined }}" name="localJoined" id="localJoined" required>
+          <input type="date" value="{{ localJoinedNative }}" name="localJoined" id="localJoined" required>
           {{#if errors.localJoined}}
           <div class="form-error">
             <p>The joined on date {{ errors.localJoined }}</p>
@@ -80,7 +80,7 @@
         </div>
         <div class="pure-control-group">
           <label for="localExpiration">Expires on</label>
-          <input type="date" data-value="{{ localExpirationNative }}" value="{{ localExpiration }}" name="localExpiration" id="localExpiration" required>
+          <input type="date" value="{{ localExpirationNative }}" name="localExpiration" id="localExpiration" required>
           {{#if errors.localExpiration}}
           <div class="form-error">
             <p>The expires on date {{ errors.localExpiration }}</p>

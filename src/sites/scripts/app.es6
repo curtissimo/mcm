@@ -30,6 +30,12 @@ if (document.querySelectorAll) {
   } catch (e) { console.error(e); }
 }
 
+let isDateSupported = (() => {
+    var i = document.createElement("input");
+    i.setAttribute("type", "date");
+    return i.type !== "text";
+}());
+
 /*!
  * Small Walker - v0.1.1 - 5/5/2011
  * http://benalman.com/
@@ -507,13 +513,18 @@ if (memberListFilter && memberListFilterForm) {
   });
 }
 
-let dateControls = document.querySelectorAll('input[type="date"]');
-for (let i = 0; i < dateControls.length; i += 1) {
-  let control = dateControls[i];
-  new Pikaday({
-    field: control,
-    format: 'MM/DD/YYYY'
-  });
+if (!isDateSupported) {
+  let dateControls = document.querySelectorAll('input[type="date"]');
+  for (let i = 0; i < dateControls.length; i += 1) {
+    let control = dateControls[i];
+    if (control.value) {
+      control.value = moment(control.value, 'YYYY-MM-DD').format('MM/DD/YYYY');
+    }
+    new Pikaday({
+      field: control,
+      format: 'MM/DD/YYYY'
+    });
+  }
 }
 
 let achievementType = document.getElementById('achievement-type');
