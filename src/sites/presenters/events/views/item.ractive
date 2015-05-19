@@ -62,19 +62,19 @@
       </dd>
       {{#routeFiles}}
       {{#garmin}}
-      <dt>Garmin</dt>
+      <dt>Route</dt>
       <dd>
         <a href="/chapter/events/{{ _id }}/garmin/{{ @index }}">{{ fileName }}</a>
       </dd>
       {{/garmin}}
       {{#pdf}}
-      <dt>PDF</dt>
+      <dt>Route</dt>
       <dd>
         <a href="/chapter/events/{{ _id }}/pdf/{{ @index }}">{{ fileName }}</a>
       </dd>
       {{/pdf}}
       {{#est}}
-      <dt>Streets &amp; Trips</dt>
+      <dt>Route</dt>
       <dd>
         <a href="/chapter/events/{{ _id }}/est/{{ @index }}">{{ fileName }}</a>
       </dd>

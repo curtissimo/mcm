@@ -101,16 +101,20 @@
     </fieldset>
     <fieldset class="ride-files-group">
       <legend>Files</legend>
+      <p>
+        Any file in the first slot will show up as a link on the events
+        list.
+      </p>
       <div class="pure-control-group">
-        <label for="garmin{{ '{{ i }}' }}">Garmin</label>
+        <label for="garmin{{ '{{ i }}' }}">Route file</label>
         <input type="file" name="days[{{ '{{ i }}' }}][garmin]" id="garmin{{ '{{ i }}' }}">
       </div>
       <div class="pure-control-group">
-        <label for="pdf{{ '{{ i }}' }}">PDF</label>
+        <label for="pdf{{ '{{ i }}' }}">Route file</label>
         <input type="file" name="days[{{ '{{ i }}' }}][pdf]" id="pdf{{ '{{ i }}' }}">
       </div>
       <div class="pure-control-group">
-        <label for="est{{ '{{ i }}' }}">Streets &amp; Trips</label>
+        <label for="est{{ '{{ i }}' }}">Route file</label>
         <input type="file" name="days[{{ '{{ i }}' }}][est]" id="est{{ '{{ i }}' }}">
       </div>
     </fieldset>

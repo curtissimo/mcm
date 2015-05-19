@@ -91,9 +91,13 @@
           </fieldset>
           <fieldset>
             <legend>Files</legend>
+            <p>
+              Any file in the first slot will show up as a link on the events
+              list.
+            </p>
             <div class="pure-form-stacked-control-group">
               <label for="garmin{{ i }}">
-                Garmin
+                Route file
                 {{#if days[i].routeFiles.garmin}}
                 (<a href="/chapter/events/{{ _id }}/garmin/{{ @index }}">{{ days[i].routeFiles.garmin.fileName }}</a>)
                 {{/if}}
@@ -102,7 +106,7 @@
             </div>
             <div class="pure-form-stacked-control-group">
               <label for="pdf{{ i }}">
-                PDF
+                Route file
                 {{#if days[i].routeFiles.pdf}}
                 (<a href="/chapter/events/{{ _id }}/pdf/{{ @index }}">{{ days[i].routeFiles.pdf.fileName }}</a>)
                 {{/if}}
@@ -111,7 +115,7 @@
             </div>
             <div class="pure-form-stacked-control-group">
               <label for="est{{ i }}">
-                Streets &amp; Trips
+                Route file
                 {{#if days[i].routeFiles.est}}
                 (<a href="/chapter/events/{{ _id }}/est/{{ @index }}">{{ days[i].routeFiles.est.fileName }}</a>)
                 {{/if}}
@@ -181,16 +185,20 @@
     </fieldset>
     <fieldset class="ride-files-group">
       <legend>Files</legend>
+      <p>
+        Any file in the first slot will show up as a link on the events
+        list.
+      </p>
       <div class="pure-control-group">
-        <label for="garmin{{ '{{ i }}' }}">Garmin</label>
+        <label for="garmin{{ '{{ i }}' }}">Route file</label>
         <input type="file" name="days[{{ '{{ i }}' }}][garmin]" id="garmin{{ '{{ i }}' }}">
       </div>
       <div class="pure-control-group">
-        <label for="pdf{{ '{{ i }}' }}">PDF</label>
+        <label for="pdf{{ '{{ i }}' }}">Route file</label>
         <input type="file" name="days[{{ '{{ i }}' }}][pdf]" id="pdf{{ '{{ i }}' }}">
       </div>
       <div class="pure-control-group">
-        <label for="est{{ '{{ i }}' }}">Streets &amp; Trips</label>
+        <label for="est{{ '{{ i }}' }}">Streets &amp; Route file</label>
         <input type="file" name="days[{{ '{{ i }}' }}][est]" id="est{{ '{{ i }}' }}">
       </div>
     </fieldset>
