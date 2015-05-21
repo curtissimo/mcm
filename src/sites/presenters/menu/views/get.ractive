@@ -46,7 +46,7 @@
       <a class="pure-menu-link" href="/chapter/public-documents">Change public docs</a>
     </li>
     {{/if}}
-    {{#if permissions.canManagePolls}}
+    {{#if permissions.canManagePolls || member.isRoadCaptain}}
     <li class="pure-menu-item {{ is.polls }}">
       <a class="pure-menu-link" href="/chapter/polls">Road captain polls</a>
     </li>

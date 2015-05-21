@@ -18,7 +18,8 @@ let presenter = {
             || this.canManageLoh
             || this.canManageEvents
             || this.canManageMembers
-            || this.canManageRoadCaptains;
+            || this.canManageRoadCaptains
+            || ac.member.isRoadCaptain;
       };
       ac.member.permissions.hasAdminPermissions = function () {
         return this.canManagePermissions

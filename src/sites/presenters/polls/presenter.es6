@@ -42,7 +42,7 @@ function getMembers(ac, cb) {
 
 let presenter = {
   list(ac) {
-    if (!ac.member.permissions.canManagePolls) {
+    if (!ac.member.permissions.canManagePolls && !ac.member.isRoadCaptain) {
       return ac.redirect('/chapter/dashboard');
     }
 
@@ -91,13 +91,15 @@ let presenter = {
             polls.closed.push(entity);
           }
         }
+        let actions = {};
+        if (ac.member.permissions.canManagePolls) {
+          actions['Create'] = '/chapter/polls/create-form';
+        }
         ac.render({
           data: {
             polls: polls,
-            actions: {
-              'Create': '/chapter/polls/create-form'
-            },
-            title: 'Road Captain Polls'
+            title: 'Road Captain Polls',
+            actions: actions
           },
           layout: 'chapter',
           presenters: { menu: 'menu' }
@@ -107,7 +109,7 @@ let presenter = {
   },
 
   item(ac) {
-    if (!ac.member.permissions.canManagePolls) {
+    if (!ac.member.permissions.canManagePolls && !ac.member.isRoadCaptain) {
       return ac.redirect('/chapter/dashboard');
     }
     
@@ -139,16 +141,18 @@ let presenter = {
             entity.options[r.option].count += 1;
           }
         }
-
+        let actions = {};
+        if (ac.member.permissions.canManagePolls) {
+          actions['Delete'] = `/chapter/polls/${entity._id}/delete-form`;
+        }
         ac.render({
           data: {
+            canManagePolls: ac.member.permissions.canManagePolls,
             poll: entity,
             title: entity.name,
             nav: { '<i class="fa fa-chevron-left"></i> Back to polls': '/chapter/polls' },
             shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/polls' },
-            actions: {
-              'Delete': `/chapter/polls/${entity._id}/delete-form`
-            }
+            actions: actions
           },
           layout: 'chapter',
           presenters: { menu: 'menu' }
