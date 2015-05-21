@@ -406,16 +406,16 @@ let pollTemplate = `<html>
 <div>A new poll has opened:</div>
 <div style="font-weight:bold;">{{ poll.name }}</div>
 <div style="margin-top:1em;text-align:center;">
-<a style="max-width:400px;background-color:#1CB841;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/0/{{ roadCaptain._id }}">{{ poll.options[0].name }}</a>
+<a style="max-width:400px;background-color:#1CB841;color:black;border-radius:2px;box-sizing:border-box;font-weight:bold;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/0/{{ roadCaptain._id }}">{{ poll.options[0].name }}</a>
 </div>
 <div>&nbsp;</div>
 <div style="margin-top:1em;text-align:center;">
-<a style="max-width:400px;background-color:#42B8DD;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/1/{{ roadCaptain._id }}">{{ poll.options[1].name }}</a>
+<a style="max-width:400px;background-color:#42B8DD;color:black;border-radius:2px;box-sizing:border-box;font-weight:normal;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/1/{{ roadCaptain._id }}">{{ poll.options[1].name }}</a>
 </div>
 {{#if poll.options.length === 3}}
 <div>&nbsp;</div>
 <div style="margin-top:1em;text-align:center;">
-<a style="max-width:400px;background-color:#E6E6E5;color:black;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/2/{{ roadCaptain._id }}">{{ poll.options[2].name }}</a>
+<a style="max-width:400px;background-color:#E6E6E5;color:black;border-radius:2px;box-sizing:border-box;font-weight:normal;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/2/{{ roadCaptain._id }}">{{ poll.options[2].name }}</a>
 </div>
 {{/if}}
 </body>
