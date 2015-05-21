@@ -120,13 +120,14 @@ ${email.text}`;
     });
 }
 
-function fetchPolls({ subdomain, id, initiatorId }) {
+function fetchPolls({ subdomain, id, initiatorId, domain }) {
   let db = getAccountDb(subdomain);
   let promises = [
     promisify(db, 'get', id),
     promisify(member.projections.onlyRoadCaptains, 'projection', db),
     promisify(db, 'get', id)
   ];
+  let host = domain || `${subdomain}.ismymc.com`;
   return Promise.all(promises)
     .then(([ poll, roadCaptains, initiator ]) => {
       let sender = `"New Poll" <no-reply@${subdomain}.ismymc.com>`;
@@ -136,7 +137,7 @@ function fetchPolls({ subdomain, id, initiatorId }) {
         let data = {
           poll: poll,
           roadCaptain: recipient,
-          subdomain: subdomain
+          host: host
         };
         let html = new Ractive({
           template: pollTemplate,
@@ -405,16 +406,16 @@ let pollTemplate = `<html>
 <div>A new poll has opened:</div>
 <div style="font-weight:bold;">{{ poll.name }}</div>
 <div style="margin-top:1em;text-align:center;">
-<a style="max-width:400px;background-color:#1CB841;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/0/{{ roadCaptain._id }}">{{ poll.options[0].name }}</a>
+<a style="max-width:400px;background-color:#1CB841;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/0/{{ roadCaptain._id }}">{{ poll.options[0].name }}</a>
 </div>
 <div>&nbsp;</div>
 <div style="margin-top:1em;text-align:center;">
-<a style="max-width:400px;background-color:#42B8DD;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/1/{{ roadCaptain._id }}">{{ poll.options[1].name }}</a>
+<a style="max-width:400px;background-color:#42B8DD;color:white;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/1/{{ roadCaptain._id }}">{{ poll.options[1].name }}</a>
 </div>
 {{#if poll.options.length === 3}}
 <div>&nbsp;</div>
 <div style="margin-top:1em;text-align:center;">
-<a style="max-width:400px;background-color:#E6E6E5;color:black;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ subdomain }}.ismymc.com/chapter/polls/{{ poll._id }}/2/{{ roadCaptain._id }}">{{ poll.options[2].name }}</a>
+<a style="max-width:400px;background-color:#E6E6E5;color:black;border-radius:2px;box-sizing:border-box;font-weight:100;letter-spacing:0.01em;padding:8px 16px;text-align:center;text-decoration:none;vertical-align:middle;zoom:1;" href="http://{{ host }}/chapter/polls/{{ poll._id }}/2/{{ roadCaptain._id }}">{{ poll.options[2].name }}</a>
 </div>
 {{/if}}
 </body>

@@ -260,6 +260,7 @@ let presenter = {
         return postMailDirective('mcm-poll-mail', {
           id: entity._id,
           subdomain: ac.account.subdomain,
+          domain: ac.account.domain,
           initiatorId: ac.member._id
         })
         .then(() => ac.redirect('/chapter/polls'))
@@ -291,7 +292,8 @@ let presenter = {
         if (entity.open) {
           postMailDirective('mcm-poll-mail', {
             id: entity._id,
-            subdomain: ac.account.subdomain
+            subdomain: ac.account.subdomain,
+            domain: ac.account.domain
           });
         }
         ac.redirect('/chapter/polls');
