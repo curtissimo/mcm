@@ -1,11 +1,23 @@
 <h1 class="banner">Events</h1>
 <section class="events-list">
   <div class="calendar-column-left min-md-screen">
+    <div class="calendar-navigation-left">
+      <div class="calendar-backward">
+        <a href="/chapter/events?month={{ previousMonth.month }}&year={{ previousMonth.year }}">
+          <i class="fa fa-arrow-circle-o-left"></i> {{ previousMonth.name.substr(0, 3) }}
+        </a>
+      </div>
+      <div class="calendar-forward">
+        <a href="/chapter/events?month={{ nextMonth.month }}&year={{ nextMonth.year }}">
+          {{ nextMonth.name.substr(0, 3) }} <i class="fa fa-arrow-circle-o-right"></i>
+        </a>
+      </div>
+    </div>
     {{#months}}
     <table class="calendar">
       <thead class="calendar-month-name">
         <tr>
-          <th colspan="7">{{ name }}</th>
+          <th colspan="7">{{ name }} {{ year }}</th>
         </tr>
       </thead>
       <thead class="calendar-day-name">
@@ -46,13 +58,25 @@
     {{/months}}
   </div>
   <div class="calendar-column-right">
+    <div class="calendar-navigation-right">
+      <div class="calendar-backward">
+        <a href="/chapter/events?month={{ previousMonth.month }}&year={{ previousMonth.year }}">
+          <i class="fa fa-arrow-circle-o-left"></i> {{ previousMonth.name.substr(0, 3) }}
+        </a>
+      </div>
+      <div class="calendar-forward">
+        <a href="/chapter/events?month={{ nextMonth.month }}&year={{ nextMonth.year }}">
+          {{ nextMonth.name.substr(0, 3) }} <i class="fa fa-arrow-circle-o-right"></i>
+        </a>
+      </div>
+    </div>
     <ul class="discussions-category">
       {{#events:key}}
       <li class="event-entry stripe-{{(@index + 1) % 2}}">
         <div class="event-entry-summary">
           <div class="event-entry-date">
             <div class="event-entry-date-month">
-              {{ monthNames[this[0].month] }}
+              {{ monthNames[this[0].month].substr(0, 3) }}
             </div>
             <div class="event-entry-date-day">
               {{ this[0].date }}

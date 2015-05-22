@@ -572,7 +572,7 @@
 
 .calendar {
   margin: auto;
-  margin-bottom: 4em;
+  margin-bottom: 2em;
 }
 
 .calendar-weeks {
@@ -888,4 +888,28 @@
 
 .poll dd {
   margin: 0 0 1em 0;
+}
+
+.calendar-navigation-left {
+  margin-bottom: 1em;
+}
+
+.calendar-navigation-left:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.calendar-navigation-right {
+  margin-bottom: 1em;
+
+  @include min-md-screen {
+    display: none;
+  }
+}
+
+.calendar-navigation-right:after {
+  content: "";
+  display: table;
+  clear: right;
 }

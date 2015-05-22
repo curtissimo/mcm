@@ -184,6 +184,7 @@ function makeCalendar(startOfMonth) {
 
   let month = {
     name: monthNames[startOfMonth.getMonth()],
+    year: startOfMonth.getFullYear(),
     weeks: [[]],
     days: []
   };
@@ -222,14 +223,16 @@ let presenter = {
     }
 
     let today = new Date();
-    let thisMonth = new Date();
-    thisMonth.setDate(1);
-    let nextMonth = new Date();
-    nextMonth.setDate(1);
+    let year = parseInt(ac.query.year) || today.getFullYear();
+    let month = ac.query.hasOwnProperty('year')? parseInt(ac.query.month) : today.getMonth();
+
+    let thisMonth = new Date(year, month, 1);
+    let nextMonth = new Date(year, month, 1);
     nextMonth.setMonth(nextMonth.getMonth() + 1);
-    let followingMonth = new Date();
-    followingMonth.setDate(1);
+    let followingMonth = new Date(year, month, 1);
     followingMonth.setMonth(followingMonth.getMonth() + 2);
+    let previousMonth = new Date(year, month, 1);
+    previousMonth.setMonth(previousMonth.getMonth() - 2);
 
     let from = [ thisMonth.getFullYear(), thisMonth.getMonth(), thisMonth.getDate() ];
     let to = [ followingMonth.getFullYear(), followingMonth.getMonth(), followingMonth.getDate() ];
@@ -303,8 +306,22 @@ let presenter = {
           }
         }
 
+        let prevStep = {
+          year: previousMonth.getFullYear(),
+          month: previousMonth.getMonth(),
+          name: monthNames[previousMonth.getMonth()]
+        };
+
+        let nextStep = {
+          year: followingMonth.getFullYear(),
+          month: followingMonth.getMonth(),
+          name: monthNames[followingMonth.getMonth()]
+        };
+
         ac.render({
           data: {
+            previousMonth: prevStep,
+            nextMonth: nextStep,
             monthNames: monthNames,
             months: months,
             events: eventsByDay,
