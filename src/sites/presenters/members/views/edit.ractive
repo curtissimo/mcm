@@ -139,44 +139,41 @@
         </div>
       </fieldset>
       <fieldset>
-        {{#emergencyContact}}
         <legend>Emergency contact information</legend>
         <div class="pure-control-group">
           <label for="emergencyContact[name]">Name</label>
-          <input type="text" value="{{ name }}" name="emergencyContact[name]" id="emergencyContact[name]">
+          <input type="text" value="{{ emergencyContact.name }}" name="emergencyContact[name]" id="emergencyContact[name]">
         </div>
         <div class="pure-control-group">
           <label for="emergencyContact[mobile]">Cell phone</label>
-          <input type="text" value="{{ mobile }}" name="emergencyContact[mobile]" id="emergencyContact[mobile]">
+          <input type="text" value="{{ emergencyContact.mobile }}" name="emergencyContact[mobile]" id="emergencyContact[mobile]">
         </div>
         <div class="pure-control-group">
           <label for="emergencyContact[phone]">Home phone</label>
-          <input type="text" value="{{ phone }}" name="emergencyContact[phone]" id="emergencyContact[phone]">
+          <input type="text" value="{{ emergencyContact.phone }}" name="emergencyContact[phone]" id="emergencyContact[phone]">
         </div>
-        {{/emergencyContact}}
       </fieldset>
     </div>
     <div class="form-panel">
       <fieldset>
-        {{#address}}
         <legend>Address</legend>
         <div class="pure-control-group">
           <label for="street1">Street 1</label>
-          <input type="text" value="{{ street1 }}" name="address[street1]" id="street1">
+          <input type="text" value="{{ address.street1 }}" name="address[street1]" id="street1">
         </div>
         <div class="pure-control-group">
           <label for="street2">Street 2</label>
-          <input type="text" value="{{ street2 }}" name="address[street2]" id="street2">
+          <input type="text" value="{{ address.street2 }}" name="address[street2]" id="street2">
         </div>
         <div class="pure-control-group">
           <label for="city">City</label>
-          <input type="text" value="{{ city }}" name="address[city]" id="city">
+          <input type="text" value="{{ address.city }}" name="address[city]" id="city">
         </div>
         <div class="pure-control-group">
           <label for="state">State</label>
           <select name="address[state]" id="state">
             {{#states}}
-            <option {{#if abbreviation === state}}selected{{/if}}>
+            <option {{#if abbreviation === address.state}}selected{{/if}}>
               {{ abbreviation }}
             </option>
             {{/states}}
@@ -184,9 +181,8 @@
         </div>
         <div class="pure-control-group">
           <label for="zip">ZIP</label>
-          <input type="text" value="{{ zip }}" name="address[zip]" id="zip">
+          <input type="text" value="{{ address.zip }}" name="address[zip]" id="zip">
         </div>
-        {{/address}}
       </fieldset>
     </div>
     <div class="form-controls">
