@@ -190,16 +190,15 @@ function populateRecipients(email) {
 }
 
 function mailMany(emails) {
-  let promises = [];
+  let promise = Promise.resolve(true);
   for (let email of emails) {
-    let promise = promisify(transporter, 'sendMail', email);
-    promises.push(promise);
+    promise = promise.then(() => promisify(transporter, 'sendMail', email));
   }
-  return Promise.all(promises);
+  return promise;
 }
 
 function mailAndMark({ email, recipients, db }) {
-  let promises = [];
+  let promise = Promise.resolve(true);
   for (let recipient of recipients) {
     let missive = {
       from: email.from,
@@ -213,10 +212,9 @@ function mailAndMark({ email, recipients, db }) {
         { key: 'x-mua', value: 'what.ismymc.com' }
       ]
     }
-    let promise = promisify(transporter, 'sendMail', missive);
-    promises.push(promise);
+    promise = promise.then(() => promisify(transporter, 'sendMail', missive));
   }
-  return Promise.all(promises);
+  return promise;
 }
 
 /*****************************************************************************

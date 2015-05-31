@@ -272,7 +272,46 @@ member.projections = {
     name: 'Chapter members that receive discussion posts',
     title: 'Discussion Recipients',
     projection: (db, callback) => {
-      member.from(db).wantingDiscussions(callback);
+      member.from(db).wantingDiscussions((e, entities) => {
+        if (e) {
+          return callback(e);
+        }
+        let now = new Date();
+        let results = [];
+        for (let entity of entities) {
+          if (entity.membership.national.endDate < now) {
+            continue;
+          }
+          if (entity.membership.local.endDate < now) {
+            continue;
+          }
+          results.push(entity);
+        }
+        callback(null, results);
+      });
+    }
+  },
+  eventRecipients: {
+    name: 'Chapter members that receive event reminders',
+    title: 'Event Reminder Recipients',
+    projection: (db, callback) => {
+      member.from(db).wantingCalendarEvents((e, entities) => {
+        if (e) {
+          return callback(e);
+        }
+        let now = new Date();
+        let results = [];
+        for (let entity of entities) {
+          if (entity.membership.national.endDate < now) {
+            continue;
+          }
+          if (entity.membership.local.endDate < now) {
+            continue;
+          }
+          results.push(entity);
+        }
+        callback(null, results);
+      });
     }
   },
   onlyFemaleMembers: {

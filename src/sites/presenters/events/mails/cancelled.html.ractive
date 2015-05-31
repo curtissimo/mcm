@@ -1,0 +1,30 @@
+{{#event}}
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <p>
+      <span style="font-weight:bold;">Event canceled:</span>
+      <span>{{ title }}</span>
+    </p>
+    <p style="margin-bottom: 1em;">
+      <span style="font-weight:bold;">Reason:</span>
+      <span>{{ cancelledReason }}</span>
+    </p>
+    <p style="border-bottom: 1px solid black;">
+      <span style="font-weight:bold">Details of the canceled event</span>
+    </p>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;">
+      <span style="font-weight:bold">On:</span> {{ days[0].month + 1 }}/{{ days[0].date }}/{{ days[0].year }}
+    </div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;">
+      <span style="font-weight:bold">When:</span> {{ days[0].meetAt }}
+    </div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;">
+      <span style="font-weight:bold">Where:</span> {{ days[0].location | days[0].destination }}
+    </div>
+    <div style="font-family:Helvetica,Arial,serif;font-size: 16px;margin-top:8px;">{{ days[0].description }}</div>
+  </body>
+</html>
+{{/event}}

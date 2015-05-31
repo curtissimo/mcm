@@ -1,9 +1,10 @@
 import moment from 'moment';
 import event from '../../../models/event';
 import ride from '../../../models/ride';
+import email from '../../../models/email';
 import fs from 'fs';
 import stork from 'stork-odm';
-import { text2html } from '../../../mailUtils';
+import { postMailDirective, text2html } from '../../../mailUtils';
 
 let inProduction = process.env.NODE_ENV === 'production';
 let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
@@ -240,7 +241,13 @@ let presenter = {
     let months = [ makeCalendar(thisMonth), makeCalendar(nextMonth) ];
 
     event.from(ac.chapterdb).byDate(from, to, (error, events) => {
+      if (error) {
+        return ac.error(error);
+      }
       ride.from(ac.chapterdb).byDate(from, to, (error, rides) => {
+        if (error) {
+          return ac.error(error);
+        }
         events = events.concat(rides);
         events.sort((a, b) => {
           if (a.days[0].year < b.days[0].year) {
@@ -269,9 +276,6 @@ let presenter = {
           }
           return 0;
         });
-        if (error) {
-          return ac.error(error);
-        }
         let eventVisited = {};
         let eventsByDay = {};
         for (let e of events) {
@@ -288,12 +292,10 @@ let presenter = {
             day.activity = e.activity;
             day.cancelledReason = e.cancelledReason;
             let d = moment([ day.year, day.month, day.date ]).format('MM/DD/YYYY');
-            if (day.year >= today.getFullYear() && ((day.month > today.getMonth() || (day.month <= today.getMonth() && day.date >= today.getDate())))) {
-              if (!eventsByDay[d]) {
-                eventsByDay[d] = [];
-              }
-              eventsByDay[d].push(day);
+            if (!eventsByDay[d]) {
+              eventsByDay[d] = [];
             }
+            eventsByDay[d].push(day);
             for (let i = 0; i < months.length; i += 1) {
               let month = months[i];
               for (let j = 0; j < month.days.length; j += 1) {
@@ -544,11 +546,35 @@ let presenter = {
         return ac.error(e);
       }
       r.cancelledReason = ac.body.cancelledReason;
+      let host = ac.account.domain || `${ac.account.subdomain}.ismymc.com}`;
       r.to(ac.chapterdb).save(e => {
         if (e) {
           return ac.error(e);
         }
-        ac.redirect('/chapter/events/' + ac.params.id);
+        ac.renderEmails('cancelled', { event: r })
+          .then(() => {
+            let missive = email.new({
+              sent: new Date(),
+              from: `no-reply@${host}`,
+              group: { view: 'eventRecipients' },
+              text: ac.mails.text,
+              html: ac.mails.html,
+              subject: `Canceled: ${r.title}`
+            });
+
+            return promisify(missive.to(ac.chapterdb), 'save');
+          })
+          .then(({ _id: id }) => {
+            let directive = {
+              id: id,
+              subdomain: ac.account.subdomain,
+              domain: ac.account.domain
+            }
+            return postMailDirective('mcm-group-mail', directive);
+          })
+          .then(() => ac.redirect('/chapter/events/' + ac.params.id))
+          .catch(e => ac.error(e));
+        ;
       })
     });
   },
@@ -638,7 +664,7 @@ let presenter = {
           if (e) {
             return ac.error(e);
           }
-          ac.redirect('/chapter/events');
+          ac.redirect(`/chapter/events/${ac.params.id}`);
         })
       });
     } else {

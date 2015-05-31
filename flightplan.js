@@ -95,11 +95,11 @@ plan.remote(function (remote) {
   var outboundStart = path.join(outbound, 'outbound-start.sh');
   var mailer = path.join(live, 'mailer-daemon');
   var mailerDaemon = path.join(mailer, 'app.js');
-  remote.log('Start the haraka servers.');
-  remote.sudo('pm2 delete all', { user: 'curtis', failsafe: true });
-  remote.sudo(shellenv() + ' pm2 start ' + inboundStart, { user: 'curtis' });
-  remote.sudo(shellenv() + ' pm2 start ' + outboundStart, { user: 'curtis' });
-  remote.sudo(shellenv() + ' pm2 start ' + mailerDaemon, { user: 'curtis' });
+
+  remote.log('Start the mail infrastructure.');
+  remote.sudo(shellenv() + ' pm2 restart inbound-start', { user: 'curtis' });
+  remote.sudo(shellenv() + ' pm2 restart outbound-start', { user: 'curtis' });
+  remote.sudo(shellenv() + ' pm2 restart app', { user: 'curtis' });
   remote.sudo(shellenv() + ' pm2 save', { user: 'curtis' });
 
   /* NO LONGER UPDATE NGINX */

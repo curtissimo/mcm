@@ -1,0 +1,16 @@
+{{#event}}
+EVENT CANCELED:
+{{ title }}
+
+REASON:
+{{ cancelledReason }}
+ 
+ 
+Details of the canceled event
+-----------------------------
+On: {{ days[0].month + 1 }}/{{ days[0].date }}/{{ days[0].year }}
+When: {{ days[0].meetAt }}
+Where: {{ days[0].location | days[0].destination }}
+
+{{ days[0].description }}
+{{/event}}

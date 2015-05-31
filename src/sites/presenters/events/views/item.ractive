@@ -27,7 +27,13 @@
       {{/if}}
       {{#if location}}
       <dt>Location</dt>
+      {{#if locationUrl}}
+      <dd>
+        <a href="{{ locationUrl }}" target="_blank">{{ location }}</a>
+      </dd>
+      {{else}}
       <dd>{{ location }}</dd>
+      {{/if}}
       {{/if}}
       {{#if destination}}
       <dt>Destination</dt>
