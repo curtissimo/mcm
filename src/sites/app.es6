@@ -77,6 +77,9 @@ app.use((req, res, next) => {
   if (id) {
     member.from(req.vars.chapterdb).get(id, function (e, m) {
       if (m) {
+        if (!m.permissions) {
+          m.permissions = {};
+        }
         req.vars.member = m;
       }
       next();

@@ -10,6 +10,9 @@ function misp(ac) {
 let presenter = {
   get(ac) {
     if (ac.member) {
+      if (!ac.member.permissions) {
+        ac.member.permissions = {};
+      }
       ac.member.permissions.hasOfficerPermissions = function () {
         return this.canManagePolls
             || ac.member.officerInbox
