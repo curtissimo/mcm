@@ -41,7 +41,9 @@
       {{/if}}
       <dt>Date</dt>
       <dd>{{ formattedDate }}</dd>
-      <dt>Starts at</dt>
+      <dt>Starts from</dt>
+      <dd>{{ startFrom }}</dd>
+      <dt>Meet at</dt>
       <dd>{{ meetAt }}</dd>
       {{#if ksuAt}}
       <dt>KSU at</dt>
