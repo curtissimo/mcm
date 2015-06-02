@@ -22,6 +22,7 @@
       <div><a href="mailto:{{ email }}">{{ email }}</a></div>
       {{/if}}
       {{#if privacy.showAddress || viewer.permissions.canManageMembers}}
+        {{#if address.street1 || address.street2 || address.city || address.zip}}
         {{#address}}
         <div>
           {{#if street1}}{{ street1 }}<br>{{/if}}
@@ -29,6 +30,7 @@
           {{ city }}, {{ state }} {{ zip }}
         </div>
         {{/address}}
+        {{/if}}
       {{/if}}
     </div>
     {{#if achievements}}

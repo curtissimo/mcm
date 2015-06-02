@@ -173,7 +173,7 @@
           <label for="state">State</label>
           <select name="address[state]" id="state">
             {{#states}}
-            <option {{#if abbreviation === address.state}}selected{{/if}}>
+            <option value="{{ abbreviation }}" {{#if abbreviation === address.state}}selected{{/if}}>
               {{ abbreviation }}
             </option>
             {{/states}}

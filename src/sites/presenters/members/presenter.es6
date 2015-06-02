@@ -150,9 +150,14 @@ function formatPhone(s) {
 }
 
 function toDate(s) {
-  let d = moment(s);
-  if (d.isValid()) {
+  let d = moment(s, 'YYYY-MM-DD');
+  if (d.isValid() && d.year() > 1999) {
     return d.toDate();
+  } else {
+    d = moment(s, 'MM/DD/YYYY');
+    if (d.isValid()) {
+      return d.toDate();
+    }
   }
   return null;
 }
@@ -426,6 +431,13 @@ let presenter = {
       entity.membership.local.endDate = formatDate(entity.membership.local.endDate);
       if (entity.membership.national.type === 'L') {
         entity.membership.national.endDate = 'never';
+      }
+
+      if (!entity.address) {
+        entity.address = {};
+      }
+      if (!entity.address.state) {
+        entity.address.state = 'TX';
       }
 
       ac.render({
