@@ -291,6 +291,7 @@ let presenter = {
             day._id = e._id;
             day.activity = e.activity;
             day.cancelledReason = e.cancelledReason;
+            day.dayIndex = index;
             let d = moment([ day.year, day.month, day.date ]).format('MM/DD/YYYY');
             if (!eventsByDay[d]) {
               eventsByDay[d] = [];
