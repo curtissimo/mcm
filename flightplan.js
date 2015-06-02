@@ -82,6 +82,10 @@ plan.remote(function (remote) {
   remote.log('Shutting down remote services.');
   remote.sudo('pm2 stop all', { user: 'curtis', failsafe: true });
 
+  remote.log('Copy queued messages to new folder.');
+  remote.sudo('mkdir -p ' + fullTmp + '/haraka/outbound/queue', { user: 'curtis' });
+  remote.sudo('mv ' + live + '/haraka/outbound/queue/* ' + fullTmp + '/haraka/outbound/queue/', { user: 'curtis', failsafe: true });
+
   remote.log('Link the upload to the serve directory');
   remote.sudo('ln -snf ' + fullTmp + ' ' + live, { user: 'curtis' });
 
@@ -89,18 +93,21 @@ plan.remote(function (remote) {
   remote.sudo('ln -snf ' + fullTmp + '/node_modules ' + fullTmp + '/haraka/inbound/node_modules', { user: 'curtis' });
   remote.sudo('ln -snf ' + fullTmp + '/node_modules ' + fullTmp + '/haraka/outbound/node_modules', { user: 'curtis' });
 
-  var inbound = path.join(live, 'haraka', 'inbound');
-  var inboundStart = path.join(inbound, 'inbound-start.sh');
-  var outbound = path.join(live, 'haraka', 'outbound');
-  var outboundStart = path.join(outbound, 'outbound-start.sh');
-  var mailer = path.join(live, 'mailer-daemon');
-  var mailerDaemon = path.join(mailer, 'app.js');
+  // var inbound = path.join(live, 'haraka', 'inbound');
+  // var inboundStart = path.join(inbound, 'inbound-start.sh');
+  // var outbound = path.join(live, 'haraka', 'outbound');
+  // var outboundStart = path.join(outbound, 'outbound-start.sh');
+  // var mailer = path.join(live, 'mailer-daemon');
+  // var mailerDaemon = path.join(mailer, 'app.js');
 
-  remote.log('Start the mail infrastructure.');
-  remote.sudo(shellenv() + ' pm2 restart inbound-start', { user: 'curtis' });
-  remote.sudo(shellenv() + ' pm2 restart outbound-start', { user: 'curtis' });
-  remote.sudo(shellenv() + ' pm2 restart app', { user: 'curtis' });
-  remote.sudo(shellenv() + ' pm2 save', { user: 'curtis' });
+  remote.log('Restart the services.');
+  remote.sudo(shellenv() + ' pm2 restart all', { user: 'curtis' });
+
+  // remote.log('Start the mail infrastructure.');
+  // remote.sudo(shellenv() + ' pm2 restart inbound-start', { user: 'curtis' });
+  // remote.sudo(shellenv() + ' pm2 restart outbound-start', { user: 'curtis' });
+  // remote.sudo(shellenv() + ' pm2 restart app', { user: 'curtis' });
+  // remote.sudo(shellenv() + ' pm2 save', { user: 'curtis' });
 
   /* NO LONGER UPDATE NGINX */
   // var d = plan.runtime.options.DOMAIN;
