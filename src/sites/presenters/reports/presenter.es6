@@ -25,6 +25,7 @@ let presenter = {
 
       if (ac.query.hasOwnProperty('csv')) {
         let culled = [];
+        let name = 'membership-all.csv';
 
         if (ac.query.hasOwnProperty('all')) {
           for (let entity of entities) {
@@ -33,6 +34,7 @@ let presenter = {
             culled.push(entity);
           }
         } else {
+          name = 'membershp-expired.csv';
           for (let entity of entities) {
             entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
             entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
@@ -54,7 +56,7 @@ let presenter = {
           phone: 'Phone',
           email: 'Email'
         };
-        return ac.csv('membership.csv', culled, headers, 'lastName', 'firstName', 'hogNumber', 'local', 'national', 'phone', 'email');
+        return ac.csv(name, culled, headers, 'lastName', 'firstName', 'hogNumber', 'local', 'national', 'phone', 'email');
       }
 
       let sections = [{
@@ -161,7 +163,7 @@ let presenter = {
           miles: 'Miles'
         };
 
-        ac.csv('membership.csv', mileages, headers, 'year', 'month', 'miles', 'lastName', 'firstName');
+        ac.csv('mileage.csv', mileages, headers, 'year', 'month', 'miles', 'lastName', 'firstName');
       });
     }
 
