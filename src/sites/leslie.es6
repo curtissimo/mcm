@@ -88,13 +88,18 @@ export class UnauthorizedDirective extends Directive {
 }
 
 export class CsvDirective extends Directive {
-  constructor(fileName, data, ...fields) {
+  constructor(fileName, data, headers, ...fields) {
     super();
     this.code = 200;
     this.mimeType = 'text/csv';
     let content = [];
+    let row = [];
+    for (let field of fields) {
+      row.push(headers[field] || field);
+    }
+    content.push(row.join(','));
     for (let datum of data) {
-      let row = [];
+      row = [];
       for (let field of fields) {
         row.push(datum[field]);
       }
@@ -208,8 +213,8 @@ class PresentationContext {
     this._bad(new FileDirective(path, name, section, true));
   }
 
-  csv(data, ...fields) {
-    this._bad(new CsvDirective(data, ...fields));
+  csv(fileName, data, headers, ...fields) {
+    this._bad(new CsvDirective(fileName, data, headers, ...fields));
   }
 
   error(e) {

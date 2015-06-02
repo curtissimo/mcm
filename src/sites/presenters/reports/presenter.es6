@@ -26,18 +26,35 @@ let presenter = {
       if (ac.query.hasOwnProperty('csv')) {
         let culled = [];
 
-        for (let entity of entities) {
-          entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
-          entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
-          let national = entity.membership.national.endDate.valueOf();
-          let local = entity.membership.local.endDate.valueOf();
-          let nationalExpired = foreverAgo <= national && national < threeMonth;
-          let localExpired = foreverAgo <= local && local < threeMonth;
-          if (localExpired || nationalExpired) {
+        if (ac.query.hasOwnProperty('all')) {
+          for (let entity of entities) {
+            entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
+            entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
             culled.push(entity);
           }
+        } else {
+          for (let entity of entities) {
+            entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
+            entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
+            let national = entity.membership.national.endDate.valueOf();
+            let local = entity.membership.local.endDate.valueOf();
+            let nationalExpired = foreverAgo <= national && national < now;
+            let localExpired = foreverAgo <= local && local < now;
+            if (localExpired || nationalExpired) {
+              culled.push(entity);
+            }
+          }
         }
-        return ac.csv('membership.csv', culled, 'lastName', 'firstName', 'hogNumber', 'local', 'national', 'phone', 'email');
+        let headers = {
+          lastName: 'Last name',
+          firstName: 'First name',
+          hogNumber: 'HOG #',
+          local: 'Local expiration',
+          national: 'National expiration',
+          phone: 'Phone',
+          email: 'Email'
+        };
+        return ac.csv('membership.csv', culled, headers, 'lastName', 'firstName', 'hogNumber', 'local', 'national', 'phone', 'email');
       }
 
       let sections = [{
@@ -93,9 +110,11 @@ let presenter = {
 
       ac.render({
         data: {
+          activeMemberCount: entities.length - sections[0].members.length,
           sections: sections,
           actions: {
-            'Export': '/chapter/reports/membership?csv'
+            'Export expired': '/chapter/reports/membership?csv',
+            'Export all': '/chapter/reports/membership?csv&all'
           },
           title: "Membership report for the chapter"
         },
@@ -106,10 +125,48 @@ let presenter = {
   },
 
   mileage(ac) {
-    let now = new Date();
     let mileageProcessFor = new Set();
-    let year = parseInt(ac.query.year) || now.getFullYear();
 
+    if (ac.query.hasOwnProperty('csv')) {
+      return member.from(ac.chapterdb).withMonthlyMileage((e, entities) => {
+        if (e) {
+          return ac.error(e);
+        }
+
+        let mileages = [];
+        for (let entity of entities) {
+          if (mileageProcessFor.has(entity._id)) {
+            continue;
+          }
+          mileageProcessFor.add(entity._id);
+          if (entity.mileage === undefined) {
+            continue;
+          }
+          for (let mileage of entity.mileage) {
+            mileages.push({
+              lastName: entity.lastName,
+              firstName: entity.firstName,
+              year: mileage[0],
+              month: mileage[1],
+              miles: mileage[2]
+            });
+          }
+        }
+
+        let headers = {
+          lastName: 'Last name',
+          firstName: 'firstName',
+          year: 'Year',
+          month: 'Month',
+          miles: 'Miles'
+        };
+
+        ac.csv('membership.csv', mileages, headers, 'year', 'month', 'miles', 'lastName', 'firstName');
+      });
+    }
+
+    let now = new Date();
+    let year = parseInt(ac.query.year) || now.getFullYear();
     let month = now.getMonth() - 1;
     if (ac.query.hasOwnProperty('month')) {
       if (ac.query.month.length > 0) {
@@ -189,6 +246,9 @@ let presenter = {
 
       ac.render({
         data: {
+          actions: {
+            'Export all': '/chapter/reports/mileage?csv'
+          },
           entries: entries,
           year: year,
           month: month,

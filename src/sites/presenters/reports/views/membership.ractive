@@ -1,4 +1,7 @@
 {{#sections}}
+<section>
+  <h2>Active member count: {{ activeMemberCount }}</h2>
+</section>
 {{#if !ignoreExpired}}
 <section>
   <h2>{{ title }}</h2>
