@@ -318,7 +318,7 @@ member.projections = {
     name: 'Only female members',
     title: 'Only female members',
     projection: (db, callback) => {
-      member.from(db).wantingDiscussions((e, entities) => {
+      member.from(db).all((e, entities) => {
         if (e) {
           return callback(e);
         }
