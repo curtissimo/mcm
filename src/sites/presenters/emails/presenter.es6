@@ -142,7 +142,7 @@ let presenter = {
       } else if (!missive.text) {
         missive.text = '';
       } else {
-        missive.text = missive.text.replace(/\n/g, '<br>');
+        missive.text = missive.text.replace(/</g, '&lt;').replace(/\n/g, '<br>');
       }
 
       ac.render({
