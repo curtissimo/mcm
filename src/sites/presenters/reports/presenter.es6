@@ -36,6 +36,10 @@ let presenter = {
         } else {
           name = 'membershp-expired.csv';
           for (let entity of entities) {
+            if (!entity.membership.local.endDate || !entity.membership.national.endDate) {
+              culled.push(entity);
+              continue;
+            }
             entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
             entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
             let national = entity.membership.national.endDate.valueOf();
@@ -90,8 +94,8 @@ let presenter = {
       for (let entity of entities) {
         entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
         entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
-        let national = entity.membership.national.endDate.valueOf();
-        let local = entity.membership.local.endDate.valueOf();
+        let national = (entity.membership.national.endDate || '').valueOf();
+        let local = (entity.membership.local.endDate || '').valueOf();
         for (let section of sections) {
           let nationalExpired = section.from <= national && national < section.to;
           let localExpired = section.from <= local && local < section.to;
