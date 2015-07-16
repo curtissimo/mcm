@@ -128,13 +128,13 @@ let member = stork.deliver('member', function () {
   });
 
   this.view('wantingDiscussions', function(member, emitKey) {
-    if (member.emailPreferences && member.emailPreferences.getDiscussions) {
+    if (member.emailPreferences && member.emailPreferences.getDiscussions && member.email) {
       emitKey(null);
     }
   });
 
   this.view('wantingCalendarEvents', function(member, emitKey) {
-    if (member.emailPreferences && member.emailPreferences.getCalendarReminders) {
+    if (member.emailPreferences && member.emailPreferences.getCalendarReminders && member.email) {
       emitKey(null);
     }
   });

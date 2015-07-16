@@ -21,6 +21,16 @@ function getMembers(ac, cb) {
       return cb(e);
     }
     let membersMap = new Map();
+    let get = membersMap.get.bind(membersMap);
+    membersMap.get = function (key) {
+      return get(key) || {
+        firstName: 'Removed',
+        lastName: 'User',
+        nickName: '',
+        _id: undefined,
+        private: false
+      };
+    };
     for (let m of members) {
       membersMap.set(m._id, {
         firstName: m.firstName,

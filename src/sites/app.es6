@@ -310,6 +310,7 @@ assets.initialize()
       routes: [
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create-form', method: 'create' },
+        { verb: 'get', action: ':id/delete-form', method: 'delete' },
         { verb: 'get', action: ':id/edit-form', method: 'edit' },
         { verb: 'get', action: ':id/nophoto', method: 'nophoto' },
         { verb: 'get', action: ':id/photo', method: 'photo' },
@@ -319,6 +320,7 @@ assets.initialize()
         { verb: 'patch', action: ':id/mileage', method: 'patchMileage' },
         { verb: 'patch', action: ':id/emailPreferences', method: 'patchEmailPreferences' },
         { verb: 'put', action: ':id' },
+        { verb: 'delete', action: ':id', method: 'destroy' },
         { verb: 'post', action: ':id/blogs', method: 'createBlog' },
         { verb: 'post' }
       ]

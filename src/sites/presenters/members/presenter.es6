@@ -270,9 +270,14 @@ let presenter = {
       });
       let editKey = `Edit ${m.firstName}`;
       let editValue = `/chapter/members/${m._id}/edit-form`;
+      let deleteKey = `Delete ${m.firstName}`;
+      let deleteValue = `/chapter/members/${m._id}/delete-form`;
       let actions = null;
       if (ac.member.permissions.canManageMembers) {
-        actions = { [editKey]: editValue };
+        actions = {
+          [editKey]: editValue,
+          [deleteKey]: deleteValue
+        };
       }
       ac.render({
         data: {
@@ -313,6 +318,10 @@ let presenter = {
       presenters: { menu: 'menu' },
       layout: 'chapter'
     });
+  },
+
+  delete(ac) {
+
   },
 
   photo(ac) {
@@ -509,6 +518,24 @@ let presenter = {
         return ac.error(e);
       }
       ac.redirect('/chapter/dashboard');
+    });
+  },
+
+  destroy(ac) {
+    if (!ac.member.permissions.canManageMembers) {
+      return ac.redirect('/chapter/members');
+    }
+
+    entity.from(ac.chapterdb).get((e, thing) => {
+      if (e) {
+        return ac.error(e);
+      }
+      thing.to(ac.chapterdb).destroy(e => {
+        if (e) {
+          return ac.error(e);
+        }
+        ac.redirect('/chapter/members');
+      });
     });
   },
 

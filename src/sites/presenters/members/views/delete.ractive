@@ -1,0 +1,53 @@
+{{#member}}
+<h1 class="banner">{{ lastName }}, {{ firstName }}</h1>
+<section>
+  <div class="is-error">
+    This action will delete this member. You cannot undo this deletion. Are
+    you sure you want to continue?
+    <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ email._id }}">
+      <input type="hidden" name="X-HTTP-Method-Override" value="delete">
+      <div class="form-controls">
+        <div class="pure-controls">
+          <a href="/chapter/members/{{ _id }}" class="pure-button">Cancel</a>
+          <button type="submit" class="pure-button pure-button-primary">Delete this email</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+<div class="member-item">
+  <div class="member-item-information">
+    {{#if private}}
+    <div class="is-hidden-member"><span>Hidden</span></div>
+    {{/if}}
+    {{#if photoPath}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/chapter/members/{{ _id }}/photo">
+    {{else}}
+    <img class="{{#private}}private-person{{/private}} pure-img" src="/images/unknown-user.jpg">
+    {{/if}}
+    <div class="member-item-personal-information">
+      {{#if (phone || mobile) && (privacy.showPhone || viewer.permissions.canManageMembers)}}
+      <div>
+        {{#mobile}}{{ mobile }}{{/mobile}}
+        {{#if mobile && phone}} | {{/if}}
+        {{#phone}}{{ phone }}{{/phone}}
+      </div>
+      {{/if}}
+      {{#if privacy.showEmail || viewer.permissions.canManageMembers}}
+      <div><a href="mailto:{{ email }}">{{ email }}</a></div>
+      {{/if}}
+      {{#if privacy.showAddress || viewer.permissions.canManageMembers}}
+        {{#if address.street1 || address.street2 || address.city || address.zip}}
+        {{#address}}
+        <div>
+          {{#if street1}}{{ street1 }}<br>{{/if}}
+          {{#if street2}}{{ street2 }}<br>{{/if}}
+          {{ city }}, {{ state }} {{ zip }}
+        </div>
+        {{/address}}
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+</div>
+{{/member}}
