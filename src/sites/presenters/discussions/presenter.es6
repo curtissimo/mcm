@@ -74,11 +74,11 @@ let presenter = {
               comment.writtenOn = moment(comment.createdOn).format('ddd MM/DD/YYYY h:mm a');
             }
             d.lastComment = d.comments[d.comments.length - 1];
-            if (moment(d.lastComment.createdOn).isBefore(lastMonth)) {
+            if (moment(d.lastComment.createdOn).isBefore(lastMonth) && !d.sticky) {
               d.archived = true;
             }
           } else {
-            if (moment(d.createdOn).isBefore(lastMonth)) {
+            if (moment(d.createdOn).isBefore(lastMonth) && !d.sticky) {
               d.archived = true;
             }
           }
