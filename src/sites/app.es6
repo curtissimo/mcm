@@ -331,6 +331,8 @@ assets.initialize()
       presenterName: 'discussions',
       routes: [
         { verb: 'get', method: 'list' },
+        { verb: 'get', action: ':id/stick', method: 'stick' },
+        { verb: 'get', action: ':id/unstick', method: 'unstick' },
         { verb: 'get', action: 'create-form', method: 'create' },
         { verb: 'get', action: ':id/delete-form', method: 'deleteForm' },
         { verb: 'get', action: ':id/archive', method: 'archive' },

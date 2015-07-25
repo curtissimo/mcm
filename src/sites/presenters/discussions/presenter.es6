@@ -145,6 +145,11 @@ let presenter = {
           if (!d.archived) {
             actions['Archive'] = `/chapter/discussions/${d._id}/archive`;
           }
+          if (d.sticky) {
+            actions['Unstick'] = `/chapter/discussions/${d._id}/unstick`;
+          } else {
+            actions['Stick'] = `/chapter/discussions/${d._id}/stick`;
+          }
           actions['Delete'] = `/chapter/discussions/${d._id}/delete-form`;
         }
         actions['Comment on this'] = 'javascript:showComments()';
@@ -203,6 +208,32 @@ let presenter = {
 
     discussion.from(ac.chapterdb).withComments(ac.params.id, (e, d) => {
       d.archived = true;
+      d.to(ac.chapterdb).save(saveErr => {
+        ac.redirect(`/chapter/discussions/${ac.params.id}`);
+      });
+    });
+  },
+
+  stick(ac) {
+    if (!ac.member.permissions.canManageDiscussions) {
+      ac.redirect(`/chapter/discussions/${ac.params.id}`);
+    }
+
+    discussion.from(ac.chapterdb).withComments(ac.params.id, (e, d) => {
+      d.sticky = true;
+      d.to(ac.chapterdb).save(saveErr => {
+        ac.redirect(`/chapter/discussions/${ac.params.id}`);
+      });
+    });
+  },
+
+  unstick(ac) {
+    if (!ac.member.permissions.canManageDiscussions) {
+      ac.redirect(`/chapter/discussions/${ac.params.id}`);
+    }
+
+    discussion.from(ac.chapterdb).withComments(ac.params.id, (e, d) => {
+      d.sticky = false;
       d.to(ac.chapterdb).save(saveErr => {
         ac.redirect(`/chapter/discussions/${ac.params.id}`);
       });
