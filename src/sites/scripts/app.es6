@@ -543,3 +543,13 @@ if (achievementType) {
     }
   });
 }
+
+let changePassword = document.getElementById('change-password');
+let newPassword = document.getElementById('new-password');
+if (changePassword && newPassword) {
+  changePassword.addEventListener('change', e => {
+    let target = e.target || e.srcElement;
+    newPassword.disabled = !!!target.checked;
+  });
+}
+

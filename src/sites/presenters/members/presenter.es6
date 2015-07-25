@@ -232,6 +232,10 @@ let presenter = {
 
   item(ac) {
     member.from(ac.chapterdb).withBlogs(ac.params.id, function (e, m) {
+      if (!ac.member.permissions.canManageMembers && m.private) {
+        return ac.redirect('/chapter/members');
+      }
+
       if (e || !m) {
         return ac.redirect('/chapter/members');
       }
@@ -488,6 +492,19 @@ let presenter = {
         return ac.error(e);
       }
 
+      ac.body.emailPreferences = ac.body.emailPreferences || {};
+      ac.body.emailPreferences.getCalendarReminders = !!ac.body.emailPreferences.getCalendarReminders;
+      ac.body.emailPreferences.getDiscussions = !!ac.body.emailPreferences.getDiscussions;
+
+      ac.body.private = !!ac.body.private;
+
+      ac.body.privacy = ac.body.privacy || {};
+      ac.body.privacy.showEmail = !!ac.body.privacy.showEmail;
+      ac.body.privacy.showPhone = !!ac.body.privacy.showPhone;
+      ac.body.privacy.showAddress = !!ac.body.privacy.showAddress;
+
+      if (!ac.body.member)
+
       Object.assign(entity, ac.body);
 
       entity.phone = formatPhone(entity.phone);
@@ -504,6 +521,9 @@ let presenter = {
       }
       if (entity.address.state.length > 2) {
         entity.address.state = '';
+      }
+      if (!entity.emailPreferences) {
+        entity.emailPreferences = {};
       }
 
       entity.to(ac.chapterdb).save(saveError => {

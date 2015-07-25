@@ -138,6 +138,8 @@
           <input type="text" value="{{ phone }}" name="phone" id="phone">
         </div>
       </fieldset>
+    </div>
+    <div class="form-panel">
       <fieldset>
         <legend>Emergency contact information</legend>
         <div class="pure-control-group">
@@ -182,6 +184,51 @@
         <div class="pure-control-group">
           <label for="zip">ZIP</label>
           <input type="text" value="{{ address.zip }}" name="address[zip]" id="zip">
+        </div>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Email preferences</legend>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="emailPreferences[getCalendarReminders]" value="1" {{#if emailPreferences.getCalendarReminders}}checked{{/if}}>
+          Get calendar reminders
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="emailPreferences[getDiscussions]" value="1" {{#if emailPreferences.getDiscussions}}checked{{/if}}>
+          Get discussions
+        </label>
+      </fieldset>
+      <fieldset>
+        <legend>Privacy settings</legend>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="private" value="1" {{#if private}}checked{{/if}}>
+          Do not show in the member list
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="privacy[showEmail]" value="1" {{#if privacy.showEmail}}checked{{/if}}>
+          Show an email address
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="privacy[showPhone]" value="1" {{#if privacy.showPhone}}checked{{/if}}>
+          Show a phone number
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="privacy[showAddress]" value="1" {{#if privacy.showAddress}}checked{{/if}}>
+          Show an address
+        </label>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Change password</legend>
+        <label class="pure-checkbox">
+          <input type="checkbox" id="change-password">
+          Yes, I want to create a new password
+        </label>
+        <div class="pure-control-group">
+          <label for="password">New password</label>
+          <input type="password" name="password" id="new-password" disabled>
         </div>
       </fieldset>
     </div>
