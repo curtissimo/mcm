@@ -232,8 +232,8 @@ let presenter = {
 
   item(ac) {
     member.from(ac.chapterdb).withBlogs(ac.params.id, function (e, m) {
-      if (e) {
-        return ac.error(e);
+      if (e || !m) {
+        return ac.redirect('/chapter/members');
       }
       for (let achievement of (m.achievements || [])) {
         if (achievement.on) {
@@ -321,13 +321,28 @@ let presenter = {
   },
 
   delete(ac) {
-
+    member.from(ac.chapterdb).get(ac.params.id, function (e, m) {
+      if (e) {
+        return ac.error(e);
+      }
+      ac.render({
+        data: {
+          nav: { '<i class="fa fa-chevron-left"></i> Back to members': '/chapter/members' },
+          shortnav: { '<i class="fa fa-chevron-left"></i>': '/chapter/members' },
+          member: m,
+          viewer: ac.member,
+          title: m.nickName || `${m.firstName} ${m.lastName}`
+        },
+        presenters: { menu: 'menu' },
+        layout: 'chapter'
+      });
+    });
   },
 
   photo(ac) {
     member.from(ac.chapterdb).get(ac.params.id, function (e, member) {
-      if (e) {
-        return ac.error(e);
+      if (e || !member) {
+        return ac.redirect('/images/unknown-user.jpg');
       }
       if (member.photoPath) {
         return ac.binary(member.photoPath, member.photoPath, ac.account.subdomain);
@@ -526,7 +541,7 @@ let presenter = {
       return ac.redirect('/chapter/members');
     }
 
-    entity.from(ac.chapterdb).get((e, thing) => {
+    member.from(ac.chapterdb).get(ac.params.id, (e, thing) => {
       if (e) {
         return ac.error(e);
       }
@@ -534,6 +549,7 @@ let presenter = {
         if (e) {
           return ac.error(e);
         }
+
         ac.redirect('/chapter/members');
       });
     });

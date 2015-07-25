@@ -4,12 +4,12 @@
   <div class="is-error">
     This action will delete this member. You cannot undo this deletion. Are
     you sure you want to continue?
-    <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ email._id }}">
+    <form class="pure-form pure-form-stacked" method="post" action="/chapter/members/{{ member._id }}">
       <input type="hidden" name="X-HTTP-Method-Override" value="delete">
       <div class="form-controls">
         <div class="pure-controls">
           <a href="/chapter/members/{{ _id }}" class="pure-button">Cancel</a>
-          <button type="submit" class="pure-button pure-button-primary">Delete this email</button>
+          <button type="submit" class="pure-button pure-button-primary">Delete this member</button>
         </div>
       </div>
     </form>

@@ -27,7 +27,7 @@ function getMembers(ac, cb) {
         firstName: 'Removed',
         lastName: 'User',
         nickName: '',
-        _id: undefined,
+        _id: -1,
         private: false
       };
     };
