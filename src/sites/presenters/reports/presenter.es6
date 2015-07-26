@@ -156,20 +156,22 @@ let presenter = {
               firstName: entity.firstName,
               year: mileage[0],
               month: mileage[1],
-              miles: mileage[2]
+              miles: mileage[2],
+              type: mileage[3]? 'passenger' : 'rider'
             });
           }
         }
 
         let headers = {
           lastName: 'Last name',
-          firstName: 'firstName',
+          firstName: 'First name',
           year: 'Year',
           month: 'Month',
-          miles: 'Miles'
+          miles: 'Miles',
+          type: 'Type'
         };
 
-        ac.csv('mileage.csv', mileages, headers, 'year', 'month', 'miles', 'lastName', 'firstName');
+        ac.csv('mileage.csv', mileages, headers, 'year', 'month', 'miles', 'lastName', 'firstName', 'type');
       });
     }
 
@@ -224,7 +226,8 @@ let presenter = {
               year: my,
               month: mm,
               miles: mileage[2],
-              who: entity
+              who: entity,
+              type: mileage[3]? 'passenger' : 'rider'
             });
           }
         }

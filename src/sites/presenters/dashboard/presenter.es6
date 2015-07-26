@@ -43,13 +43,9 @@ let presenter = {
     d.setMonth(d.getMonth() - 1);
     let year = d.getFullYear();
     let month = d.getMonth();
-    let hasRecordedMileage = false;
     if (ac.member.mileage !== undefined) {
       for (let entry of ac.member.mileage) {
-        if (entry[0] === year && entry[1] === month) {
-          hasRecordedMileage = true;
-          break;
-        }
+        entry.type = entry[3]? 'passenger' : 'rider';
       }
     } else {
       ac.member.mileage = [];
@@ -69,6 +65,7 @@ let presenter = {
       }
       return 0;
     });
+    let years = [ -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0 ];
     let from = [ ac.member._id ];
     let to = [ ac.member._id, '3' ];
     blog.from(ac.chapterdb).byAuthorAndDate(from, to, (e, entities) => {
@@ -81,12 +78,12 @@ let presenter = {
       ac.render({
         data: {
           blogs: entities,
-          hasRecordedMileage: hasRecordedMileage,
-          mileageMonth: months[d.getMonth()],
+          mileageMonth: d.getMonth(),
           mileageYear: d.getFullYear(),
           member: ac.member,
           title: 'My Page',
-          months: months
+          months: months,
+          years: years
         },
         presenters: {
           menu: 'menu'

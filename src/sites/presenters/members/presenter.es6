@@ -491,12 +491,33 @@ let presenter = {
       return ac.redirect('/chapter/dashboard');
     }
 
+    let foundMileage = false;
+    let year = parseInt(ac.body.mileageYear);
+    let month = parseInt(ac.body.mileageMonth);
+    let mileage = parseInt(ac.body.mileage);
+    let asPassenger = !!ac.body.asPassenger;
+
     if (ac.member.mileage === undefined) {
       ac.member.mileage = [];
     }
-    let d = new Date();
-    d.setMonth(d.getMonth() - 1);
-    ac.member.mileage.push([ d.getFullYear(), d.getMonth(), parseInt(ac.body.mileage) ]);
+    ac.member.mileage.forEach(m => {
+      if (foundMileage) {
+        return;
+      }
+      if (year == m[0] && month == m[1] && asPassenger === m[3]) {
+        foundMileage = m;
+      }
+    });
+    if (foundMileage) {
+      foundMileage[2] = mileage;
+    } else {
+      ac.member.mileage.push([
+        parseInt(ac.body.mileageYear),
+        parseInt(ac.body.mileageMonth),
+        parseInt(ac.body.mileage),
+        !!ac.body.asPassenger
+      ]);
+    }
 
     ac.member.to(ac.chapterdb).save(e => {
       if (e) {
