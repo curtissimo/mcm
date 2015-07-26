@@ -10,7 +10,7 @@ let presenter = {
         return ac.error(e);
       }
 
-      let foreverAgo = new Date(0).valueOf();
+      let foreverAgo = new Date(-62167197600000).valueOf();
       let now = new Date();
       let oneMonth = new Date(now.valueOf());
       let twoMonth = new Date(now.valueOf());
