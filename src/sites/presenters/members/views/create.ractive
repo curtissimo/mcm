@@ -104,6 +104,40 @@
         </div>
       </fieldset>
     </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Email preferences</legend>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="emailPreferences[getCalendarReminders]" value="1" checked>
+          Get calendar reminders
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="emailPreferences[getDiscussions]" value="1" checked>
+          Get discussions
+        </label>
+      </fieldset>
+    </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Privacy settings</legend>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="private" value="1">
+          Do not show in the member list
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="privacy[showEmail]" value="1" checked>
+          Show an email address
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="privacy[showPhone]" value="1">
+          Show a phone number
+        </label>
+        <label class="pure-checkbox">
+          <input type="checkbox" name="privacy[showAddress]" value="1">
+          Show an address
+        </label>
+      </fieldset>
+    </div>
     <div class="form-controls">
       <div class="pure-controls">
         <a href="/chapter/members" class="pure-button">Cancel</a>

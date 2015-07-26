@@ -664,6 +664,16 @@ let presenter = {
           startDate: localJoined ? moment(localJoined).toDate() : undefined,
           endDate: localExpiration? moment(localExpiration).toDate() : undefined
         }
+      },
+      private: !!ac.body.private,
+      privacy: {
+        showEmail: !!ac.body.privacy.showEmail,
+        showPhone: !!ac.body.privacy.showPhone,
+        showAddress: !!ac.body.privacy.showAddress
+      },
+      emailPreferences: {
+        getCalendarReminders: !!ac.body.emailPreferences.getCalendarReminders,
+        getDiscussions: !!ac.body.emailPreferences.getDiscussions
       }
     };
 
