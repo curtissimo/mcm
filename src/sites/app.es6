@@ -315,6 +315,7 @@ assets.initialize()
         { verb: 'get', action: ':id/nophoto', method: 'nophoto' },
         { verb: 'get', action: ':id/photo', method: 'photo' },
         { verb: 'get', action: ':id', method: 'item' },
+        { verb: 'post', action: 'membership-dates', method: 'dates' },
         { verb: 'patch', action: ':id/photo', method: 'patchPhoto' },
         { verb: 'patch', action: ':id/privacy', method: 'patchPrivacy' },
         { verb: 'patch', action: ':id/mileage', method: 'patchMileage' },

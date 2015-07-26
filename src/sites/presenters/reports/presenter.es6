@@ -93,7 +93,9 @@ let presenter = {
 
       for (let entity of entities) {
         entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
+        entity.localCanonical = moment(entity.membership.local.endDate).format('YYYY-MM-DD');
         entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
+        entity.nationalCanonical = moment(entity.membership.national.endDate).format('YYYY-MM-DD');
         let national = (entity.membership.national.endDate || '').valueOf();
         let local = (entity.membership.local.endDate || '').valueOf();
         for (let section of sections) {

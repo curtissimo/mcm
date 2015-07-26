@@ -553,3 +553,20 @@ if (changePassword && newPassword) {
   });
 }
 
+let oldDates = document.querySelectorAll('.is-member-expired input[type=date]');
+let memberhsipDatesForm = document.getElementById('memberhsip-dates-form');
+if (oldDates && oldDates.length && memberhsipDatesForm) {
+  for (let i = 0; i < oldDates.length; i += 1) {
+    var input = oldDates[i];
+    input.addEventListener('change', e => {
+      let target = e.target || e.srcElement;
+      target.parentNode.className += ' updated';
+
+      let element = document.createElement('input');
+      element.type = 'hidden';
+      element.name = 'changedIds';
+      element.value = target.name.substring(8, 40);
+      memberhsipDatesForm.appendChild(element);
+    });
+  }
+}

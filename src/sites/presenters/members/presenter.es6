@@ -330,6 +330,45 @@ let presenter = {
     });
   },
 
+  dates(ac) {
+    if (!ac.member.permissions.canManageMembers) {
+      return ac.redirect('/chapter/reports/membership');
+    }
+
+    function updateDates(id) {
+      return new Promise((good, bad) => {
+        member.from(ac.chapterdb).get(id, (e, m) => {
+          if (e) {
+            return bad(e);
+          }
+          try {
+            m.membership.national.endDate = toDate(ac.body.members[id].membership.national.endDate);
+          } catch (e) {}
+          try {
+            m.membership.local.endDate = toDate(ac.body.members[id].membership.local.endDate);
+          } catch (e) {}
+          
+          m.to(ac.chapterdb).save(e => {
+            if (e) {
+              return bad(e);
+            }
+            good();
+          });
+        });
+      });
+    }
+
+    let updates = [];
+    let changes = ac.body.changedIds;
+    if (typeof changes === 'string') {
+      changes = [ changes ];
+    }
+    changes.forEach(id => changes.push(updateDates(id)));
+    Promise.all(updates)
+      .then(() => ac.redirect('/chapter/reports/membership'))
+      .catch(() => ac.redirect('/chapter/reports/membership'));
+  },
+
   delete(ac) {
     member.from(ac.chapterdb).get(ac.params.id, function (e, m) {
       if (e) {
