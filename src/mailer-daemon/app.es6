@@ -252,7 +252,7 @@ let job = schedule.scheduleJob(rule, () => {
       for (let account of accounts) {
         let db = getAccountDb(account.subdomain);
         let options = { include_docs: true, key: date };
-        promises.push(promisify(db, 'view', 'member', 'wantingCalendarEvents', { include_docs: true }));
+        promises.push(promisify(member.projections.discussionRecipients, 'projection', db));
         promises.push(promisify(db, 'view', 'event', 'byReminderDates', options));
         promises.push(promisify(db, 'view', 'ride', 'byReminderDates', options));
         promises.push(account.domain || `${account.subdomain}.ismymc.com`);
@@ -275,7 +275,6 @@ let job = schedule.scheduleJob(rule, () => {
           continue;
         }
 
-        members = members.rows.map(m => m.doc);
         events = events.rows.map(e => e.doc);
         rides = rides.rows.map(r => r.doc);
 
