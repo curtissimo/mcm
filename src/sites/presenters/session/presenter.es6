@@ -54,6 +54,7 @@ let presenter = {
     let data = {
       title: 'Log in',
       bad: ac.query.bad !== undefined,
+      tooMany: ac.query.tooMany !== undefined,
       expiredMembership: ac.query.expiredMembership !== undefined
     };
     ac.addStylesheet('area');
@@ -62,10 +63,16 @@ let presenter = {
 
   put(ac) {
     member.from(ac.chapterdb).byLogin(ac.body.email, function (e, m) {
-      if (e || m.length !== 1) {
+      if (e) {
         return ac.redirect('/session?bad');
       }
+      if (m.length > 1) {
+        return ac.redirect('/session?tooMany');
+      }
       m = m[0];
+      if (m.password !== ac.body.password) {
+        return ac.redirect('/session?bad');
+      }
       let now = new Date();
       if (now > m.membership.national.endDate || now > m.membership.local.endDate) {
         return ac.redirect('/session?expiredMembership');
