@@ -93,7 +93,7 @@
       <div class="edit-your-personal-information">
         <a href="/chapter/members/{{ member._id }}/edit-form">Edit your personal information</a>
       </div>
-      <div>Mobile: {{ mobile}}</div>
+      <div>Mobile: {{ mobile }}</div>
       <div>Home: {{ phone }}</div>
       <div>{{ email }}</div>
       {{#if address}}
@@ -113,6 +113,29 @@
       {{/achievements}}
     </ul>
     {{/if}}
+    <div class="mileage-history">
+      <h2>Mileage history</h2>
+      {{#if mileage.length > 0}}
+      <table class="pure-table pure-table-striped centered">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Mileage</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#mileage}}
+          <tr>
+            <td>{{ months[this[1]] }} {{ this[0] }}</td>
+            <td>{{ this[2] }} miles</td>
+          </tr>
+          {{/mileage}}
+        </tbody>
+      </table>
+      {{else}}
+      You have not submitted any mileage to the activities director.
+      {{/if}}
+    </div>
   </div>
   <div class="dashboard-aggregates">
     <div class="dashboard-aggregates-padder">
@@ -138,29 +161,6 @@
         {{ createdOn }}: <a href="/chapter/members/{{ member._id }}#blog-{{ _id }}">{{ title }}</a>
         </div>
         {{/blogs}}
-      </div>
-      <div class="mileage-history">
-        <h2>Mileage history</h2>
-        {{#if mileage.length > 0}}
-        <table class="pure-table pure-table-striped">
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Mileage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#mileage}}
-            <tr>
-              <td>{{ months[this[1]] }} {{ this[0] }}</td>
-              <td>{{ this[2] }} miles</td>
-            </tr>
-            {{/mileage}}
-          </tbody>
-        </table>
-        {{else}}
-        You have not submitted any mileage to the activities director.
-        {{/if}}
       </div>
     </div>
   </div>
