@@ -222,106 +222,12 @@ function mailAndMark({ email, recipients, db }) {
 *****************************************************************************/
 
 /////////////////////////////////////////////////////////////////////////////
-// START: RABBITMQ
-let context = rabbit.createContext(rabbitUrl);
-
-let group = {
-  close() {}
-};
-
-let single = group;
-let discussion = group;
-let poll = group;
-
-function fail(message, e) {
-  console.error(message, e);
-  context.close();
-}
-
-context.on('ready', () => {
-  console.info('MAILER-DAEMON: Rabbit context ready.');
-  group = context.socket('WORKER', { persistent: true });
-  group.setEncoding('utf8');
-  group.connect('mcm-group-mail', () => {
-    console.info('MAILER-DAEMON: Connected to mcm-group-mail.');
-    group.on('data', (directive) => {
-      console.info('MAILER-DAEMON: Message received on mcm-group-mail.');
-      console.info('\tCONTENT:', directive);
-      directive = JSON.parse(directive);
-      fetchMail(directive)
-        .then(email => populateRecipients(email))
-        .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
-        .then(() => group.ack())
-        .catch(e => {
-          console.error(e, e.stack);
-        });
-    });
-  });
-
-  discussion = context.socket('WORKER', { persistent: true });
-  discussion.setEncoding('utf8');
-  discussion.connect('mcm-discussion-mail', () => {
-    console.info('MAILER-DAEMON: Connected to mcm-discussion-mail.');
-    discussion.on('data', (directive) => {
-      console.info('MAILER-DAEMON: Message received on mcm-discussion-mail.');
-      console.info('\tCONTENT:', directive);
-      directive = JSON.parse(directive);
-      fetchDiscussion(directive)
-        .then(email => populateRecipients(email))
-        .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
-        .then(() => discussion.ack())
-        .catch(e => {
-          console.error(e, e.stack);
-        });
-    });
-  });
-
-  poll = context.socket('WORKER', { persistent: true });
-  poll.setEncoding('utf8');
-  poll.connect('mcm-poll-mail', () => {
-    console.info('MAILER-DAEMON: Connected to mcm-poll-mail.');
-    poll.on('data', (directive) => {
-      console.info('MAILER-DAEMON: Message received on mcm-poll-mail.');
-      console.info('\tCONTENT:', directive);
-      directive = JSON.parse(directive);
-      fetchPolls(directive)
-        .then(({ emails, db }) => mailMany(emails))
-        .then(() => poll.ack())
-        .catch(e => {
-          console.error(e, e.stack);
-        });
-    });
-  });
-
-  single = context.socket('WORKER', { persistent: true });
-  single.setEncoding('utf8');
-  single.connect('mcm-single-mail', () => {
-    console.info('MAILER-DAEMON: Connected to mcm-single-mail.');
-    single.on('data', (missive) => {
-      console.info('MAILER-DAEMON: Message received on mcm-single-mail.');
-      single.ack();
-      missive = JSON.parse(missive);
-      promisify(transporter, 'sendMail', missive)
-        .catch(e => console.error('transporter error:', e));
-    });
-  });
-});
-
-context.on('close', (...rest) => console.log('Closing context.', rest) || process.exit());
-context.on('error', e => fail('Context error', e));
-
-process.on('SIGINT', () => context.close());
-process.on('SIGTERM', () => context.close());
-// END: RABBITMQ
-/////////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////////
 // START: SCHEDULED
 let rule = new schedule.RecurrenceRule();
 rule.hour = 2;
 rule.minute = 0;
 
-schedule.scheduleJob(rule, () => {
+let job = schedule.scheduleJob(rule, () => {
   promisify(masterdb, 'view', 'account', 'all', { include_docs: true })
     .then(accounts => {
       let now = new Date();
@@ -396,6 +302,103 @@ schedule.scheduleJob(rule, () => {
     .catch(e => console.error(e, e.stack));
 });
 // END: SCHEDULED
+/////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////
+// START: RABBITMQ
+let context = rabbit.createContext(rabbitUrl);
+
+let group = {
+  close() {}
+};
+
+let single = group;
+let discussion = group;
+let poll = group;
+
+function fail(message, e) {
+  if (job) {
+    job.cancel();
+  }
+  console.error('error connecting to rabbit', message, e);
+  context.close();
+  process.exit(1);
+}
+
+context.on('ready', () => {
+  console.info('MAILER-DAEMON: Rabbit context ready.');
+  group = context.socket('WORKER', { persistent: true });
+  group.setEncoding('utf8');
+  group.connect('mcm-group-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-group-mail.');
+    group.on('data', (directive) => {
+      console.info('MAILER-DAEMON: Message received on mcm-group-mail.');
+      console.info('\tCONTENT:', directive);
+      directive = JSON.parse(directive);
+      fetchMail(directive)
+        .then(email => populateRecipients(email))
+        .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
+        .then(() => group.ack())
+        .catch(e => {
+          console.error(e, e.stack);
+        });
+    });
+  });
+
+  discussion = context.socket('WORKER', { persistent: true });
+  discussion.setEncoding('utf8');
+  discussion.connect('mcm-discussion-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-discussion-mail.');
+    discussion.on('data', (directive) => {
+      console.info('MAILER-DAEMON: Message received on mcm-discussion-mail.');
+      console.info('\tCONTENT:', directive);
+      directive = JSON.parse(directive);
+      fetchDiscussion(directive)
+        .then(email => populateRecipients(email))
+        .then(({ email, recipients, db }) => mailAndMark({ email, recipients, db }))
+        .then(() => discussion.ack())
+        .catch(e => {
+          console.error(e, e.stack);
+        });
+    });
+  });
+
+  poll = context.socket('WORKER', { persistent: true });
+  poll.setEncoding('utf8');
+  poll.connect('mcm-poll-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-poll-mail.');
+    poll.on('data', (directive) => {
+      console.info('MAILER-DAEMON: Message received on mcm-poll-mail.');
+      console.info('\tCONTENT:', directive);
+      directive = JSON.parse(directive);
+      fetchPolls(directive)
+        .then(({ emails, db }) => mailMany(emails))
+        .then(() => poll.ack())
+        .catch(e => {
+          console.error(e, e.stack);
+        });
+    });
+  });
+
+  single = context.socket('WORKER', { persistent: true });
+  single.setEncoding('utf8');
+  single.connect('mcm-single-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-single-mail.');
+    single.on('data', (missive) => {
+      console.info('MAILER-DAEMON: Message received on mcm-single-mail.');
+      single.ack();
+      missive = JSON.parse(missive);
+      promisify(transporter, 'sendMail', missive)
+        .catch(e => console.error('transporter error:', e));
+    });
+  });
+});
+
+context.on('error', e => fail('Context error', e));
+
+process.on('SIGINT', () => context.close());
+process.on('SIGTERM', () => context.close());
+// END: RABBITMQ
 /////////////////////////////////////////////////////////////////////////////
 
 let pollTemplate = `<html>
