@@ -332,11 +332,13 @@ let poll = group;
 let immediateEvent = group;
 
 function fail(message, e) {
-  if (job) {
-    job.cancel();
-  }
-  console.error(message, e);
-  context.close();
+  try {
+    if (job) {
+      job.cancel();
+    }
+    console.error(message, e);
+    context.close();
+  } catch(e) {}
   process.exit(1);
 }
 
