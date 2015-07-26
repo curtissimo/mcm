@@ -4,7 +4,7 @@ import ride from '../../../models/ride';
 import email from '../../../models/email';
 import fs from 'fs';
 import stork from 'stork-odm';
-import { postMailDirective, text2html } from '../../../mailUtils';
+import { getDomain, postMailDirective, text2html } from '../../../mailUtils';
 
 let inProduction = process.env.NODE_ENV === 'production';
 let dest = inProduction ? process.cwd() + '/../../files' : process.cwd() + '/build/sites/files';
@@ -403,6 +403,23 @@ let presenter = {
       .catch(e => ac.error(e));
   },
 
+  email(ac) {
+    couchPromise(event.from(ac.chapterdb), 'get', ac.params.id)
+      .then(value => {
+        if (!value) {
+          return ac.notFound();
+        }
+
+        postMailDirective('mcm-single-event-mail', {
+          id: ac.params.id,
+          host: getDomain(ac.account),
+          db: ac.account.subdomain
+        });
+        ac.redirect(`/chapter/events/${ac.params.id}?email=1`)
+      })
+      .catch(e => ac.error(e));
+  },
+
   item(ac) {
     couchPromise(event.from(ac.chapterdb), 'get', ac.params.id)
       .then(value => {
@@ -414,11 +431,14 @@ let presenter = {
         }
         let actions = {};
         if (ac.member.permissions.canManageEvents) {
-          actions['Delete ' + value.activity] = `/chapter/events/${value._id}/delete-form`;
           if (!value.cancelledReason) {
-            actions['Cancel ' + value.activity] = `/chapter/events/${value._id}/cancel-form`;
+            actions['Email'] = `/chapter/events/${value._id}/email`;
           }
-          actions['Edit ' + value.activity] = `/chapter/events/${value._id}/edit-form`;
+          actions['Delete'] = `/chapter/events/${value._id}/delete-form`;
+          if (!value.cancelledReason) {
+            actions['Cancel'] = `/chapter/events/${value._id}/cancel-form`;
+          }
+          actions['Edit'] = `/chapter/events/${value._id}/edit-form`;
         }
         for (let day of value.days) {
           day.formattedDate = moment(new Date(day.year, day.month, day.date)).format('MM/DD/YYYY');
@@ -432,6 +452,7 @@ let presenter = {
             title: value.title,
             event: value,
             months: monthNames,
+            emailSent: ac.query.email,
             legalese: ac.settings.rideLegalese
           },
           presenters: { menu: 'menu' },

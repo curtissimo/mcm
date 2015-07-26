@@ -9,24 +9,39 @@ import member from '../models/member.js';
 import Ractive from 'ractive';
 import { text2html, randomValueHex, html2text } from '../mailUtils';
 
+Ractive.DEBUG = false;
+
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+
 console.info('MAILER-DAEMON: Environment variables');
 console.info('\tMCM_DB:', process.env.MCM_DB);
 console.info('\tMCM_MAIL_HOST:', process.env.MCM_MAIL_HOST);
 console.info('\tMCM_RABBIT_URL:', process.env.MCM_RABBIT_URL);
+console.info('\tNODE_ENV:', process.env.NODE_ENV);
+
+function inProduction() {
+  return process.env.NODE_ENV === 'production';
+}
 
 let mailHost = process.env.MCM_MAIL_HOST || true;
-let transporter = nodemailer.createTransport({
+let transportSettings = {
   port: 587,
   host: mailHost,
-  authMethod: 'CRAM-MD5',
-  auth: {
+  debug: true
+};
+if (inProduction()) {
+  transportSettings.authMethod = 'CRAM-MD5';
+  transportSettings.auth = {
     user: 'republichog',
     pass: 'antigone123.'
-  },
-  tls: {
+  };
+  transportSettings.tls = {
     rejectUnauthorized: false
   }
-});
+} else {
+  transportSettings.ignoreTLS = true;
+}
+let transporter = nodemailer.createTransport(transportSettings);
 
 console.info('MAILER-DAEMON: Transport created');
 
@@ -315,6 +330,7 @@ let group = {
 let single = group;
 let discussion = group;
 let poll = group;
+let immediateEvent = group;
 
 function fail(message, e) {
   if (job) {
@@ -392,6 +408,50 @@ context.on('ready', () => {
         .catch(e => console.error('transporter error:', e));
     });
   });
+
+  immediateEvent = context.socket('WORKER', { persistent: true });
+  immediateEvent.setEncoding('utf8');
+  immediateEvent.connect('mcm-single-event-mail', () => {
+    console.info('MAILER-DAEMON: Connected to mcm-single-event-mail.');
+    immediateEvent.on('data', missive => {
+      console.info('MAILER-DAEMON: Message received on mcm-single-event-mail');
+      immediateEvent.ack();
+      let { id, host, db } = JSON.parse(missive);
+      console.info('\tCONTENT: (id, host, db): ', id, host, db);
+      db = getAccountDb(db);
+      Promise.all([
+        promisify(member.projections.discussionRecipients, 'projection', db),
+        promisify(db, 'get', id)
+      ])      
+        .then(([ members, o ]) => {
+          o.activity = o.activity || 'ride';
+          let content = new Ractive({
+            template: eventTemplates[o.activity],
+            data: { event: o, host: host }
+          }).toHTML();
+          content = new Ractive({
+            template: updatedEventMailTemplate,
+            data: { events: [ content ] }
+          }).toHTML();
+
+          let emails = [];
+          for (let m of members) {
+            if (m.email.trim().length === 0) {
+              continue;
+            }
+            emails.push({
+              to: `"${m.firstName} ${m.lastName}" <${m.email}>`,
+              from: `"Upcoming Chapter Events" <no-reply@${host}>`,
+              subject: 'Updated Chapter Event',
+              html: content,
+              text: html2text(content)
+            });
+          }
+          return mailMany(emails);
+        })
+        .catch(e => console.error('error sending single event email\n', e));
+    });
+  });
 });
 
 context.on('error', e => fail('error connecting to rabbit', e));
@@ -452,6 +512,17 @@ let eventMailTemplate = `<html>
 <head></head>
 <body>
 <div style="font-family:Helvetica,Arial,serif;font-size: 16px;border-bottom:1px solid #CCC;">Upcoming Events</div>
+{{#events}}
+<hr style="margin-top:16px;margin-botton:16px;">
+{{{ . }}}
+{{/events}}
+</body>
+</html>`;
+
+let updatedEventMailTemplate = `<html>
+<head></head>
+<body>
+<div style="font-family:Helvetica,Arial,serif;font-size: 16px;border-bottom:1px solid #CCC;">Updated Event Information</div>
 {{#events}}
 <hr style="margin-top:16px;margin-botton:16px;">
 {{{ . }}}

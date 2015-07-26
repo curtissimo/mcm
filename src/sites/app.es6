@@ -352,6 +352,7 @@ assets.initialize()
         { verb: 'get', method: 'list' },
         { verb: 'get', action: 'create/:type', method: 'create' },
         { verb: 'get', action: ':id/edit-form', method: 'edit' },
+        { verb: 'get', action: ':id/email', method: 'email' },
         { verb: 'get', action: ':id/delete-form', method: 'deleteForm' },
         { verb: 'get', action: ':id/cancel-form', method: 'cancelForm' },
         { verb: 'get', action: ':id/garmin/:index', method: 'garmin' },

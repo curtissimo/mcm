@@ -8,6 +8,13 @@
   color: $accent-color-text;
 }
 
+.is-success {
+  background-color: $success-color;
+  padding: 1em;
+  border-radius: .5em;
+  color: $success-color-text;
+}
+
 .is-xs-screen {
   display: block;
 
