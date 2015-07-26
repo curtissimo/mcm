@@ -4,6 +4,12 @@ import member from '../../../models/member';
 import blog from '../../../models/blog';
 import { postMailDirective } from '../../../mailUtils';
 
+try {
+  var sharp = require('sharp');
+} catch (e) {
+  var sharp = false;
+}
+
 const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const lower = 'abcdefghijklmnopqrstuvwxyz';
@@ -359,7 +365,27 @@ let presenter = {
     let file = ac.files.photo;
     let newPath = `${dest}/${ac.account.subdomain}/${file.name}`;
     file.newPath = newPath;
-    promisify(fs, 'rename', file.path, newPath)
+
+    function rotate() {
+      if (sharp) {
+        return new Promise((good, bad) => {
+          sharp(file.path)
+            .rotate()
+            .resize(750)
+            .withoutEnlargement()
+            .toFile(newPath, e => {
+              if (e) {
+                return bad(e);
+              }
+              good();
+            });
+        });
+      } else {
+        return promisify(fs, 'rename', file.path, newPath);
+      }
+    }
+
+    rotate()
       .then(() => {
         member.from(ac.chapterdb).get(ac.params.id, (e, m) => {
           if (e) {

@@ -43,6 +43,9 @@
     "test": "mocha --compilers js:babel/register --recursive",
     "mailer-daemon": "node ./build/mailer-daemon/app.js"
   },
+  "optionalDependencies": {
+    "sharp": "^0.11.0"
+  },
   "dependencies": {
     "babel": "^5.0.12",
     "body-parser": "^1.12.2",
