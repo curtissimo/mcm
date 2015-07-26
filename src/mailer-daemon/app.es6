@@ -320,7 +320,7 @@ function fail(message, e) {
   if (job) {
     job.cancel();
   }
-  console.error('error connecting to rabbit', message, e);
+  console.error(message, e);
   context.close();
   process.exit(1);
 }
@@ -394,10 +394,10 @@ context.on('ready', () => {
   });
 });
 
-context.on('error', e => fail('Context error', e));
+context.on('error', e => fail('error connecting to rabbit', e));
 
-process.on('SIGINT', () => context.close());
-process.on('SIGTERM', () => context.close());
+process.on('SIGINT', () => fail('SIGINT'));
+process.on('SIGTERM', () => fail('SIGTERM'));
 // END: RABBITMQ
 /////////////////////////////////////////////////////////////////////////////
 
