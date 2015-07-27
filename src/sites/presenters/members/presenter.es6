@@ -156,6 +156,9 @@ function formatPhone(s) {
 }
 
 function toDate(s) {
+  if (s instanceof Date) {
+    return s;
+  }
   let d = moment(s, 'YYYY-MM-DD');
   if (d.isValid() && d.year() > 1999) {
     return d.toDate();
