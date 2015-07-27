@@ -589,8 +589,6 @@ let presenter = {
       ac.body.privacy.showPhone = !!ac.body.privacy.showPhone;
       ac.body.privacy.showAddress = !!ac.body.privacy.showAddress;
 
-      if (!ac.body.member)
-
       Object.assign(entity, ac.body);
 
       entity.phone = formatPhone(entity.phone);
