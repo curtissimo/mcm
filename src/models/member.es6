@@ -114,10 +114,10 @@ let member = stork.deliver('member', function () {
 
   this.view('byLogin', function (member, emitKey) {
     if (member.email) {
-      emitKey(member.email);
+      emitKey(member.email.toLowerCase());
     }
     if (member.hogNumber) {
-      emitKey(member.hogNumber);
+      emitKey(member.hogNumber.toLowerCase());
     }
   });
 

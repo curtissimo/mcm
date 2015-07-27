@@ -62,7 +62,7 @@ let presenter = {
   },
 
   put(ac) {
-    member.from(ac.chapterdb).byLogin(ac.body.email, function (e, m) {
+    member.from(ac.chapterdb).byLogin(ac.body.email.toLowerCase(), function (e, m) {
       if (e) {
         return ac.redirect('/session?bad');
       }
@@ -70,6 +70,9 @@ let presenter = {
         return ac.redirect('/session?tooMany');
       }
       m = m[0];
+      if (!m) {
+        return ac.redirect('/session?bad');
+      }
       if (m.password !== ac.body.password) {
         return ac.redirect('/session?bad');
       }
