@@ -507,7 +507,7 @@ let presenter = {
       if (foundMileage) {
         return;
       }
-      if (year == m[0] && month == m[1] && asPassenger === m[3]) {
+      if (year == m[0] && month == m[1] && asPassenger == m[3]) {
         foundMileage = m;
       }
     });
