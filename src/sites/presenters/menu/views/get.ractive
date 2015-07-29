@@ -21,6 +21,9 @@
     <li class="pure-menu-item {{ is.privateDocs }}">
       <a class="pure-menu-link" href="/chapter/private-documents">Chapter documents</a>
     </li>
+    <li class="pure-menu-item {{ is.feedback }}">
+      <a class="pure-menu-link" href="/chapter/feedback">Feedback</a>
+    </li>
     {{#if permissions.hasOfficerPermissions()}}
     <li class="pure-menu-heading menu-section">Officers-Only</li>
     {{#officerInbox}}

@@ -50,7 +50,8 @@ let presenter = {
       settings: p('settings'),
       officers: p('officers'),
       emailMgmt: p('email-management'),
-      membership: p('reports/membership')
+      membership: p('reports/membership'),
+      feedback: p('feedback')
     }
     let data = {
       name: ac.settings.name,

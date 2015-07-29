@@ -80,6 +80,22 @@
           {{/if}}
         </div>
       </fieldset>
+      <fieldset>
+        <legend>Kudos and Complaints</legend>
+        <p>
+          Select the officer from the list below to assign them as the person
+          that receives emails from members that would like to express praise
+          or criticism.
+        </p>
+        <div class="pure-form-stacked-control-group">
+          <label for="ombudsman">Recipient</label>
+          <select name="ombudsman" class="pure-input-1">
+            {{#titles}}
+            <option {{#if this.toString() == settings.ombudsman}}selected{{/if}}>{{ this }}</option>
+            {{/titles}}
+          </select>
+        </div>
+      </fieldset>
     </div>
     <div class="form-controls">
       <div class="pure-controls">

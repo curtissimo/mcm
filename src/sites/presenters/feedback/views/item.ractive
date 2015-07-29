@@ -1,0 +1,30 @@
+<h1 class="banner">Give Us Feedback</h1>
+{{#if thanks}}
+<section>
+  <h1>Thank you for your feedback</h1>
+  <div class="is-success">
+    We successfully sent your message and someone should contact you very
+    soon.
+  </div>
+</section>
+{{else}}
+<section>
+  <form class="pure-form pure-form-stacked" id="email-form" method="post" action="/chapter/feedback">
+    <label for="subject">Subject</label>
+    <input type="text" id="subject" name="subject" class="pure-input-1" required>
+
+    <textarea hidden id="email-html" name="html"></textarea>
+
+    <iframe src="/document.html" id="email-editor" class="long-text"></iframe>
+
+    <div class="form-controls">
+      <div class="pure-controls">
+        <a href="/chapter/emails" class="pure-button">Cancel</a>
+        <button type="submit" class="pure-button pure-button-primary">Send the message</button>
+      </div>
+    </div>
+
+    <textarea id="email-text" name="text" class="is-mostly-hidden pretending-to-be-iframe" required></textarea>
+  </form>
+</section>
+{{/if}}
