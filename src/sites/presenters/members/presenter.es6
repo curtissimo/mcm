@@ -160,11 +160,13 @@ function toDate(s) {
     return s;
   }
   let d = moment(s, 'YYYY-MM-DD');
-  if (d.isValid() && d.year() > 1999) {
+  if (s.indexOf('-') > -1 && d.isValid()) {
+console.log('-', d.toDate());
     return d.toDate();
-  } else {
+  } else if (s.indexOf('/') > -1) {
     d = moment(s, 'MM/DD/YYYY');
     if (d.isValid()) {
+console.log('/', d.toDate());
       return d.toDate();
     }
   }
