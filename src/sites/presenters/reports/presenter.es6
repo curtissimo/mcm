@@ -10,7 +10,7 @@ let presenter = {
         return ac.error(e);
       }
 
-      let foreverAgo = new Date(0).valueOf();
+      let foreverAgo = new Date(-62167197600000).valueOf();
       let now = new Date();
       let oneMonth = new Date(now.valueOf());
       let twoMonth = new Date(now.valueOf());
@@ -93,7 +93,9 @@ let presenter = {
 
       for (let entity of entities) {
         entity.local = moment(entity.membership.local.endDate).format('MM/DD/YYYY');
+        entity.localCanonical = moment(entity.membership.local.endDate).format('YYYY-MM-DD');
         entity.national = moment(entity.membership.national.endDate).format('MM/DD/YYYY');
+        entity.nationalCanonical = moment(entity.membership.national.endDate).format('YYYY-MM-DD');
         let national = (entity.membership.national.endDate || '').valueOf();
         let local = (entity.membership.local.endDate || '').valueOf();
         for (let section of sections) {
@@ -154,20 +156,22 @@ let presenter = {
               firstName: entity.firstName,
               year: mileage[0],
               month: mileage[1],
-              miles: mileage[2]
+              miles: mileage[2],
+              type: mileage[3]? 'passenger' : 'rider'
             });
           }
         }
 
         let headers = {
           lastName: 'Last name',
-          firstName: 'firstName',
+          firstName: 'First name',
           year: 'Year',
           month: 'Month',
-          miles: 'Miles'
+          miles: 'Miles',
+          type: 'Type'
         };
 
-        ac.csv('mileage.csv', mileages, headers, 'year', 'month', 'miles', 'lastName', 'firstName');
+        ac.csv('mileage.csv', mileages, headers, 'year', 'month', 'miles', 'lastName', 'firstName', 'type');
       });
     }
 
@@ -222,7 +226,8 @@ let presenter = {
               year: my,
               month: mm,
               miles: mileage[2],
-              who: entity
+              who: entity,
+              type: mileage[3]? 'passenger' : 'rider'
             });
           }
         }

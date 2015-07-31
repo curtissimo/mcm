@@ -12,6 +12,7 @@
     <li class="discussions-entry stripe-{{(@index + 1) % 2}}">
       <div class="discussions-entry-summary">
         <div class="discussions-entry-title">
+          {{#if sticky}}<i class="fa fa-thumb-tack"></i>{{/if}}
           <a href="/chapter/discussions/{{ _id }}">{{ title }}</a>
         </div>
         <div class="discussions-entry-author">

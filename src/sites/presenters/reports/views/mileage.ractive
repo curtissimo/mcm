@@ -22,11 +22,12 @@
         <th>Month</th>
         <th>Miles</th>
         <th>Member</th>
+        <th>Type</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <th colspan="2">Total mileage:</th>
+        <th colspan="3">Total mileage:</th>
         <th colspan="2">{{ total }} miles</th>
       </tr>
       {{#entries}}
@@ -35,6 +36,7 @@
         <td>{{ months[month] }}</td>
         <td>{{ miles }}</td>
         <td>{{ who.lastName }}, {{ who.firstName }}</td>
+        <td>{{ type }}</td>
       </tr>
       {{/entries}}
     </tbody>

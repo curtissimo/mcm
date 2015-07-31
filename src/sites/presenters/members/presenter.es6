@@ -4,6 +4,12 @@ import member from '../../../models/member';
 import blog from '../../../models/blog';
 import { postMailDirective } from '../../../mailUtils';
 
+try {
+  var sharp = require('sharp');
+} catch (e) {
+  var sharp = false;
+}
+
 const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const lower = 'abcdefghijklmnopqrstuvwxyz';
@@ -150,12 +156,17 @@ function formatPhone(s) {
 }
 
 function toDate(s) {
+  if (s instanceof Date) {
+    return s;
+  }
   let d = moment(s, 'YYYY-MM-DD');
-  if (d.isValid() && d.year() > 1999) {
+  if (s.indexOf('-') > -1 && d.isValid()) {
+console.log('-', d.toDate());
     return d.toDate();
-  } else {
+  } else if (s.indexOf('/') > -1) {
     d = moment(s, 'MM/DD/YYYY');
     if (d.isValid()) {
+console.log('/', d.toDate());
       return d.toDate();
     }
   }
@@ -232,6 +243,10 @@ let presenter = {
 
   item(ac) {
     member.from(ac.chapterdb).withBlogs(ac.params.id, function (e, m) {
+      if (!ac.member.permissions.canManageMembers && m.private) {
+        return ac.redirect('/chapter/members');
+      }
+
       if (e || !m) {
         return ac.redirect('/chapter/members');
       }
@@ -320,6 +335,45 @@ let presenter = {
     });
   },
 
+  dates(ac) {
+    if (!ac.member.permissions.canManageMembers) {
+      return ac.redirect('/chapter/reports/membership');
+    }
+
+    function updateDates(id) {
+      return new Promise((good, bad) => {
+        member.from(ac.chapterdb).get(id, (e, m) => {
+          if (e) {
+            return bad(e);
+          }
+          try {
+            m.membership.national.endDate = toDate(ac.body.members[id].membership.national.endDate);
+          } catch (e) {}
+          try {
+            m.membership.local.endDate = toDate(ac.body.members[id].membership.local.endDate);
+          } catch (e) {}
+          
+          m.to(ac.chapterdb).save(e => {
+            if (e) {
+              return bad(e);
+            }
+            good();
+          });
+        });
+      });
+    }
+
+    let updates = [];
+    let changes = ac.body.changedIds;
+    if (typeof changes === 'string') {
+      changes = [ changes ];
+    }
+    changes.forEach(id => changes.push(updateDates(id)));
+    Promise.all(updates)
+      .then(() => ac.redirect('/chapter/reports/membership'))
+      .catch(() => ac.redirect('/chapter/reports/membership'));
+  },
+
   delete(ac) {
     member.from(ac.chapterdb).get(ac.params.id, function (e, m) {
       if (e) {
@@ -355,7 +409,27 @@ let presenter = {
     let file = ac.files.photo;
     let newPath = `${dest}/${ac.account.subdomain}/${file.name}`;
     file.newPath = newPath;
-    promisify(fs, 'rename', file.path, newPath)
+
+    function rotate() {
+      if (sharp) {
+        return new Promise((good, bad) => {
+          sharp(file.path)
+            .rotate()
+            .resize(750)
+            .withoutEnlargement()
+            .toFile(newPath, e => {
+              if (e) {
+                return bad(e);
+              }
+              good();
+            });
+        });
+      } else {
+        return promisify(fs, 'rename', file.path, newPath);
+      }
+    }
+
+    rotate()
       .then(() => {
         member.from(ac.chapterdb).get(ac.params.id, (e, m) => {
           if (e) {
@@ -422,12 +496,33 @@ let presenter = {
       return ac.redirect('/chapter/dashboard');
     }
 
+    let foundMileage = false;
+    let year = parseInt(ac.body.mileageYear);
+    let month = parseInt(ac.body.mileageMonth);
+    let mileage = parseInt(ac.body.mileage);
+    let asPassenger = !!ac.body.asPassenger;
+
     if (ac.member.mileage === undefined) {
       ac.member.mileage = [];
     }
-    let d = new Date();
-    d.setMonth(d.getMonth() - 1);
-    ac.member.mileage.push([ d.getFullYear(), d.getMonth(), parseInt(ac.body.mileage) ]);
+    ac.member.mileage.forEach(m => {
+      if (foundMileage) {
+        return;
+      }
+      if (year == m[0] && month == m[1] && asPassenger == m[3]) {
+        foundMileage = m;
+      }
+    });
+    if (foundMileage) {
+      foundMileage[2] = mileage;
+    } else {
+      ac.member.mileage.push([
+        parseInt(ac.body.mileageYear),
+        parseInt(ac.body.mileageMonth),
+        parseInt(ac.body.mileage),
+        !!ac.body.asPassenger
+      ]);
+    }
 
     ac.member.to(ac.chapterdb).save(e => {
       if (e) {
@@ -488,6 +583,17 @@ let presenter = {
         return ac.error(e);
       }
 
+      ac.body.emailPreferences = ac.body.emailPreferences || {};
+      ac.body.emailPreferences.getCalendarReminders = !!ac.body.emailPreferences.getCalendarReminders;
+      ac.body.emailPreferences.getDiscussions = !!ac.body.emailPreferences.getDiscussions;
+
+      ac.body.private = !!ac.body.private;
+
+      ac.body.privacy = ac.body.privacy || {};
+      ac.body.privacy.showEmail = !!ac.body.privacy.showEmail;
+      ac.body.privacy.showPhone = !!ac.body.privacy.showPhone;
+      ac.body.privacy.showAddress = !!ac.body.privacy.showAddress;
+
       Object.assign(entity, ac.body);
 
       entity.phone = formatPhone(entity.phone);
@@ -504,6 +610,9 @@ let presenter = {
       }
       if (entity.address.state.length > 2) {
         entity.address.state = '';
+      }
+      if (!entity.emailPreferences) {
+        entity.emailPreferences = {};
       }
 
       entity.to(ac.chapterdb).save(saveError => {
@@ -579,6 +688,16 @@ let presenter = {
           startDate: localJoined ? moment(localJoined).toDate() : undefined,
           endDate: localExpiration? moment(localExpiration).toDate() : undefined
         }
+      },
+      private: !!ac.body.private,
+      privacy: {
+        showEmail: !!ac.body.privacy.showEmail,
+        showPhone: !!ac.body.privacy.showPhone,
+        showAddress: !!ac.body.privacy.showAddress
+      },
+      emailPreferences: {
+        getCalendarReminders: !!ac.body.emailPreferences.getCalendarReminders,
+        getDiscussions: !!ac.body.emailPreferences.getDiscussions
       }
     };
 

@@ -6,30 +6,6 @@
       <a href="#" id="create-blog-entry">Create a blog entry</a>
       <span id="create-blog-entry-placeholder" class="link-placeholder">Create a blog entry</span>
     </div>
-    {{#if !hasRecordedMileage}}
-    <div class="member-item-mileage">
-      <a href="#" id="edit-mileage">Enter last month's mileage</a>
-      <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/mileage" id="mileage">
-        <input type="hidden" value="patch" name="X-HTTP-Method-Override">
-        <fieldset class="ancillary-form-panel">
-          <div class="mileage-input">
-            <label for="mileage[input]">Mileage for {{ mileageMonth }} {{ mileageYear }}</label>
-            <input class="mileage-input-field" type="number" placeholder="1234" name="mileage" id="mileage[input]" required>
-          </div>
-          <div class="mileage-button-holder">
-            <button type="submit" class="pure-button pure-button-primary">Update mileage</button>
-          </div>
-          <div>
-            <button type="button" class="pure-button" id="cancel-edit-mileage">Cancel changes</button>
-          </div>
-        </fieldset>
-      </form>
-    </div>
-    {{else}}
-    <div class="member-item-mileage">
-      <span class="link-placeholder-visible">Enter last month's mileage</span>
-    </div>
-    {{/if}}
     <div class="member-item-communication-preferences">
       <a href="#" id="edit-email-preferences">Edit your email preferences</a>
       <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/emailPreferences" id="email-preferences">
@@ -93,7 +69,7 @@
       <div class="edit-your-personal-information">
         <a href="/chapter/members/{{ member._id }}/edit-form">Edit your personal information</a>
       </div>
-      <div>Mobile: {{ mobile}}</div>
+      <div>Mobile: {{ mobile }}</div>
       <div>Home: {{ phone }}</div>
       <div>{{ email }}</div>
       {{#if address}}
@@ -113,6 +89,68 @@
       {{/achievements}}
     </ul>
     {{/if}}
+    <div class="mileage-history">
+      <h2>Mileage history</h2>
+      <div class="member-item-mileage">
+        <a href="#" id="edit-mileage">Enter mileage</a>
+        <form class="pure-form ancillary-form" method="post" action="/chapter/members/{{ member._id }}/mileage" id="mileage">
+          <input type="hidden" value="patch" name="X-HTTP-Method-Override">
+          <fieldset class="ancillary-form-panel">
+            <div class="mileage-input">
+              <label for="mileage[input]">Mileage for</label>
+              <select name="mileageMonth">
+                {{#months:i}}
+                <option value="{{i}}" {{#if mileageMonth === i}}selected{{/if}}>{{ months[i] }}</option>
+                {{/months}}
+              </select>
+              <select name="mileageYear">
+                {{#years:i}}
+                <option value="{{ years[i] + mileageYear }}" {{#if years[i] === 0}}selected{{/if}}>{{ years[i] + mileageYear }}</option>
+                {{/years}}
+              </select>
+            </div>
+            <div class="mileage-input">
+              <input class="mileage-input-field" type="number" placeholder="1234" name="mileage" id="mileage[input]" required>
+            </div>
+            <div class="mileage-input">
+              <label for="mileage[passenger]">
+                <input type="checkbox" name="asPassenger" id="mileage[passenger]" value="1">
+                These are passenger miles
+              </label>
+            </div>
+            <div class="mileage-button-holder">
+              <button type="submit" class="pure-button pure-button-primary">Update mileage</button>
+            </div>
+            <div>
+              <button type="button" class="pure-button" id="cancel-edit-mileage">Cancel changes</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+
+      {{#if mileage.length > 0}}
+      <table class="pure-table pure-table-striped centered">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Mileage</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#mileage}}
+          <tr>
+            <td>{{ months[this[1]] }} {{ this[0] }}</td>
+            <td>{{ this[2] }} miles</td>
+            <td>{{ type }}</td>
+          </tr>
+          {{/mileage}}
+        </tbody>
+      </table>
+      {{else}}
+      You have not submitted any mileage to the activities director.
+      {{/if}}
+    </div>
   </div>
   <div class="dashboard-aggregates">
     <div class="dashboard-aggregates-padder">
@@ -138,29 +176,6 @@
         {{ createdOn }}: <a href="/chapter/members/{{ member._id }}#blog-{{ _id }}">{{ title }}</a>
         </div>
         {{/blogs}}
-      </div>
-      <div class="mileage-history">
-        <h2>Mileage history</h2>
-        {{#if mileage.length > 0}}
-        <table class="pure-table pure-table-striped">
-          <thead>
-            <tr>
-              <th>Month</th>
-              <th>Mileage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {{#mileage}}
-            <tr>
-              <td>{{ months[this[1]] }} {{ this[0] }}</td>
-              <td>{{ this[2] }} miles</td>
-            </tr>
-            {{/mileage}}
-          </tbody>
-        </table>
-        {{else}}
-        You have not submitted any mileage to the activities director.
-        {{/if}}
       </div>
     </div>
   </div>

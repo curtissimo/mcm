@@ -78,15 +78,15 @@ export let hook_queue = (next, connection) => {
       name = name.trim().replace(/^[\s"]+/, '').replace(/[\s"]+$/, '');
     }
 
-    let recipient = {
+    let emailRecipient = {
       email: email,
       name: name
     };
     if (notes[email.toLowerCase()] && notes[email.toLowerCase()].id) {
-      recipient.status = 'received';
-      recipient.id = notes[email.toLowerCase()].id;
+      emailRecipient.status = 'received';
+      emailRecipient.id = notes[email.toLowerCase()].id;
     }
-    missive.recipients.push(recipient);
+    missive.recipients.push(emailRecipient);
   }
   connection.loginfo('recipients:', missive.recipients);
 

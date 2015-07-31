@@ -1,35 +1,48 @@
 <section>
   <h2>Active member count: {{ activeMemberCount }}</h2>
 </section>
-{{#sections}}
-{{#if !ignoreExpired}}
-<section>
-  <h2>{{ title }}</h2>
-  <table class="pure-table pure-table-striped">
-    <thead>
-      <tr>
-        <th>Last Name</th>
-        <th>First Name</th>
-        <th>HOG#</th>
-        <th>Local</th>
-        <th>National</th>
-        <th>Phone</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#members}}
-      <tr>
-        <td>{{ lastName }}</td>
-        <td>{{ firstName }}</td>
-        <td>{{ hogNumber }}</td>
-        <td class="{{ localClass }}">{{ local }}</td>
-        <td class="{{ nationalClass }}">{{ national }}</td>
-        <td>{{ mobile || phone }}</td>
-        <td>{{ email }}</td>
-      {{/members}}
-    </tbody>
-  </table>
-</section>
-{{/if}}
-{{/sections}}
+<form method="post" action="/chapter/members/membership-dates" id="memberhsip-dates-form">
+  {{#sections}}
+  {{#if !ignoreExpired}}
+  <section>
+    <h2>{{ title }}</h2>
+    <table class="pure-table pure-table-striped">
+      <thead>
+        <tr>
+          <th>Last Name</th>
+          <th>First Name</th>
+          <th>HOG#</th>
+          <th>Local</th>
+          <th>National</th>
+          <th>Phone</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#members}}
+        <tr>
+          <td>{{ lastName }}</td>
+          <td>{{ firstName }}</td>
+          <td>{{ hogNumber }}</td>
+          {{#if localClass}}
+          <td class="input-holder {{ localClass }}"><input name="members[{{ _id }}][membership][local][endDate]" type="date" value="{{ localCanonical }}" data-val="{{ local }}"></td>
+          {{else}}
+          <td class="input-holder">{{ local }}</td>
+          {{/if}}
+          {{#if nationalClass}}
+          <td class="input-holder {{ nationalClass }}"><input name="members[{{ _id }}][membership][national][endDate]" type="date" value="{{ nationalCanonical }}" data-val="{{ national }}"></td>
+          {{else}}
+          <td class="input-holder">{{ national }}</td>
+          {{/if}}
+          <td>{{ mobile || phone }}</td>
+          <td>{{ email }}</td>
+        {{/members}}
+      </tbody>
+    </table>
+  </section>
+  {{/if}}
+  {{/sections}}
+  <section class="pure-form-controls">
+    <button class="pure-button pure-button-primary" type="submit">Save changes</button>
+  </section>
+</form>

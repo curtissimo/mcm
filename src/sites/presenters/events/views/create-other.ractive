@@ -147,6 +147,16 @@
         </div>
       </fieldset>
     </div>
+    <div class="form-panel">
+      <fieldset>
+        <legend>Reminders</legend>
+        <div class="pure-control-group">
+          <label for="reminders">On days</label>
+          <input type="text" placeholder="a list of numbers" value="{{ reminders }}" name="reminders" id="reminders" required>
+          before the event
+        </div>
+      </fieldset>
+    </div>
     <div class="form-controls">
       <div class="pure-controls">
         <a href="/chapter/events" class="pure-button">Cancel</a>

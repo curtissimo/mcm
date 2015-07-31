@@ -1,6 +1,6 @@
 {
   "name": "motorcycle-club-management",
-  "version": "0.1.0",
+  "version": "1.14.0",
   "description": "The Web site, mailer daemon, and Haraka plugins that power MCM.",
   "repository": {
     "type": "git",
@@ -42,6 +42,9 @@
     "start": "",
     "test": "mocha --compilers js:babel/register --recursive",
     "mailer-daemon": "node ./build/mailer-daemon/app.js"
+  },
+  "optionalDependencies": {
+    "sharp": "^0.11.0"
   },
   "dependencies": {
     "babel": "^5.0.12",
