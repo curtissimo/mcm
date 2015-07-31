@@ -1,6 +1,6 @@
 {
   "name": "motorcycle-club-management",
-  "version": "0.1.0",
+  "version": "1.14.0",
   "description": "The Web site, mailer daemon, and Haraka plugins that power MCM.",
   "repository": {
     "type": "git",
