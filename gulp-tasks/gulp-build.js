@@ -108,7 +108,7 @@ gulp.task('build:clean', function (next) {
 
 gulp.task('build:es3-client', function () {
   return gulp.src('./src/sites/scripts/*.js')
-    .pipe(newer(newerOptionsForHash('./build/sites/public/scripts', '.js')))
+    // .pipe(newer(newerOptionsForHash('./build/sites/public/scripts', '.js')))
     .pipe(jsmin())
     .pipe(hash())
     .pipe(gulp.dest('./build/sites/public/scripts'))
@@ -141,10 +141,10 @@ gulp.task('build:es6-mailer', function () {
 
 gulp.task('build:es6-server', function () {
   return gulp.src([ './src/**/*.es6', '!./src/sites/scripts/*.es6', '!./src/mailer-daemon/*.es6' ])
-    .pipe(newer({
-      dest: './build',
-      ext: '.js'
-    }))
+    // .pipe(newer({
+    //   dest: './build',
+    //   ext: '.js'
+    // }))
     .pipe(babel())
     .pipe(rename(function (path) {
       path.extname = '.js';
@@ -227,7 +227,7 @@ gulp.task('build:shell-scripts', function () {
 
 gulp.task('build:views', function () {
   return gulp.src('./src/**/*.ractive')
-    .pipe(newer('./build'))
+    // .pipe(newer('./build'))
     .pipe(ractive({ preserveWhitespace: true }))
     .pipe(gulp.dest('./build'))
     .pipe(syncIfActive());
