@@ -21,6 +21,11 @@
     </h2>
     <div class="site-content-section-content">
       <h3>Our members have ridden a total of {{ totalMiles }} miles so far this year!</h3>
+      <p style="margin: 8px 0 8px 0; padding: 0;">
+        <a href="https://events.com/r/en_US/registration/2016-heros-highway-stafford-november-19473" target="_blank">
+          <img src="/images/heros-highway.jpg" style="width: 100%; height: auto">
+        </a>
+      </p>
       {{ settings.description }}
     </div>
   </section>
