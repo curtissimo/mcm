@@ -40,7 +40,6 @@ let presenter = {
       }
     }
     let d = new Date();
-    d.setMonth(d.getMonth() - 1);
     let year = d.getFullYear();
     let month = d.getMonth();
     if (ac.member.mileage !== undefined) {
