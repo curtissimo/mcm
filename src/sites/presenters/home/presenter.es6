@@ -54,10 +54,13 @@ let presenter = {
         rides = rides.filter(e => e.attendance !== 'member');
 
         let total = 0;
+        let year = new Date().getFullYear();
         for (let m of members) {
           if (m.mileage) {
             for (let mileage of m.mileage) {
-              total += mileage[2];
+              if (mileage[0] === year) {
+                total += mileage[2];
+              }
             }
           }
         }
